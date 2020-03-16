@@ -25,7 +25,7 @@ SECRET_KEY = '$#uf%4w2j8gb@^zpm^t%#vo8ky+nh@2zxm)d!u&q32jqjip!=&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['django-env.eba-68v5xyqg.us-west-2.elasticbeanstalk.com']
+ALLOWED_HOSTS = ['django-env.eba-68v5xyqg.us-west-2.elasticbeanstalk.com', '127.0.0.1']
 
 
 # Application definition
@@ -113,3 +113,27 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 STATIC_URL = '/static/'
 STATIC_ROOT = 'static'
+
+# Database
+if 'RDS_HOSTNAME' in os.environ:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.environ['RDS_DB_NAME'],
+            'USER': os.environ['RDS_USERNAME'],
+            'PASSWORD': os.environ['RDS_PASSWORD'],
+            'HOST': os.environ['RDS_HOSTNAME'],
+            'PORT': os.environ['RDS_PORT'],
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'MySQL',
+            'USER': 'root',
+            'PASSWORD': 'root',
+            'HOST': '127.0.0.1',
+            'PORT': '3306',
+        }
+    }
