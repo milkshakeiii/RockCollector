@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
+from webapi.game import make_game
 
 
 AUTH_FAILED_MESSAGE = "Authentication failed."
@@ -25,12 +26,18 @@ def index(request):
         return HttpResponse(AUTH_FAILED_MESSAGE)
 
 
+users_looking_for_games = []
 def find_game(request):
     user = one_message_authenticate(request)
     if user is None:
         return HttpResponse(AUTH_FAILED_MESSAGE)
+    
+    if (len(users_looking_for_games) > 0):
+        opponent = users_looking_for_games.pop()
+        return HttpResponse(make_game(user, opponent))
     else:
-        return HttpResponse("So, you want to find a game...")
+        users_looking_for_games.append(user)
+        return HttpResponse("Added to queue")
 
 
 def make_move(request):
