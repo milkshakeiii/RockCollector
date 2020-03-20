@@ -7,6 +7,7 @@ from webapi.game import make_game
 AUTH_FAILED_MESSAGE = "Authentication failed."
 
 
+
 def one_message_authenticate(request):
     username = request.GET['username']
     password = request.GET['password']
@@ -18,6 +19,8 @@ def one_message_authenticate(request):
     return user
 
 
+
+#############################API###########################################
 def index(request):
     user = one_message_authenticate(request)
     if user is not None:
@@ -34,7 +37,9 @@ def find_game(request):
     
     if (len(users_looking_for_games) > 0):
         opponent = users_looking_for_games.pop()
-        return HttpResponse(make_game(user, opponent))
+        first_gamestate = make_game(user, opponent)
+        response = textify_gamestate(first_gamestate)
+        return HttpResponse(response)
     else:
         users_looking_for_games.append(user)
         return HttpResponse("Added to queue")
@@ -46,3 +51,9 @@ def make_move(request):
         return HttpResponse(AUTH_FAILED_MESSAGE)
     else:
         return HttpResponse("So, you want to make a move...")
+##########################################################################
+
+
+#viewy functions
+def textify_gamestate(first_gamestate):
+    return "_ _ _ \n _ _ _"

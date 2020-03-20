@@ -1,29 +1,9 @@
 from django.db import models
-from enum import Enum
 from django.core.validators import int_list_validator
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-
-#######################
-class BoardTile(Enum):
-    PLAIN_GROUND = 1
-    VOID = 2
-class Colors(Enum):
-    GREY = 1
-    BLUE = 2
-    YELLOW = 3
-class Shapes(Enum):
-    CIRCLULAR = 1
-    SQUARE = 2
-    TRIANGULAR = 3
-    STARSHAPED = 4
-    LUMPY = 5
-    HOOKED = 6
-class Materials(Enum):
-    KINGSTONE = 1
-#######################
 
 
 ###ONE-TO-ONE PROFILE WITH USER###
@@ -45,11 +25,17 @@ def save_user_profile(sender, instance, **kwargs):
 ##################################
 
 
+
 #main game models
 class Gamestate(models.Model):
-    game_number = models.IntegerField(default=0)
+    game_id = models.UUIDField()
     board_width = models.IntegerField(default=0)
     board_height = models.IntegerField(default=0)
+    location = models.IntegerField(default=0)
+    game_over = models.BooleanField(default=True)
+    player1_wins = models.BooleanField(default=False)
+    rocks_awarded = models.CharField(validators=[int_list_validator],
+                                     max_length=100)
     player1_active = models.BooleanField(default=True)
     board_tiles = models.CharField(validators=[int_list_validator],
                                    max_length=1000)
