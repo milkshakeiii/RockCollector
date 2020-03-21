@@ -1,11 +1,12 @@
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
-from webapi.game import make_game
+from webapi.game import make_game, Locations, Colors, Shapes, Materials
+
 
 
 AUTH_FAILED_MESSAGE = "Authentication failed."
-
+newline = "<br>"
 
 
 def one_message_authenticate(request):
@@ -13,7 +14,9 @@ def one_message_authenticate(request):
     password = request.GET['password']
     user = authenticate(request, username=username, password=password)
     if not User.objects.filter(username=username).exists():
-        user = User.objects.create_user(username, 'noemail@noemail.com', password)
+        user = User.objects.create_user(username,
+                                        'noemail@noemail.com',
+                                        password)
     if user is not None:
         login(request, user)
     return user
@@ -55,5 +58,71 @@ def make_move(request):
 
 
 #viewy functions
-def textify_gamestate(first_gamestate):
-    return "_ _ _ \n _ _ _"
+def textify_gamestate(gamestate):
+    #game id
+    return_string = "Game ID: " + str(gamestate.game_id) + newline
+    return_string += (gamestate.player1_user.username +
+                      "vs. " +
+                      gamestate.player2_user.username +
+                      " in " +
+                      Locations(gamestate.location).name +
+                      newline)
+                     
+    return_string += "Board:" + newline
+    for i in range(gamestate.board_height):
+        board_line = ''.join
+        (
+            [tile for
+             tile in
+             gamestate.board_tiles[
+                 i*gamestate.board_width:(i+1)*gamestate.board_width]]
+        )
+
+    #game status
+    return_string += "Game status: "
+    if (gamestate.game_over) and (gamestate.player1_wins):
+        return_string += "Player 1 wins!"
+    elif (gamestate.game_over):
+        return_string += "Player 2 wins!"
+    else:
+        return_string += "Ongoing"
+    return_string += newline
+
+    #prizes
+    return_string += "Prizes: "
+    if len(gamestate.rocks_awarded) == 0:
+        return_string += "None yet"
+    for rock in gamestate.rocks_awarded:
+        color = int(rock[0:3])
+        shape = int(rock[3:6])
+        material = int(rock[6:9])
+        return_string += Rock(color, shape, material).name_string + ", "
+    return_string += newline + newline
+
+    def coord_to_position_string(x, y):
+        if x == -1 or x == -2:
+            return "(ready zone)"
+        if x == -3 or x == -4:
+            return "(captured)"
+        if x == -5:
+            return "(destroyed)"
+        return "(" + str(x) + ", " + str(y) + ")"
+        
+    for player_number in [1, 2]:
+        return_string += "Player " + str(player_number) + " rocks:" + newline
+        if (player_number == 1):
+            rocklist = gamestate.player1_rocks
+            x_coords = gamestate.player1_rocks_x_coords
+            y_coords = gamestate.player1_rocks_y_coords
+        else:
+            rocklist = gamestate.player2_rocks
+            x_coords = gamestate.player2_rocks_x_coords
+            y_coords = gamestate.player2_rocks_y_coords
+        for i in range(0, 8):
+            return_string += str(i) + ": " + rocklist[i].get_name_string() + " "
+            return_string += coord_to_position_string(
+                x_coords[i],
+                y_coords[i])
+            return_string += newline
+        
+    return return_string
