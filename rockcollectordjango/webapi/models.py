@@ -32,7 +32,7 @@ class Gamestate(models.Model):
     board_width = models.IntegerField(default=0)
     board_height = models.IntegerField(default=0)
     location = models.IntegerField(default=0) #see location Enum in game.py
-    game_over = models.BooleanField(default=True)
+    game_over = models.BooleanField(default=False)
     player1_wins = models.BooleanField(default=False)
     
     #these are rock numbers, see Rock in game.py

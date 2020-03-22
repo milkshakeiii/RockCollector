@@ -62,7 +62,7 @@ def textify_gamestate(gamestate):
     #game id
     return_string = "Game ID: " + str(gamestate.game_id) + newline
     return_string += (gamestate.player1_user.username +
-                      "vs. " +
+                      " vs. " +
                       gamestate.player2_user.username +
                       " in " +
                       Locations(gamestate.location).name +
