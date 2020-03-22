@@ -1,7 +1,9 @@
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
-from webapi.game import make_game, Locations, Colors, Shapes, Materials, Rock
+from webapi.game import make_game, make_move, validate_move
+from webapi.game import Locations, Colors, Shapes, Materials, Rock
+from webapi.game import csv_to_int_list
 
 
 
@@ -9,6 +11,7 @@ AUTH_FAILED_MESSAGE = "Authentication failed."
 newline = "<br>"
 
 
+#returns None if authentication fails
 def one_message_authenticate(request):
     username = request.GET['username']
     password = request.GET['password']
@@ -53,7 +56,40 @@ def make_move(request):
     if user is None:
         return HttpResponse(AUTH_FAILED_MESSAGE)
     else:
-        return HttpResponse("So, you want to make a move...")
+        game_uuid = request.GET['game_uuid']
+        turn_trying_to_take = request.GET['taking_turn_number']
+        source_rock_index = request.GET['source_rock_index']
+        target_x = request.GET['target_x']
+        target_y = request.GET['target_y']
+
+        try:
+            gamestate_acted_on = Gamestate.get(game_uuid=game_uuid,
+                                               turns_taken=turn_trying_to_take-1)
+        except User.DoesNotExist:
+            return HttpRequest("Trying to take turn " + str(turn_trying_to_take) +
+                               " but there is no gamestate with " +
+                               str(turn_trying_to_take-1) + " turns taken " +
+                               "or there is no game with that uuid.")
+        if gamestate_acted_on.valid_action_submitted:
+            return HttpRequest("A valid action has already been submitted for " +
+                               "turn " + str(turn_trying_to_take))
+
+        if (validate_move(gamestate_acted_on,
+                          user,
+                          source_rock_index,
+                          target_x,
+                          target_y)):
+            gamestate_acted_on.valid_action_submitted = True
+            gamestate_acted_on.save()
+            next_gamestate = make_move(gamestate_acted_on,
+                                       user,
+                                       source_rock_index,
+                                       target_x,
+                                       target_y)
+            response = textify_gamestate(next_gamestate)
+            return HttpResponse(response)
+        else:
+            return HttpResponse("Invalid move. Try again.")
 ##########################################################################
 
 
@@ -66,6 +102,9 @@ def textify_gamestate(gamestate):
                       gamestate.player2_user.username +
                       " in " +
                       Locations(gamestate.location).name +
+                      newline)
+    return_string += ("Turns taken so far: " +
+                      str(gamestate.turns_taken) +
                       newline)
                      
     return_string += "Board:" + newline
@@ -125,6 +164,3 @@ def textify_gamestate(gamestate):
             return_string += newline
         
     return return_string
-
-def csv_to_int_list(csv):
-    return [int(s) for s in csv.split(',')]

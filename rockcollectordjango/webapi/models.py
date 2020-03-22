@@ -29,6 +29,12 @@ def save_user_profile(sender, instance, **kwargs):
 #main game models
 class Gamestate(models.Model):
     game_id = models.UUIDField()
+    
+    #how many turns have ALREADY been taken
+    turns_taken = models.IntegerField(default=0)
+    #whether a player has already submitted a valid move to make in this state
+    valid_action_submitted = models.BooleanField(default=False)
+    
     board_width = models.IntegerField(default=0)
     board_height = models.IntegerField(default=0)
     location = models.IntegerField(default=0) #see location Enum in game.py
@@ -39,7 +45,6 @@ class Gamestate(models.Model):
     rocks_awarded = models.CharField(validators=[int_list_validator],
                                      max_length=100)
     
-    player1_active = models.BooleanField(default=True)
     board_tiles = models.CharField(validators=[int_list_validator],
                                    max_length=1000)
     

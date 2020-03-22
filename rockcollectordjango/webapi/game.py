@@ -98,3 +98,37 @@ def make_game(player1, player2): #player1, player2 are django users
 
     first_gamestate.save()
     return first_gamestate
+
+
+def validate_move(gamestate_acted_on, actor_user, source_rock_index, target_x, target_y):
+    if (actor_user == gamestate_acted_on.player1_user) and (gamestate_acted_on.turns_taken%2 == 0):
+        return False
+    if (actor_user == gamestate_acted_on.player2_user) and (gamestate_acted_on.turns_taken%2 == 1):
+        return False
+    return True
+    
+
+
+def make_move(gamestate_acted_on, actor_user, source_rock_index, target_x, target_y):
+    next_gamestate = Gamestate.get(pk=gamestate_acted_on.pk)
+    next_gamestate.pk = None
+
+    if (actor_user == gamestate_acted_on.player1_user):
+        next_gamestate.player1_rock_x_coords = csv_index_assign(source_rock_index, target_x)
+        next_gamestate.player1_rock_y_coords = csv_index_assign(source_rock_index, target_y)
+    else:
+        next_gamestate.player2_rock_x_coords = csv_index_assign(source_rock_index, target_x)
+        next_gamestate.player2_rock_y_coords = csv_index_assign(source_rock_index, target_y)
+
+    next_gamestate.save()
+    return next_gamestate
+
+
+def csv_to_int_list(csv):
+    return [int(s) for s in csv.split(',')]
+
+
+def csv_index_assign(csv, index, value):
+    int_list = csv_to_int_list(csv)
+    int_list[index] = value
+    return ','.join([str(i) for i in int_list])
