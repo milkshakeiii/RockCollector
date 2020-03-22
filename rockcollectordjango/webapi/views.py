@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
-from webapi.game import make_game, Locations, Colors, Shapes, Materials
+from webapi.game import make_game, Locations, Colors, Shapes, Materials, Rock
 
 
 
@@ -70,13 +70,13 @@ def textify_gamestate(gamestate):
                      
     return_string += "Board:" + newline
     for i in range(gamestate.board_height):
-        board_line = ''.join
-        (
-            [tile for
+        board_line = ''.join(
+            [str(tile) for
              tile in
              gamestate.board_tiles[
-                 i*gamestate.board_width:(i+1)*gamestate.board_width]]
+                 (i*gamestate.board_width):((i+1)*gamestate.board_width)]]
         )
+        return_string += board_line + newline
 
     #game status
     return_string += "Game status: "
@@ -92,11 +92,9 @@ def textify_gamestate(gamestate):
     return_string += "Prizes: "
     if len(gamestate.rocks_awarded) == 0:
         return_string += "None yet"
-    for rock in gamestate.rocks_awarded:
-        color = int(rock[0:3])
-        shape = int(rock[3:6])
-        material = int(rock[6:9])
-        return_string += Rock(color, shape, material).name_string + ", "
+    for rock_number in gamestate.rocks_awarded:
+        rock = Rock.rock_from_rock_number(rock_number)
+        return_string += rock.get_name_string + ", "
     return_string += newline + newline
 
     def coord_to_position_string(x, y):
@@ -111,18 +109,22 @@ def textify_gamestate(gamestate):
     for player_number in [1, 2]:
         return_string += "Player " + str(player_number) + " rocks:" + newline
         if (player_number == 1):
-            rocklist = gamestate.player1_rocks
-            x_coords = gamestate.player1_rocks_x_coords
-            y_coords = gamestate.player1_rocks_y_coords
+            rocklist = csv_to_int_list(gamestate.player1_rocks)
+            x_coords = csv_to_int_list(gamestate.player1_rocks_x_coords)
+            y_coords = csv_to_int_list(gamestate.player1_rocks_y_coords)
         else:
-            rocklist = gamestate.player2_rocks
-            x_coords = gamestate.player2_rocks_x_coords
-            y_coords = gamestate.player2_rocks_y_coords
+            rocklist = csv_to_int_list(gamestate.player2_rocks)
+            x_coords = csv_to_int_list(gamestate.player2_rocks_x_coords)
+            y_coords = csv_to_int_list(gamestate.player2_rocks_y_coords)
         for i in range(0, 8):
-            return_string += str(i) + ": " + rocklist[i].get_name_string() + " "
+            rock = Rock.rock_from_rock_number(rocklist[i])
+            return_string += str(i) + ": " + rock.get_name_string() + " "
             return_string += coord_to_position_string(
                 x_coords[i],
                 y_coords[i])
             return_string += newline
         
     return return_string
+
+def csv_to_int_list(csv):
+    return [int(s) for s in csv.split(',')]

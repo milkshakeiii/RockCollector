@@ -45,22 +45,22 @@ class Gamestate(models.Model):
     
     #more rock numbers
     player1_rocks = models.CharField(validators=[int_list_validator],
-                                     max_length=8)
+                                     max_length=80)
     player2_rocks = models.CharField(validators=[int_list_validator],
-                                     max_length=8)
+                                     max_length=80)
 
     #(-1, -1) for player 1 ready zone, (-2, -2) for player 2 ready zone
     #(-3, -3) for pieces captured by player 1
     #(-4, -4) for pieces captured by player 2
     #(-5, -5) for destroyed pieces
-    player1_rock_x_coords = models.CharField(validators=[int_list_validator],
-                                             max_length=8)
-    player1_rock_y_coords = models.CharField(validators=[int_list_validator],
-                                             max_length=8)
-    player2_rock_x_coords = models.CharField(validators=[int_list_validator],
-                                             max_length=8)
-    player2_rock_y_coords = models.CharField(validators=[int_list_validator],
-                                             max_length=8)
+    player1_rock_x_coords = models.CharField(validators=[int_list_validator(allow_negative=True)],
+                                             max_length=80,)
+    player1_rock_y_coords = models.CharField(validators=[int_list_validator(allow_negative=True)],
+                                             max_length=80,)
+    player2_rock_x_coords = models.CharField(validators=[int_list_validator(allow_negative=True)],
+                                             max_length=80,)
+    player2_rock_y_coords = models.CharField(validators=[int_list_validator(allow_negative=True)],
+                                             max_length=80,)
     
     player1_user = models.ForeignKey(User,
                                      null=True,
