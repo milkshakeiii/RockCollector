@@ -1,0 +1,3 @@
+http://127.0.0.1:8000/webapi/find_game?username=georgea&password=georgep
+http://127.0.0.1:8000/webapi/find_game?username=georgeb&password=georgep
+http://127.0.0.1:8000/webapi/make_move?username=georgea&password=georgep&game_uuid=c0095a6d-7c33-41fe-8b81-57ecc9b07071&taking_turn_number=1&source_rock_index=0&target_x=4&target_y=4

@@ -63,7 +63,7 @@ class Rock():
 
 def make_game(player1, player2): #player1, player2 are django users
     first_gamestate = Gamestate(player1_user=player1, player2_user=player2)
-    first_gamestate.game_id = uuid.uuid4()
+    first_gamestate.game_uuid = uuid.uuid4()
     first_gamestate.board_width = 8
     first_gamestate.board_height = 8
     first_gamestate.location = Locations.JUNGLE.value
@@ -109,23 +109,34 @@ def validate_move(gamestate_acted_on, actor_user, source_rock_index, target_x, t
     
 
 
-def make_move(gamestate_acted_on, actor_user, source_rock_index, target_x, target_y):
-    next_gamestate = Gamestate.get(pk=gamestate_acted_on.pk)
+def do_move(gamestate_acted_on, actor_user, source_rock_index, target_x, target_y):
+    next_gamestate = Gamestate.objects.get(pk=gamestate_acted_on.pk)
     next_gamestate.pk = None
-
+    
     if (actor_user == gamestate_acted_on.player1_user):
-        next_gamestate.player1_rock_x_coords = csv_index_assign(source_rock_index, target_x)
-        next_gamestate.player1_rock_y_coords = csv_index_assign(source_rock_index, target_y)
+        next_gamestate.player1_rocks_x_coords = csv_index_assign(next_gamestate.player1_rocks_x_coords,
+                                                                 source_rock_index,
+                                                                 target_x)
+        next_gamestate.player1_rocks_y_coords = csv_index_assign(next_gamestate.player1_rocks_x_coords,
+                                                                 source_rock_index,
+                                                                 target_y)
     else:
-        next_gamestate.player2_rock_x_coords = csv_index_assign(source_rock_index, target_x)
-        next_gamestate.player2_rock_y_coords = csv_index_assign(source_rock_index, target_y)
+        next_gamestate.player2_rocks_x_coords = csv_index_assign(next_gamestate.player2_rocks_x_coords,
+                                                                 source_rock_index,
+                                                                 target_x)
+        next_gamestate.player2_rocks_y_coords = csv_index_assign(next_gamestate.player2_rocks_x_coords,
+                                                                 source_rock_index,
+                                                                 target_y)
 
     next_gamestate.save()
     return next_gamestate
 
 
 def csv_to_int_list(csv):
-    return [int(s) for s in csv.split(',')]
+    split_csv = csv.split(',')
+    if ('' in split_csv):
+        raise Exception(str(split_csv))
+    return [int(s) for s in split_csv]
 
 
 def csv_index_assign(csv, index, value):

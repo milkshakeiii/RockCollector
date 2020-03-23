@@ -28,7 +28,7 @@ def save_user_profile(sender, instance, **kwargs):
 
 #main game models
 class Gamestate(models.Model):
-    game_id = models.UUIDField()
+    game_uuid = models.UUIDField()
     
     #how many turns have ALREADY been taken
     turns_taken = models.IntegerField(default=0)
@@ -58,13 +58,13 @@ class Gamestate(models.Model):
     #(-3, -3) for pieces captured by player 1
     #(-4, -4) for pieces captured by player 2
     #(-5, -5) for destroyed pieces
-    player1_rock_x_coords = models.CharField(validators=[int_list_validator(allow_negative=True)],
+    player1_rocks_x_coords = models.CharField(validators=[int_list_validator(allow_negative=True)],
                                              max_length=80,)
-    player1_rock_y_coords = models.CharField(validators=[int_list_validator(allow_negative=True)],
+    player1_rocks_y_coords = models.CharField(validators=[int_list_validator(allow_negative=True)],
                                              max_length=80,)
-    player2_rock_x_coords = models.CharField(validators=[int_list_validator(allow_negative=True)],
+    player2_rocks_x_coords = models.CharField(validators=[int_list_validator(allow_negative=True)],
                                              max_length=80,)
-    player2_rock_y_coords = models.CharField(validators=[int_list_validator(allow_negative=True)],
+    player2_rocks_y_coords = models.CharField(validators=[int_list_validator(allow_negative=True)],
                                              max_length=80,)
     
     player1_user = models.ForeignKey(User,

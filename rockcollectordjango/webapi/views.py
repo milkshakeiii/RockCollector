@@ -1,7 +1,8 @@
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
-from webapi.game import make_game, make_move, validate_move
+from webapi.models import Gamestate
+from webapi.game import make_game, do_move, validate_move
 from webapi.game import Locations, Colors, Shapes, Materials, Rock
 from webapi.game import csv_to_int_list
 
@@ -40,8 +41,10 @@ def find_game(request):
     user = one_message_authenticate(request)
     if user is None:
         return HttpResponse(AUTH_FAILED_MESSAGE)
-    
-    if (len(users_looking_for_games) > 0):
+
+    if user in users_looking_for_games:
+        return HttpResponse("You're already in the queue.")
+    elif (len(users_looking_for_games) > 0):
         opponent = users_looking_for_games.pop()
         first_gamestate = make_game(user, opponent)
         response = textify_gamestate(first_gamestate)
@@ -57,21 +60,21 @@ def make_move(request):
         return HttpResponse(AUTH_FAILED_MESSAGE)
     else:
         game_uuid = request.GET['game_uuid']
-        turn_trying_to_take = request.GET['taking_turn_number']
-        source_rock_index = request.GET['source_rock_index']
-        target_x = request.GET['target_x']
-        target_y = request.GET['target_y']
+        turn_trying_to_take = int(request.GET['taking_turn_number'])
+        source_rock_index = int(request.GET['source_rock_index'])
+        target_x = int(request.GET['target_x'])
+        target_y = int(request.GET['target_y'])
 
         try:
-            gamestate_acted_on = Gamestate.get(game_uuid=game_uuid,
-                                               turns_taken=turn_trying_to_take-1)
+            gamestate_acted_on = Gamestate.objects.get(game_uuid=game_uuid,
+                                                       turns_taken=turn_trying_to_take-1)
         except User.DoesNotExist:
-            return HttpRequest("Trying to take turn " + str(turn_trying_to_take) +
+            return HttpResponse("Trying to take turn " + str(turn_trying_to_take) +
                                " but there is no gamestate with " +
                                str(turn_trying_to_take-1) + " turns taken " +
                                "or there is no game with that uuid.")
         if gamestate_acted_on.valid_action_submitted:
-            return HttpRequest("A valid action has already been submitted for " +
+            return HttpResponse("A valid action has already been submitted for " +
                                "turn " + str(turn_trying_to_take))
 
         if (validate_move(gamestate_acted_on,
@@ -81,11 +84,11 @@ def make_move(request):
                           target_y)):
             gamestate_acted_on.valid_action_submitted = True
             gamestate_acted_on.save()
-            next_gamestate = make_move(gamestate_acted_on,
-                                       user,
-                                       source_rock_index,
-                                       target_x,
-                                       target_y)
+            next_gamestate = do_move(gamestate_acted_on,
+                                     user,
+                                     source_rock_index,
+                                     target_x,
+                                     target_y)
             response = textify_gamestate(next_gamestate)
             return HttpResponse(response)
         else:
@@ -96,7 +99,7 @@ def make_move(request):
 #viewy functions
 def textify_gamestate(gamestate):
     #game id
-    return_string = "Game ID: " + str(gamestate.game_id) + newline
+    return_string = "Game ID: " + str(gamestate.game_uuid) + newline
     return_string += (gamestate.player1_user.username +
                       " vs. " +
                       gamestate.player2_user.username +
