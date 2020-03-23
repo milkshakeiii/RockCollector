@@ -68,9 +68,9 @@ def make_game(player1, player2): #player1, player2 are django users
     first_gamestate.board_height = 8
     first_gamestate.location = Locations.JUNGLE.value
 
-    first_gamestate.board_tiles = ([BoardTiles.PLAIN_GROUND.value] *
-                                    first_gamestate.board_width *
-                                    first_gamestate.board_height)
+    first_gamestate.board_tiles = (','.join([str(BoardTiles.PLAIN_GROUND.value)] *
+                                             first_gamestate.board_width *
+                                             first_gamestate.board_height))
     
     player1_rocks_int_list = [Rock(Colors.GREY, Shapes.SQUARE, Materials.SHALE).get_rock_number(),
                               Rock(Colors.GREY, Shapes.HOOKED, Materials.SHALE).get_rock_number(),
@@ -112,6 +112,8 @@ def validate_move(gamestate_acted_on, actor_user, source_rock_index, target_x, t
 def do_move(gamestate_acted_on, actor_user, source_rock_index, target_x, target_y):
     next_gamestate = Gamestate.objects.get(pk=gamestate_acted_on.pk)
     next_gamestate.pk = None
+    next_gamestate.turns_taken += 1
+    next_gamestate.valid_action_submitted = False
     
     if (actor_user == gamestate_acted_on.player1_user):
         next_gamestate.player1_rocks_x_coords = csv_index_assign(next_gamestate.player1_rocks_x_coords,

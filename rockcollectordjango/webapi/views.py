@@ -83,7 +83,9 @@ def make_move(request):
                           target_x,
                           target_y)):
             gamestate_acted_on.valid_action_submitted = True
+            Gamestate.objects.get(game_uuid=game_uuid, turns_taken=turn_trying_to_take-1)
             gamestate_acted_on.save()
+            Gamestate.objects.get(game_uuid=game_uuid, turns_taken=turn_trying_to_take-1)
             next_gamestate = do_move(gamestate_acted_on,
                                      user,
                                      source_rock_index,
@@ -115,7 +117,7 @@ def textify_gamestate(gamestate):
         board_line = ''.join(
             [str(tile) for
              tile in
-             gamestate.board_tiles[
+             csv_to_int_list(gamestate.board_tiles)[
                  (i*gamestate.board_width):((i+1)*gamestate.board_width)]]
         )
         return_string += board_line + newline
