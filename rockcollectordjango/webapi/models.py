@@ -34,6 +34,10 @@ class Gamestate(models.Model):
     turns_taken = models.IntegerField(default=0)
     #whether a player has already submitted a valid move to make in this state
     valid_action_submitted = models.BooleanField(default=False)
+    #csv of length 3*turns_taken, (piece index, target x, target y)
+    turn_history= models.CharField(validators=[int_list_validator],
+                                   max_length=10000,
+                                   default="")
     
     board_width = models.IntegerField(default=0)
     board_height = models.IntegerField(default=0)

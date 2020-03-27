@@ -114,6 +114,15 @@ def do_move(gamestate_acted_on, actor_user, source_rock_index, target_x, target_
     next_gamestate.pk = None
     next_gamestate.turns_taken += 1
     next_gamestate.valid_action_submitted = False
+    if next_gamestate.turn_history == "":
+        next_gamestate.turn_history = ','.join([str(source_rock_index),
+                                                str(target_x),
+                                                str(target_y)])
+    else:
+        next_gamestate.turn_history = ','.join([next_gamestate.turn_history,
+                                                str(source_rock_index),
+                                                str(target_x),
+                                                str(target_y)])
     
     if (actor_user == gamestate_acted_on.player1_user):
         next_gamestate.player1_rocks_x_coords = csv_index_assign(next_gamestate.player1_rocks_x_coords,

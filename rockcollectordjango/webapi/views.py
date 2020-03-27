@@ -137,7 +137,7 @@ def textify_gamestate(gamestate):
     for rock_number in gamestate.rocks_awarded:
         rock = Rock.rock_from_rock_number(rock_number)
         return_string += rock.get_name_string + ", "
-    return_string += newline + newline
+    return_string += newline
 
     def coord_to_position_string(x, y):
         if x == -1 or x == -2:
@@ -165,5 +165,7 @@ def textify_gamestate(gamestate):
                 x_coords[i],
                 y_coords[i])
             return_string += newline
+
+    return_string += "Turn History: " + gamestate.turn_history
         
     return return_string
