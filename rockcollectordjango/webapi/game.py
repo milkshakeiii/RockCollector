@@ -100,11 +100,94 @@ def make_game(player1, player2): #player1, player2 are django users
     return first_gamestate
 
 
+def get_valid_target_squares(source_rock,
+                             source_rock_square,
+                             active_player_rocks,
+                             active_player_rock_squares,
+                             other_player_rocks,
+                             other_player_rock_squares,
+                             board_rows,
+                             width,
+                             height):
+    if (len(board_rows) == 0):
+        raise Exception("Empty board rows")
+    valid_squares = []
+
+    for x in range(width):
+        for y in range(height):
+            player_rock_overlap = (x, y) in active_player_rock_squares
+            other_rock_overlap = (source_rock_square == (-1, -1) and (x, y) in other_player_rock_squares)
+            if not player_rock_overlap and not other_rock_overlap:
+                valid_squares.append((x, y))
+
+    return valid_squares
+    
+
+
+def get_board_rows_from_csv(csv_board, height, width):
+    rows = []
+    for i in range(height):
+        row = [BoardTiles(tile) for
+               tile in
+               csv_to_int_list(csv_board)[(i*width):((i+1)*width)]]
+        rows.append(row)
+    return rows
+
+
 def validate_move(gamestate_acted_on, actor_user, source_rock_index, target_x, target_y):
-    if (actor_user == gamestate_acted_on.player1_user) and (gamestate_acted_on.turns_taken%2 == 0):
+    #invalid if the wrong player is trying to act
+    player1_active = (actor_user == gamestate_acted_on.player1_user)
+    if player1_active and (gamestate_acted_on.turns_taken%2 == 0):
         return False
-    if (actor_user == gamestate_acted_on.player2_user) and (gamestate_acted_on.turns_taken%2 == 1):
+    if not player1_active and (gamestate_acted_on.turns_taken%2 == 1):
         return False
+
+    board_width = gamestate_acted_on.board_width
+    board_height = gamestate_acted_on.board_height
+    board_rows = get_board_rows_from_csv(gamestate_acted_on.board_tiles, board_height, board_width)
+
+    if player1_active:
+        active_player_rock_number_list = csv_to_int_list(gamestate_acted_on.player1_rocks)
+        active_player_rock_x_coords = csv_to_int_list(gamestate_acted_on.player1_rocks_x_coords)
+        active_player_rock_y_coords = csv_to_int_list(gamestate_acted_on.player1_rocks_y_coords)
+        other_player_rock_number_list = csv_to_int_list(gamestate_acted_on.player2_rocks)
+        other_player_rock_x_coords = csv_to_int_list(gamestate_acted_on.player2_rocks_x_coords)
+        other_player_rock_y_coords = csv_to_int_list(gamestate_acted_on.player2_rocks_y_coords)
+    else:
+        other_player_rock_number_list = csv_to_int_list(gamestate_acted_on.player1_rocks)
+        other_player_rock_x_coords = csv_to_int_list(gamestate_acted_on.player1_rocks_x_coords)
+        other_player_rock_y_coords = csv_to_int_list(gamestate_acted_on.player1_rocks_y_coords)
+        active_player_rock_number_list = csv_to_int_list(gamestate_acted_on.player2_rocks)
+        active_player_rock_x_coords = csv_to_int_list(gamestate_acted_on.player2_rocks_x_coords)
+        active_player_rock_y_coords = csv_to_int_list(gamestate_acted_on.player2_rocks_y_coords)
+        
+    source_rock = Rock.rock_from_rock_number(active_player_rock_number_list[source_rock_index])
+    source_rock_x = active_player_rock_x_coords[source_rock_index]
+    source_rock_y = active_player_rock_y_coords[source_rock_index]
+    source_rock_square = (source_rock_x, source_rock_y)
+    active_player_rocks = [Rock.rock_from_rock_number(rock_number) for
+                           rock_number in active_player_rock_number_list]
+    other_player_rocks =  [Rock.rock_from_rock_number(rock_number) for
+                           rock_number in other_player_rock_number_list]
+    active_player_rock_squares = [(active_player_rock_x_coords[i], active_player_rock_y_coords[i]) for
+                                  i in range(0, len(active_player_rock_number_list))]
+    other_player_rock_squares = [(other_player_rock_x_coords[i], other_player_rock_y_coords[i]) for
+                                 i in range(0, len(other_player_rock_number_list))]
+
+    valid_target_squares = get_valid_target_squares(source_rock,
+                                                    source_rock_square,
+                                                    active_player_rocks,
+                                                    active_player_rock_squares,
+                                                    other_player_rocks,
+                                                    other_player_rock_squares,
+                                                    board_rows,
+                                                    board_width,
+                                                    board_height)
+
+    target_square = (target_x, target_y)
+    if target_square not in valid_target_squares:
+        return False                                
+
     return True
     
 
