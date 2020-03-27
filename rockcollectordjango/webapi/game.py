@@ -100,6 +100,50 @@ def make_game(player1, player2): #player1, player2 are django users
     return first_gamestate
 
 
+def add_coords(a, b):
+    return (a[0] + b[0], a[1] + b[1])
+
+
+def get_shape_possible_squares(shape, start_square, width, height):
+    up = [add_coords(start_square, (0, i)) for i in range(1, width)]
+    down = [add_coords(start_square, (0, -i)) for i in range(1, width)]
+    right = [add_coords(start_square, (i, 0)) for i in range(1, width)]
+    left = [add_coords(start_square, (-i, 0)) for i in range(1, width)]
+    upright = [add_coords(start_square, (i, i)) for i in range(1, width)]
+    upleft = [add_coords(start_square, (i, -i)) for i in range(1, width)]
+    downright = [add_coords(start_square, (-i, i)) for i in range(1, width)]
+    downleft = [add_coords(start_square, (-i, -i)) for i in range(1, width)]
+    if shape == Shapes.CIRCULAR:
+        return [add_coords(start_square, (1, -1)),
+                add_coords(start_square, (1, 0)),
+                add_coords(start_square, (1, 1)),
+                add_coords(start_square, (0, -1)),
+                add_coords(start_square, (0, 1)),
+                add_coords(start_square, (-1, -1)),
+                add_coords(start_square, (-1, 0)),
+                add_coords(start_square, (-1, 1))]
+    if shape == Shapes.SQUARE:
+        return up + down + right + left
+    if shape == Shapes.TRIANGULAR:
+        return upright + upleft + downright + downleft
+    if shape == Shapes.STARSHAPED:
+        return upright + upleft + downright + downleft + up + right + down + left
+    if shape == Shapes.LUMPY:
+        return [add_coords(start_square, (0, 1)), add_coords(shape, (0, -1))]
+    if shape == Shapes.HOOKED:
+        return [add_coords(start_square, (2, 1)),
+                add_coords(start_square, (2, -1)),
+                add_coords(start_square, (-2, 1)),
+                add_coords(start_square, (-2, -1)),
+                add_coords(start_square, (1, 2)),
+                add_coords(start_square, (1, -2)),
+                add_coords(start_square, (-1, 2)),
+                add_coords(start_square, (-1, -2))]
+
+    raise Exception("Unrecognized shape " + str(shape) + " for possible squares.")
+        
+
+
 def get_valid_target_squares(source_rock,
                              source_rock_square,
                              active_player_rocks,
@@ -111,14 +155,30 @@ def get_valid_target_squares(source_rock,
                              height):
     if (len(board_rows) == 0):
         raise Exception("Empty board rows")
-    valid_squares = []
 
-    for x in range(width):
-        for y in range(height):
-            player_rock_overlap = (x, y) in active_player_rock_squares
-            other_rock_overlap = (source_rock_square == (-1, -1) and (x, y) in other_player_rock_squares)
-            if not player_rock_overlap and not other_rock_overlap:
-                valid_squares.append((x, y))
+    shape_possible_squares = [] #without accounting for overlap
+    #recall (-1, -1) is player 1's ready zone, (-2, -2) is player 2's
+    if (source_rock_square == (-1, -1) or source_rock_square == (-2, -2)):
+        for x in range(width):
+            for y in range(height):
+                shape_possible_squares.append((x, y))
+    else:
+        shape_possible_squares = get_shape_possible_squares(source_rock.shape,
+                                                            source_rock_square,
+                                                            width,
+                                                            height)
+    print (shape_possible_squares)
+
+    valid_squares = [] #account for overlap and bounds
+    for coords in shape_possible_squares:
+        x = coords[0]
+        y = coords[1]
+        player_rock_overlap = (x, y) in active_player_rock_squares
+        placing_on_other_rock = (source_rock_square == (-1, -1) and (x, y) in other_player_rock_squares)
+        x_in_bounds = (x >= 0 and x < width)
+        y_in_bounds = (y >= 0 and y < width)
+        if not player_rock_overlap and not placing_on_other_rock:
+            valid_squares.append((x, y))
 
     return valid_squares
     
