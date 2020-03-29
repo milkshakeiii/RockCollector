@@ -62,14 +62,20 @@ class Gamestate(models.Model):
     #(-3, -3) for pieces captured by player 1
     #(-4, -4) for pieces captured by player 2
     #(-5, -5) for destroyed pieces
+    player1_square_count_per_rock = models.CharField(validators=[int_list_validator],
+                                                     max_length=80,
+                                                     default='')
     player1_rocks_x_coords = models.CharField(validators=[int_list_validator(allow_negative=True)],
-                                             max_length=80,)
+                                              max_length=1000)
     player1_rocks_y_coords = models.CharField(validators=[int_list_validator(allow_negative=True)],
-                                             max_length=80,)
+                                              max_length=1000)
+    player2_square_count_per_rock = models.CharField(validators=[int_list_validator],
+                                                     max_length=80,
+                                                     default='')
     player2_rocks_x_coords = models.CharField(validators=[int_list_validator(allow_negative=True)],
-                                             max_length=80,)
+                                              max_length=1000)
     player2_rocks_y_coords = models.CharField(validators=[int_list_validator(allow_negative=True)],
-                                             max_length=80,)
+                                              max_length=1000)
     
     player1_user = models.ForeignKey(User,
                                      null=True,

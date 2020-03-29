@@ -46,7 +46,7 @@ def find_game(request):
         return HttpResponse("You're already in the queue.")
     elif (len(users_looking_for_games) > 0):
         opponent = users_looking_for_games.pop()
-        first_gamestate = make_game(user, opponent)
+        first_gamestate = make_game(opponent, user)
         response = textify_gamestate(first_gamestate)
         return HttpResponse(response)
     else:
@@ -77,11 +77,12 @@ def make_move(request):
             return HttpResponse("A valid action has already been submitted for " +
                                "turn " + str(turn_trying_to_take))
 
-        if (validate_move(gamestate_acted_on,
-                          user,
-                          source_rock_index,
-                          target_x,
-                          target_y)):
+        validate_move_result = validate_move(gamestate_acted_on,
+                                             user,
+                                             source_rock_index,
+                                             target_x,
+                                             target_y)
+        if (validate_move_result == "OK"):
             gamestate_acted_on.valid_action_submitted = True
             gamestate_acted_on.save()
             next_gamestate = do_move(gamestate_acted_on,
@@ -92,7 +93,7 @@ def make_move(request):
             response = textify_gamestate(next_gamestate)
             return HttpResponse(response)
         else:
-            return HttpResponse("Invalid move. Try again.")
+            return HttpResponse(validate_move_result + " Try again.")
 ##########################################################################
 
 
@@ -152,18 +153,22 @@ def textify_gamestate(gamestate):
         return_string += "Player " + str(player_number) + " rocks:" + newline
         if (player_number == 1):
             rocklist = csv_to_int_list(gamestate.player1_rocks)
+            rock_square_counts = csv_to_int_list(gamestate.player1_square_count_per_rock)
             x_coords = csv_to_int_list(gamestate.player1_rocks_x_coords)
             y_coords = csv_to_int_list(gamestate.player1_rocks_y_coords)
         else:
             rocklist = csv_to_int_list(gamestate.player2_rocks)
+            rock_square_counts = csv_to_int_list(gamestate.player2_square_count_per_rock)
             x_coords = csv_to_int_list(gamestate.player2_rocks_x_coords)
             y_coords = csv_to_int_list(gamestate.player2_rocks_y_coords)
         for i in range(0, 8):
             rock = Rock.rock_from_rock_number(rocklist[i])
             return_string += str(i) + ": " + rock.get_name_string() + " "
-            return_string += coord_to_position_string(
-                x_coords[i],
-                y_coords[i])
+            for j in range(0, rock_square_counts[i]):
+                return_string += coord_to_position_string(x_coords[i],
+                                                          y_coords[i])
+                return_string += ", "
+            return_string = return_string[0:-2]
             return_string += newline
 
     return_string += "Turn History: " + gamestate.turn_history

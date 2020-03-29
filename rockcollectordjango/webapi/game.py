@@ -91,20 +91,25 @@ def make_game(player1, player2): #player1, player2 are django users
     first_gamestate.player1_rocks = ','.join([str(i) for i in player1_rocks_int_list])
     first_gamestate.player2_rocks = ','.join([str(i) for i in player2_rocks_int_list])
 
+    first_gamestate.player1_square_count_per_rock = ','.join(["1"] * 8)
     first_gamestate.player1_rocks_x_coords = ','.join(["-1"] * 8)
     first_gamestate.player1_rocks_y_coords = ','.join(["-1"] * 8)
+    first_gamestate.player2_square_count_per_rock = ','.join(["1"] * 8)
     first_gamestate.player2_rocks_x_coords = ','.join(["-2"] * 8)
     first_gamestate.player2_rocks_y_coords = ','.join(["-2"] * 8)
 
     first_gamestate.save()
     return first_gamestate
 
-
+#no side effects
 def add_coords(a, b):
     return (a[0] + b[0], a[1] + b[1])
 
-
-def get_shape_possible_squares(shape, start_square, width, height):
+#no side effects
+#returns a list of lists, where each list is a line
+#example, a king or queen would have 8 lines,
+#whereas a rook or bishop would have 4
+def get_move_lines(start_square, shape, width, height):
     up = [add_coords(start_square, (0, i)) for i in range(1, width)]
     down = [add_coords(start_square, (0, -i)) for i in range(1, width)]
     right = [add_coords(start_square, (i, 0)) for i in range(1, width)]
@@ -123,29 +128,89 @@ def get_shape_possible_squares(shape, start_square, width, height):
                 add_coords(start_square, (-1, 0)),
                 add_coords(start_square, (-1, 1))]
     if shape == Shapes.SQUARE:
-        return up + down + right + left
+        return [up, down, left, right]
     if shape == Shapes.TRIANGULAR:
-        return upright + upleft + downright + downleft
+        return [upright, upleft, downright, downleft]
     if shape == Shapes.STARSHAPED:
-        return upright + upleft + downright + downleft + up + right + down + left
+        return [upright, upleft, downright, downleft, up, right, down, left]
     if shape == Shapes.LUMPY:
-        return [add_coords(start_square, (0, 1)), add_coords(shape, (0, -1))]
+        return [[add_coords(start_square, (0, 1))], [add_coords(shape, (0, -1))]]
     if shape == Shapes.HOOKED:
-        return [add_coords(start_square, (2, 1)),
-                add_coords(start_square, (2, -1)),
-                add_coords(start_square, (-2, 1)),
-                add_coords(start_square, (-2, -1)),
-                add_coords(start_square, (1, 2)),
-                add_coords(start_square, (1, -2)),
-                add_coords(start_square, (-1, 2)),
-                add_coords(start_square, (-1, -2))]
+        return [[add_coords(start_square, (2, 1))],
+                [add_coords(start_square, (2, -1))],
+                [add_coords(start_square, (-2, 1))],
+                [add_coords(start_square, (-2, -1))],
+                [add_coords(start_square, (1, 2))],
+                [add_coords(start_square, (1, -2))],
+                [add_coords(start_square, (-1, 2))],
+                [add_coords(start_square, (-1, -2))]]
 
-    raise Exception("Unrecognized shape " + str(shape) + " for possible squares.")
+#no side effects (obv)
+def in_bounds(square, width, height):
+    return square[0] >= 0 and square[0] <= width and square[1] >= 0 and square[1] <= height
+
+#no side effects
+#takes a source_rock that is on the board
+#returns a list of valid target squares for action originating from that source
+def get_onboard_targetable_squares(source_rock_index,
+                                   source_rock,
+                                   source_rock_squares,
+                                   active_player_rocks,
+                                   active_player_rock_squares,
+                                   all_active_player_occupied_squares, #list of (x, y) squares
+                                   other_player_rocks,
+                                   other_player_rock_squares,
+                                   all_other_player_occupied_squares, #list of (x, y) squares
+                                   board_rows,
+                                   width,
+                                   height):
+
+    if len(source_rock_squares) == 0:
+        raise "get_onboard_targetable_squares got no start squares"
+    in_ready_zone = (-1, -1) in source_rock_squares or (-2, -2) in source_rock_squares
+    in_captured_zone = (-3, -3) in source_rock_squares or (-4, -4) in source_rock_squares
+    in_destroyed_zone = (-5, -5) in source_rock_squares
+    if in_ready_zone or in_captured_zone or in_destroyed_zone:
+        raise "get_onboard_targetable_squares got start squares not on board: " + str(start_squares)
+    
+    start_square = source_rock_squares[0]
+
+    if (source_rock.color == Colors.GREY):
+        targetable_squares = []
+        move_lines = get_move_lines(start_square, source_rock.shape, width, height)
+        for line in move_lines:
+            for square in line:
+                if not in_bounds(square, width, height):
+                    break
+                if square in all_active_player_occupied_squares:
+                    break
+                elif square in all_other_player_occupied_squares:
+                    targetable_squares.append(square)
+                    break
+                else:
+                    targetable_squares.append(square)
+        return targetable_squares
+    if (source_rock.color == Colors.BLUE):
+        return source_rock_squares
+    if (source_rock.color == Colors.RED):
+        targetable_squares = []
+        move_lines = get_move_lines(start_square, source_rock.shape, width, height)
+        for line in move_lines:
+            for square in line:
+                if not in_bounds(square, width, height):
+                    break
+                else:
+                    targetable_squares.append(square)
+        return targetable_squares
+
+    raise Exception(str(source_rock.shape) + ", " + str(source_rock.color) + " didn't match a targeting scheme")
         
 
-
-def get_valid_target_squares(source_rock,
-                             source_rock_square,
+#no side effects
+#returns: list of (x, y) squares that are valid targets for action originating from source_rock
+def get_valid_target_squares(source_rock_index,
+                             source_rock,
+                             source_rock_squares,
                              active_player_rocks,
                              active_player_rock_squares,
                              other_player_rocks,
@@ -156,34 +221,46 @@ def get_valid_target_squares(source_rock,
     if (len(board_rows) == 0):
         raise Exception("Empty board rows")
 
-    shape_possible_squares = [] #without accounting for overlap
-    #recall (-1, -1) is player 1's ready zone, (-2, -2) is player 2's
-    if (source_rock_square == (-1, -1) or source_rock_square == (-2, -2)):
+    all_active_player_occupied_squares = []
+    for i in range(0, len(active_player_rocks)):
+        rock = active_player_rocks[i]
+        squares = active_player_rock_squares[i]
+        if not (rock.color == Colors.BLUE and len(squares) > 1):
+            all_active_player_occupied_squares.extend(squares)
+    all_other_player_occupied_squares = []
+    for i in range(0, len(other_player_rocks)):
+        rock = other_player_rocks[i]
+        squares = other_player_rock_squares[i]
+        if not (rock.color == Colors.BLUE and len(squares) > 1):
+            all_other_player_occupied_squares.extend(squares)
+
+    valid_target_squares = []
+    #place from ready zone: recall (-1, -1) is player 1's ready zone, (-2, -2) is player 2's
+    if (source_rock_squares == [(-1, -1)] or source_rock_squares == [(-2, -2)]):
         for x in range(width):
             for y in range(height):
-                shape_possible_squares.append((x, y))
+                actor_rock_overlap = (x, y) in all_active_player_occupied_squares
+                other_rock_overlap = (x, y) in all_other_player_occupied_squares
+                if not actor_rock_overlap and not other_rock_overlap:
+                    valid_target_squares.append((x, y))
     else:
-        shape_possible_squares = get_shape_possible_squares(source_rock.shape,
-                                                            source_rock_square,
-                                                            width,
-                                                            height)
-    print (shape_possible_squares)
-
-    valid_squares = [] #account for overlap and bounds
-    for coords in shape_possible_squares:
-        x = coords[0]
-        y = coords[1]
-        player_rock_overlap = (x, y) in active_player_rock_squares
-        placing_on_other_rock = (source_rock_square == (-1, -1) and (x, y) in other_player_rock_squares)
-        x_in_bounds = (x >= 0 and x < width)
-        y_in_bounds = (y >= 0 and y < width)
-        if not player_rock_overlap and not placing_on_other_rock:
-            valid_squares.append((x, y))
-
-    return valid_squares
+        valid_target_squares = get_onboard_targetable_squares(source_rock_index,
+                                                              source_rock,
+                                                              source_rock_squares,
+                                                              active_player_rocks,
+                                                              active_player_rock_squares,
+                                                              all_active_player_occupied_squares,
+                                                              other_player_rocks,
+                                                              other_player_rock_squares,
+                                                              all_other_player_occupied_squares,
+                                                              board_rows,
+                                                              width,
+                                                              height)
+    return valid_target_squares
     
-
-
+#no side effects
+#returns list of rows
+#rows are lists of BoardTiles enum instances
 def get_board_rows_from_csv(csv_board, height, width):
     rows = []
     for i in range(height):
@@ -193,23 +270,23 @@ def get_board_rows_from_csv(csv_board, height, width):
         rows.append(row)
     return rows
 
+#no side effects
+#returns dict where keys are rock index, values are list of all (x, y) squares occupied by that rock
+def get_square_dict(squares_per_rock, rock_x_coords, rock_y_coords):
+    square_dict = {}
+    for i in range(len(squares_per_rock)):
+        count = squares_per_rock[i]
+        square_dict[i] = [(rock_x_coords.pop(0), rock_y_coords.pop(0)) for j in range(count)]
+    return square_dict
 
-def validate_move(gamestate_acted_on, actor_user, source_rock_index, target_x, target_y):
-    #invalid if the wrong player is trying to act
-    player1_active = (actor_user == gamestate_acted_on.player1_user)
-    if player1_active and (gamestate_acted_on.turns_taken%2 == 0):
-        return False
-    if not player1_active and (gamestate_acted_on.turns_taken%2 == 1):
-        return False
-
-    board_width = gamestate_acted_on.board_width
-    board_height = gamestate_acted_on.board_height
-    board_rows = get_board_rows_from_csv(gamestate_acted_on.board_tiles, board_height, board_width)
-
+#no side effects
+def get_rock_data_from_gamestate(gamestate_acted_on, player1_active):
     if player1_active:
+        active_player_squares_per_rock = csv_to_int_list(gamestate_acted_on.player1_square_count_per_rock)
         active_player_rock_number_list = csv_to_int_list(gamestate_acted_on.player1_rocks)
         active_player_rock_x_coords = csv_to_int_list(gamestate_acted_on.player1_rocks_x_coords)
         active_player_rock_y_coords = csv_to_int_list(gamestate_acted_on.player1_rocks_y_coords)
+        other_player_squares_per_rock = csv_to_int_list(gamestate_acted_on.player2_square_count_per_rock)
         other_player_rock_number_list = csv_to_int_list(gamestate_acted_on.player2_rocks)
         other_player_rock_x_coords = csv_to_int_list(gamestate_acted_on.player2_rocks_x_coords)
         other_player_rock_y_coords = csv_to_int_list(gamestate_acted_on.player2_rocks_y_coords)
@@ -217,25 +294,54 @@ def validate_move(gamestate_acted_on, actor_user, source_rock_index, target_x, t
         other_player_rock_number_list = csv_to_int_list(gamestate_acted_on.player1_rocks)
         other_player_rock_x_coords = csv_to_int_list(gamestate_acted_on.player1_rocks_x_coords)
         other_player_rock_y_coords = csv_to_int_list(gamestate_acted_on.player1_rocks_y_coords)
+        other_player_squares_per_rock = csv_to_int_list(gamestate_acted_on.player1_square_count_per_rock)
         active_player_rock_number_list = csv_to_int_list(gamestate_acted_on.player2_rocks)
         active_player_rock_x_coords = csv_to_int_list(gamestate_acted_on.player2_rocks_x_coords)
         active_player_rock_y_coords = csv_to_int_list(gamestate_acted_on.player2_rocks_y_coords)
+        active_player_squares_per_rock = csv_to_int_list(gamestate_acted_on.player2_square_count_per_rock)
         
-    source_rock = Rock.rock_from_rock_number(active_player_rock_number_list[source_rock_index])
-    source_rock_x = active_player_rock_x_coords[source_rock_index]
-    source_rock_y = active_player_rock_y_coords[source_rock_index]
-    source_rock_square = (source_rock_x, source_rock_y)
     active_player_rocks = [Rock.rock_from_rock_number(rock_number) for
                            rock_number in active_player_rock_number_list]
     other_player_rocks =  [Rock.rock_from_rock_number(rock_number) for
                            rock_number in other_player_rock_number_list]
-    active_player_rock_squares = [(active_player_rock_x_coords[i], active_player_rock_y_coords[i]) for
-                                  i in range(0, len(active_player_rock_number_list))]
-    other_player_rock_squares = [(other_player_rock_x_coords[i], other_player_rock_y_coords[i]) for
-                                 i in range(0, len(other_player_rock_number_list))]
 
-    valid_target_squares = get_valid_target_squares(source_rock,
-                                                    source_rock_square,
+    active_player_rock_squares = get_square_dict(active_player_squares_per_rock,
+                                                 active_player_rock_x_coords,
+                                                 active_player_rock_y_coords)
+    other_player_rock_squares = get_square_dict(other_player_squares_per_rock,
+                                                other_player_rock_x_coords,
+                                                other_player_rock_y_coords)
+
+    return (active_player_rocks,
+            other_player_rocks,
+            active_player_rock_squares,
+            other_player_rock_squares)
+
+#no side effects
+#returns "OK" if valid move, otherwise string explaining why it's invalid
+def validate_move(gamestate_acted_on, actor_user, source_rock_index, target_x, target_y):
+    #invalid if the wrong player is trying to act
+    player1_active = (actor_user == gamestate_acted_on.player1_user)
+    if player1_active and (gamestate_acted_on.turns_taken%2 == 1):
+        return "Wrong player submitting turn."
+    if not player1_active and (gamestate_acted_on.turns_taken%2 == 0):
+        return "Wrong player submitting turn."
+
+    board_width = gamestate_acted_on.board_width
+    board_height = gamestate_acted_on.board_height
+    board_rows = get_board_rows_from_csv(gamestate_acted_on.board_tiles, board_height, board_width)
+
+    active_player_rocks,
+    other_player_rocks,
+    active_player_rock_squares,
+    other_player_rock_squares = get_rock_data_from_gamestate(gamestate_acted_on, player1_active)
+
+    source_rock = active_player_rocks[source_rock_index]
+    print(active_player_rock_squares)
+    source_rock_squares = active_player_rock_squares[source_rock_index]
+    valid_target_squares = get_valid_target_squares(source_rock_index,
+                                                    source_rock,
+                                                    source_rock_squares,
                                                     active_player_rocks,
                                                     active_player_rock_squares,
                                                     other_player_rocks,
@@ -246,11 +352,13 @@ def validate_move(gamestate_acted_on, actor_user, source_rock_index, target_x, t
 
     target_square = (target_x, target_y)
     if target_square not in valid_target_squares:
-        return False                                
+        if len(valid_target_squares) == 0:
+            return "That's not a valid target square. It looks like that rock can't move."
+        else:
+            return "That's not a valid target square. Valid squares are: " + str(valid_target_squares)                               
 
-    return True
+    return "OK"
     
-
 
 def do_move(gamestate_acted_on, actor_user, source_rock_index, target_x, target_y):
     next_gamestate = Gamestate.objects.get(pk=gamestate_acted_on.pk)
@@ -266,8 +374,9 @@ def do_move(gamestate_acted_on, actor_user, source_rock_index, target_x, target_
                                                 str(source_rock_index),
                                                 str(target_x),
                                                 str(target_y)])
-    
-    if (actor_user == gamestate_acted_on.player1_user):
+
+    player1_is_actor = (actor_user == gamestate_acted_on.player1_user)
+    if (player1_is_actor):
         next_gamestate.player1_rocks_x_coords = csv_index_assign(next_gamestate.player1_rocks_x_coords,
                                                                  source_rock_index,
                                                                  target_x)
@@ -281,18 +390,67 @@ def do_move(gamestate_acted_on, actor_user, source_rock_index, target_x, target_
         next_gamestate.player2_rocks_y_coords = csv_index_assign(next_gamestate.player2_rocks_x_coords,
                                                                  source_rock_index,
                                                                  target_y)
+        
+    active_player_rocks,
+    other_player_rocks,
+    active_player_rock_squares,
+    other_player_rock_squares = get_rock_data_from_gamestate(gamestate_acted_on, player1_active)
 
+    source_rock = active_player_rocks[source_rock_index]
+    width = next_gamestate.width
+    height = next_gamestate.height
+    if source_rock.color == Colors.GREY:
+        occupant_index = get_occupant((target_x, target_y), other_player_rock_squares)
+        if (occupant_index):
+            other_player_rock_squares[occupant_index] = [(-3, -3)] if player1_active else [(-4, -4)]
+        active_player_rock_squares[source_rock_index] = (target_x, target_y)
+    if source_rock.color == Colors.BLUE:
+        source_rock_squares = active_player_rock_squares[source_rock_index]
+        if len(source_rock_squares) == 1:
+            for line in get_move_lines(source_rock_squares[0],
+                                       source_rock.shape,
+                                       width,
+                                       height):
+                source_rock_squares.extend([square for square in line if in_bounds(square,
+                                                                                   width,
+                                                                                   height)])
+        else:
+            active_player_rock_squares[source_rock_index] = (target_x, target_y)
+    if source_rock.color == Colors.RED:
+        source_rock_squares = active_player_rock_squares[source_rock_index]
+        for line in get_move_lines(source_rock_squares[0],
+                                   source_rock.shape,
+                                   width,
+                                   height):
+            for square in line:
+                enemy_occupant_index = get_occupant((target_x, target_y), other_player_rock_squares)
+                actor_occupant_index = get_occupant((target_x, target_y), active_player_rock_squares)
+                if (enemy_occupant_index):
+                    other_player_rock_squares[enemy_occupant_index] = [(-5, -5)]
+                if (actor_occupant_index):
+                    active_player_rock_squares[actor_occupant_index] = [(-5, -5)]
+        
     next_gamestate.save()
     return next_gamestate
 
+#no side effects
+def get_occupant(square, active_player_rock_squares, other_player_rock_squares):
+    for key, value in active_player_rock_squares:
+        if square in value:
+            return key
+    for key, value in other_player_rock_squares:
+        if square in value:
+            return key
+    return None
 
+#no side effects
 def csv_to_int_list(csv):
     split_csv = csv.split(',')
     if ('' in split_csv):
         raise Exception(str(split_csv))
     return [int(s) for s in split_csv]
 
-
+#no side effects
 def csv_index_assign(csv, index, value):
     int_list = csv_to_int_list(csv)
     int_list[index] = value
