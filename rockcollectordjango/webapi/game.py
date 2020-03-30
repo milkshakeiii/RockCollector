@@ -11,7 +11,7 @@ class BoardTiles(Enum):
 class Colors(Enum):
     GREY = 1
     BLUE = 2
-    YELLOW = 3
+    RED = 3
 class Shapes(Enum):
     CIRCULAR = 1
     SQUARE = 2
@@ -280,44 +280,6 @@ def get_square_dict(squares_per_rock, rock_x_coords, rock_y_coords):
     return square_dict
 
 #no side effects
-def get_rock_data_from_gamestate(gamestate_acted_on, player1_active):
-    if player1_active:
-        active_player_squares_per_rock = csv_to_int_list(gamestate_acted_on.player1_square_count_per_rock)
-        active_player_rock_number_list = csv_to_int_list(gamestate_acted_on.player1_rocks)
-        active_player_rock_x_coords = csv_to_int_list(gamestate_acted_on.player1_rocks_x_coords)
-        active_player_rock_y_coords = csv_to_int_list(gamestate_acted_on.player1_rocks_y_coords)
-        other_player_squares_per_rock = csv_to_int_list(gamestate_acted_on.player2_square_count_per_rock)
-        other_player_rock_number_list = csv_to_int_list(gamestate_acted_on.player2_rocks)
-        other_player_rock_x_coords = csv_to_int_list(gamestate_acted_on.player2_rocks_x_coords)
-        other_player_rock_y_coords = csv_to_int_list(gamestate_acted_on.player2_rocks_y_coords)
-    else:
-        other_player_rock_number_list = csv_to_int_list(gamestate_acted_on.player1_rocks)
-        other_player_rock_x_coords = csv_to_int_list(gamestate_acted_on.player1_rocks_x_coords)
-        other_player_rock_y_coords = csv_to_int_list(gamestate_acted_on.player1_rocks_y_coords)
-        other_player_squares_per_rock = csv_to_int_list(gamestate_acted_on.player1_square_count_per_rock)
-        active_player_rock_number_list = csv_to_int_list(gamestate_acted_on.player2_rocks)
-        active_player_rock_x_coords = csv_to_int_list(gamestate_acted_on.player2_rocks_x_coords)
-        active_player_rock_y_coords = csv_to_int_list(gamestate_acted_on.player2_rocks_y_coords)
-        active_player_squares_per_rock = csv_to_int_list(gamestate_acted_on.player2_square_count_per_rock)
-        
-    active_player_rocks = [Rock.rock_from_rock_number(rock_number) for
-                           rock_number in active_player_rock_number_list]
-    other_player_rocks =  [Rock.rock_from_rock_number(rock_number) for
-                           rock_number in other_player_rock_number_list]
-
-    active_player_rock_squares = get_square_dict(active_player_squares_per_rock,
-                                                 active_player_rock_x_coords,
-                                                 active_player_rock_y_coords)
-    other_player_rock_squares = get_square_dict(other_player_squares_per_rock,
-                                                other_player_rock_x_coords,
-                                                other_player_rock_y_coords)
-
-    return (active_player_rocks,
-            other_player_rocks,
-            active_player_rock_squares,
-            other_player_rock_squares)
-
-#no side effects
 #returns "OK" if valid move, otherwise string explaining why it's invalid
 def validate_move(gamestate_acted_on, actor_user, source_rock_index, target_x, target_y):
     #invalid if the wrong player is trying to act
@@ -331,10 +293,10 @@ def validate_move(gamestate_acted_on, actor_user, source_rock_index, target_x, t
     board_height = gamestate_acted_on.board_height
     board_rows = get_board_rows_from_csv(gamestate_acted_on.board_tiles, board_height, board_width)
 
-    active_player_rocks,
-    other_player_rocks,
-    active_player_rock_squares,
-    other_player_rock_squares = get_rock_data_from_gamestate(gamestate_acted_on, player1_active)
+    (active_player_rocks,
+     other_player_rocks,
+     active_player_rock_squares,
+     other_player_rock_squares) = get_rock_data_from_gamestate(gamestate_acted_on, player1_active)
 
     source_rock = active_player_rocks[source_rock_index]
     print(active_player_rock_squares)
@@ -375,35 +337,23 @@ def do_move(gamestate_acted_on, actor_user, source_rock_index, target_x, target_
                                                 str(target_x),
                                                 str(target_y)])
 
-    player1_is_actor = (actor_user == gamestate_acted_on.player1_user)
-    if (player1_is_actor):
-        next_gamestate.player1_rocks_x_coords = csv_index_assign(next_gamestate.player1_rocks_x_coords,
-                                                                 source_rock_index,
-                                                                 target_x)
-        next_gamestate.player1_rocks_y_coords = csv_index_assign(next_gamestate.player1_rocks_x_coords,
-                                                                 source_rock_index,
-                                                                 target_y)
-    else:
-        next_gamestate.player2_rocks_x_coords = csv_index_assign(next_gamestate.player2_rocks_x_coords,
-                                                                 source_rock_index,
-                                                                 target_x)
-        next_gamestate.player2_rocks_y_coords = csv_index_assign(next_gamestate.player2_rocks_x_coords,
-                                                                 source_rock_index,
-                                                                 target_y)
+    player1_active = (actor_user == gamestate_acted_on.player1_user)
         
-    active_player_rocks,
-    other_player_rocks,
-    active_player_rock_squares,
-    other_player_rock_squares = get_rock_data_from_gamestate(gamestate_acted_on, player1_active)
+    (active_player_rocks,
+     other_player_rocks,
+     active_player_rock_squares,
+     other_player_rock_squares) = get_rock_data_from_gamestate(gamestate_acted_on, player1_active)
 
     source_rock = active_player_rocks[source_rock_index]
-    width = next_gamestate.width
-    height = next_gamestate.height
+    width = next_gamestate.board_width
+    height = next_gamestate.board_height
+    
+    ####################################
     if source_rock.color == Colors.GREY:
         occupant_index = get_occupant((target_x, target_y), other_player_rock_squares)
         if (occupant_index):
             other_player_rock_squares[occupant_index] = [(-3, -3)] if player1_active else [(-4, -4)]
-        active_player_rock_squares[source_rock_index] = (target_x, target_y)
+        active_player_rock_squares[source_rock_index] = [(target_x, target_y)]
     if source_rock.color == Colors.BLUE:
         source_rock_squares = active_player_rock_squares[source_rock_index]
         if len(source_rock_squares) == 1:
@@ -429,16 +379,105 @@ def do_move(gamestate_acted_on, actor_user, source_rock_index, target_x, target_
                     other_player_rock_squares[enemy_occupant_index] = [(-5, -5)]
                 if (actor_occupant_index):
                     active_player_rock_squares[actor_occupant_index] = [(-5, -5)]
-        
+    ####################################
+
+    
+    apply_rock_data_to_gamestate(player1_active,
+                                 next_gamestate,
+                                 active_player_rocks,
+                                 other_player_rocks,
+                                 active_player_rock_squares,
+                                 other_player_rock_squares)
     next_gamestate.save()
     return next_gamestate
 
 #no side effects
-def get_occupant(square, active_player_rock_squares, other_player_rock_squares):
-    for key, value in active_player_rock_squares:
-        if square in value:
-            return key
-    for key, value in other_player_rock_squares:
+def get_rock_data_from_gamestate(gamestate_acted_on, player1_active):
+    if player1_active:
+        active_player_squares_per_rock = csv_to_int_list(gamestate_acted_on.player1_square_count_per_rock)
+        active_player_rock_number_list = csv_to_int_list(gamestate_acted_on.player1_rocks)
+        active_player_rock_x_coords = csv_to_int_list(gamestate_acted_on.player1_rocks_x_coords)
+        active_player_rock_y_coords = csv_to_int_list(gamestate_acted_on.player1_rocks_y_coords)
+        other_player_squares_per_rock = csv_to_int_list(gamestate_acted_on.player2_square_count_per_rock)
+        other_player_rock_number_list = csv_to_int_list(gamestate_acted_on.player2_rocks)
+        other_player_rock_x_coords = csv_to_int_list(gamestate_acted_on.player2_rocks_x_coords)
+        other_player_rock_y_coords = csv_to_int_list(gamestate_acted_on.player2_rocks_y_coords)
+    else:
+        other_player_rock_number_list = csv_to_int_list(gamestate_acted_on.player1_rocks)
+        other_player_rock_x_coords = csv_to_int_list(gamestate_acted_on.player1_rocks_x_coords)
+        other_player_rock_y_coords = csv_to_int_list(gamestate_acted_on.player1_rocks_y_coords)
+        other_player_squares_per_rock = csv_to_int_list(gamestate_acted_on.player1_square_count_per_rock)
+        active_player_rock_number_list = csv_to_int_list(gamestate_acted_on.player2_rocks)
+        active_player_rock_x_coords = csv_to_int_list(gamestate_acted_on.player2_rocks_x_coords)
+        active_player_rock_y_coords = csv_to_int_list(gamestate_acted_on.player2_rocks_y_coords)
+        active_player_squares_per_rock = csv_to_int_list(gamestate_acted_on.player2_square_count_per_rock)
+        
+    active_player_rocks = [Rock.rock_from_rock_number(rock_number) for
+                           rock_number in active_player_rock_number_list]
+    other_player_rocks =  [Rock.rock_from_rock_number(rock_number) for
+                           rock_number in other_player_rock_number_list]
+
+    active_player_rock_squares = get_square_dict(active_player_squares_per_rock,
+                                                 active_player_rock_x_coords,
+                                                 active_player_rock_y_coords)
+    other_player_rock_squares = get_square_dict(other_player_squares_per_rock,
+                                                other_player_rock_x_coords,
+                                                other_player_rock_y_coords)
+
+    return (active_player_rocks,
+            other_player_rocks,
+            active_player_rock_squares,
+            other_player_rock_squares)
+
+#yes side effects (to gamestate)
+def apply_rock_data_to_gamestate(player1_active,
+                                 gamestate,
+                                 active_player_rocks,
+                                 other_player_rocks,
+                                 active_player_rock_squares,
+                                 other_player_rock_squares):
+    active_player_square_count_per_rock = []
+    active_player_rock_squares_list = []
+    for i in range(len(active_player_rocks)):
+        squares = active_player_rock_squares[i]
+        active_player_square_count_per_rock.append(str(len(squares)))
+        active_player_rock_squares_list.extend(squares)
+    active_player_square_count_per_rock_csv = ','.join(active_player_square_count_per_rock)
+    active_player_rocks_x_coords_csv = ','.join([str(square[0]) for
+                                                 square in active_player_rock_squares_list])
+    active_player_rocks_y_coords_csv = ','.join([str(square[1]) for
+                                                 square in active_player_rock_squares_list])
+
+    other_player_square_count_per_rock = []
+    other_player_rock_squares_list = []
+    for i in range(len(other_player_rocks)):
+        squares = other_player_rock_squares[i]
+        other_player_square_count_per_rock.append(str(len(squares)))
+        other_player_rock_squares_list.extend(squares)
+    other_player_square_count_per_rock_csv = ','.join(other_player_square_count_per_rock)
+    other_player_rocks_x_coords_csv = ','.join([str(square[0]) for
+                                                square in other_player_rock_squares_list])
+    other_player_rocks_y_coords_csv = ','.join([str(square[1]) for
+                                                square in other_player_rock_squares_list])
+
+    if (player1_active):
+        gamestate.player1_square_count_per_rock = active_player_square_count_per_rock_csv
+        gamestate.player1_rocks_x_coords = active_player_rocks_x_coords_csv
+        gamestate.player1_rocks_y_coords = active_player_rocks_y_coords_csv
+        gamestate.player2_square_count_per_rock = other_player_square_count_per_rock_csv
+        gamestate.player2_rocks_x_coords = other_player_rocks_x_coords_csv
+        gamestate.player2_rocks_y_coords = other_player_rocks_y_coords_csv
+    else:
+        gamestate.player2_square_count_per_rock = active_player_square_count_per_rock_csv
+        gamestate.player2_rocks_x_coords = active_player_rocks_x_coords_csv
+        gamestate.player2_rocks_y_coords = active_player_rocks_y_coords_csv
+        gamestate.player1_square_count_per_rock = other_player_square_count_per_rock_csv
+        gamestate.player1_rocks_x_coords = other_player_rocks_x_coords_csv
+        gamestate.player1_rocks_y_coords = other_player_rocks_y_coords_csv
+
+#no side effects
+def get_occupant(square, rock_squares):
+    for key, value in rock_squares.items():
         if square in value:
             return key
     return None
