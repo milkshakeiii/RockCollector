@@ -361,17 +361,19 @@ def do_move(gamestate_acted_on, actor_user, source_rock_index, target_x, target_
     source_rock_root_square = active_player_rock_squares[source_rock_index][0]
     width = next_gamestate.board_width
     height = next_gamestate.board_height
-    
-    ##################################################################################
-    if (source_rock_root_square in [(-1, -1), (-2, -2)]): #so far, placement from the ready zone is just
-        active_player_rock_squares[source_rock_index] = [(target_x, target_y)] #this
-    elif source_rock.color == Colors.GREY:
+
+    def capture_target():
         if (has_occupant((target_x, target_y), other_player_rock_squares)):
             occupant_index = get_occupant((target_x, target_y), other_player_rock_squares)
             occupant_is_blue = other_player_rocks[occupant_index].color == Colors.BLUE
             occupant_is_multisquared = len(other_player_rock_squares[occupant_index]) > 1
             if not (occupant_is_blue and occupant_is_multisquared):
                 other_player_rock_squares[occupant_index] = [(-3, -3)] if player1_active else [(-4, -4)]
+    ##################################################################################
+    if (source_rock_root_square in [(-1, -1), (-2, -2)]): #so far, placement from the ready zone is just
+        active_player_rock_squares[source_rock_index] = [(target_x, target_y)] #this
+    elif source_rock.color == Colors.GREY:
+        capture_target()
         active_player_rock_squares[source_rock_index] = [(target_x, target_y)]
     elif source_rock.color == Colors.BLUE:
         source_rock_squares = active_player_rock_squares[source_rock_index]
@@ -382,6 +384,7 @@ def do_move(gamestate_acted_on, actor_user, source_rock_index, target_x, target_
                                        height):
                 source_rock_squares.extend(line)
         else:
+            capture_target()
             active_player_rock_squares[source_rock_index] = [(target_x, target_y)]
     elif source_rock.color == Colors.RED:
         source_rock_squares = active_player_rock_squares[source_rock_index]
@@ -398,7 +401,6 @@ def do_move(gamestate_acted_on, actor_user, source_rock_index, target_x, target_
                     active_player_rock_squares[actor_occupant_index] = [(-5, -5)]
     ##################################################################################
 
-    
     apply_rock_data_to_gamestate(player1_active,
                                  next_gamestate,
                                  active_player_rocks,
