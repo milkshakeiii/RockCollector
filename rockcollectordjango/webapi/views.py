@@ -161,12 +161,14 @@ def textify_gamestate(gamestate):
             rock_square_counts = csv_to_int_list(gamestate.player2_square_count_per_rock)
             x_coords = csv_to_int_list(gamestate.player2_rocks_x_coords)
             y_coords = csv_to_int_list(gamestate.player2_rocks_y_coords)
+        coords_displayed = 0
         for i in range(0, 8):
             rock = Rock.rock_from_rock_number(rocklist[i])
             return_string += str(i) + ": " + rock.get_name_string() + " "
             for j in range(0, rock_square_counts[i]):
-                return_string += coord_to_position_string(x_coords[i],
-                                                          y_coords[i])
+                return_string += coord_to_position_string(x_coords[coords_displayed],
+                                                          y_coords[coords_displayed])
+                coords_displayed += 1
                 return_string += ", "
             return_string = return_string[0:-2]
             return_string += newline

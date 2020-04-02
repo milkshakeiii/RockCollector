@@ -73,21 +73,21 @@ def make_game(player1, player2): #player1, player2 are django users
                                              first_gamestate.board_height))
     
     player1_rocks_int_list = [Rock(Colors.GREY, Shapes.SQUARE, Materials.SHALE).get_rock_number(),
-                              Rock(Colors.GREY, Shapes.HOOKED, Materials.SHALE).get_rock_number(),
+                              Rock(Colors.RED, Shapes.HOOKED, Materials.SHALE).get_rock_number(),
+                              Rock(Colors.BLUE, Shapes.TRIANGULAR, Materials.SHALE).get_rock_number(),
+                              Rock(Colors.RED, Shapes.STARSHAPED, Materials.SHALE).get_rock_number(),
+                              Rock(Colors.BLUE, Shapes.CIRCULAR, Materials.SHALE).get_rock_number(),
                               Rock(Colors.GREY, Shapes.TRIANGULAR, Materials.SHALE).get_rock_number(),
-                              Rock(Colors.GREY, Shapes.STARSHAPED, Materials.SHALE).get_rock_number(),
+                              Rock(Colors.RED, Shapes.HOOKED, Materials.SHALE).get_rock_number(),
+                              Rock(Colors.BLUE, Shapes.SQUARE, Materials.SHALE).get_rock_number()]
+    player2_rocks_int_list = [Rock(Colors.BLUE, Shapes.SQUARE, Materials.SHALE).get_rock_number(),
+                              Rock(Colors.GREY, Shapes.HOOKED, Materials.SHALE).get_rock_number(),
+                              Rock(Colors.RED, Shapes.TRIANGULAR, Materials.SHALE).get_rock_number(),
+                              Rock(Colors.BLUE, Shapes.STARSHAPED, Materials.SHALE).get_rock_number(),
                               Rock(Colors.GREY, Shapes.CIRCULAR, Materials.SHALE).get_rock_number(),
-                              Rock(Colors.GREY, Shapes.TRIANGULAR, Materials.SHALE).get_rock_number(),
-                              Rock(Colors.GREY, Shapes.HOOKED, Materials.SHALE).get_rock_number(),
-                              Rock(Colors.GREY, Shapes.SQUARE, Materials.SHALE).get_rock_number()]
-    player2_rocks_int_list = [Rock(Colors.GREY, Shapes.SQUARE, Materials.SHALE).get_rock_number(),
-                              Rock(Colors.GREY, Shapes.HOOKED, Materials.SHALE).get_rock_number(),
-                              Rock(Colors.GREY, Shapes.TRIANGULAR, Materials.SHALE).get_rock_number(),
-                              Rock(Colors.GREY, Shapes.STARSHAPED, Materials.SHALE).get_rock_number(),
-                              Rock(Colors.GREY, Shapes.CIRCULAR, Materials.SHALE).get_rock_number(),
-                              Rock(Colors.GREY, Shapes.TRIANGULAR, Materials.SHALE).get_rock_number(),
-                              Rock(Colors.GREY, Shapes.HOOKED, Materials.SHALE).get_rock_number(),
-                              Rock(Colors.GREY, Shapes.SQUARE, Materials.SHALE).get_rock_number()]
+                              Rock(Colors.RED, Shapes.TRIANGULAR, Materials.SHALE).get_rock_number(),
+                              Rock(Colors.RED, Shapes.HOOKED, Materials.SHALE).get_rock_number(),
+                              Rock(Colors.BLUE, Shapes.SQUARE, Materials.SHALE).get_rock_number()]
     first_gamestate.player1_rocks = ','.join([str(i) for i in player1_rocks_int_list])
     first_gamestate.player2_rocks = ','.join([str(i) for i in player2_rocks_int_list])
 
@@ -118,36 +118,46 @@ def get_move_lines(start_square, shape, width, height):
     upleft = [add_coords(start_square, (i, -i)) for i in range(1, width)]
     downright = [add_coords(start_square, (-i, i)) for i in range(1, width)]
     downleft = [add_coords(start_square, (-i, -i)) for i in range(1, width)]
+
+    ##################################################################################
     if shape == Shapes.CIRCULAR:
-        return [add_coords(start_square, (1, -1)),
-                add_coords(start_square, (1, 0)),
-                add_coords(start_square, (1, 1)),
-                add_coords(start_square, (0, -1)),
-                add_coords(start_square, (0, 1)),
-                add_coords(start_square, (-1, -1)),
-                add_coords(start_square, (-1, 0)),
-                add_coords(start_square, (-1, 1))]
+        move_lines = [add_coords(start_square, (1, -1)),
+                      add_coords(start_square, (1, 0)),
+                      add_coords(start_square, (1, 1)),
+                      add_coords(start_square, (0, -1)),
+                      add_coords(start_square, (0, 1)),
+                      add_coords(start_square, (-1, -1)),
+                      add_coords(start_square, (-1, 0)),
+                      add_coords(start_square, (-1, 1))]
     if shape == Shapes.SQUARE:
-        return [up, down, left, right]
+        move_lines = [up, down, left, right]
     if shape == Shapes.TRIANGULAR:
-        return [upright, upleft, downright, downleft]
+        move_lines = [upright, upleft, downright, downleft]
     if shape == Shapes.STARSHAPED:
-        return [upright, upleft, downright, downleft, up, right, down, left]
+        move_lines = [upright, upleft, downright, downleft, up, right, down, left]
     if shape == Shapes.LUMPY:
-        return [[add_coords(start_square, (0, 1))], [add_coords(shape, (0, -1))]]
+        move_lines = [[add_coords(start_square, (0, 1))], [add_coords(shape, (0, -1))]]
     if shape == Shapes.HOOKED:
-        return [[add_coords(start_square, (2, 1))],
-                [add_coords(start_square, (2, -1))],
-                [add_coords(start_square, (-2, 1))],
-                [add_coords(start_square, (-2, -1))],
-                [add_coords(start_square, (1, 2))],
-                [add_coords(start_square, (1, -2))],
-                [add_coords(start_square, (-1, 2))],
-                [add_coords(start_square, (-1, -2))]]
+        move_lines = [[add_coords(start_square, (2, 1))],
+                      [add_coords(start_square, (2, -1))],
+                      [add_coords(start_square, (-2, 1))],
+                      [add_coords(start_square, (-2, -1))],
+                      [add_coords(start_square, (1, 2))],
+                      [add_coords(start_square, (1, -2))],
+                      [add_coords(start_square, (-1, 2))],
+                      [add_coords(start_square, (-1, -2))]]
+    ##################################################################################
+
+    for i in range(len(move_lines)):
+        line = move_lines[i]
+        move_lines[i] = [move for move in line if in_bounds(move, width, height)]
+
+    return move_lines
+        
 
 #no side effects (obv)
 def in_bounds(square, width, height):
-    return square[0] >= 0 and square[0] <= width and square[1] >= 0 and square[1] <= height
+    return square[0] >= 0 and square[0] < width and square[1] >= 0 and square[1] < height
 
 #no side effects
 #takes a source_rock that is on the board
@@ -175,6 +185,7 @@ def get_onboard_targetable_squares(source_rock_index,
     
     start_square = source_rock_squares[0]
 
+    ##################################################################################
     if (source_rock.color == Colors.GREY):
         targetable_squares = []
         move_lines = get_move_lines(start_square, source_rock.shape, width, height)
@@ -202,6 +213,7 @@ def get_onboard_targetable_squares(source_rock_index,
                 else:
                     targetable_squares.append(square)
         return targetable_squares
+    ##################################################################################
 
     raise Exception(str(source_rock.shape) + ", " + str(source_rock.color) + " didn't match a targeting scheme")
         
@@ -299,7 +311,6 @@ def validate_move(gamestate_acted_on, actor_user, source_rock_index, target_x, t
      other_player_rock_squares) = get_rock_data_from_gamestate(gamestate_acted_on, player1_active)
 
     source_rock = active_player_rocks[source_rock_index]
-    print(active_player_rock_squares)
     source_rock_squares = active_player_rock_squares[source_rock_index]
     valid_target_squares = get_valid_target_squares(source_rock_index,
                                                     source_rock,
@@ -321,7 +332,9 @@ def validate_move(gamestate_acted_on, actor_user, source_rock_index, target_x, t
 
     return "OK"
     
-
+#extracts data, does move based on rock color in marked section
+#calls apply_rock_data_to_gamestate, then  saves
+#yes side effects (TO THE DATABASE, creates a NEW gamestate
 def do_move(gamestate_acted_on, actor_user, source_rock_index, target_x, target_y):
     next_gamestate = Gamestate.objects.get(pk=gamestate_acted_on.pk)
     next_gamestate.pk = None
@@ -345,41 +358,45 @@ def do_move(gamestate_acted_on, actor_user, source_rock_index, target_x, target_
      other_player_rock_squares) = get_rock_data_from_gamestate(gamestate_acted_on, player1_active)
 
     source_rock = active_player_rocks[source_rock_index]
+    source_rock_root_square = active_player_rock_squares[source_rock_index][0]
     width = next_gamestate.board_width
     height = next_gamestate.board_height
     
-    ####################################
-    if source_rock.color == Colors.GREY:
-        occupant_index = get_occupant((target_x, target_y), other_player_rock_squares)
-        if (occupant_index):
-            other_player_rock_squares[occupant_index] = [(-3, -3)] if player1_active else [(-4, -4)]
+    ##################################################################################
+    if (source_rock_root_square in [(-1, -1), (-2, -2)]): #so far, placement from the ready zone is just
+        active_player_rock_squares[source_rock_index] = [(target_x, target_y)] #this
+    elif source_rock.color == Colors.GREY:
+        if (has_occupant((target_x, target_y), other_player_rock_squares)):
+            occupant_index = get_occupant((target_x, target_y), other_player_rock_squares)
+            occupant_is_blue = other_player_rocks[occupant_index].color == Colors.BLUE
+            occupant_is_multisquared = len(other_player_rock_squares[occupant_index]) > 1
+            if not (occupant_is_blue and occupant_is_multisquared):
+                other_player_rock_squares[occupant_index] = [(-3, -3)] if player1_active else [(-4, -4)]
         active_player_rock_squares[source_rock_index] = [(target_x, target_y)]
-    if source_rock.color == Colors.BLUE:
+    elif source_rock.color == Colors.BLUE:
         source_rock_squares = active_player_rock_squares[source_rock_index]
         if len(source_rock_squares) == 1:
             for line in get_move_lines(source_rock_squares[0],
                                        source_rock.shape,
                                        width,
                                        height):
-                source_rock_squares.extend([square for square in line if in_bounds(square,
-                                                                                   width,
-                                                                                   height)])
+                source_rock_squares.extend(line)
         else:
-            active_player_rock_squares[source_rock_index] = (target_x, target_y)
-    if source_rock.color == Colors.RED:
+            active_player_rock_squares[source_rock_index] = [(target_x, target_y)]
+    elif source_rock.color == Colors.RED:
         source_rock_squares = active_player_rock_squares[source_rock_index]
         for line in get_move_lines(source_rock_squares[0],
                                    source_rock.shape,
                                    width,
                                    height):
             for square in line:
-                enemy_occupant_index = get_occupant((target_x, target_y), other_player_rock_squares)
-                actor_occupant_index = get_occupant((target_x, target_y), active_player_rock_squares)
-                if (enemy_occupant_index):
+                if (has_occupant(square, other_player_rock_squares)):
+                    enemy_occupant_index = get_occupant(square, other_player_rock_squares)
                     other_player_rock_squares[enemy_occupant_index] = [(-5, -5)]
-                if (actor_occupant_index):
+                if (has_occupant(square, active_player_rock_squares)):
+                    actor_occupant_index = get_occupant(square, active_player_rock_squares)
                     active_player_rock_squares[actor_occupant_index] = [(-5, -5)]
-    ####################################
+    ##################################################################################
 
     
     apply_rock_data_to_gamestate(player1_active,
@@ -474,6 +491,13 @@ def apply_rock_data_to_gamestate(player1_active,
         gamestate.player1_square_count_per_rock = other_player_square_count_per_rock_csv
         gamestate.player1_rocks_x_coords = other_player_rocks_x_coords_csv
         gamestate.player1_rocks_y_coords = other_player_rocks_y_coords_csv
+
+#no side effects
+def has_occupant(square, rock_squares):
+    for key, value in rock_squares.items():
+        if square in value:
+            return True
+    return False
 
 #no side effects
 def get_occupant(square, rock_squares):
