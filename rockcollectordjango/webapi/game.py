@@ -1,6 +1,5 @@
 from webapi.models import Gamestate
 from enum import Enum
-import uuid
 
 
 
@@ -61,9 +60,9 @@ class Rock():
 
 
 
-def make_game(player1, player2): #player1, player2 are django users
+def make_game(player1, player2, uuid): #player1, player2 are django users
     first_gamestate = Gamestate(player1_user=player1, player2_user=player2)
-    first_gamestate.game_uuid = uuid.uuid4()
+    first_gamestate.game_uuid = uuid
     first_gamestate.board_width = 8
     first_gamestate.board_height = 8
     first_gamestate.location = Locations.JUNGLE.value

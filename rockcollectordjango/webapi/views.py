@@ -5,6 +5,7 @@ from webapi.models import Gamestate
 from webapi.game import make_game, do_move, validate_move
 from webapi.game import Locations, Colors, Shapes, Materials, Rock
 from webapi.game import csv_to_int_list
+import uuid
 
 
 
@@ -37,6 +38,7 @@ def index(request):
 
 
 users_looking_for_games = []
+uuids_of_games_for_said_users = []
 def find_game(request):
     user = one_message_authenticate(request)
     if user is None:
@@ -46,13 +48,35 @@ def find_game(request):
         return HttpResponse("You're already in the queue.")
     elif (len(users_looking_for_games) > 0):
         opponent = users_looking_for_games.pop()
-        first_gamestate = make_game(opponent, user)
+        new_game_uuid = uuids_of_games_for_said_users.pop()
+        first_gamestate = make_game(opponent, user, new_game_uuid)
         response = textify_gamestate(first_gamestate)
         return HttpResponse(response)
     else:
         users_looking_for_games.append(user)
-        return HttpResponse("Added to queue")
+        uuids_of_games_for_said_users.append(uuid.uuid4())
+        return HttpResponse("Added to queue.  UUID of game when an " +
+                            "opponent is found: " +
+                            str(uuids_of_games_for_said_users[-1]))
 
+
+def check_for_gamestate(request):
+    user = one_message_authenticate(request)
+    if user is None:
+        return HttpResponse(AUTH_FAILED_MESSAGE)
+    else:
+        game_uuid = request.GET['game_uuid']
+        turns_checking_for = int(request.GET['turns_taken'])
+        try:
+            gamestate_found = Gamestate.objects.get(game_uuid=game_uuid,
+                                                       turns_taken=turns_checking_for)
+        except Gamestate.DoesNotExist:
+            return HttpResponse("There is no such gamestate with " +
+                               str(turns_checking_for) + " turns taken " +
+                               "or there is no game with that uuid.")
+        response = textify_gamestate(gamestate_found)
+        return HttpResponse(response)
+                                
 
 def make_move(request):
     user = one_message_authenticate(request)
@@ -68,7 +92,7 @@ def make_move(request):
         try:
             gamestate_acted_on = Gamestate.objects.get(game_uuid=game_uuid,
                                                        turns_taken=turn_trying_to_take-1)
-        except User.DoesNotExist:
+        except Gamestate.DoesNotExist:
             return HttpResponse("Trying to take turn " + str(turn_trying_to_take) +
                                " but there is no gamestate with " +
                                str(turn_trying_to_take-1) + " turns taken " +
