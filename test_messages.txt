@@ -1,3 +1,15 @@
 http://127.0.0.1:8000/webapi/find_game?username=georgea&password=georgep
+
 http://127.0.0.1:8000/webapi/find_game?username=georgeb&password=georgep
-http://127.0.0.1:8000/webapi/make_move?username=georgea&password=georgep&game_uuid=c0095a6d-7c33-41fe-8b81-57ecc9b07071&taking_turn_number=1&source_rock_index=0&target_x=4&target_y=4
+
+http://127.0.0.1:8000/webapi/make_move?username=georgea&password=georgep&game_uuid=9f4e7568-3d36-4dd4-b5fb-7069f9279222&taking_turn_number=1&source_rock_index=0&target_x=4&target_y=4
+
+http://127.0.0.1:8000/webapi/make_move?username=georgeb&password=georgep&game_uuid=9f4e7568-3d36-4dd4-b5fb-7069f9279222&taking_turn_number=2&source_rock_index=7&target_x=3&target_y=3
+
+http://127.0.0.1:8000/webapi/make_move?username=georgea&password=georgep&game_uuid=9f4e7568-3d36-4dd4-b5fb-7069f9279222&taking_turn_number=3&source_rock_index=7&target_x=7&target_y=7
+
+http://127.0.0.1:8000/webapi/make_move?username=georgeb&password=georgep&game_uuid=9f4e7568-3d36-4dd4-b5fb-7069f9279222&taking_turn_number=4&source_rock_index=7&target_x=3&target_y=3
+
+http://127.0.0.1:8000/webapi/make_move?username=georgea&password=georgep&game_uuid=9f4e7568-3d36-4dd4-b5fb-7069f9279222&taking_turn_number=5&source_rock_index=0&target_x=4&target_y=3
+
+http://127.0.0.1:8000/webapi/make_move?username=georgeb&password=georgep&game_uuid=9f4e7568-3d36-4dd4-b5fb-7069f9279222&taking_turn_number=6&source_rock_index=7&target_x=4&target_y=3
