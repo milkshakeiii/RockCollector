@@ -15,8 +15,8 @@ newline = "<br>"
 
 #returns None if authentication fails
 def one_message_authenticate(request):
-    username = request.GET['username']
-    password = request.GET['password']
+    username = request.POST['username']
+    password = request.POST['password']
     user = authenticate(request, username=username, password=password)
     if not User.objects.filter(username=username).exists():
         user = User.objects.create_user(username,

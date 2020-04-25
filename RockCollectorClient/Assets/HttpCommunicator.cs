@@ -10,6 +10,11 @@ public class HttpCommunicator : MonoBehaviour
 
     private static HttpCommunicator instance;
 
+    public delegate void OnRequest();
+    public static event OnRequest OnFindGameRequestEvent;
+    public delegate void OnResponse(string response);
+    public static event OnResponse OnFindGameResponseEvent;
+
     void Start()
     {
         instance = this;
@@ -25,16 +30,22 @@ public class HttpCommunicator : MonoBehaviour
         username = newUsername;
         wordpass = newWordpass;
 
-        StartCoroutine(DoRequest(new Dictionary<string, string>(), "webapi/find_game"));
+        OnFindGameRequestEvent.Invoke();
+        StartCoroutine(DoRequest(new Dictionary<string, string>(), "webapi/find_game", FindGameCallback));
     }
 
-    IEnumerator DoRequest(Dictionary<string, string> formData, string endpoint)
+    public void FindGameCallback(string response)
+    {
+        OnFindGameResponseEvent.Invoke(response);
+    }
+
+    IEnumerator DoRequest(Dictionary<string, string> formData, string endpoint, OnResponse callback)
     {
         if (username.Equals("") || wordpass.Equals(""))
             throw new UnityException("uername or wordpass not set");
 
         formData["username"] = username;
-        formData["wordpass"] = wordpass;
+        formData["password"] = wordpass;
 
         UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:8000/"+endpoint, formData);
         yield return www.SendWebRequest();
@@ -46,7 +57,9 @@ public class HttpCommunicator : MonoBehaviour
         else
         {
             Debug.Log("http response:");
-            Debug.Log(www.downloadHandler.text);
+            string response = www.downloadHandler.text;
+            Debug.Log(response);
+            callback(response);
         }
     }
 }
