@@ -50,8 +50,8 @@ def find_game(request):
         opponent = users_looking_for_games.pop()
         new_game_uuid = uuids_of_games_for_said_users.pop()
         first_gamestate = make_game(opponent, user, new_game_uuid)
-        response = textify_gamestate(first_gamestate)
-        return HttpResponse(response)
+        return HttpResponse("Game created successfully. Game UUID: " +
+                            str(new_game_uuid))
     else:
         users_looking_for_games.append(user)
         uuids_of_games_for_said_users.append(uuid.uuid4())
