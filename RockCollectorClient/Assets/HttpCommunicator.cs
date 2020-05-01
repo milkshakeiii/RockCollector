@@ -96,4 +96,10 @@ public class HttpCommunicator : MonoBehaviour
             callback(response);
         }
     }
+
+    public static string BeforeTheColon(string line)
+    {
+        string[] split = line.Split(':');
+        return split[0];
+    }
 }
