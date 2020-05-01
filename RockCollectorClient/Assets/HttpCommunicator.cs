@@ -13,9 +13,11 @@ public class HttpCommunicator : MonoBehaviour
     public delegate void OnRequest();
     public static event OnRequest OnFindGameRequestEvent;
     public static event OnRequest OnCheckForGamestateRequestEvent;
+    public static event OnRequest OnTakeTurnRequestEvent;
     public delegate void OnResponse(string response);
     public static event OnResponse OnFindGameResponseEvent;
     public static event OnResponse OnCheckForGamestateResponseEvent;
+    public static event OnResponse OnTakeTurnResponseEvent;
 
     void Start()
     {
@@ -54,6 +56,21 @@ public class HttpCommunicator : MonoBehaviour
     private void CheckForGamestateCallback(string response)
     {
         OnCheckForGamestateResponseEvent.Invoke(response);
+    }
+
+    public void TakeTurnRequest(string gameUuid, string turnsTaken)
+    {
+        //if (OnCheckForGamestateRequestEvent != null)
+            //OnCheckForGamestateRequestEvent.Invoke();
+        //Dictionary<string, string> requestData = new Dictionary<string, string>();
+        //requestData["game_uuid"] = gameUuid;
+        //requestData["turns_taken"] = turnsTaken;
+        //StartCoroutine(DoRequest(requestData, "webapi/check_for_gamestate", CheckForGamestateCallback));
+    }
+
+    private void TaleTurnCallback(string response)
+    {
+        //OnCheckForGamestateResponseEvent.Invoke(response);
     }
 
     IEnumerator DoRequest(Dictionary<string, string> formData, string endpoint, OnResponse callback)

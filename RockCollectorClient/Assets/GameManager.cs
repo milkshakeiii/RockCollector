@@ -16,8 +16,15 @@ public class GameManager : MonoBehaviour
 
     private void StartCheckingForGames(string findGameResponse)
     {
-        gameUuid = findGameResponse.Split(':')[1].Substring(1);
-        StartCoroutine(DoCheckForGamestate());
+        string[] responseLines = findGameResponse.Split('\n');
+        if (responseLines[0].Equals("4") || 
+            responseLines[0].Equals("3") ||
+            responseLines[0].Equals("2"))
+        {
+            string secondLine = responseLines[1];
+            gameUuid = secondLine.Split(':')[1].Substring(1);
+            StartCoroutine(DoCheckForGamestate());
+        }
     }
 
     private IEnumerator DoCheckForGamestate()
@@ -32,6 +39,10 @@ public class GameManager : MonoBehaviour
     private void GamestateFound(string response)
     {
         Debug.Log(response);
-        nextTurnNumber += 1;
+        string[] responseLines = response.Split('\n');
+        if (responseLines[0].Equals("6"))
+        {
+            nextTurnNumber += 1;
+        }
     }
 }
