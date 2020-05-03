@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameBoardReactor : MonoBehaviour
 {
     public GameObject onesquare;
+    public GameObject piece;
 
     void Start()
     {
@@ -29,6 +30,8 @@ public class GameBoardReactor : MonoBehaviour
     private void DisplayGamestate(string gamestate_response)
     {
         string[] responseLines = gamestate_response.Split('\n');
+
+        //parse board
         float width = responseLines[5].Length;
         float height = 0f;
         for (int i = 5; i < responseLines.Length; i++)
@@ -49,9 +52,18 @@ public class GameBoardReactor : MonoBehaviour
                     squareRenderer.material.color = Color.gray;
                 }
                 newOnesquare.transform.parent = gameObject.transform;
-                newOnesquare.transform.position = new Vector2(i - 5 + 0.5f, j + 0.5f);
+                newOnesquare.transform.position = LocalGameworldPosition(i, j);
             }
         }
         gameObject.transform.position = new Vector2(-width / 2, -height / 2);
+
+        //parse pieces
+
+
+    }
+
+    public Vector2 LocalGameworldPosition(int xcoord, int ycoord)
+    {
+        return new Vector2(xcoord - 5 + 0.5f, ycoord + 0.5f);
     }
 }

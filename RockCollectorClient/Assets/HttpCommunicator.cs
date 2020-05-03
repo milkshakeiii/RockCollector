@@ -58,19 +58,26 @@ public class HttpCommunicator : MonoBehaviour
         OnCheckForGamestateResponseEvent.Invoke(response);
     }
 
-    public void TakeTurnRequest(string gameUuid, string turnsTaken)
+    public void TakeTurnRequest(string gameUuid,
+                                string takingTurnNumber,
+                                string sourceRockIndex,
+                                string targetX,
+                                string targetY)
     {
-        //if (OnCheckForGamestateRequestEvent != null)
-            //OnCheckForGamestateRequestEvent.Invoke();
-        //Dictionary<string, string> requestData = new Dictionary<string, string>();
-        //requestData["game_uuid"] = gameUuid;
-        //requestData["turns_taken"] = turnsTaken;
-        //StartCoroutine(DoRequest(requestData, "webapi/check_for_gamestate", CheckForGamestateCallback));
+        if (OnTakeTurnRequestEvent != null)
+            OnTakeTurnRequestEvent.Invoke();
+        Dictionary<string, string> requestData = new Dictionary<string, string>();
+        requestData["game_uuid"] = gameUuid;
+        requestData["taking_turn_number"] = takingTurnNumber;
+        requestData["source_rock_index"] = sourceRockIndex;
+        requestData["target_x"] = targetX;
+        requestData["targey_y"] = targetY;
+        StartCoroutine(DoRequest(requestData, "webapi/make_move", TakeTurnCallback));
     }
 
-    private void TaleTurnCallback(string response)
+    private void TakeTurnCallback(string response)
     {
-        //OnCheckForGamestateResponseEvent.Invoke(response);
+        OnTakeTurnResponseEvent.Invoke(response);
     }
 
     IEnumerator DoRequest(Dictionary<string, string> formData, string endpoint, OnResponse callback)

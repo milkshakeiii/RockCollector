@@ -4,17 +4,35 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    private static GameManager instance;
+
     private string gameUuid = null;
-    private bool gameActive = false;
     private int nextTurnNumber = 0;
+
+    public static GameManager GetInstance()
+    {
+        return instance;
+    }
 
     void Start()
     {
+        instance = this;
         HttpCommunicator.OnFindGameResponseEvent += StartCheckingForGames;
         HttpCommunicator.OnCheckForGamestateResponseEvent += GamestateFound;
     }
 
-    private void StartCheckingForGames(string findGameResponse)
+    public void TakeTurnRequest(int sourceRockIndex,
+                                int targetX,
+                                int targetY)
+    {
+        HttpCommunicator.GetInstance().TakeTurnRequest(gameUuid,
+                                                       nextTurnNumber.ToString(),
+                                                       sourceRockIndex.ToString(),
+                                                       targetX.ToString(),
+                                                       targetY.ToString());
+    }
+
+        private void StartCheckingForGames(string findGameResponse)
     {
         string[] responseLines = findGameResponse.Split('\n');
         if (responseLines[0].Equals("4") || 
