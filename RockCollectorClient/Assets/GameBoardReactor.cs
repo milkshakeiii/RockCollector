@@ -58,8 +58,38 @@ public class GameBoardReactor : MonoBehaviour
         gameObject.transform.position = new Vector2(-width / 2, -height / 2);
 
         //parse pieces
+        int player1piecesLine = -1;
+        int player2piecesLine = -1;
+        for (int i = 5; i < responseLines.Length; i++)
+        {
+            string line = responseLines[i];
+            if (line.Equals("Player 1 rocks:"))
+            {
+                player1piecesLine = i;
+            }
+            if (line.Equals("Player 2 rocks:"))
+            {
+                player2piecesLine = i;
+            }
+        }
+        int pieceCount = player2piecesLine - player1piecesLine - 1;
+        for (int i = player1piecesLine + 1; i < player2piecesLine; i++)
+        {
+            string pieceLine = responseLines[i];
+            string[] halves = pieceLine.Split(':');
+            string pieceNumber = halves[0];
+            string pieceData = halves[1];
+            string[] dataParts = pieceData.Split(' ');
+            string color = dataParts[1];
+            string shape = dataParts[2];
+            string material = dataParts[3];
+            string positionLeft = dataParts[4];
+            string positionRight = dataParts[5];
+            if (positionLeft.Equals("(ready"))
+            {
 
-
+            }
+        }
     }
 
     public Vector2 LocalGameworldPosition(int xcoord, int ycoord)
