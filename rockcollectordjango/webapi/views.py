@@ -175,9 +175,9 @@ def textify_gamestate(gamestate):
         if x == -1 or x == -2:
             return "(ready zone)"
         if x == -3 or x == -4:
-            return "(captured)"
+            return "(captured zone)"
         if x == -5:
-            return "(destroyed)"
+            return "(destroyed zone)"
         return "(" + str(x) + ", " + str(y) + ")"
         
     for player_number in [1, 2]:

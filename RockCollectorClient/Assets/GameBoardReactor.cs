@@ -6,6 +6,11 @@ public class GameBoardReactor : MonoBehaviour
 {
     public GameObject onesquare;
     public GameObject piece;
+    public OutOfPlayZone playerReadyZone;
+    public OutOfPlayZone capturedByPlayerZone;
+    public OutOfPlayZone enemyReadyZone;
+    public OutOfPlayZone capturedByEnemyZone;
+    public OutOfPlayZone destroyedZone;
 
     void Start()
     {
@@ -76,19 +81,40 @@ public class GameBoardReactor : MonoBehaviour
         for (int i = player1piecesLine + 1; i < player2piecesLine; i++)
         {
             string pieceLine = responseLines[i];
-            string[] halves = pieceLine.Split(':');
-            string pieceNumber = halves[0];
-            string pieceData = halves[1];
-            string[] dataParts = pieceData.Split(' ');
-            string color = dataParts[1];
-            string shape = dataParts[2];
-            string material = dataParts[3];
-            string positionLeft = dataParts[4];
-            string positionRight = dataParts[5];
-            if (positionLeft.Equals("(ready"))
-            {
+            PlacePiece(pieceLine, playerReadyZone, capturedByEnemyZone);
+        }
+        for (int i = player2piecesLine + 1; i < player2piecesLine + 1 + pieceCount; i++)
+        {
+            string pieceLine = responseLines[i];
+            PlacePiece(pieceLine, enemyReadyZone, capturedByPlayerZone);
+        }
+    }
 
-            }
+    private void PlacePiece(string pieceLine, OutOfPlayZone readyZone, OutOfPlayZone capturedZone)
+    {
+        string[] halves = pieceLine.Split(':');
+        string pieceNumber = halves[0];
+        string pieceData = halves[1];
+        string[] dataParts = pieceData.Split(' ');
+        string color = dataParts[1];
+        string shape = dataParts[2];
+        string material = dataParts[3];
+        string positionLeft = dataParts[4];
+        string positionRight = dataParts[5];
+
+        GameObject newPiece = Instantiate(piece);
+
+        if (positionLeft.Equals("(ready"))
+        {
+            readyZone.AddPiece(newPiece);
+        }
+        if (positionLeft.Equals("(captured"))
+        {
+            capturedZone.AddPiece(newPiece);
+        }
+        if (positionLeft.Equals("(destroyed"))
+        {
+            destroyedZone.AddPiece(newPiece);
         }
     }
 

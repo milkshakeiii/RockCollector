@@ -15,4 +15,9 @@ public class OutOfPlayZone : MonoBehaviour
     {
         
     }
+
+    public void AddPiece(GameObject piece)
+    {
+
+    }
 }
