@@ -189,7 +189,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 132276227}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.46, y: -2.94, z: 0}
+  m_LocalPosition: {x: 4.67, y: -2.9, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 680361289}
@@ -207,6 +207,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 830397bcb622c4844b1a2da06c4cf4a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  horizontalGap: 0.5
+  verticalGap: 0.5
+  piecesPerRow: 4
 --- !u!1 &283386677
 GameObject:
   m_ObjectHideFlags: 0
@@ -531,7 +534,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 338757719}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.41, y: 2.25, z: 0}
+  m_LocalPosition: {x: 5.01, y: 2.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 680361289}
@@ -549,6 +552,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 830397bcb622c4844b1a2da06c4cf4a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  horizontalGap: 0.5
+  verticalGap: 0.5
+  piecesPerRow: 4
 --- !u!1 &356100301
 GameObject:
   m_ObjectHideFlags: 0
@@ -828,7 +834,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 552651122}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.48, y: 0, z: 0}
+  m_LocalPosition: {x: 4.49, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 680361289}
@@ -846,6 +852,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 830397bcb622c4844b1a2da06c4cf4a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  horizontalGap: 0.5
+  verticalGap: 0.5
+  piecesPerRow: 4
 --- !u!1 &600515872
 GameObject:
   m_ObjectHideFlags: 0
@@ -1190,6 +1199,49 @@ Transform:
   - {fileID: 552651123}
   m_Father: {fileID: 0}
   m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &786270577
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 786270579}
+  - component: {fileID: 786270578}
+  m_Layer: 0
+  m_Name: MoveManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &786270578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 786270577}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 539cfbd2ec148d94ab106ec29b838c2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &786270579
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 786270577}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.4997139, y: 0.024216495, z: -5.9023466}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &823322023
 GameObject:
@@ -1681,7 +1733,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1028085711}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.98, y: 2.42, z: 0}
+  m_LocalPosition: {x: -8.37, y: 3.46, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 680361289}
@@ -1699,6 +1751,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 830397bcb622c4844b1a2da06c4cf4a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  horizontalGap: 0.5
+  verticalGap: 0.5
+  piecesPerRow: 4
 --- !u!1 &1276225588
 GameObject:
   m_ObjectHideFlags: 0
@@ -1774,7 +1829,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1353726737}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.28, y: -3.11, z: 0}
+  m_LocalPosition: {x: -8.25, y: -2.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 680361289}
@@ -1792,6 +1847,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 830397bcb622c4844b1a2da06c4cf4a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  horizontalGap: 0.5
+  verticalGap: 0.5
+  piecesPerRow: 4
 --- !u!1 &1430472505
 GameObject:
   m_ObjectHideFlags: 0

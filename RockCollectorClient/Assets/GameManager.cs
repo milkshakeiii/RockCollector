@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
                                                        targetY.ToString());
     }
 
-        private void StartCheckingForGames(string findGameResponse)
+    private void StartCheckingForGames(string findGameResponse)
     {
         string[] responseLines = findGameResponse.Split('\n');
         if (responseLines[0].Equals("4") || 

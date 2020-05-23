@@ -57,7 +57,8 @@ public class GameBoardReactor : MonoBehaviour
                     squareRenderer.material.color = Color.gray;
                 }
                 newOnesquare.transform.parent = gameObject.transform;
-                newOnesquare.transform.position = LocalGameworldPosition(i, j);
+                newOnesquare.transform.position = LocalGameworldPosition(i-5, j);
+                newOnesquare.GetComponent<BoardSquare>().Initialize(new Vector2Int(i-5, j));
             }
         }
         gameObject.transform.position = new Vector2(-width / 2, -height / 2);
@@ -81,16 +82,18 @@ public class GameBoardReactor : MonoBehaviour
         for (int i = player1piecesLine + 1; i < player2piecesLine; i++)
         {
             string pieceLine = responseLines[i];
-            PlacePiece(pieceLine, playerReadyZone, capturedByEnemyZone);
+            GameObject newPiece = PlacePiece(pieceLine, playerReadyZone, capturedByEnemyZone);
+            newPiece.GetComponent<Piece>().Initialize(true, i - player1piecesLine - 1);
         }
         for (int i = player2piecesLine + 1; i < player2piecesLine + 1 + pieceCount; i++)
         {
             string pieceLine = responseLines[i];
-            PlacePiece(pieceLine, enemyReadyZone, capturedByPlayerZone);
+            GameObject newPiece = PlacePiece(pieceLine, enemyReadyZone, capturedByPlayerZone);
+            newPiece.GetComponent<Piece>().Initialize(false, i - player2piecesLine - 1);
         }
     }
 
-    private void PlacePiece(string pieceLine, OutOfPlayZone readyZone, OutOfPlayZone capturedZone)
+    private GameObject PlacePiece(string pieceLine, OutOfPlayZone readyZone, OutOfPlayZone capturedZone)
     {
         string[] halves = pieceLine.Split(':');
         string pieceNumber = halves[0];
@@ -108,18 +111,26 @@ public class GameBoardReactor : MonoBehaviour
         {
             readyZone.AddPiece(newPiece);
         }
-        if (positionLeft.Equals("(captured"))
+        else if (positionLeft.Equals("(captured"))
         {
             capturedZone.AddPiece(newPiece);
         }
-        if (positionLeft.Equals("(destroyed"))
+        else if (positionLeft.Equals("(destroyed"))
         {
             destroyedZone.AddPiece(newPiece);
         }
+        else
+        {
+            int x = int.Parse(positionLeft.Substring(1));
+            int y = int.Parse(positionRight.Substring(0, positionRight.Length - 1));
+            newPiece.transform.position = LocalGameworldPosition(x, y);
+        }
+
+        return newPiece;
     }
 
     public Vector2 LocalGameworldPosition(int xcoord, int ycoord)
     {
-        return new Vector2(xcoord - 5 + 0.5f, ycoord + 0.5f);
+        return new Vector2(xcoord + 0.5f, ycoord + 0.5f);
     }
 }
