@@ -24,7 +24,7 @@ public class MoveManager : MonoBehaviour
 
     public void ReportPieceClick(Piece piece)
     {
-        if (!moveClickActive)
+        if (!moveClickActive && piece.IsPlayerPiece())
         {
             StartCoroutine(DoMoveClick(piece));
         }
@@ -60,5 +60,6 @@ public class MoveManager : MonoBehaviour
         }
         UnityEngine.Cursor.visible = true;
         cursorObject.SetActive(false);
+        moveClickActive = false;
     }
 }

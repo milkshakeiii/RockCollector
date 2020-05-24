@@ -11,6 +11,12 @@ public class GameBoardReactor : MonoBehaviour
     public OutOfPlayZone enemyReadyZone;
     public OutOfPlayZone capturedByEnemyZone;
     public OutOfPlayZone destroyedZone;
+    public Sprite circle;
+    public Sprite hook;
+    public Sprite lump;
+    public Sprite star;
+    public Sprite square;
+    public Sprite triangle;
 
     void Start()
     {
@@ -40,11 +46,16 @@ public class GameBoardReactor : MonoBehaviour
         {
             Destroy(gameObject.transform.GetChild(i).gameObject);
         }
+        playerReadyZone.ClearPieces();
+        capturedByPlayerZone.ClearPieces();
+        enemyReadyZone.ClearPieces();
+        capturedByEnemyZone.ClearPieces();
+        destroyedZone.ClearPieces();
 
-        //parse board
-        string[] responseLines = gamestate_response.Split('\n');
-        float width = responseLines[5].Length;
-        float height = 0f;
+    //parse board
+    string[] responseLines = gamestate_response.Split('\n');
+        int width = responseLines[5].Length;
+        int height = 0;
         for (int i = 5; i < responseLines.Length; i++)
         {
             string line = responseLines[i];
@@ -52,7 +63,11 @@ public class GameBoardReactor : MonoBehaviour
             {
                 break;
             }
-            height += 1f;
+            height += 1;
+        }
+        for (int i = 5; i < 5 + height; i++)
+        {
+            string line = responseLines[i];
             for (int j = 0; j < line.Length; j++)
             {
                 char squareno = line[j];
@@ -63,11 +78,10 @@ public class GameBoardReactor : MonoBehaviour
                     squareRenderer.material.color = Color.gray;
                 }
                 newOnesquare.transform.parent = gameObject.transform;
-                newOnesquare.transform.position = LocalGameworldPosition(i-5, j);
+                newOnesquare.transform.position = LocalGameworldPosition(i-5, j, width, height);
                 newOnesquare.GetComponent<BoardSquare>().Initialize(new Vector2Int(i-5, j));
             }
         }
-        gameObject.transform.position = new Vector2(-width / 2, -height / 2);
 
         //parse pieces
         int player1piecesLine = -1;
@@ -88,16 +102,21 @@ public class GameBoardReactor : MonoBehaviour
         for (int i = player1piecesLine + 1; i < player2piecesLine; i++)
         {
             string pieceLine = responseLines[i];
-            PlacePiece(pieceLine, playerReadyZone, capturedByEnemyZone, true);
+            PlacePiece(pieceLine, playerReadyZone, capturedByEnemyZone, true, width, height);
         }
         for (int i = player2piecesLine + 1; i < player2piecesLine + 1 + pieceCount; i++)
         {
             string pieceLine = responseLines[i];
-            PlacePiece(pieceLine, enemyReadyZone, capturedByPlayerZone, false);
+            PlacePiece(pieceLine, enemyReadyZone, capturedByPlayerZone, false, width, height);
         }
     }
 
-    private GameObject PlacePiece(string pieceLine, OutOfPlayZone readyZone, OutOfPlayZone capturedZone, bool isPlayerPiece)
+    private void PlacePiece(string pieceLine,
+                            OutOfPlayZone readyZone,
+                            OutOfPlayZone capturedZone,
+                            bool isPlayerPiece,
+                            float width,
+                            float height)
     {
         string[] halves = pieceLine.Split(':');
         string pieceNumber = halves[0];
@@ -106,64 +125,97 @@ public class GameBoardReactor : MonoBehaviour
         string color = dataParts[1];
         string shape = dataParts[2];
         string material = dataParts[3];
-        string positionLeft = dataParts[4];
-        string positionRight = dataParts[5];
+        int positionCount = (dataParts.Length - 6)/2 + 1;
 
         GameObject newPiece = Instantiate(piece);
 
-        int x;
-        int y;
-        if (positionLeft.Equals("(ready"))
+        for (int i = 0; i < positionCount; i++)
         {
-            readyZone.AddPiece(newPiece);
-            if (isPlayerPiece)
+            string positionLeft = dataParts[4 + i * 2];
+            string positionRight = dataParts[5 + i * 2];
+            int x;
+            int y;
+            if (positionLeft.Equals("(ready"))
             {
-                x = -1;
-                y = -1;
+                readyZone.AddPiece(newPiece);
+                if (isPlayerPiece)
+                {
+                    x = -1;
+                    y = -1;
+                }
+                else
+                {
+                    x = -2;
+                    y = -2;
+                }
+            }
+            else if (positionLeft.Equals("(captured"))
+            {
+                capturedZone.AddPiece(newPiece);
+                if (isPlayerPiece)
+                {
+                    x = -3;
+                    y = -3;
+                }
+                else
+                {
+                    x = -4;
+                    y = -4;
+                }
+            }
+            else if (positionLeft.Equals("(destroyed"))
+            {
+                destroyedZone.AddPiece(newPiece);
+                x = -5;
+                y = -5;
             }
             else
             {
-                x = -2;
-                y = -2;
+                x = int.Parse(positionLeft.Substring(1, positionLeft.Length - 2));
+                if (positionCount > 1)
+                    y = int.Parse(positionRight.Substring(0, positionRight.Length - 3));
+                else
+                    y = int.Parse(positionRight.Substring(0, positionRight.Length - 1));
+                newPiece.transform.position = LocalGameworldPosition(x, y, width, height);
+                newPiece.transform.position = new Vector3(newPiece.transform.position.x,
+                                                          newPiece.transform.position.y,
+                                                          piece.transform.position.z);
             }
-        }
-        else if (positionLeft.Equals("(captured"))
-        {
-            capturedZone.AddPiece(newPiece);
-            if (isPlayerPiece)
-            {
-                x = -3;
-                y = -3;
-            }
-            else
-            {
-                x = -4;
-                y = -4;
-            }
-        }
-        else if (positionLeft.Equals("(destroyed"))
-        {
-            destroyedZone.AddPiece(newPiece);
-            x = -5;
-            y = -5;
-        }
-        else
-        {
-            x = int.Parse(positionLeft.Substring(1, positionLeft.Length - 2));
-            y = int.Parse(positionRight.Substring(0, positionRight.Length - 1));
-            newPiece.transform.position = LocalGameworldPosition(x, y);
-            newPiece.transform.position = new Vector3(newPiece.transform.position.x,
-                                                      newPiece.transform.position.y,
-                                                      piece.transform.position.z);
-        }
 
-        newPiece.GetComponent<Piece>().Initialize(isPlayerPiece, int.Parse(pieceNumber), new Vector2Int(x, y));
-        newPiece.transform.parent = gameObject.transform;
-        return newPiece;
+            newPiece.GetComponent<Piece>().Initialize(isPlayerPiece, int.Parse(pieceNumber), new Vector2Int(x, y));
+            newPiece.transform.parent = gameObject.transform;
+
+            //color, shape, material
+            if (shape.Equals("CIRCULAR"))
+            {
+                newPiece.GetComponent<SpriteRenderer>().sprite = circle;
+            }
+            if (shape.Equals("HOOKED"))
+            {
+                newPiece.GetComponent<SpriteRenderer>().sprite = hook;
+            }
+            if (shape.Equals("STARSHAPED"))
+            {
+                newPiece.GetComponent<SpriteRenderer>().sprite = star;
+            }
+            if (shape.Equals("LUMPY"))
+            {
+                newPiece.GetComponent<SpriteRenderer>().sprite = lump;
+            }
+            if (shape.Equals("SQUARE"))
+            {
+                newPiece.GetComponent<SpriteRenderer>().sprite = square;
+            }
+            if (shape.Equals("TRIANGULAR"))
+            {
+                newPiece.GetComponent<SpriteRenderer>().sprite = triangle;
+            }
+        }
     }
 
-    public Vector2 LocalGameworldPosition(int xcoord, int ycoord)
+    private Vector2 LocalGameworldPosition(int xcoord, int ycoord, float width, float height)
     {
-        return new Vector2(xcoord + 0.5f, ycoord + 0.5f);
+        return new Vector2(xcoord + 0.5f, ycoord + 0.5f) + new Vector2(-width / 2, -height / 2);
     }
 }
+

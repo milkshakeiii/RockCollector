@@ -21,6 +21,11 @@ public class OutOfPlayZone : MonoBehaviour
         
     }
 
+    public void ClearPieces()
+    {
+        pieces = new List<GameObject>();
+    }
+
     public void AddPiece(GameObject piece)
     {
         pieces.Add(piece);
