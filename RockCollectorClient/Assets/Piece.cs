@@ -6,11 +6,13 @@ public class Piece : MonoBehaviour
 {
     private bool isPlayerPiece;
     private int pieceNumber;
+    private Vector2Int position;
 
-    public void Initialize(bool newIsPlayerPiece, int newPieceNumber)
+    public void Initialize(bool newIsPlayerPiece, int newPieceNumber, Vector2Int newPosition)
     {
         isPlayerPiece = newIsPlayerPiece;
         pieceNumber = newPieceNumber;
+        position = newPosition;
     }
 
     public bool IsPlayerPiece()
@@ -21,6 +23,11 @@ public class Piece : MonoBehaviour
     public int PieceNumber()
     {
         return pieceNumber;
+    }
+
+    Vector2Int Position()
+    {
+        return position;
     }
 
     // Start is called before the first frame update
@@ -38,5 +45,6 @@ public class Piece : MonoBehaviour
     private void OnMouseDown()
     {
         MoveManager.GetInstance().ReportPieceClick(this);
+        MoveManager.GetInstance().ReportSquareClick(position);
     }
 }

@@ -18,6 +18,6 @@ public class BoardSquare : MonoBehaviour
 
     private void OnMouseDown()
     {
-        MoveManager.GetInstance().ReportSquareClick(this);
+        MoveManager.GetInstance().ReportSquareClick(boardPosition);
     }
 }

@@ -34,9 +34,15 @@ public class GameBoardReactor : MonoBehaviour
 
     private void DisplayGamestate(string gamestate_response)
     {
-        string[] responseLines = gamestate_response.Split('\n');
+        //clear old board
+        int childCount = gameObject.transform.childCount;
+        for (int i = 0; i < childCount; i++)
+        {
+            Destroy(gameObject.transform.GetChild(i).gameObject);
+        }
 
         //parse board
+        string[] responseLines = gamestate_response.Split('\n');
         float width = responseLines[5].Length;
         float height = 0f;
         for (int i = 5; i < responseLines.Length; i++)
@@ -82,18 +88,16 @@ public class GameBoardReactor : MonoBehaviour
         for (int i = player1piecesLine + 1; i < player2piecesLine; i++)
         {
             string pieceLine = responseLines[i];
-            GameObject newPiece = PlacePiece(pieceLine, playerReadyZone, capturedByEnemyZone);
-            newPiece.GetComponent<Piece>().Initialize(true, i - player1piecesLine - 1);
+            PlacePiece(pieceLine, playerReadyZone, capturedByEnemyZone, true);
         }
         for (int i = player2piecesLine + 1; i < player2piecesLine + 1 + pieceCount; i++)
         {
             string pieceLine = responseLines[i];
-            GameObject newPiece = PlacePiece(pieceLine, enemyReadyZone, capturedByPlayerZone);
-            newPiece.GetComponent<Piece>().Initialize(false, i - player2piecesLine - 1);
+            PlacePiece(pieceLine, enemyReadyZone, capturedByPlayerZone, false);
         }
     }
 
-    private GameObject PlacePiece(string pieceLine, OutOfPlayZone readyZone, OutOfPlayZone capturedZone)
+    private GameObject PlacePiece(string pieceLine, OutOfPlayZone readyZone, OutOfPlayZone capturedZone, bool isPlayerPiece)
     {
         string[] halves = pieceLine.Split(':');
         string pieceNumber = halves[0];
@@ -107,25 +111,54 @@ public class GameBoardReactor : MonoBehaviour
 
         GameObject newPiece = Instantiate(piece);
 
+        int x;
+        int y;
         if (positionLeft.Equals("(ready"))
         {
             readyZone.AddPiece(newPiece);
+            if (isPlayerPiece)
+            {
+                x = -1;
+                y = -1;
+            }
+            else
+            {
+                x = -2;
+                y = -2;
+            }
         }
         else if (positionLeft.Equals("(captured"))
         {
             capturedZone.AddPiece(newPiece);
+            if (isPlayerPiece)
+            {
+                x = -3;
+                y = -3;
+            }
+            else
+            {
+                x = -4;
+                y = -4;
+            }
         }
         else if (positionLeft.Equals("(destroyed"))
         {
             destroyedZone.AddPiece(newPiece);
+            x = -5;
+            y = -5;
         }
         else
         {
-            int x = int.Parse(positionLeft.Substring(1));
-            int y = int.Parse(positionRight.Substring(0, positionRight.Length - 1));
+            x = int.Parse(positionLeft.Substring(1, positionLeft.Length - 2));
+            y = int.Parse(positionRight.Substring(0, positionRight.Length - 1));
             newPiece.transform.position = LocalGameworldPosition(x, y);
+            newPiece.transform.position = new Vector3(newPiece.transform.position.x,
+                                                      newPiece.transform.position.y,
+                                                      piece.transform.position.z);
         }
 
+        newPiece.GetComponent<Piece>().Initialize(isPlayerPiece, int.Parse(pieceNumber), new Vector2Int(x, y));
+        newPiece.transform.parent = gameObject.transform;
         return newPiece;
     }
 

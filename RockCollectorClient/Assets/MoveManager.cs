@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class MoveManager : MonoBehaviour
 {
+    public GameObject cursorObject;
+
     private static MoveManager instance;
+    private bool moveClickActive = false;
+    private bool squareClicked = false;
+    private Vector2Int lastSquareClicked;
 
     // Start is called before the first frame update
     void Start()
@@ -19,13 +24,41 @@ public class MoveManager : MonoBehaviour
 
     public void ReportPieceClick(Piece piece)
     {
-        Debug.Log(piece);
-        Debug.Log(piece.PieceNumber());
+        if (!moveClickActive)
+        {
+            StartCoroutine(DoMoveClick(piece));
+        }
     }
 
-    public void ReportSquareClick(BoardSquare square)
+    public void ReportSquareClick(Vector2Int position)
     {
-        Debug.Log(square);
-        Debug.Log(square.GetBoardPosition());
+        if (moveClickActive)
+            squareClicked = true;
+        lastSquareClicked = position;
+    }
+
+    private IEnumerator DoMoveClick(Piece piece)
+    {
+        yield return null;
+        moveClickActive = true;
+        UnityEngine.Cursor.visible = false;
+        cursorObject.SetActive(true);
+        while (!squareClicked && !Input.GetMouseButtonDown(1))
+        {
+            Vector2 mousePos = Camera.main.ScreenToWorldPoint(UnityEngine.Input.mousePosition);
+            cursorObject.transform.position = new Vector3(mousePos.x,
+                                                          mousePos.y,
+                                                          cursorObject.transform.position.z);
+            yield return null;
+        }
+        if (squareClicked)
+        {
+            squareClicked = false;
+            GameManager.GetInstance().TakeTurnRequest(piece.PieceNumber(),
+                                                      lastSquareClicked.x,
+                                                      lastSquareClicked.y);
+        }
+        UnityEngine.Cursor.visible = true;
+        cursorObject.SetActive(false);
     }
 }

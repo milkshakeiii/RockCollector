@@ -71,7 +71,7 @@ public class HttpCommunicator : MonoBehaviour
         requestData["taking_turn_number"] = takingTurnNumber;
         requestData["source_rock_index"] = sourceRockIndex;
         requestData["target_x"] = targetX;
-        requestData["targey_y"] = targetY;
+        requestData["target_y"] = targetY;
         StartCoroutine(DoRequest(requestData, "webapi/make_move", TakeTurnCallback));
     }
 
