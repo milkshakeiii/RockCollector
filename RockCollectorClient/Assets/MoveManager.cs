@@ -10,11 +10,17 @@ public class MoveManager : MonoBehaviour
     private bool moveClickActive = false;
     private bool squareClicked = false;
     private Vector2Int lastSquareClicked;
+    private bool userIsPlayer1 = true;
 
     // Start is called before the first frame update
     void Start()
     {
         instance = this;
+    }
+
+    public void SetUserIsPlayerOne(bool isPlayerOne)
+    {
+        userIsPlayer1 = isPlayerOne;
     }
 
     public static MoveManager GetInstance()
@@ -24,7 +30,7 @@ public class MoveManager : MonoBehaviour
 
     public void ReportPieceClick(Piece piece)
     {
-        if (!moveClickActive && piece.IsPlayerPiece())
+        if (!moveClickActive && (piece.IsPlayerPiece() == userIsPlayer1))
         {
             StartCoroutine(DoMoveClick(piece));
         }

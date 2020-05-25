@@ -30,8 +30,8 @@ public class OutOfPlayZone : MonoBehaviour
     {
         pieces.Add(piece);
         int rowCount = pieces.Count / piecesPerRow;
-        float startX = gameObject.transform.position.x - pieces.Count % piecesPerRow * horizontalGap;
-        float startY = gameObject.transform.position.y - rowCount * horizontalGap;
+        float startX = gameObject.transform.position.x;
+        float startY = gameObject.transform.position.y;
         for (int i = 0; i < pieces.Count; i++)
         {
             GameObject placeMe = pieces[i];

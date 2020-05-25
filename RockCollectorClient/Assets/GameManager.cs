@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
                                                        targetY.ToString());
     }
 
-    private void StartCheckingForGames(string findGameResponse)
+    private void StartCheckingForGames(string findGameResponse, string username)
     {
         string[] responseLines = findGameResponse.Split('\n');
         if (responseLines[0].Equals("4") || 
@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void GamestateFound(string response)
+    private void GamestateFound(string response, string username)
     {
         Debug.Log(response);
         string[] responseLines = response.Split('\n');

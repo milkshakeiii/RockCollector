@@ -24,22 +24,23 @@ public class GameBoardReactor : MonoBehaviour
         HttpCommunicator.OnCheckForGamestateResponseEvent += GamestateFound;
     }
 
-    private void GamestateFound(string response)
+    private void GamestateFound(string response, string username)
     {
         string[] responseLines = response.Split('\n');
         if (responseLines[0].Equals("6"))
         {
-            DisplayGamestate(response);
+            DisplayGamestate(response, username);
         }
     }
     
-    private void TurnTaken(string response)
+    private void TurnTaken(string response, string username)
     {
 
     }
 
-    private void DisplayGamestate(string gamestate_response)
+    private void DisplayGamestate(string gamestate_response, string username)
     {
+
         //clear old board
         int childCount = gameObject.transform.childCount;
         for (int i = 0; i < childCount; i++)
@@ -52,8 +53,10 @@ public class GameBoardReactor : MonoBehaviour
         capturedByEnemyZone.ClearPieces();
         destroyedZone.ClearPieces();
 
-    //parse board
-    string[] responseLines = gamestate_response.Split('\n');
+        //parse board
+        string[] responseLines = gamestate_response.Split('\n');
+        string player1username = responseLines[2].Split(' ')[0];
+        MoveManager.GetInstance().SetUserIsPlayerOne(username.Equals(player1username));
         int width = responseLines[5].Length;
         int height = 0;
         for (int i = 5; i < responseLines.Length; i++)
@@ -173,7 +176,7 @@ public class GameBoardReactor : MonoBehaviour
             {
                 x = int.Parse(positionLeft.Substring(1, positionLeft.Length - 2));
                 if (positionCount > 1)
-                    y = int.Parse(positionRight.Substring(0, positionRight.Length - 3));
+                    y = int.Parse(positionRight.Substring(0, positionRight.Length - 2));
                 else
                     y = int.Parse(positionRight.Substring(0, positionRight.Length - 1));
                 newPiece.transform.position = LocalGameworldPosition(x, y, width, height);
@@ -209,6 +212,18 @@ public class GameBoardReactor : MonoBehaviour
             if (shape.Equals("TRIANGULAR"))
             {
                 newPiece.GetComponent<SpriteRenderer>().sprite = triangle;
+            }
+            if (color.Equals("RED"))
+            {
+                newPiece.GetComponent<SpriteRenderer>().color = Color.red;
+            }
+            if (color.Equals("GREY"))
+            {
+                newPiece.GetComponent<SpriteRenderer>().color = Color.grey;
+            }
+            if (color.Equals("BLUE"))
+            {
+                newPiece.GetComponent<SpriteRenderer>().color = Color.blue;
             }
         }
     }

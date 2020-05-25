@@ -120,14 +120,14 @@ def get_move_lines(start_square, shape, width, height):
 
     ##################################################################################
     if shape == Shapes.CIRCULAR:
-        move_lines = [add_coords(start_square, (1, -1)),
-                      add_coords(start_square, (1, 0)),
-                      add_coords(start_square, (1, 1)),
-                      add_coords(start_square, (0, -1)),
-                      add_coords(start_square, (0, 1)),
-                      add_coords(start_square, (-1, -1)),
-                      add_coords(start_square, (-1, 0)),
-                      add_coords(start_square, (-1, 1))]
+        move_lines = [[add_coords(start_square, (1, -1))],
+                      [add_coords(start_square, (1, 0))],
+                      [add_coords(start_square, (1, 1))],
+                      [add_coords(start_square, (0, -1))],
+                      [add_coords(start_square, (0, 1))],
+                      [add_coords(start_square, (-1, -1))],
+                      [add_coords(start_square, (-1, 0))],
+                      [add_coords(start_square, (-1, 1))]]
     if shape == Shapes.SQUARE:
         move_lines = [up, down, left, right]
     if shape == Shapes.TRIANGULAR:

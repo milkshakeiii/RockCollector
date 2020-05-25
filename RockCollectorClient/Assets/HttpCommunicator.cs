@@ -14,7 +14,7 @@ public class HttpCommunicator : MonoBehaviour
     public static event OnRequest OnFindGameRequestEvent;
     public static event OnRequest OnCheckForGamestateRequestEvent;
     public static event OnRequest OnTakeTurnRequestEvent;
-    public delegate void OnResponse(string response);
+    public delegate void OnResponse(string response, string username);
     public static event OnResponse OnFindGameResponseEvent;
     public static event OnResponse OnCheckForGamestateResponseEvent;
     public static event OnResponse OnTakeTurnResponseEvent;
@@ -38,9 +38,9 @@ public class HttpCommunicator : MonoBehaviour
         StartCoroutine(DoRequest(new Dictionary<string, string>(), "webapi/find_game", FindGameCallback));
     }
 
-    private void FindGameCallback(string response)
+    private void FindGameCallback(string response, string username)
     {
-        OnFindGameResponseEvent.Invoke(response);
+        OnFindGameResponseEvent.Invoke(response, username);
     }
 
     public void CheckForGamestateRequest(string gameUuid, string turnsTaken)
@@ -53,9 +53,9 @@ public class HttpCommunicator : MonoBehaviour
         StartCoroutine(DoRequest(requestData, "webapi/check_for_gamestate", CheckForGamestateCallback));
     }
 
-    private void CheckForGamestateCallback(string response)
+    private void CheckForGamestateCallback(string response, string username)
     {
-        OnCheckForGamestateResponseEvent.Invoke(response);
+        OnCheckForGamestateResponseEvent.Invoke(response, username);
     }
 
     public void TakeTurnRequest(string gameUuid,
@@ -75,9 +75,9 @@ public class HttpCommunicator : MonoBehaviour
         StartCoroutine(DoRequest(requestData, "webapi/make_move", TakeTurnCallback));
     }
 
-    private void TakeTurnCallback(string response)
+    private void TakeTurnCallback(string response, string username)
     {
-        OnTakeTurnResponseEvent.Invoke(response);
+        OnTakeTurnResponseEvent.Invoke(response, username);
     }
 
     IEnumerator DoRequest(Dictionary<string, string> formData, string endpoint, OnResponse callback)
@@ -100,7 +100,7 @@ public class HttpCommunicator : MonoBehaviour
             Debug.Log("http response:");
             string response = www.downloadHandler.text;
             Debug.Log(response);
-            callback(response);
+            callback(response, username);
         }
     }
 

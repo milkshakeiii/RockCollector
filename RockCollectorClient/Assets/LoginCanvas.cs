@@ -16,7 +16,7 @@ public class LoginCanvas : MonoBehaviour
         HttpCommunicator.OnCheckForGamestateResponseEvent += GamestateFound;
     }
 
-    private void GamestateFound(string response)
+    private void GamestateFound(string response, string username)
     {
         string[] responseLines = response.Split('\n');
         if (responseLines[0].Equals("6"))
@@ -37,7 +37,7 @@ public class LoginCanvas : MonoBehaviour
         greyButton.SetActive(true);
     }
 
-    void HandleFindGameResponse(string response)
+    void HandleFindGameResponse(string response, string username)
     {
         ChangeInfoText(response);
         string[] responseLines = response.Split('\n');
