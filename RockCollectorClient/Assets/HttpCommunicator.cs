@@ -83,12 +83,12 @@ public class HttpCommunicator : MonoBehaviour
     IEnumerator DoRequest(Dictionary<string, string> formData, string endpoint, OnResponse callback)
     {
         if (username.Equals("") || wordpass.Equals(""))
-            throw new UnityException("uername or wordpass not set");
+            throw new UnityException("username or wordpass not set");
 
         formData["username"] = username;
         formData["password"] = wordpass;
 
-        UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:8000/"+endpoint, formData);
+        UnityWebRequest www = UnityWebRequest.Post("http://django-env.eba-68v5xyqg.us-west-2.elasticbeanstalk.com/" + endpoint, formData);
         yield return www.SendWebRequest();
 
         if (www.isNetworkError || www.isHttpError)
