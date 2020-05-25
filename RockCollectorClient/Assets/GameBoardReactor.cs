@@ -56,7 +56,8 @@ public class GameBoardReactor : MonoBehaviour
         //parse board
         string[] responseLines = gamestate_response.Split('\n');
         string player1username = responseLines[2].Split(' ')[0];
-        MoveManager.GetInstance().SetUserIsPlayerOne(username.Equals(player1username));
+        bool iAmPlayer1 = username.Equals(player1username);
+        MoveManager.GetInstance().SetUserIsPlayerOne(iAmPlayer1);
         int width = responseLines[5].Length;
         int height = 0;
         for (int i = 5; i < responseLines.Length; i++)
@@ -130,10 +131,10 @@ public class GameBoardReactor : MonoBehaviour
         string material = dataParts[3];
         int positionCount = (dataParts.Length - 6)/2 + 1;
 
-        GameObject newPiece = Instantiate(piece);
-
         for (int i = 0; i < positionCount; i++)
         {
+            GameObject newPiece = Instantiate(piece);
+
             string positionLeft = dataParts[4 + i * 2];
             string positionRight = dataParts[5 + i * 2];
             int x;
@@ -175,10 +176,14 @@ public class GameBoardReactor : MonoBehaviour
             else
             {
                 x = int.Parse(positionLeft.Substring(1, positionLeft.Length - 2));
-                if (positionCount > 1)
+                if (positionCount > 1 && i != positionCount - 1)
+                {
                     y = int.Parse(positionRight.Substring(0, positionRight.Length - 2));
+                }
                 else
+                {
                     y = int.Parse(positionRight.Substring(0, positionRight.Length - 1));
+                }
                 newPiece.transform.position = LocalGameworldPosition(x, y, width, height);
                 newPiece.transform.position = new Vector3(newPiece.transform.position.x,
                                                           newPiece.transform.position.y,
@@ -219,11 +224,15 @@ public class GameBoardReactor : MonoBehaviour
             }
             if (color.Equals("GREY"))
             {
-                newPiece.GetComponent<SpriteRenderer>().color = Color.grey;
+                newPiece.GetComponent<SpriteRenderer>().color = Color.white*0.8f;
             }
             if (color.Equals("BLUE"))
             {
                 newPiece.GetComponent<SpriteRenderer>().color = Color.blue;
+            }
+            if (!isPlayerPiece)
+            {
+                newPiece.GetComponent<SpriteRenderer>().color = newPiece.GetComponent<SpriteRenderer>().color*0.65f;
             }
         }
     }
