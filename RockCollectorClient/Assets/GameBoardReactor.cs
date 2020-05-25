@@ -106,21 +106,22 @@ public class GameBoardReactor : MonoBehaviour
         for (int i = player1piecesLine + 1; i < player2piecesLine; i++)
         {
             string pieceLine = responseLines[i];
-            PlacePiece(pieceLine, playerReadyZone, capturedByEnemyZone, true, width, height);
+            PlacePiece(pieceLine, playerReadyZone, capturedByEnemyZone, true, width, height, iAmPlayer1);
         }
         for (int i = player2piecesLine + 1; i < player2piecesLine + 1 + pieceCount; i++)
         {
             string pieceLine = responseLines[i];
-            PlacePiece(pieceLine, enemyReadyZone, capturedByPlayerZone, false, width, height);
+            PlacePiece(pieceLine, enemyReadyZone, capturedByPlayerZone, false, width, height, iAmPlayer1);
         }
     }
 
     private void PlacePiece(string pieceLine,
                             OutOfPlayZone readyZone,
                             OutOfPlayZone capturedZone,
-                            bool isPlayerPiece,
+                            bool isPlayer1Piece,
                             float width,
-                            float height)
+                            float height,
+                            bool iAmPlayer1)
     {
         string[] halves = pieceLine.Split(':');
         string pieceNumber = halves[0];
@@ -142,7 +143,7 @@ public class GameBoardReactor : MonoBehaviour
             if (positionLeft.Equals("(ready"))
             {
                 readyZone.AddPiece(newPiece);
-                if (isPlayerPiece)
+                if (isPlayer1Piece)
                 {
                     x = -1;
                     y = -1;
@@ -156,7 +157,7 @@ public class GameBoardReactor : MonoBehaviour
             else if (positionLeft.Equals("(captured"))
             {
                 capturedZone.AddPiece(newPiece);
-                if (isPlayerPiece)
+                if (isPlayer1Piece)
                 {
                     x = -3;
                     y = -3;
@@ -190,8 +191,12 @@ public class GameBoardReactor : MonoBehaviour
                                                           piece.transform.position.z);
             }
 
-            newPiece.GetComponent<Piece>().Initialize(isPlayerPiece, int.Parse(pieceNumber), new Vector2Int(x, y));
+            newPiece.GetComponent<Piece>().Initialize(isPlayer1Piece, int.Parse(pieceNumber), new Vector2Int(x, y));
             newPiece.transform.parent = gameObject.transform;
+            if (iAmPlayer1 == isPlayer1Piece)
+            {
+                newPiece.transform.position += new Vector3(0f, 0f, -0.5f);
+            }
 
             //color, shape, material
             if (shape.Equals("CIRCULAR"))
@@ -230,7 +235,7 @@ public class GameBoardReactor : MonoBehaviour
             {
                 newPiece.GetComponent<SpriteRenderer>().color = Color.blue;
             }
-            if (!isPlayerPiece)
+            if (!isPlayer1Piece)
             {
                 newPiece.GetComponent<SpriteRenderer>().color = newPiece.GetComponent<SpriteRenderer>().color*0.65f;
             }
