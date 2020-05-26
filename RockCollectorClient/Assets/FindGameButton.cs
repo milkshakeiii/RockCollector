@@ -9,6 +9,9 @@ public class FindGameButton : MonoBehaviour
 
     public void FindGame()
     {
-        HttpCommunicator.GetInstance().FindGameRequest(usernameInput.text, wordpassInput.text);
+        if (usernameInput.text.Length > 0 && wordpassInput.text.Length > 0)
+            HttpCommunicator.GetInstance().FindGameRequest(usernameInput.text, wordpassInput.text);
+        else
+            wordpassInput.text = "dog";
     }
 }
