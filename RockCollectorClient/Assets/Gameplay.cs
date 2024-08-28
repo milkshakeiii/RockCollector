@@ -73,6 +73,7 @@ public class DepthController : Equipment
         {
             currentDepthControlMass -= deltaMass;
         }
+        currentDepthControlMass = Mathf.Clamp(currentDepthControlMass, 0, depthControlMass);
         return currentDepthControlMass;
     }
 
