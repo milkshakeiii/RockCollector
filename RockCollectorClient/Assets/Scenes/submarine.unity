@@ -134,7 +134,6 @@ GameObject:
   - component: {fileID: 519420032}
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
-  - component: {fileID: 519420033}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -216,18 +215,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &519420033
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 519420028}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc914e46f44f85243adee499ecf5a94c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1215720686
 GameObject:
   m_ObjectHideFlags: 0
@@ -238,9 +225,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1215720688}
   - component: {fileID: 1215720687}
-  - component: {fileID: 1215720691}
   - component: {fileID: 1215720690}
   - component: {fileID: 1215720689}
+  - component: {fileID: 1215720691}
   m_Layer: 0
   m_Name: Circle
   m_TagString: Untagged
@@ -362,7 +349,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1215720686}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74a424782c23c5e468b03d892244176c, type: 3}
+  m_Script: {fileID: 11500000, guid: 6c38bb22df84a3048b7b54faae041b1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   drag: 0
