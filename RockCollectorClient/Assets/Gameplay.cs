@@ -101,3 +101,8 @@ public class DepthController : Equipment
         return base.AddedMass() + currentDepthControlMass;
     }
 }
+
+public class Engine : Equipment
+{
+    public float thrust = 0f; // Thrust in newtons
+}

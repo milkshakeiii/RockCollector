@@ -9,6 +9,9 @@ public class Submarine : MonoBehaviour
     public float startingMass = 2000f; // starting mass in kilograms
     public float volume = 10f; // Base volume in cubic meters
     public float maxPower = 100f; // max power in power units
+    public float turnTime = 1f; // Time to turn 180 degrees in seconds
+
+    private bool turning = false; // Whether the submarine is currently turning
 
     private float drag = 0f; // Drag force in Newtons
     private float mass = 0f; // Base mass in kilograms
@@ -46,6 +49,12 @@ public class Submarine : MonoBehaviour
             depthController.continuousPower = 1f;
             coreModules.Add(depthController);
         }
+
+        // Add an engine to the submarine
+        Engine engine = new();
+        engine.thrust = 2000f;
+        engine.continuousPower = 1f;
+        coreModules.Add(engine);
     }
 
     public float PowerRemaining()
@@ -117,6 +126,34 @@ public class Submarine : MonoBehaviour
         } // control the mass with W and S keys
 
         {
+            // if neither A nor D is pressed, do nothing
+            if (UnityEngine.Input.GetKey(KeyCode.A) || UnityEngine.Input.GetKey(KeyCode.D))
+            {
+                bool facingRight = this.transform.localScale.x > 0;
+                bool turningRight = UnityEngine.Input.GetKey(KeyCode.D);
+                if (facingRight != turningRight && !turning)
+                {
+                    turning = true;
+                    StartCoroutine(Turn180Degrees());
+                }
+                else
+                {
+                    // fire all engines
+                    foreach (var module in AllModules())
+                    {
+                        if (module is Engine engine)
+                        {
+                            int direction = facingRight ? 1 : -1;
+                            GetComponent<Rigidbody2D>().AddRelativeForce(new Vector2(direction * engine.thrust, 0));
+                            SpendPower(engine.continuousPower * Time.deltaTime);
+                        }
+                    }
+                }
+            }
+
+        } // control the propulsion with A and D keys
+
+        {
             this.GetComponent<Rigidbody2D>().mass = CurrentMass();
             this.GetComponent<Rigidbody2D>().drag = drag;
         } // update rigidbody mass and drag
@@ -127,6 +164,13 @@ public class Submarine : MonoBehaviour
                 Destroy(this.gameObject);
             }
         } // destroy the submarine if out of power
+    }
+
+    private IEnumerator Turn180Degrees()
+    {
+        yield return new WaitForSeconds(turnTime);
+        this.transform.localScale = new Vector3(-this.transform.localScale.x, this.transform.localScale.y, this.transform.localScale.z);
+        turning = false;
     }
 
     public void GetLighter()
