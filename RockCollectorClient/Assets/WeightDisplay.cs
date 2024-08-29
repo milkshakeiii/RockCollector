@@ -21,6 +21,8 @@ public class WeightDisplay : MonoBehaviour
         float submarineMaxMass = submarine.MaximumMass();
         float waterMassFraction = waterMass / submarineMaxMass;
         waterArrow.SetHeight(waterMassFraction);
+
+        Ballast.OnBallastChanged += ResetBars;
     }
 
     private void Update()
@@ -56,9 +58,9 @@ public class WeightDisplay : MonoBehaviour
         ballastedMassBar.GetComponent<RectTransform>().anchorMax = new Vector2(1, ballastedMass / maximumMass);
 
         GameObject maximumMassBar = Instantiate(barPrefab, this.transform);
-        // set maximum mass bar anchors so that it takes up the top part of the bar, from ballastedMass/maxMass to 1
+        // set maximum mass bar anchors so that it takes up the top part of the bar, from ballastedMass to (ballastedMass + depthControlMass)
         maximumMassBar.GetComponent<RectTransform>().anchorMin = new Vector2(0, ballastedMass / maximumMass);
-        maximumMassBar.GetComponent<RectTransform>().anchorMax = new Vector2(1, 1);
+        maximumMassBar.GetComponent<RectTransform>().anchorMax = new Vector2(1, (ballastedMass + submarine.DepthControlMass()) / maximumMass);
 
         // reset each bar's rect transform so that it takes up just the area between the anchors
         minimumMassBar.GetComponent<RectTransform>().offsetMin = Vector2.zero;

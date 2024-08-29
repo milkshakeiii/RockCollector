@@ -12,7 +12,6 @@ public class Equipment
     public float mass = 0f; // Mass in kilograms
     public float addedVolume = 0f; // Added volume in cubic meters
 
-    public float activationPower = 0f; // Instantaneous power cost to activate
     public float continuousPower = 0f; // Continuous power cost per second
 
     public virtual float AddedMass()
@@ -21,8 +20,18 @@ public class Equipment
     }
 }
 
-public class Ballast : Equipment
+public abstract class Activatable : Equipment
 {
+    public float activationPower = 0f; // Instantaneous power cost to activate
+
+    public abstract bool Activate();
+}
+
+public class Ballast : Activatable
+{
+    public delegate void BallastChange();
+    public static event BallastChange OnBallastChanged;
+
     public float ballastMass = 0f; // Ballast mass in kilograms
     public float ballastDropTime = 0f; // Time to drop ballast in seconds
     public float ballastRefills = 0; // Number of times ballast can be refilled
@@ -31,12 +40,13 @@ public class Ballast : Equipment
     private bool ballastDropped = false; // Whether the ballast has been dropped
     private int ballastRefillsUsed = 0; // Number of times the ballast has been refilled
 
-    public bool ActivateBallast()
+    public override bool Activate()
     {
         // it is always possible to drop the ballast
         if (!ballastDropped)
         {
             ballastDropped = true;
+            OnBallastChanged?.Invoke();
             return true;
         }
         // it is only possible to refill the ballast if there are refills left
@@ -44,6 +54,7 @@ public class Ballast : Equipment
         {
             ballastDropped = false;
             ballastRefillsUsed++;
+            OnBallastChanged?.Invoke();
             return true;
         }
         return false;

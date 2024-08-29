@@ -23,13 +23,19 @@ public class Submarine : MonoBehaviour
         AddDrag(startingDrag);
         AddMass(startingMass);
 
-        // Add a Ballast to the submarine
+        // Add two Ballasts to the submarine
         Ballast ballast = new();
-        ballast.ballastMass = 6000f;
+        ballast.ballastMass = 3000f;
         ballast.ballastDropTime = 1f;
         ballast.ballastRefills = 3;
         ballast.ballastRefillTime = 2f;
         coreModules.Add(ballast);
+        Ballast ballast2 = new();
+        ballast2.ballastMass = 3000f;
+        ballast2.ballastDropTime = 1f;
+        ballast2.ballastRefills = 3;
+        ballast2.ballastRefillTime = 2f;
+        coreModules.Add(ballast2);
 
         // Add several DepthControllers to the submarine
         for (int i = 0; i < 10; i++)
@@ -155,6 +161,14 @@ public class Submarine : MonoBehaviour
         SpendPower(powerSpent);
     }
 
+    public void ActivateModule(Activatable module)
+    {
+        if (module.Activate())
+        {
+            SpendPower(module.activationPower);
+        }
+    }
+
     /// <summary>
     /// Calculates the buoyancy force in Newtons of the submarine on the given planet
     /// </summary>
@@ -175,6 +189,11 @@ public class Submarine : MonoBehaviour
         allModules.AddRange(internalModules);
         allModules.AddRange(hullMountedModules);
         return allModules;
+    }
+
+    public List<Activatable> ActivatableModules()
+    {
+        return AllModules().FindAll(module => module is Activatable).ConvertAll(module => (Activatable)module);
     }
 
     public float CurrentMass()
@@ -213,7 +232,20 @@ public class Submarine : MonoBehaviour
             totalMass += module.mass;
             if (module is Ballast ballast)
             {
-                totalMass += ballast.ballastMass;
+                totalMass += ballast.AddedMass();
+            }
+        }
+        return totalMass;
+    }
+
+    public float DepthControlMass()
+    {
+        float totalMass = 0;
+        foreach (Equipment module in AllModules())
+        {
+            if (module is DepthController controller)
+            {
+                totalMass += controller.depthControlMass;
             }
         }
         return totalMass;
