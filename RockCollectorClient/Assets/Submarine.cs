@@ -5,23 +5,27 @@ using UnityEngine;
 
 public class Submarine : MonoBehaviour
 {
-    public float drag = 10.0f; // Drag force in Newtons
-    public float mass = 100f; // Base mass in kilograms
-    private float volume = 10f; // Base volume in cubic meters
+    public float startingDrag = 10.0f; // starting drag force in Newtons
+    public float startingMass = 2000f; // starting mass in kilograms
+    public float volume = 10f; // Base volume in cubic meters
+    public float maxPower = 100f; // max power in power units
+
+    private float drag = 0f; // Drag force in Newtons
+    private float mass = 0f; // Base mass in kilograms
+    private float powerSpent = 0f; // Power spent in power units
 
     private List<Equipment> coreModules = new(); // modules that are built into the submarine
     private List<Equipment> internalModules = new(); // modules that are installed inside the submarine
     private List<Equipment> hullMountedModules = new(); // modules that are installed outside the submarine
 
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        this.GetComponent<Rigidbody2D>().drag = drag;
-        this.GetComponent<Rigidbody2D>().mass = mass;
+        AddDrag(startingDrag);
+        AddMass(startingMass);
 
         // Add a Ballast to the submarine
         Ballast ballast = new();
-        ballast.ballastMass = 8000f;
+        ballast.ballastMass = 6000f;
         ballast.ballastDropTime = 1f;
         ballast.ballastRefills = 3;
         ballast.ballastRefillTime = 2f;
@@ -33,8 +37,29 @@ public class Submarine : MonoBehaviour
             DepthController depthController = new();
             depthController.depthControlMass = 300f;
             depthController.depthControlTime = 1f;
+            depthController.continuousPower = 1f;
             coreModules.Add(depthController);
         }
+    }
+
+    public float PowerRemaining()
+    {
+        return maxPower - powerSpent;
+    }
+
+    public void AddDrag(float drag)
+    {
+        this.drag += drag;
+    }
+
+    public void AddMass(float mass)
+    {
+        this.mass += mass;
+    }
+
+    public void SpendPower(float power)
+    {
+        powerSpent += power;
     }
 
     // Update is called once per frame
@@ -42,62 +67,92 @@ public class Submarine : MonoBehaviour
     {
         Planet planet = new();
 
-        // apply an upward force to the submarine according to the buoyancy
-        float verticalForce = Buoyancy(planet) * Time.deltaTime;
-
-        // apply a downward force to the submarine according to gravity
-        float totalMass = CurrentMass();
-        float gravityForce = totalMass * planet.gravity * Time.deltaTime;
-
-        float netForce = verticalForce - gravityForce;
-        this.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, netForce));
-
-        // control the mass with W and S keys
-        if (UnityEngine.Input.GetKey(KeyCode.W))
         {
-            GetLighter();
-        }
-        else if (UnityEngine.Input.GetKey(KeyCode.S))
-        {
-            GetHeavier();
-        }
-        else
-        {
-            // if neither W nor S is pressed, aim for zero buoyancy
-            float currentMass = CurrentMass();
-            float targetMass = Buoyancy(planet) / planet.gravity;
-            float massDifference = targetMass - currentMass;
-            if (massDifference > 0)
-            {
-                GetHeavier();
-            }
-            else if (massDifference < 0)
+            // apply an upward force to the submarine according to the buoyancy
+            float verticalForce = Buoyancy(planet);
+
+            // apply a downward force to the submarine according to gravity
+            float totalMass = CurrentMass();
+            float gravityForce = totalMass * planet.gravity;
+
+            float netForce = verticalForce - gravityForce;
+            this.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, netForce));
+        } // apply vertical forces to the submarine
+
+        { 
+            if (UnityEngine.Input.GetKey(KeyCode.W))
             {
                 GetLighter();
             }
-        }
+            else if (UnityEngine.Input.GetKey(KeyCode.S))
+            {
+                GetHeavier();
+            }
+            else
+            {
+                // if neither W nor S is pressed, aim for zero buoyancy
+                float currentMass = CurrentMass();
+                float targetMass = Buoyancy(planet) / planet.gravity;
+                float massDifference = targetMass - currentMass;
+                // if the mass difference is less than 0.1% of the target mass, stop adjusting
+                if (Mathf.Abs(massDifference) < 0.001f * targetMass)
+                {
+                    // do nothing
+                }
+                else if (massDifference > 0)
+                {
+                    GetHeavier();
+                }
+                else if (massDifference < 0)
+                {
+                    GetLighter();
+                }
+            }
+        } // control the mass with W and S keys
+
+        {
+            this.GetComponent<Rigidbody2D>().mass = CurrentMass();
+            this.GetComponent<Rigidbody2D>().drag = drag;
+        } // update rigidbody mass and drag
+
+        {
+            if (PowerRemaining() <= 0)
+            {
+                Destroy(this.gameObject);
+            }
+        } // destroy the submarine if out of power
     }
 
     public void GetLighter()
     {
+        float powerSpent = 0f;
         foreach (var module in AllModules())
         {
             if (module is DepthController depthController)
             {
-                depthController.AdjustMass(false); // get lighter
+                if (depthController.AdjustMass(false))// get lighter
+                {
+                    powerSpent += depthController.continuousPower * Time.deltaTime;
+                }
             }
         }
+        SpendPower(powerSpent);
     }
 
     public void GetHeavier()
     {
+        float powerSpent = 0f;
         foreach (var module in AllModules())
         {
             if (module is DepthController depthController)
             {
-                depthController.AdjustMass(true); // get heavier
+                if (depthController.AdjustMass(true))// get heavier
+                {
+                    powerSpent += depthController.continuousPower * Time.deltaTime;
+                }
             }
         }
+        SpendPower(powerSpent);
     }
 
     /// <summary>

@@ -62,8 +62,17 @@ public class DepthController : Equipment
 
     private float currentDepthControlMass = 0f; // Current depth control mass in kilograms
 
-    public float AdjustMass(bool adjustHeavier)
+    // returns true if the mass was adjusted, false otherwise
+    public bool AdjustMass(bool adjustHeavier)
     {
+        if (adjustHeavier && currentDepthControlMass >= depthControlMass)
+        {
+            return false;
+        }
+        if (!adjustHeavier && currentDepthControlMass <= 0)
+        {
+            return false;
+        }
         float deltaMass = depthControlMass * Time.deltaTime / depthControlTime;
         if (adjustHeavier)
         {
@@ -73,8 +82,7 @@ public class DepthController : Equipment
         {
             currentDepthControlMass -= deltaMass;
         }
-        currentDepthControlMass = Mathf.Clamp(currentDepthControlMass, 0, depthControlMass);
-        return currentDepthControlMass;
+        return true;
     }
 
     public override float AddedMass()

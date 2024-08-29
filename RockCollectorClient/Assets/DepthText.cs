@@ -15,6 +15,11 @@ public class DepthText : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // do nothing if the submarine has been destroyed
+        if (submarine == null)
+        {
+            return;
+        }
         float depth = submarine.transform.position.y;
         this.GetComponent<TMPro.TMP_Text>().text = depth.ToString("F2") + "m";
     }
