@@ -26,15 +26,15 @@ public class MouseAim : MonoBehaviour
         Vector3 objectPos = Camera.main.WorldToScreenPoint(transform.position);
         mousePos.x = mousePos.x - objectPos.x;
         mousePos.y = mousePos.y - objectPos.y;
+        if (!currentFacingRight)
+        {
+            mousePos.x = -mousePos.x;
+        }
         float targetAngle = Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg;
         Debug.Log(targetAngle);
         bool shouldRotate = targetAngle < maxAngle && targetAngle > minAngle;
         if (shouldRotate)
         {
-            if (!currentFacingRight)
-            {
-                targetAngle = 180.0f - targetAngle;
-            }
             float currentAngle = transform.localEulerAngles.z;
             float deltaAngle = Mathf.DeltaAngle(currentAngle, targetAngle);
             float newAngle = currentAngle + Mathf.Sign(deltaAngle) * Mathf.Min(Mathf.Abs(deltaAngle), rotationSpeed * Time.deltaTime);
