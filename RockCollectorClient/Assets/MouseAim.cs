@@ -31,7 +31,6 @@ public class MouseAim : MonoBehaviour
             mousePos.x = -mousePos.x;
         }
         float targetAngle = Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg;
-        Debug.Log(targetAngle);
         bool shouldRotate = targetAngle < maxAngle && targetAngle > minAngle;
         if (shouldRotate)
         {

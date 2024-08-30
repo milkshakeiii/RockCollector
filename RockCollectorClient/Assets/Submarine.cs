@@ -55,6 +55,16 @@ public class Submarine : MonoBehaviour
         engine.thrust = 8000f;
         engine.continuousPower = 0.1f;
         coreModules.Add(engine);
+
+        // Add a HarpoonGun to the submarine
+        HarpoonGun harpoonGun = new();
+        harpoonGun.size = 1f;
+        hullMountedModules.Add(harpoonGun);
+
+        // Add a second HarpoonGun to the submarine
+        HarpoonGun harpoonGun2 = new();
+        harpoonGun2.size = 2f;
+        hullMountedModules.Add(harpoonGun2);
     }
 
     private void Start()

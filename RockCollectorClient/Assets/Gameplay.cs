@@ -20,6 +20,27 @@ public class Equipment
     }
 }
 
+public abstract class Shootable : Equipment
+{
+    public abstract GameObject SpawnWorldObject(Submarine submarine);
+}
+
+public class HarpoonGun : Shootable
+{
+    public float size = 1f;// visual scale of the harpoon gun
+
+    public override GameObject SpawnWorldObject(Submarine submarine)
+    {
+        // find prefab with name "HarpoonGun"
+        GameObject harpoonGunPrefab = Resources.Load<GameObject>("HarpoonGun");
+
+        // instantiate the prefab
+        GameObject harpoonGun = GameObject.Instantiate(harpoonGunPrefab, submarine.transform);
+        harpoonGun.GetComponent<HarpoonGunBehaviour>().Initialize(this);
+        return harpoonGun;
+    }
+}
+
 public abstract class Activatable : Equipment
 {
     public float activationPower = 0f; // Instantaneous power cost to activate
