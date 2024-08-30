@@ -10,7 +10,7 @@ public class TimefishSpawner : MonoBehaviour
     void Start()
     {
         TimefishSpecies testSpecies = new TimefishSpecies();
-        testSpecies.baseSize = 1.0f;
+        testSpecies.baseSize = 3.0f;
         testSpecies.preySpecies = new List<TimefishSpecies>();
         testSpecies.visionConeArc = 90.0f;
         testSpecies.visionConeMiddle = 0f;
@@ -22,9 +22,13 @@ public class TimefishSpawner : MonoBehaviour
         testSpecies.baseTradeValue = 10f;
         testSpecies.aggressive = true;
 
-        GameObject newTimefish = Instantiate(timefishPrefab, new Vector3(Random.Range(-10, 10), 0, Random.Range(-10, 10)), Quaternion.identity);
-        Timefish timefish = newTimefish.GetComponent<Timefish>();
-        timefish.Initialize(testSpecies);
+        System.Random random = new();
+        for (int i = 0; i < 10; i++)
+        {
+            GameObject newTimefish = Instantiate(timefishPrefab, new Vector3(Random.Range(-10, 10), Random.Range(-10, 10), 0), Quaternion.identity);
+            Timefish timefish = newTimefish.GetComponent<Timefish>();
+            timefish.Initialize(testSpecies, random);
+        }
     }
 
     // Update is called once per frame

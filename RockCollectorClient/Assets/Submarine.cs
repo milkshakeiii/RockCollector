@@ -46,15 +46,57 @@ public class Submarine : MonoBehaviour
             DepthController depthController = new();
             depthController.depthControlMass = 300f;
             depthController.depthControlTime = 1f;
-            depthController.continuousPower = 1f;
+            depthController.continuousPower = 0.1f;
             coreModules.Add(depthController);
         }
 
         // Add an engine to the submarine
         Engine engine = new();
-        engine.thrust = 2000f;
-        engine.continuousPower = 1f;
+        engine.thrust = 8000f;
+        engine.continuousPower = 0.1f;
         coreModules.Add(engine);
+    }
+
+    private void Start()
+    {
+        // StartCoroutine(GentleSway());
+
+
+    }
+
+    private IEnumerator GentleSway()
+    {
+        float magnitude = 0.1f;
+        float phase = 0.1f;
+        float phaseTime = 0f;
+        float magnitudeTime = 0f;
+        while (true)
+        {
+            float sway = Mathf.Sin(Time.time + phase) * magnitude;
+            this.transform.position += new Vector3(0, sway, 0) * Time.deltaTime;
+            yield return null;
+
+            phaseTime += Time.deltaTime;
+            magnitudeTime += Time.deltaTime;
+            // every 5 seconds, 10% chance to change the phase
+            if (phaseTime > 5f)
+            {
+                if (Random.Range(0, 10) == 0)
+                {
+                    phase = Random.Range(-0.1f, 0.1f);
+                }
+                phaseTime = 0f;
+            }
+            // every 6 seconds, 10% chance to change the magnitude
+            if (magnitudeTime > 6f)
+            {
+                if (Random.Range(0, 10) == 0)
+                {
+                    magnitude = Random.Range(0.05f, 0.15f);
+                }
+                magnitudeTime = 0f;
+            }
+        }
     }
 
     public float PowerRemaining()
@@ -136,7 +178,7 @@ public class Submarine : MonoBehaviour
                     turning = true;
                     StartCoroutine(Turn180Degrees());
                 }
-                else
+                else if (!turning)
                 {
                     // fire all engines
                     foreach (var module in AllModules())

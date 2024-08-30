@@ -10,7 +10,7 @@ public class Timefish : MonoBehaviour
 
     private float size; //Size(volume) in cubic meters
 
-    public void Initialize(TimefishSpecies newSpecies)
+    public void Initialize(TimefishSpecies newSpecies, System.Random random)
     {
         this.species = newSpecies;
 
@@ -18,18 +18,29 @@ public class Timefish : MonoBehaviour
         // size follows a normal distribution with a mean of 40% species base size and a standard deviation of 10% of the base size
         // use the Box-Muller transform to generate a random number from a normal distribution
         float smallSize = species.baseSize * 0.4f;
-        float u1 = Random.Range(0f, 1f);
-        float u2 = Random.Range(0f, 1f);
+        float u1 = (float)random.NextDouble();
+        float u2 = (float)random.NextDouble();
         float z0 = Mathf.Sqrt(-2 * Mathf.Log(u1)) * Mathf.Cos(2 * Mathf.PI * u2);
         size = smallSize + 0.1f * smallSize * z0;
 
+        // randomly, 20% of the time, size instead follows a normal distribution with a mean of 60% species base size
+        // and a standard deviation of 15% of the base size
+        if (random.Next(0, 100) < 20)
+        {
+            float mediumSize = species.baseSize * 0.6f;
+            u1 = (float)random.NextDouble();
+            u2 = (float)random.NextDouble();
+            z0 = Mathf.Sqrt(-2 * Mathf.Log(u1)) * Mathf.Cos(2 * Mathf.PI * u2);
+            size = mediumSize + 0.15f * mediumSize * z0;
+        }
+
         // randomly, 5% of the time, size instead follows a normal distribution with a mean of 80% species base size
         // and a standard deviation of 20% of the base size
-        if (Random.Range(0, 20) == 0)
+        if (random.Next(0, 100) < 5)
         {
             float largeSize = species.baseSize * 0.8f;
-            u1 = Random.Range(0f, 1f);
-            u2 = Random.Range(0f, 1f);
+            u1 = (float)random.NextDouble();
+            u2 = (float)random.NextDouble();
             z0 = Mathf.Sqrt(-2 * Mathf.Log(u1)) * Mathf.Cos(2 * Mathf.PI * u2);
             size = largeSize + 0.2f * largeSize * z0;
         }
@@ -39,14 +50,16 @@ public class Timefish : MonoBehaviour
         if (size < softMinSize)
         {
             // reroll to get a size between 0.03 and 0.05 of the species base size (to avoid very small fish)
-            size = Random.Range(0.03f, 0.05f) * species.baseSize;
+            size = (float)random.NextDouble() * (0.05f - 0.03f) + 0.03f;
             // just for fun, make the fish 0.025 of the species base size with a 1 in 100 chance
-            if (Random.Range(0, 100) == 0)
+            if (random.Next(0, 100) == 0)
             {
                 size = 0.025f * species.baseSize;
             }
         }
 
+        // size determines sprite scale
+        transform.localScale = new Vector3(size, size, size);
     }
 
     // Start is called before the first frame update
