@@ -64,18 +64,22 @@ public class Submarine : MonoBehaviour
         harpoonGun.continuousPower = 1f;
         harpoonGun.range = 5f;
         harpoonGun.maxHarpoons = 2;
-        harpoonGun.reelSpeed = 1f;
+        harpoonGun.reelSpeed = 0.2f;
+        harpoonGun.pullStrength = 1500f;
+        harpoonGun.ropeElasticity = 0.5f;
         hullMountedModules.Add(harpoonGun);
 
         // Add a second HarpoonGun to the submarine
         HarpoonGun harpoonGun2 = new();
         harpoonGun2.size = 2f;
         harpoonGun2.velocity = 15f;
-        harpoonGun.activationPower = 2f;
-        harpoonGun.continuousPower = 1f;
+        harpoonGun2.activationPower = 2f;
+        harpoonGun2.continuousPower = 1f;
         harpoonGun2.range = 7f;
         harpoonGun2.maxHarpoons = 3;
-        harpoonGun2.reelSpeed = 2f;
+        harpoonGun2.reelSpeed = 0.4f;
+        harpoonGun2.pullStrength = 3000f;
+        harpoonGun2.ropeElasticity = 0.5f;
         hullMountedModules.Add(harpoonGun2);
     }
 
@@ -219,7 +223,7 @@ public class Submarine : MonoBehaviour
 
         {
             this.GetComponent<Rigidbody2D>().mass = CurrentMass();
-            this.GetComponent<Rigidbody2D>().drag = drag;
+            this.GetComponent<Rigidbody2D>().linearDamping = drag;
         } // update rigidbody mass and drag
 
         {

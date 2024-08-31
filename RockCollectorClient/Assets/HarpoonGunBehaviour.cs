@@ -30,6 +30,10 @@ public class HarpoonGunBehaviour : MonoBehaviour
         bool harpoonsAvailable = harpoons.Count < harpoonGun.maxHarpoons;
         if (harpoonsAvailable && Input.GetMouseButtonDown(0))
         {
+            // pay the activation power cost
+            Submarine submarine = transform.parent.GetComponent<Submarine>();
+            submarine.SpendPower(harpoonGun.activationPower);
+
             GameObject harpoon = Instantiate(harpoonPrefab, transform.position, transform.rotation);
             bool facingRight = transform.parent.localScale.x > 0;
             float velocity = harpoonGun.velocity;
@@ -40,6 +44,15 @@ public class HarpoonGunBehaviour : MonoBehaviour
             }
             harpoon.GetComponent<Harpoon>().Initialize(this, velocity);
             harpoons.Add(harpoon);
+        }
+    }
+
+    private void OnDisable()
+    {
+        // destroy all harpoons when the harpoon gun is disabled
+        foreach (GameObject harpoon in harpoons)
+        {
+            Destroy(harpoon);
         }
     }
 }

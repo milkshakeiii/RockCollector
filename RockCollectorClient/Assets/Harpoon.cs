@@ -9,11 +9,12 @@ public class Harpoon : MonoBehaviour
 
     private HarpoonGunBehaviour harpoonGunBehaviour;
     private bool stuck = false;
+    private GameObject ropeSprite;
 
     public void Initialize(HarpoonGunBehaviour newHarpoonGunBehavior, float velocity)
     {
         harpoonGunBehaviour = newHarpoonGunBehavior;
-        GetComponent<Rigidbody2D>().velocity = this.transform.right * velocity;
+        GetComponent<Rigidbody2D>().linearVelocity = this.transform.right * velocity;
     }
 
     // Start is called before the first frame update
@@ -30,6 +31,29 @@ public class Harpoon : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+
+        // destroy the harpoon if the rope is stretched too far
+        if (stuck && GetComponent<MyJoint2D>().CheckBreak(harpoonGunBehaviour.harpoonGun.ropeElasticity, ropeSprite))
+        {
+            Destroy(this.gameObject);
+        }
+
+        // if the right mouse button is pressed, shorten the rope
+        if (Input.GetMouseButton(1))
+        {
+            GetComponent<MyJoint2D>().distance -= harpoonGunBehaviour.harpoonGun.reelSpeed * Time.deltaTime;
+            // pay the continuous cost of reeling in the harpoon
+            Submarine submarine = harpoonGunBehaviour.GetComponentInParent<Submarine>();
+            submarine.SpendPower(harpoonGunBehaviour.harpoonGun.continuousPower * Time.deltaTime);
+        }
+    }
+
+    void OnDestroy()
+    {
+        if (ropeSprite != null)
+        {
+            Destroy(ropeSprite);
+        }
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -37,8 +61,7 @@ public class Harpoon : MonoBehaviour
         if (!stuck && collision.gameObject.layer == LayerMask.NameToLayer("Fish"))
         {
             // the harpoon sticks to the fish
-            this.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-            this.GetComponent<Rigidbody2D>().isKinematic = true;
+            this.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
             this.transform.SetParent(collision.transform);
             stuck = true;
 
@@ -46,23 +69,25 @@ public class Harpoon : MonoBehaviour
             collision.gameObject.GetComponent<Timefish>().SetBehavior(new StillBehavior());
 
             // create the rope sprite
-            GameObject ropeSprite = Instantiate(harpoonRopePrefab, this.transform.position, Quaternion.identity);
+            GameObject newRopeSprite = Instantiate(harpoonRopePrefab, this.transform.position, Quaternion.identity);
+            this.ropeSprite = newRopeSprite;
 
             // get the fixedjoint2d component and connect it to the fish
             FixedJoint2D fixedJoint = this.gameObject.GetComponent<FixedJoint2D>();
             fixedJoint.connectedBody = collision.gameObject.GetComponent<Rigidbody2D>();
             fixedJoint.enabled = true;
 
-            // get the distancejoint2d component and connect it to the harpoon gun
-            DistanceJoint2D distanceJoint = this.gameObject.GetComponent<DistanceJoint2D>();
-            distanceJoint.connectedBody = harpoonGunBehaviour.GetComponentInParent<Rigidbody2D>();
-            distanceJoint.anchor = harpoonGunBehaviour.transform.localPosition;
-            distanceJoint.enabled = true;
-            distanceJoint.distance = Vector2.Distance(this.transform.position, harpoonGunBehaviour.transform.position);
+            // get the MyJoint2D component and connect it to the harpoon gun
+            MyJoint2D myJoint = this.gameObject.GetComponent<MyJoint2D>();
+            myJoint.originBody = this.GetComponent<Rigidbody2D>();
+            myJoint.connectedBody = harpoonGunBehaviour.GetComponentInParent<Rigidbody2D>();
+            myJoint.enabled = true;
+            myJoint.distance = Vector2.Distance(this.transform.position, harpoonGunBehaviour.transform.position);
+            myJoint.strength = harpoonGunBehaviour.harpoonGun.pullStrength;
 
             // add a shortener script to this and initialize it
-            Shortener shortener = this.AddComponent<Shortener>();
-            shortener.Initialize(harpoonGunBehaviour.gameObject, ropeSprite, harpoonGunBehaviour.harpoonGun.reelSpeed);
+            RopeSpriteStretcher shortener = this.AddComponent<RopeSpriteStretcher>();
+            shortener.Initialize(harpoonGunBehaviour.gameObject, newRopeSprite);
         }
     }
 }
