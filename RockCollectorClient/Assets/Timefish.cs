@@ -65,6 +65,8 @@ public class Timefish : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        GetComponent<Rigidbody2D>().mass = size * size * 100;
+
         currentBehavior = new IdleBehavior();
     }
 
@@ -72,6 +74,11 @@ public class Timefish : MonoBehaviour
     void Update()
     {
         currentBehavior.Update(this);
+    }
+
+    public void SetBehavior(Behavior newBehavior)
+    {
+        currentBehavior = newBehavior;
     }
 
     public float GetSpeed()
@@ -161,6 +168,14 @@ public class IdleBehavior : Behavior
     {
         fish.transform.localScale = new Vector3(-fish.transform.localScale.x, fish.transform.localScale.y, fish.transform.localScale.z);
         yield return null;
+    }
+}
+
+public class StillBehavior : Behavior
+{
+    public override void Update(Timefish fish)
+    {
+        // do nothing
     }
 }
 

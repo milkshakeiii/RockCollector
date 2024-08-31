@@ -59,11 +59,23 @@ public class Submarine : MonoBehaviour
         // Add a HarpoonGun to the submarine
         HarpoonGun harpoonGun = new();
         harpoonGun.size = 1f;
+        harpoonGun.velocity = 10f;
+        harpoonGun.activationPower = 2f;
+        harpoonGun.continuousPower = 1f;
+        harpoonGun.range = 5f;
+        harpoonGun.maxHarpoons = 2;
+        harpoonGun.reelSpeed = 1f;
         hullMountedModules.Add(harpoonGun);
 
         // Add a second HarpoonGun to the submarine
         HarpoonGun harpoonGun2 = new();
         harpoonGun2.size = 2f;
+        harpoonGun2.velocity = 15f;
+        harpoonGun.activationPower = 2f;
+        harpoonGun.continuousPower = 1f;
+        harpoonGun2.range = 7f;
+        harpoonGun2.maxHarpoons = 3;
+        harpoonGun2.reelSpeed = 2f;
         hullMountedModules.Add(harpoonGun2);
     }
 

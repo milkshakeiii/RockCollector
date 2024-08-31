@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class HarpoonGunBehaviour : MonoBehaviour
 {
-    private HarpoonGun harpoonGun;
+    public GameObject harpoonPrefab;
+    public HarpoonGun harpoonGun;
+
+    private List<GameObject> harpoons = new();
 
     public void Initialize(HarpoonGun harpoonGun)
     {
@@ -21,6 +24,22 @@ public class HarpoonGunBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        // spawn harpoon on left mouse click if harpoons are available
+        // clear destroyed harpoons
+        harpoons.RemoveAll(harpoon => harpoon == null);
+        bool harpoonsAvailable = harpoons.Count < harpoonGun.maxHarpoons;
+        if (harpoonsAvailable && Input.GetMouseButtonDown(0))
+        {
+            GameObject harpoon = Instantiate(harpoonPrefab, transform.position, transform.rotation);
+            bool facingRight = transform.parent.localScale.x > 0;
+            float velocity = harpoonGun.velocity;
+            if (!facingRight)
+            {
+                harpoon.transform.localScale = new Vector3(harpoon.transform.localScale.x * -1, harpoon.transform.localScale.y, harpoon.transform.localScale.z);
+                velocity *= -1;
+            }
+            harpoon.GetComponent<Harpoon>().Initialize(this, velocity);
+            harpoons.Add(harpoon);
+        }
     }
 }

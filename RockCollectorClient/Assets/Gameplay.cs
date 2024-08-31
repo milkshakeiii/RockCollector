@@ -12,6 +12,7 @@ public class Equipment
     public float mass = 0f; // Mass in kilograms
     public float addedVolume = 0f; // Added volume in cubic meters
 
+    public float activationPower = 0f; // Instantaneous power cost to activate
     public float continuousPower = 0f; // Continuous power cost per second
 
     public virtual float AddedMass()
@@ -28,6 +29,10 @@ public abstract class Shootable : Equipment
 public class HarpoonGun : Shootable
 {
     public float size = 1f;// visual scale of the harpoon gun
+    public float velocity = 10f; // Velocity of the harpoon in m/s
+    public float range = 7f; // Range of the harpoon in meters
+    public int maxHarpoons = 2; // Number of harpoons at once
+    public float reelSpeed = 1f; // Speed to reel in the harpoon in m/s
 
     public override GameObject SpawnWorldObject(Submarine submarine)
     {
@@ -43,8 +48,6 @@ public class HarpoonGun : Shootable
 
 public abstract class Activatable : Equipment
 {
-    public float activationPower = 0f; // Instantaneous power cost to activate
-
     public abstract bool Activate();
 }
 
