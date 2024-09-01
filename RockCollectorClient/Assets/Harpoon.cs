@@ -42,6 +42,7 @@ public class Harpoon : MonoBehaviour
         if (Input.GetMouseButton(1))
         {
             GetComponent<MyJoint2D>().distance -= harpoonGunBehaviour.harpoonGun.reelSpeed * Time.deltaTime;
+            GetComponent<MyJoint2D>().distance = Mathf.Max(0, GetComponent<MyJoint2D>().distance);
             // pay the continuous cost of reeling in the harpoon
             Submarine submarine = harpoonGunBehaviour.GetComponentInParent<Submarine>();
             submarine.SpendPower(harpoonGunBehaviour.harpoonGun.continuousPower * Time.deltaTime);

@@ -23,7 +23,7 @@ public class MyJoint2D : MonoBehaviour
     public bool CheckBreak(float elasticity, GameObject ropeSprite)
     {
         float currentDistance = Vector2.Distance(originBody.transform.position, connectedBody.transform.position);
-        float stretchFactor = Mathf.Abs(currentDistance - distance) / distance;
+        float stretchFactor = Mathf.Max(0, (currentDistance - distance) / distance);
         bool stretched = stretchFactor > elasticity;
         bool withinGraceDistance = currentDistance < 1f;
 
