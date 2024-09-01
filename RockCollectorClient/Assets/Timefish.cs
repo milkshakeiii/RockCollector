@@ -65,7 +65,7 @@ public class Timefish : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GetComponent<Rigidbody2D>().mass = size * size * 100;
+        GetComponent<Rigidbody2D>().mass = size * size * 200;
 
         currentBehavior = new IdleBehavior();
     }

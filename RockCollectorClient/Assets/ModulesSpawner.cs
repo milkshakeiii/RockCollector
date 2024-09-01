@@ -2,9 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShootablesManager : MonoBehaviour
+public class ModulesSpawner : MonoBehaviour
 {
+    public GameObject activatableButtonPrefab;
+    public GameObject activatableButtonParent;
+
     public GameObject shootablesImagePrefab;
+    public GameObject shootablesImageParent;
+
     public Submarine submarine;
 
     private List<GameObject> images = new List<GameObject>();
@@ -18,7 +23,7 @@ public class ShootablesManager : MonoBehaviour
         {
             if (equipment is Shootable shootable)
             {
-                GameObject shootablesImage = Instantiate(shootablesImagePrefab, transform);
+                GameObject shootablesImage = Instantiate(shootablesImagePrefab, shootablesImageParent.transform);
                 shootablesImage.GetComponent<ShootableImage>().Initialize(shootable);
                 // deactivate the shootable image if it is not the first one
                 if (images.Count > 0)
@@ -34,6 +39,25 @@ public class ShootablesManager : MonoBehaviour
                     shootableWorldObject.SetActive(false);
                 }
                 worldObjects.Add(shootableWorldObject);
+            }
+        }
+
+        List<Activatable> activatables = submarine.ActivatableModules();
+        for (int i = 0; i < activatables.Count; i++)
+        {
+            GameObject activatableButton = Instantiate(activatableButtonPrefab, activatableButtonParent.transform);
+            // positions the button in a row from left to right
+            activatableButton.transform.localPosition = new Vector3(-150 + i * 40, 0, 0);
+            // Initialize the button with the submarine and the activatable module
+            ActivatableButton button = activatableButton.GetComponent<ActivatableButton>();
+            button.Initialize(submarine, activatables[i]);
+        }
+
+        foreach (Equipment equipment in submarine.AllModules())
+        {
+            if (equipment is Scoop scoop)
+            {
+
             }
         }
     }

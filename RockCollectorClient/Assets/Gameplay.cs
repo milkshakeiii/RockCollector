@@ -10,7 +10,6 @@ public class Planet
 public class Equipment
 {
     public float mass = 0f; // Mass in kilograms
-    public float addedVolume = 0f; // Added volume in cubic meters
 
     public float activationPower = 0f; // Instantaneous power cost to activate
     public float continuousPower = 0f; // Continuous power cost per second
@@ -50,7 +49,25 @@ public class HarpoonGun : Shootable
 
 public abstract class Activatable : Equipment
 {
+    // returns true if power should be deducted, false otherwise
     public abstract bool Activate();
+}
+
+public class Scoop : Shootable
+{
+    public float scoopDiameter = 0f; // Diameter of the scoop in meters
+    public float scoopTime = 1f; // Time to scoop in seconds
+
+    public override GameObject SpawnWorldObject(Submarine submarine)
+    {
+        // find prefab with name "Scoop"
+        GameObject scoopPrefab = Resources.Load<GameObject>("Scoop");
+
+        // instantiate the prefab
+        GameObject scoop = GameObject.Instantiate(scoopPrefab, submarine.transform);
+        scoop.GetComponent<ScoopBehaviour>().Initialize(this);
+        return scoop;
+    }
 }
 
 public class Ballast : Activatable

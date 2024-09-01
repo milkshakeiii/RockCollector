@@ -10,7 +10,7 @@ public class TimefishSpawner : MonoBehaviour
     void Start()
     {
         TimefishSpecies testSpecies = new TimefishSpecies();
-        testSpecies.baseSize = 3.0f;
+        testSpecies.baseSize = 1.0f;
         testSpecies.preySpecies = new List<TimefishSpecies>();
         testSpecies.visionConeArc = 90.0f;
         testSpecies.visionConeMiddle = 0f;

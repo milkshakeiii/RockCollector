@@ -81,6 +81,13 @@ public class Submarine : MonoBehaviour
         harpoonGun2.pullStrength = 3000f;
         harpoonGun2.ropeElasticity = 0.5f;
         hullMountedModules.Add(harpoonGun2);
+
+        // Add a Scoop to the submarine
+        Scoop scoop = new();
+        scoop.scoopDiameter = 1f;
+        scoop.scoopTime = 1f;
+        scoop.activationPower = 1f;
+        hullMountedModules.Add(scoop);
     }
 
     private void Start()
