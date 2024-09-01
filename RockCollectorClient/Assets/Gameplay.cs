@@ -58,6 +58,8 @@ public class Scoop : Shootable
     public float scoopDiameter = 0f; // Diameter of the scoop in meters
     public float scoopTime = 1f; // Time to scoop in seconds
 
+    private List<Timefish> capturedFish = new List<Timefish>();
+
     public override GameObject SpawnWorldObject(Submarine submarine)
     {
         // find prefab with name "Scoop"

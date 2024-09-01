@@ -10,6 +10,9 @@ public class Submarine : MonoBehaviour
     public float volume = 10f; // Base volume in cubic meters
     public float maxPower = 100f; // max power in power units
     public float turnTime = 1f; // Time to turn 180 degrees in seconds
+    public float baseFishStorageCapacity = 1000f; // Capacity of fish storage in kilograms
+
+    private List<Timefish> fishStorage = new List<Timefish>(); // Fish stored in the submarine
 
     private bool turning = false; // Whether the submarine is currently turning
 
@@ -130,6 +133,11 @@ public class Submarine : MonoBehaviour
                 magnitudeTime = 0f;
             }
         }
+    }
+
+    public float FishStorageCapacity()
+    {
+        return baseFishStorageCapacity;
     }
 
     public float PowerRemaining()
@@ -378,5 +386,29 @@ public class Submarine : MonoBehaviour
             totalMass += module.mass;
         }
         return totalMass;
+    }
+
+    /// <summary>
+    /// Returns true if the fish was successfully added to the fish storage, false otherwise
+    /// </summary>
+    /// <param name="fish"></param>
+    /// <returns></returns>
+    public bool AddFish(Timefish fish)
+    {
+        float fishMassStored = 0;
+        foreach (Timefish storedFish in fishStorage)
+        {
+            fishMassStored += storedFish.Mass();
+        }
+
+        if (fishMassStored + fish.Mass() <= FishStorageCapacity())
+        {
+            fishStorage.Add(fish);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
