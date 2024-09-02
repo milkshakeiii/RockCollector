@@ -81,8 +81,7 @@ public class ScoopBehaviour : MonoBehaviour
         // disable the captured fish and add them to the submarine's cargo
         foreach (Timefish fish in capturedFish)
         {
-            if (submarine.AddFish(fish))
-                fish.gameObject.SetActive(false);
+            submarine.AddFish(fish);
         }
 
         // if there are no captured fish, skip waiting

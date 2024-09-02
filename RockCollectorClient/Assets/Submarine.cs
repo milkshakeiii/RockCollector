@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -5,6 +6,9 @@ using UnityEngine;
 
 public class Submarine : MonoBehaviour
 {
+    public delegate void FishStored(Timefish fish, float percentFull);
+    public static event FishStored OnFishStored;
+
     public float startingDrag = 10.0f; // starting drag force in Newtons
     public float startingMass = 2000f; // starting mass in kilograms
     public float volume = 10f; // Base volume in cubic meters
@@ -117,18 +121,18 @@ public class Submarine : MonoBehaviour
             // every 5 seconds, 10% chance to change the phase
             if (phaseTime > 5f)
             {
-                if (Random.Range(0, 10) == 0)
+                if (UnityEngine.Random.Range(0, 10) == 0)
                 {
-                    phase = Random.Range(-0.1f, 0.1f);
+                    phase = UnityEngine.Random.Range(-0.1f, 0.1f);
                 }
                 phaseTime = 0f;
             }
             // every 6 seconds, 10% chance to change the magnitude
             if (magnitudeTime > 6f)
             {
-                if (Random.Range(0, 10) == 0)
+                if (UnityEngine.Random.Range(0, 10) == 0)
                 {
-                    magnitude = Random.Range(0.05f, 0.15f);
+                    magnitude = UnityEngine.Random.Range(0.05f, 0.15f);
                 }
                 magnitudeTime = 0f;
             }
@@ -403,7 +407,10 @@ public class Submarine : MonoBehaviour
 
         if (fishMassStored + fish.Mass() <= FishStorageCapacity())
         {
+            fish.gameObject.SetActive(false);
             fishStorage.Add(fish);
+            float percentFull = (fishMassStored + fish.Mass()) / FishStorageCapacity();
+            OnFishStored?.Invoke(fish, percentFull);
             return true;
         }
         else
