@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -20,6 +21,8 @@ public class SetupScreen : MonoBehaviour
     private List<Equipment> internalModules = new(); // purchased internal modules
     private List<Equipment> hullMountedModules = new(); // purchased hull-mounted modules
 
+    private Dictionary<string, float> modulePrices = new();
+
     private int moduleCount = 0;
 
     public float LastRunValue()
@@ -37,6 +40,8 @@ public class SetupScreen : MonoBehaviour
 
     public void PostEquipment()
     {
+        List<Equipment> modules = new();
+
         Ballast ballast = new();
         ballast.name = "Ballast";
         ballast.description = "Drop ballast to decrease the weight of the submarine. Water tank ballasts can be refilled to increase weight again.";
@@ -44,7 +49,7 @@ public class SetupScreen : MonoBehaviour
         ballast.ballastDropTime = 1f;
         ballast.ballastRefills = 3;
         ballast.ballastRefillTime = 2f;
-        AddModule(ballast);
+        modules.Add(ballast);
 
         DepthController depthController = new();
         depthController.name = "Depth Controller";
@@ -52,14 +57,14 @@ public class SetupScreen : MonoBehaviour
         depthController.depthControlMass = 300f;
         depthController.depthControlTime = 1f;
         depthController.continuousPower = 0.1f;
-        AddModule(depthController);
+        modules.Add(depthController);
 
         Engine engine = new();
         engine.name = "Engine";
         engine.description = "Propel the submarine forward with the engine.";
         engine.thrust = 8000f;
         engine.continuousPower = 0.1f;
-        AddModule(engine);
+        modules.Add(engine);
 
         HarpoonGun harpoonGun = new();
         harpoonGun.name = "Harpoon Gun";
@@ -73,7 +78,7 @@ public class SetupScreen : MonoBehaviour
         harpoonGun.reelSpeed = 0.2f;
         harpoonGun.pullStrength = 1500f;
         harpoonGun.ropeElasticity = 0.5f;
-        AddModule(harpoonGun);
+        modules.Add(harpoonGun);
 
         HarpoonGun harpoonGun2 = new();
         harpoonGun2.name = "Harpoon Gun 2";
@@ -87,7 +92,7 @@ public class SetupScreen : MonoBehaviour
         harpoonGun2.reelSpeed = 0.4f;
         harpoonGun2.pullStrength = 3000f;
         harpoonGun2.ropeElasticity = 0.5f;
-        AddModule(harpoonGun2);
+        modules.Add(harpoonGun2);
 
         Scoop scoop = new();
         scoop.name = "Scoop";
@@ -95,7 +100,26 @@ public class SetupScreen : MonoBehaviour
         scoop.scoopDiameter = 1f;
         scoop.scoopTime = 1f;
         scoop.activationPower = 1f;
-        AddModule(scoop);
+        modules.Add(scoop);
+
+        StartCoroutine(SpawnModulesWithPrices(modules));
+    }
+
+    // fetch the module prices from the server
+    private IEnumerator SpawnModulesWithPrices(List<Equipment> modules)
+    {
+        // simulate a delay
+        yield return new WaitForSeconds(1f);
+
+        foreach (Equipment module in modules)
+        {
+            modulePrices[module.name] = Random.Range(100f, 1000f);
+        }
+
+        foreach (Equipment module in modules)
+        {
+            AddModule(module);
+        }
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
