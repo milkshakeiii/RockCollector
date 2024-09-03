@@ -13,20 +13,27 @@ public class WeightDisplay : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ResetBars();
+        SetupScreen.OnSetupComplete += Initialize;
+        Ballast.OnBallastChanged += ResetBars;
+    }
 
+    private void Initialize()
+    {
         Planet planet = new();
-        float volume = submarine.volume;
+        float volume = submarine.SubmarineType().volume;
         float waterMass = 1000 * volume;
         float submarineMaxMass = submarine.MaximumMass();
         float waterMassFraction = waterMass / submarineMaxMass;
         waterArrow.SetHeight(waterMassFraction);
-
-        Ballast.OnBallastChanged += ResetBars;
+        ResetBars();
     }
 
     private void Update()
     {
+        if (!submarine.gameObject.activeSelf)
+        {
+            return;
+        }
         float currentMass = submarine.CurrentMass();
         float newHeight = currentMass / submarine.MaximumMass();
         weightArrow.SetHeight(newHeight);

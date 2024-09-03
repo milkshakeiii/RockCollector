@@ -4,17 +4,39 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 
+public class SubmarineType
+{
+    public float startingDrag = 10f;
+    public float startingMass = 3000f;
+    public float baseFishStorageCapacity = 1000f;
+    public float maxPower = 1000f;
+    public float volume = 10f;
+    public float turnTime = 1f;
+    public string spriteName = "";
+
+    public SubmarineType()
+    {
+
+    }
+
+    public SubmarineType(float startingDrag, float startingMass, float baseFishStorageCapacity, float maxPower, float volume, float turnTime, string spriteName)
+    {
+        this.startingDrag = startingDrag;
+        this.startingMass = startingMass;
+        this.baseFishStorageCapacity = baseFishStorageCapacity;
+        this.maxPower = maxPower;
+        this.volume = volume;
+        this.turnTime = turnTime;
+        this.spriteName = spriteName;
+    }
+}
+
 public class Submarine : MonoBehaviour
 {
     public delegate void FishStored(Timefish fish, float percentFull);
     public static event FishStored OnFishStored;
 
-    public float startingDrag = 10.0f; // starting drag force in Newtons
-    public float startingMass = 2000f; // starting mass in kilograms
-    public float volume = 10f; // Base volume in cubic meters
-    public float maxPower = 100f; // max power in power units
-    public float turnTime = 1f; // Time to turn 180 degrees in seconds
-    public float baseFishStorageCapacity = 1000f; // Capacity of fish storage in kilograms
+    private SubmarineType submarineType;
 
     private List<Timefish> fishStorage = new List<Timefish>(); // Fish stored in the submarine
 
@@ -28,10 +50,20 @@ public class Submarine : MonoBehaviour
     private List<Equipment> internalModules = new(); // modules that are installed inside the submarine
     private List<Equipment> hullMountedModules = new(); // modules that are installed outside the submarine
 
-    void Awake()
+    public SubmarineType SubmarineType()
     {
-        AddDrag(startingDrag);
-        AddMass(startingMass);
+        return submarineType;
+    }
+
+    public void SetSubmarineType(SubmarineType submarineType)
+    {
+        this.submarineType = submarineType;
+    }
+
+    void OnEnable()
+    {
+        AddDrag(SubmarineType().startingDrag);
+        AddMass(SubmarineType().startingMass);
 
         // Add two Ballasts to the submarine
         Ballast ballast = new();
@@ -141,12 +173,12 @@ public class Submarine : MonoBehaviour
 
     public float FishStorageCapacity()
     {
-        return baseFishStorageCapacity;
+        return SubmarineType().baseFishStorageCapacity;
     }
 
     public float PowerRemaining()
     {
-        return maxPower - powerSpent;
+        return SubmarineType().maxPower - powerSpent;
     }
 
     public void AddDrag(float drag)
@@ -255,7 +287,7 @@ public class Submarine : MonoBehaviour
 
     private IEnumerator Turn180Degrees()
     {
-        yield return new WaitForSeconds(turnTime);
+        yield return new WaitForSeconds(SubmarineType().turnTime);
         this.transform.localScale = new Vector3(-this.transform.localScale.x, this.transform.localScale.y, this.transform.localScale.z);
         turning = false;
     }
@@ -309,7 +341,7 @@ public class Submarine : MonoBehaviour
     {
         // Calculate the buoyancy force
         float densityOfWater = 1000f; // Density of water in kg/m^3 (approximate)
-        float buoyancy = densityOfWater * planet.gravity * volume; // Buoyancy in Newtons
+        float buoyancy = densityOfWater * planet.gravity * SubmarineType().volume; // Buoyancy in Newtons
         return buoyancy;
     }
 

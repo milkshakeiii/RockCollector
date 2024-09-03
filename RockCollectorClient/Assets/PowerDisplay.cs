@@ -11,8 +11,12 @@ public class PowerDisplay : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        powerArrow.SetHeight(submarine.PowerRemaining() / submarine.maxPower);
+        if (!submarine.gameObject.activeSelf)
+        {
+            return;
+        }
+        powerArrow.SetHeight(submarine.PowerRemaining() / submarine.SubmarineType().maxPower);
         // display power percentage remaining in the text
-        powerText.text = (submarine.PowerRemaining() / submarine.maxPower * 100).ToString("F0") + "%";
+        powerText.text = (submarine.PowerRemaining() / submarine.SubmarineType().maxPower * 100).ToString("F0") + "%";
     }
 }
