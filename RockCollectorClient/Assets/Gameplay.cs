@@ -7,10 +7,21 @@ public class Planet
     public float gravity = 9.8f; // Gravity in m/s^2
 }
 
+public enum EquipmentSlot
+{
+    Core,
+    Internal,
+    HullMounted
+}
+
 public class Equipment
 {
-    public float mass = 0f; // Mass in kilograms
+    public string name = ""; // Name of the equipment
+    public string description = ""; // Description of the equipment
 
+    public EquipmentSlot slot = EquipmentSlot.Core; // Slot used by the equipment
+
+    public float mass = 0f; // Mass in kilograms
     public float activationPower = 0f; // Instantaneous power cost to activate
     public float continuousPower = 0f; // Continuous power cost per second
 

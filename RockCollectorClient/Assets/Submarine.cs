@@ -64,69 +64,6 @@ public class Submarine : MonoBehaviour
     {
         AddDrag(SubmarineType().startingDrag);
         AddMass(SubmarineType().startingMass);
-
-        // Add two Ballasts to the submarine
-        Ballast ballast = new();
-        ballast.ballastMass = 3000f;
-        ballast.ballastDropTime = 1f;
-        ballast.ballastRefills = 3;
-        ballast.ballastRefillTime = 2f;
-        coreModules.Add(ballast);
-        Ballast ballast2 = new();
-        ballast2.ballastMass = 3000f;
-        ballast2.ballastDropTime = 1f;
-        ballast2.ballastRefills = 3;
-        ballast2.ballastRefillTime = 2f;
-        coreModules.Add(ballast2);
-
-        // Add several DepthControllers to the submarine
-        for (int i = 0; i < 10; i++)
-        {
-            DepthController depthController = new();
-            depthController.depthControlMass = 300f;
-            depthController.depthControlTime = 1f;
-            depthController.continuousPower = 0.1f;
-            coreModules.Add(depthController);
-        }
-
-        // Add an engine to the submarine
-        Engine engine = new();
-        engine.thrust = 8000f;
-        engine.continuousPower = 0.1f;
-        coreModules.Add(engine);
-
-        // Add a HarpoonGun to the submarine
-        HarpoonGun harpoonGun = new();
-        harpoonGun.size = 1f;
-        harpoonGun.velocity = 10f;
-        harpoonGun.activationPower = 2f;
-        harpoonGun.continuousPower = 1f;
-        harpoonGun.range = 5f;
-        harpoonGun.maxHarpoons = 2;
-        harpoonGun.reelSpeed = 0.2f;
-        harpoonGun.pullStrength = 1500f;
-        harpoonGun.ropeElasticity = 0.5f;
-        hullMountedModules.Add(harpoonGun);
-
-        // Add a second HarpoonGun to the submarine
-        HarpoonGun harpoonGun2 = new();
-        harpoonGun2.size = 2f;
-        harpoonGun2.velocity = 15f;
-        harpoonGun2.activationPower = 2f;
-        harpoonGun2.continuousPower = 1f;
-        harpoonGun2.range = 7f;
-        harpoonGun2.maxHarpoons = 3;
-        harpoonGun2.reelSpeed = 0.4f;
-        harpoonGun2.pullStrength = 3000f;
-        harpoonGun2.ropeElasticity = 0.5f;
-        hullMountedModules.Add(harpoonGun2);
-
-        // Add a Scoop to the submarine
-        Scoop scoop = new();
-        scoop.scoopDiameter = 1f;
-        scoop.scoopTime = 1f;
-        scoop.activationPower = 1f;
-        hullMountedModules.Add(scoop);
     }
 
     private void Start()
