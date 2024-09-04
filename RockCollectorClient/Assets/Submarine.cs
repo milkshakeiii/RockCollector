@@ -60,6 +60,14 @@ public class Submarine : MonoBehaviour
         this.submarineType = submarineType;
     }
 
+    public void AddEquipment(List<Equipment> equipment)
+    {
+        foreach (Equipment module in equipment)
+        {
+            coreModules.Add(module);
+        }
+    }
+
     void OnEnable()
     {
         AddDrag(SubmarineType().startingDrag);

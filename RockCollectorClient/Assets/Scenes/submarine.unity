@@ -478,13 +478,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2137335a7406bc8459dac6663c2c9ad9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  horizonalSpacing: 0.2
-  verticalSpacing: 0.25
-  modulesPerRow: 5
-  modulePrefab: {fileID: 471680282587377057, guid: ba0a251b4ceb53f4ca878ed08c42be43, type: 3}
+  buyHorizontalSpacing: 0.19
+  buyVerticalSpacing: 0.25
+  buyModulesPerRow: 5
+  returnHorizontalSpacing: 0.1
+  returnVerticalSpacing: 0.1
+  returnModulesPerRow: 5
   valueRemainingText: {fileID: 1892708513}
   submarine: {fileID: 1215720691}
-  moduleButtonParent: {fileID: 378242110}
+  buyModuleParent: {fileID: 378242110}
+  buyModulePrefab: {fileID: 471680282587377057, guid: ba0a251b4ceb53f4ca878ed08c42be43, type: 3}
+  returnModuleParent: {fileID: 812450212}
+  returnModulePrefab: {fileID: 5406963023595632682, guid: 31e5729f0ddfe6f4ba7ddad2ccee140e, type: 3}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -2657,7 +2662,7 @@ GameObject:
   - component: {fileID: 1892708514}
   - component: {fileID: 1892708513}
   m_Layer: 5
-  m_Name: trade
+  m_Name: trade value text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

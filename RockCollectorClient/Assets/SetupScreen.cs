@@ -8,18 +8,24 @@ public class SetupScreen : MonoBehaviour
     public delegate void SetupComplete();
     public static event SetupComplete OnSetupComplete;
 
-    public float horizonalSpacing = 1.0f;
-    public float verticalSpacing = 1.0f;
-    public int modulesPerRow = 6;
-    public GameObject modulePrefab;
+    public float buyHorizontalSpacing = 1.0f;
+    public float buyVerticalSpacing = 1.0f;
+    public int buyModulesPerRow = 6;
+    public float returnHorizontalSpacing = 1.0f;
+    public float returnVerticalSpacing = 1.0f;
+    public int returnModulesPerRow = 6;
+
     public TMP_Text valueRemainingText;
     public Submarine submarine;
-    public GameObject moduleButtonParent;
+
+    public GameObject buyModuleParent;
+    public GameObject buyModulePrefab;
+
+    public GameObject returnModuleParent;
+    public GameObject returnModulePrefab;
 
     private SubmarineType submarineType = new(); // selected submarine type
-    private List<Equipment> coreModules = new(); // purchased core modules
-    private List<Equipment> internalModules = new(); // purchased internal modules
-    private List<Equipment> hullMountedModules = new(); // purchased hull-mounted modules
+    private List<Equipment> purchasedModules = new();
 
     private Dictionary<string, float> modulePrices = new();
 
@@ -113,7 +119,7 @@ public class SetupScreen : MonoBehaviour
 
         foreach (Equipment module in modules)
         {
-            modulePrices[module.name] = Random.Range(100f, 1000f);
+            modulePrices[module.name] = Random.Range(1f, 10f);
         }
 
         foreach (Equipment module in modules)
@@ -138,23 +144,59 @@ public class SetupScreen : MonoBehaviour
 
     private void AddModule(Equipment module)
     {
-        float x = moduleCount % modulesPerRow * horizonalSpacing;
-        float y = -moduleCount / modulesPerRow * verticalSpacing;
-        GameObject moduleObject = Instantiate(modulePrefab, moduleButtonParent.transform);
+        float x = moduleCount % buyModulesPerRow * buyHorizontalSpacing;
+        float y = -moduleCount / buyModulesPerRow * buyVerticalSpacing;
+        GameObject moduleObject = Instantiate(buyModulePrefab, buyModuleParent.transform);
         // shift the anchors of the module object by the x and y values
         moduleObject.GetComponent<RectTransform>().anchorMin += new Vector2(x, y);
         moduleObject.GetComponent<RectTransform>().anchorMax += new Vector2(x, y);
         // zero out the module object rect transform offsets
         moduleObject.GetComponent<RectTransform>().offsetMin = Vector2.zero;
         moduleObject.GetComponent<RectTransform>().offsetMax = Vector2.zero;
-        moduleObject.GetComponent<BuyModulePanel>().Initialize(module);
+        moduleObject.GetComponent<BuyModulePanel>().Initialize(module, this);
 
         moduleCount++;
+    }
+
+    public void BuyModule(Equipment module)
+    {
+        // check if the player has enough value to buy the module
+        float spentValue = 0.0f;
+        foreach (Equipment purchasedModule in purchasedModules)
+        {
+            spentValue += modulePrices[purchasedModule.name];
+        }
+        if (spentValue + modulePrices[module.name] > LastRunValue())
+        {
+            return;
+        }
+
+        // add the module to the purchased modules
+        purchasedModules.Add(module.Copy());
+
+        // create the return module button
+        GameObject returnModuleObject = Instantiate(returnModulePrefab, returnModuleParent.transform);
+        returnModuleObject.GetComponent<ReturnModuleButton>().Initialize(module, this);
+        int thisReturnModuleIndex = purchasedModules.Count;
+        float x = thisReturnModuleIndex % returnModulesPerRow * returnHorizontalSpacing;
+        float y = -thisReturnModuleIndex / returnModulesPerRow * returnVerticalSpacing;
+        // shift the anchors of the return module object by the x and y values
+        returnModuleObject.GetComponent<RectTransform>().anchorMin += new Vector2(x, y);
+        returnModuleObject.GetComponent<RectTransform>().anchorMax += new Vector2(x, y);
+        // zero out the return module object rect transform offsets
+        returnModuleObject.GetComponent<RectTransform>().offsetMin = Vector2.zero;
+        returnModuleObject.GetComponent<RectTransform>().offsetMax = Vector2.zero;
+    }
+
+    public void ReturnModule(Equipment module)
+    {
+        // TODO
     }
 
     public void Dive()
     {
         submarine.SetSubmarineType(submarineType);
+        submarine.AddEquipment(purchasedModules);
         gameObject.SetActive(false);
         submarine.gameObject.SetActive(true);
         if (OnSetupComplete != null)

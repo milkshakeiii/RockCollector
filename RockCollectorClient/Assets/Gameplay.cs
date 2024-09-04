@@ -25,6 +25,11 @@ public class Equipment
     public float activationPower = 0f; // Instantaneous power cost to activate
     public float continuousPower = 0f; // Continuous power cost per second
 
+    public virtual Equipment Copy()
+    {
+        return (Equipment)MemberwiseClone();
+    }
+
     public virtual float AddedMass()
     {
         return mass;

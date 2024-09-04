@@ -350,7 +350,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 495644413906433738}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3208067578380952818}
+        m_TargetAssemblyTypeName: BuyModulePanel, Assembly-CSharp
+        m_MethodName: Clicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1696231319643893313
 GameObject:
   m_ObjectHideFlags: 0
