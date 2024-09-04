@@ -27,7 +27,13 @@ public class TimefishSpawner : MonoBehaviour
             System.Random random = new();
             for (int j = 0; j < 10; j++)
             {
-                GameObject newTimefish = Instantiate(timefishPrefab, new Vector3(Random.Range(-10, 10), Random.Range(-10, 10), 0), Quaternion.identity);
+                float y = Random.Range(-10, 10);
+                // don't spawn fish above the surface
+                if (y > 0)
+                {
+                    y = -y;
+                }
+                GameObject newTimefish = Instantiate(timefishPrefab, new Vector3(Random.Range(-10, 10), y, 0), Quaternion.identity);
                 Timefish timefish = newTimefish.GetComponent<Timefish>();
                 timefish.Initialize(testSpecies, random);
             }

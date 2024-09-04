@@ -70,16 +70,6 @@ public class Timefish : MonoBehaviour
         currentBehavior = new IdleBehavior();
     }
 
-    public float Mass()
-    {
-        return size * 1000;
-    }
-
-    public float Size()
-    {
-        return size;
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -91,7 +81,17 @@ public class Timefish : MonoBehaviour
         currentBehavior = newBehavior;
     }
 
-    public float GetSpeed()
+    public float Mass()
+    {
+        return size * 1000;
+    }
+
+    public float Size()
+    {
+        return size;
+    }
+
+    public float Speed()
     {
         return species.movementSpeed * size;
     }
@@ -99,6 +99,11 @@ public class Timefish : MonoBehaviour
     public float ReangleSpeed()
     {
         return species.movementSpeed * size;
+    }
+
+    public float TradeValue()
+    {
+        return species.baseTradeValue * size;
     }
 }
 
@@ -141,7 +146,7 @@ public class IdleBehavior : Behavior
 
     IEnumerator SwimForward(Timefish fish)
     {
-        float speed = fish.GetSpeed();
+        float speed = fish.Speed();
 
         // swim forward for a random amount of time
         float swimTime = Random.Range(0, maximumSwimForwardTime);
@@ -149,6 +154,11 @@ public class IdleBehavior : Behavior
         while (time < swimTime)
         {
             fish.transform.position += fish.transform.right * speed * Time.deltaTime;
+            // turn around if reaching the surface (at most once per call)
+            if (fish.transform.position.y > 0)
+            {
+                speed = -speed;
+            }
             time += Time.deltaTime;
             yield return null;
         }

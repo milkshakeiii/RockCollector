@@ -150,6 +150,15 @@ public class Submarine : MonoBehaviour
             // apply an upward force to the submarine according to the buoyancy
             float verticalForce = Buoyancy(planet);
 
+            // if part of the submarine is above the surface
+            float submarineHeight = this.GetComponent<SpriteRenderer>().bounds.size.y;
+            if (this.transform.position.y > 0 /* the surface */ - submarineHeight / 2)
+            {
+                float percentAboveSurface = (this.transform.position.y + submarineHeight / 2) / submarineHeight;
+                // reduce the vertical force by the percent above the surface
+                verticalForce *= 1 - percentAboveSurface;
+            }
+
             // apply a downward force to the submarine according to gravity
             float totalMass = CurrentMass();
             float gravityForce = totalMass * planet.gravity;
