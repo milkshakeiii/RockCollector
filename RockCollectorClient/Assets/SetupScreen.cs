@@ -25,7 +25,7 @@ public class SetupScreen : MonoBehaviour
     public GameObject returnModulePrefab;
 
     private SubmarineType submarineType = new(); // selected submarine type
-    private List<Equipment> purchasedModules = new();
+    private List<ReturnModuleButton> purchasedModules = new();
 
     private Dictionary<string, float> modulePrices = new();
 
@@ -38,10 +38,23 @@ public class SetupScreen : MonoBehaviour
         return Mathf.Max(storedValue, 100f);
     }
 
-    public void UpdateValueRemainingText(float spentValue)
+    public void UpdateValueRemainingText()
     {
+        float spentValue = SpentValue();
+
         float lastRunValue = LastRunValue();
         valueRemainingText.text = $"Value Remaining: {lastRunValue - spentValue}";
+    }
+
+    private float SpentValue()
+    {
+        float spentValue = 0.0f;
+        foreach (ReturnModuleButton button in purchasedModules)
+        {
+            Equipment module = button.module;
+            spentValue += modulePrices[module.name];
+        }
+        return spentValue;
     }
 
     public void PostEquipment()
@@ -131,7 +144,7 @@ public class SetupScreen : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        UpdateValueRemainingText(0.0f);
+        UpdateValueRemainingText();
 
         PostEquipment();
     }
@@ -161,19 +174,21 @@ public class SetupScreen : MonoBehaviour
     public void BuyModule(Equipment module)
     {
         // check if the player has enough value to buy the module
-        float spentValue = 0.0f;
-        foreach (Equipment purchasedModule in purchasedModules)
-        {
-            spentValue += modulePrices[purchasedModule.name];
-        }
+        float spentValue = SpentValue();
+
         if (spentValue + modulePrices[module.name] > LastRunValue())
         {
             return;
         }
 
-        // add the module to the purchased modules
-        purchasedModules.Add(module.Copy());
+        AddReturnModuleButton(module.Copy());
 
+        // update the value remaining text
+        UpdateValueRemainingText();
+    }
+
+    public void AddReturnModuleButton(Equipment module)
+    {
         // create the return module button
         GameObject returnModuleObject = Instantiate(returnModulePrefab, returnModuleParent.transform);
         returnModuleObject.GetComponent<ReturnModuleButton>().Initialize(module, this);
@@ -186,22 +201,52 @@ public class SetupScreen : MonoBehaviour
         // zero out the return module object rect transform offsets
         returnModuleObject.GetComponent<RectTransform>().offsetMin = Vector2.zero;
         returnModuleObject.GetComponent<RectTransform>().offsetMax = Vector2.zero;
+
+        purchasedModules.Add(returnModuleObject.GetComponent<ReturnModuleButton>());
     }
 
-    public void ReturnModule(Equipment module)
+    public void ReturnModule(ReturnModuleButton button)
     {
-        // TODO
+        Equipment returnedModule = button.module;
+
+        // get a list of all the equipment except the one being returned
+        List<Equipment> equipment = new();
+        foreach (ReturnModuleButton returnModuleButton in purchasedModules)
+        {
+            if (returnModuleButton != button)
+            {
+                equipment.Add(returnModuleButton.module);
+            }
+        }
+
+        // destroy all the return module buttons
+        foreach (ReturnModuleButton returnModuleButton in purchasedModules)
+        {
+            Destroy(returnModuleButton.gameObject);
+        }
+
+        // create new return module buttons for all the equipment except the one being returned
+        purchasedModules.Clear();
+        foreach (Equipment module in equipment)
+        {
+            AddReturnModuleButton(module);
+        }
+
+        // update the value remaining text
+        UpdateValueRemainingText();
     }
 
     public void Dive()
     {
         submarine.SetSubmarineType(submarineType);
-        submarine.AddEquipment(purchasedModules);
+        List<Equipment> modules = new();
+        foreach (ReturnModuleButton button in purchasedModules)
+        {
+            modules.Add(button.module);
+        }
+        submarine.AddEquipment(modules);
         gameObject.SetActive(false);
         submarine.gameObject.SetActive(true);
-        if (OnSetupComplete != null)
-        {
-            OnSetupComplete();
-        }
+        OnSetupComplete?.Invoke();
     }
 }

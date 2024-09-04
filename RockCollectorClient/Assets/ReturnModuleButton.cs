@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ReturnModuleButton : MonoBehaviour
 {
-    private Equipment module;
+    public Equipment module;
     private SetupScreen setupScreen;
 
     public void Initialize(Equipment module, SetupScreen setupScreen)
@@ -26,6 +26,6 @@ public class ReturnModuleButton : MonoBehaviour
 
     public void Clicked()
     {
-        
+        setupScreen.ReturnModule(this);
     }
 }
