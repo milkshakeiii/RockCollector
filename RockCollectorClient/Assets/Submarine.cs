@@ -404,4 +404,18 @@ public class Submarine : MonoBehaviour
             return false;
         }
     }
+
+    public List<Timefish> AllCatches()
+    {
+        List<Timefish> allCatches = new();
+        allCatches.AddRange(fishStorage);
+
+        // add fish from harpoon guns to the list
+        foreach (HarpoonGunBehaviour harpoonGun in GetComponentsInChildren<HarpoonGunBehaviour>())
+        {
+            allCatches.AddRange(harpoonGun.HarpoonedFish());
+        }
+
+        return allCatches;
+    }
 }

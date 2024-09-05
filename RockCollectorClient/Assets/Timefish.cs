@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Timefish : MonoBehaviour
 {
-    private TimefishSpecies species;
+    public TimefishSpecies species;
     
     private Behavior currentBehavior;
 
@@ -201,6 +201,7 @@ public class StillBehavior : Behavior
 
 public class TimefishSpecies
 {
+    public string name = "test species";
     public float baseSize; //Base size(volume) (greater with depth) in cubic meters
     public List<TimefishSpecies> preySpecies; //Prey species(usually smaller species found nearby, but can also be larger)
     public float visionConeArc; //Vision cone arc in degrees

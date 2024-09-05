@@ -55,4 +55,19 @@ public class HarpoonGunBehaviour : MonoBehaviour
             Destroy(harpoon);
         }
     }
+
+    public List<Timefish> HarpoonedFish()
+    {
+        List<Timefish> harpoonedFish = new();
+        foreach (GameObject harpoon in harpoons)
+        {
+            // look for Timefish component in parents of the harpoon
+            Timefish timefish = harpoon.GetComponentInParent<Timefish>();
+            if (timefish != null)
+            {
+                harpoonedFish.Add(timefish);
+            }
+        }
+        return harpoonedFish;
+    }
 }

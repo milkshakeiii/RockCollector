@@ -17,6 +17,12 @@ public class WeightDisplay : MonoBehaviour
         Ballast.OnBallastChanged += ResetBars;
     }
 
+    void OnDestroy()
+    {
+        SetupScreen.OnSetupComplete -= Initialize;
+        Ballast.OnBallastChanged -= ResetBars;
+    }
+
     private void Initialize()
     {
         Planet planet = new();

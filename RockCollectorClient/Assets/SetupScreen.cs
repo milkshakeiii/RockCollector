@@ -35,7 +35,7 @@ public class SetupScreen : MonoBehaviour
     {
         // access the value of the last run from player prefs
         float storedValue = PlayerPrefs.GetFloat("LastRunValue", 0f);
-        return Mathf.Max(storedValue, 100f);
+        return Mathf.Max(storedValue*10, 100f);
     }
 
     public void UpdateValueRemainingText()
