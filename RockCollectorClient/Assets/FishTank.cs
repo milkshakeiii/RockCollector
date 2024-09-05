@@ -10,6 +10,11 @@ public class FishTank : MonoBehaviour
         Submarine.OnFishStored += DisplayFish;
     }
 
+    void OnDestroy()
+    {
+        Submarine.OnFishStored -= DisplayFish;
+    }
+
     // Update is called once per frame
     void Update()
     {
