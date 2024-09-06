@@ -25,11 +25,13 @@ public class SetupScreen : MonoBehaviour
     public GameObject returnModulePrefab;
 
     private SubmarineType submarineType = new(); // selected submarine type
-    private List<ReturnModuleButton> purchasedModules = new();
+    private List<PurchasedModulePanel> purchasedModules = new();
 
+    private Dictionary<string, Equipment> modulesAvailable = new();
     private Dictionary<string, float> modulePrices = new();
 
     private int moduleCount = 0;
+    private float spentValue = 0f;
 
     public float LastRunValue()
     {
@@ -48,13 +50,13 @@ public class SetupScreen : MonoBehaviour
 
     private float SpentValue()
     {
-        float spentValue = 0.0f;
-        foreach (ReturnModuleButton button in purchasedModules)
-        {
-            Equipment module = button.module;
-            spentValue += modulePrices[module.name];
-        }
         return spentValue;
+    }
+
+    private void AddAvailableModule(string name, Equipment module)
+    {
+        module.name = name;
+        modulesAvailable[name] = module;
     }
 
     public void PostEquipment()
@@ -62,7 +64,7 @@ public class SetupScreen : MonoBehaviour
         List<Equipment> modules = new();
 
         Ballast ballast = new();
-        ballast.name = "Ballast";
+        AddAvailableModule("Ballast", ballast);
         ballast.description = "Drop ballast to decrease the weight of the submarine. Water tank ballasts can be refilled to increase weight again.";
         ballast.ballastMass = 3000f;
         ballast.ballastDropTime = 1f;
@@ -71,7 +73,7 @@ public class SetupScreen : MonoBehaviour
         modules.Add(ballast);
 
         DepthController depthController = new();
-        depthController.name = "Depth Controller";
+        AddAvailableModule("Depth Controller", depthController);
         depthController.description = "Control the depth of the submarine by adjusting the mass of the submarine.";
         depthController.depthControlMass = 300f;
         depthController.depthControlTime = 1f;
@@ -79,14 +81,14 @@ public class SetupScreen : MonoBehaviour
         modules.Add(depthController);
 
         Engine engine = new();
-        engine.name = "Engine";
+        AddAvailableModule("Engine", engine);
         engine.description = "Propel the submarine forward with the engine.";
         engine.thrust = 8000f;
         engine.continuousPower = 0.1f;
         modules.Add(engine);
 
         HarpoonGun harpoonGun = new();
-        harpoonGun.name = "Harpoon Gun";
+        AddAvailableModule("Harpoon Gun", harpoonGun);
         harpoonGun.description = "Fire harpoons to tether fish.";
         harpoonGun.size = 1f;
         harpoonGun.velocity = 10f;
@@ -100,7 +102,7 @@ public class SetupScreen : MonoBehaviour
         modules.Add(harpoonGun);
 
         HarpoonGun harpoonGun2 = new();
-        harpoonGun2.name = "Harpoon Gun 2";
+        AddAvailableModule("Harpoon Gun 2", harpoonGun2);
         harpoonGun2.description = "Fire harpoons to tether fish.";
         harpoonGun2.size = 2f;
         harpoonGun2.velocity = 15f;
@@ -114,7 +116,7 @@ public class SetupScreen : MonoBehaviour
         modules.Add(harpoonGun2);
 
         Scoop scoop = new();
-        scoop.name = "Scoop";
+        AddAvailableModule("Scoop", scoop);
         scoop.description = "Scoop up fish with the scoop.";
         scoop.scoopDiameter = 1f;
         scoop.scoopTime = 1f;
@@ -147,6 +149,21 @@ public class SetupScreen : MonoBehaviour
         UpdateValueRemainingText();
 
         PostEquipment();
+
+        // get list of modules and their remaing durabilities from player prefs
+        string[] moduleNames = PlayerPrefs.GetString("LastRunModules", "").Split(',');
+        string[] modulePrices = PlayerPrefs.GetString("LastRunDurabilities", "").Split(',');
+
+        // add the modules to purchased modules with their remaining durabilities
+        for (int i = 0; i < moduleNames.Length; i++)
+        {
+            if (moduleNames[i] == "")
+            {
+                continue;
+            }
+            int durability = int.Parse(modulePrices[i]);
+            Equipment newModule = BuyModule(modulesAvailable[moduleNames[i]], false, durability);
+        }
     }
 
     // Update is called once per frame
@@ -171,27 +188,33 @@ public class SetupScreen : MonoBehaviour
         moduleCount++;
     }
 
-    public void BuyModule(Equipment module)
+    public Equipment BuyModule(Equipment module, bool pay, int durability)
     {
-        // check if the player has enough value to buy the module
-        float spentValue = SpentValue();
-
-        if (spentValue + modulePrices[module.name] > LastRunValue())
+        if (pay)
         {
-            return;
+            // check if the player has enough value to buy the module
+            if (SpentValue() + modulePrices[module.name] > LastRunValue())
+            {
+                return null;
+            }
+            this.spentValue += modulePrices[module.name];
         }
 
-        AddReturnModuleButton(module.Copy());
+        Equipment addedModule = module.Copy();
+        addedModule.remainingDurability = durability;
+        AddReturnModuleButton(addedModule);
 
         // update the value remaining text
         UpdateValueRemainingText();
+
+        return addedModule;
     }
 
     public void AddReturnModuleButton(Equipment module)
     {
         // create the return module button
         GameObject returnModuleObject = Instantiate(returnModulePrefab, returnModuleParent.transform);
-        returnModuleObject.GetComponent<ReturnModuleButton>().Initialize(module, this);
+        returnModuleObject.GetComponent<PurchasedModulePanel>().Initialize(module, this);
         int thisReturnModuleIndex = purchasedModules.Count;
         float x = thisReturnModuleIndex % returnModulesPerRow * returnHorizontalSpacing;
         float y = -thisReturnModuleIndex / returnModulesPerRow * returnVerticalSpacing;
@@ -202,16 +225,16 @@ public class SetupScreen : MonoBehaviour
         returnModuleObject.GetComponent<RectTransform>().offsetMin = Vector2.zero;
         returnModuleObject.GetComponent<RectTransform>().offsetMax = Vector2.zero;
 
-        purchasedModules.Add(returnModuleObject.GetComponent<ReturnModuleButton>());
+        purchasedModules.Add(returnModuleObject.GetComponent<PurchasedModulePanel>());
     }
 
-    public void ReturnModule(ReturnModuleButton button)
+    public void ReturnModule(PurchasedModulePanel button)
     {
         Equipment returnedModule = button.module;
 
         // get a list of all the equipment except the one being returned
         List<Equipment> equipment = new();
-        foreach (ReturnModuleButton returnModuleButton in purchasedModules)
+        foreach (PurchasedModulePanel returnModuleButton in purchasedModules)
         {
             if (returnModuleButton != button)
             {
@@ -220,7 +243,7 @@ public class SetupScreen : MonoBehaviour
         }
 
         // destroy all the return module buttons
-        foreach (ReturnModuleButton returnModuleButton in purchasedModules)
+        foreach (PurchasedModulePanel returnModuleButton in purchasedModules)
         {
             Destroy(returnModuleButton.gameObject);
         }
@@ -240,7 +263,7 @@ public class SetupScreen : MonoBehaviour
     {
         submarine.SetSubmarineType(submarineType);
         List<Equipment> modules = new();
-        foreach (ReturnModuleButton button in purchasedModules)
+        foreach (PurchasedModulePanel button in purchasedModules)
         {
             modules.Add(button.module);
         }

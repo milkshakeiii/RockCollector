@@ -55,6 +55,42 @@ public class Submarine : MonoBehaviour
         return submarineType;
     }
 
+    public void EndOfRun()
+    {
+        // reduce the durability of all modules by 1
+        foreach (Equipment module in AllModules())
+        {
+            module.remainingDurability -= 1;
+        }
+
+        // remove those modules that have 0 durability
+        coreModules.RemoveAll(module => module.remainingDurability <= 0);
+        internalModules.RemoveAll(module => module.remainingDurability <= 0);
+        hullMountedModules.RemoveAll(module => module.remainingDurability <= 0);
+
+        // create a string of module names separated by commas
+        string moduleNames = "";
+        foreach (Equipment module in AllModules())
+        {
+            moduleNames += module.name + ",";
+        }
+        moduleNames = moduleNames.TrimEnd(',');
+
+        // save the module names in player prefs
+        PlayerPrefs.SetString("LastRunModules", moduleNames);
+
+        // create a string of module durabilities separated by commas
+        string moduleDurabilities = "";
+        foreach (Equipment module in AllModules())
+        {
+            moduleDurabilities += module.remainingDurability + ",";
+        }
+        moduleDurabilities = moduleDurabilities.TrimEnd(',');
+
+        // save the module durabilities in player prefs
+        PlayerPrefs.SetString("LastRunDurabilities", moduleDurabilities);
+    }
+
     public void SetSubmarineType(SubmarineType submarineType)
     {
         this.submarineType = submarineType;
@@ -72,6 +108,13 @@ public class Submarine : MonoBehaviour
     {
         AddDrag(SubmarineType().startingDrag);
         AddMass(SubmarineType().startingMass);
+
+        DiveExit.OnDiveExitEvent += EndOfRun;
+    }
+
+    void OnDisable()
+    {
+        DiveExit.OnDiveExitEvent -= EndOfRun;
     }
 
     private void Start()

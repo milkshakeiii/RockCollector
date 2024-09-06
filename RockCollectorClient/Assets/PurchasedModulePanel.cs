@@ -1,15 +1,21 @@
+using TMPro;
 using UnityEngine;
 
-public class ReturnModuleButton : MonoBehaviour
+public class PurchasedModulePanel : MonoBehaviour
 {
+    public TMP_Text durabilityText;
+    public TMP_Text moduleNameText;
+
     public Equipment module;
+
     private SetupScreen setupScreen;
 
     public void Initialize(Equipment module, SetupScreen setupScreen)
     {
         this.module = module;
         this.setupScreen = setupScreen;
-        GetComponentInChildren<TMPro.TMP_Text>().text = module.name;
+        moduleNameText.text = module.name;
+        durabilityText.text = module.remainingDurability.ToString() + "/" + module.maxDurability.ToString();
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created

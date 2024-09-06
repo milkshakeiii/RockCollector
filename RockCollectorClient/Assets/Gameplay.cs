@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using UnityEngine;
 
 public class Planet
@@ -16,6 +17,9 @@ public enum EquipmentSlot
 
 public class Equipment
 {
+    public int maxDurability = 3; // Maximum durability of the equipment
+    public int remainingDurability = 3; // Current durability of the equipment
+
     public string name = ""; // Name of the equipment
     public string description = ""; // Description of the equipment
 
