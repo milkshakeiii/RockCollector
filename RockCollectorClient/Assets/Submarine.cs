@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class SubmarineType
 {
+    public string name = "";
+    public string description = "A submarine with engines, depth control, and fish catching capabilities.";
     public float startingDrag = 10f;
     public float startingMass = 3000f;
     public float baseFishStorageCapacity = 1000f;
@@ -13,6 +15,7 @@ public class SubmarineType
     public float volume = 10f;
     public float turnTime = 1f;
     public string spriteName = "";
+    public int maxDurability = 10;
 
     public SubmarineType()
     {
@@ -37,6 +40,7 @@ public class Submarine : MonoBehaviour
     public static event FishStored OnFishStored;
 
     private SubmarineType submarineType;
+    private int remainingDurability = 10;
 
     private List<Timefish> fishStorage = new List<Timefish>(); // Fish stored in the submarine
 
@@ -62,6 +66,9 @@ public class Submarine : MonoBehaviour
         {
             module.remainingDurability -= 1;
         }
+
+        // reduce the durability of the submarine by 1
+        remainingDurability -= 1;
 
         // remove those modules that have 0 durability
         coreModules.RemoveAll(module => module.remainingDurability <= 0);
@@ -89,6 +96,22 @@ public class Submarine : MonoBehaviour
 
         // save the module durabilities in player prefs
         PlayerPrefs.SetString("LastRunDurabilities", moduleDurabilities);
+
+        // save the submarine type name in player prefs
+        PlayerPrefs.SetString("LastRunSubmarineType", submarineType.name);
+
+        // save the submarine durability in player prefs
+        PlayerPrefs.SetInt("LastRunSubmarineDurability", remainingDurability);
+    }
+
+    public int RemainingDurability()
+    {
+        return remainingDurability;
+    }
+
+    public void SetRemainingDurability(int remainingDurability)
+    {
+        this.remainingDurability = remainingDurability;
     }
 
     public void SetSubmarineType(SubmarineType submarineType)
