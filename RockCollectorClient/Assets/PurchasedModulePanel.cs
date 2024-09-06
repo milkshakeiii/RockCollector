@@ -30,6 +30,12 @@ public class PurchasedModulePanel : MonoBehaviour
         
     }
 
+    public void AddDurability()
+    {
+        setupScreen.AddDurability(module);
+        durabilityText.text = module.remainingDurability.ToString() + "/" + module.maxDurability.ToString();
+    }
+
     public void Clicked()
     {
         setupScreen.ReturnModule(this);

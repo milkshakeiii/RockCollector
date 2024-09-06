@@ -255,7 +255,28 @@ public class SetupScreen : MonoBehaviour
             AddReturnModuleButton(module);
         }
 
+        // remove the value of the module from the spent value
+        spentValue -= modulePrices[returnedModule.name] * ((float)returnedModule.remainingDurability / (float)returnedModule.maxDurability);
+
         // update the value remaining text
+        UpdateValueRemainingText();
+    }
+
+    public void AddDurability(Equipment module)
+    {
+        // return if the module is at max durability
+        if (module.remainingDurability >= module.maxDurability)
+        {
+            return;
+        }
+        float cost = modulePrices[module.name] * (1f / (float)module.maxDurability);
+        // check if the player has enough value to buy the durability
+        if (SpentValue() + cost > LastRunValue())
+        {
+            return;
+        }
+        module.remainingDurability++;
+        spentValue += cost;
         UpdateValueRemainingText();
     }
 
