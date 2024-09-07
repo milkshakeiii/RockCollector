@@ -8,7 +8,7 @@ public class Environment : MonoBehaviour
     public Sprite fillerRock;
     public Sprite innerCornerRock;
 
-    private const float rockSpacing = 0.32f;
+    private const float rockSpacing = 0.159f;
 
     public IEnumerator Generate(int seed)
     {
@@ -20,53 +20,49 @@ public class Environment : MonoBehaviour
         int height = random.Next(30, 100);
         int center = random.Next(width/4, 3*width/4);
         Debug.Log("Width: " + width + " Height: " + height + " Center: " + center);
-        // make an array of nulls
-        Sprite[,] rocks = new Sprite[width, height];
-        int[,] rotations = new int[width, height];
+        
+        // start with a grid to make into a mountain shape
+        bool[,] grid = new bool[width, height];
+
+        // each grid cell has 4 sprites with 4 rotations
+        Sprite[,] rocks = new Sprite[width*2, height*2];
+        int[,] rotations = new int[width*2, height*2];
 
         // starting at the bottom left corner, determine sprites
         int currentX = 0;
         int currentY = 0;
+        int conservativeHeight = height - 7;
         while (currentX < width)
         {
             if (currentY < height && currentY >= 0)
             {
                 Debug.Log("xIndex: " + currentX + " yIndex: " + currentY);
-                rocks[currentX, currentY] = cornerRock;
+                grid[currentX, currentY] = true;
             }
             currentX++;
-            float slope = (float)(height - currentY) / center;
-            if (currentX > center)
+            float slope = (float)(conservativeHeight - currentY) / (center - currentX);
+            if (currentX >= center)
             {
-                slope = (float)(currentY) / (width - center);
+                slope = (float)(-currentY) / (width - currentX);
             }
             int jitter = random.Next(-1, 2);
             int jitter2 = random.Next(-1, 2);
             int Ychange = Mathf.RoundToInt(slope + jitter + jitter2);
-            if (currentX < center)
-            {
-               currentY += Ychange;
-            }
-            else
-            {
-                currentY -= Ychange;
-            }
+            currentY += Ychange;
             yield return null;
         }
 
         // fill in the rest of the rocks one column at a time
         for (int x = 0; x < width; x++)
         {
-            for (int y = 0; y < height; y++)
+            bool fill = false;
+            for (int y = height-1; y >= 0; y--)
             {
-                if (rocks[x, y] == null)
+                if (grid[x, y])
                 {
-                    rocks[x, y] = fillerRock;
+                    fill = true;
                 }
-                else
-                {
-                    break;
-                }
+                grid[x, y] = fill;
             }
             yield return null;
         }
@@ -76,18 +72,18 @@ public class Environment : MonoBehaviour
         {
             for (int y = 0; y < height; y++)
             {
-                if (rocks[x, y] == null)
+                if (!grid[x, y])
                 {
                     continue;
                 }
-                bool upLeftOccupied = x > 0 && y < height - 1 && rocks[x - 1, y + 1] != null;
-                bool upOccupied = y < height - 1 && rocks[x, y + 1] != null;
-                bool upRightOccupied = x < width - 1 && y < height - 1 && rocks[x + 1, y + 1] != null;
-                bool rightOccupied = x < width - 1 && rocks[x + 1, y] != null;
-                bool downRightOccupied = x < width - 1 && y > 0 && rocks[x + 1, y - 1] != null;
-                bool downOccupied = y > 0 && rocks[x, y - 1] != null;
-                bool downLeftOccupied = x > 0 && y > 0 && rocks[x - 1, y - 1] != null;
-                bool leftOccupied = x > 0 && rocks[x - 1, y] != null;
+                bool upLeftOccupied = x > 0 && y < height - 1 && grid[x - 1, y + 1];
+                bool upOccupied = y < height - 1 && grid[x, y + 1];
+                bool upRightOccupied = x < width - 1 && y < height - 1 && grid[x + 1, y + 1];
+                bool rightOccupied = x < width - 1 && grid[x + 1, y];
+                bool downRightOccupied = x < width - 1 && y > 0 && grid[x + 1, y - 1];
+                bool downOccupied = y > 0 && grid[x, y - 1];
+                bool downLeftOccupied = x > 0 && y > 0 && grid[x - 1, y - 1];
+                bool leftOccupied = x > 0 && grid[x - 1, y];
                 
                 bool topLeftCornerFree = !upLeftOccupied && !upOccupied && !leftOccupied;
                 bool topRightCornerFree = !upRightOccupied && !upOccupied && !rightOccupied;
@@ -104,85 +100,122 @@ public class Environment : MonoBehaviour
                 bool bottomRightInnerCorner = !downRightOccupied && downOccupied && rightOccupied;
                 bool bottomLeftInnerCorner = !downLeftOccupied && downOccupied && leftOccupied;
 
-                if (topLeftCornerFree && bottomRightCornerOccupied)
+                // based on the grid neighbors, set 4 sprites per grid cell
+                Sprite topLeft = fillerRock;
+                Sprite topRight = fillerRock;
+                Sprite bottomRight = fillerRock;
+                Sprite bottomLeft = fillerRock;
+                // begin with random rotations
+                int topLeftRotation = random.Next(0, 4) * 90;
+                int topRightRotation = random.Next(0, 4) * 90;
+                int bottomRightRotation = random.Next(0, 4) * 90;
+                int bottomLeftRotation = random.Next(0, 4) * 90;
+                if (topLeftCornerFree)
                 {
-                    rocks[x, y] = cornerRock;
+                    topLeft = cornerRock;
+                    topLeftRotation = 0;
                 }
-                else if (topRightCornerFree && bottomLeftCornerOccupied)
+                if (topRightCornerFree)
                 {
-                    rocks[x, y] = cornerRock;
-                    rotations[x, y] = 270;
+                    topRight = cornerRock;
+
+                    topRightRotation = 270;
                 }
-                else if (bottomRightCornerFree && topLeftCornerOccupied)
+                if (bottomRightCornerFree)
                 {
-                    rocks[x, y] = cornerRock;
-                    rotations[x, y] = 180;
+                    bottomRight = cornerRock;
+                    bottomRightRotation = 180;
                 }
-                else if (bottomLeftCornerFree && topRightCornerOccupied)
+                if (bottomLeftCornerFree)
                 {
-                    rocks[x, y] = cornerRock;
-                    rotations[x, y] = 90;
+                    bottomLeft = cornerRock;
+                    bottomLeftRotation = 90;
                 }
-                else if (topLeftInnerCorner)
+                if (upOccupied && !leftOccupied)
                 {
-                    rocks[x, y] = innerCornerRock;
-                    rotations[x, y] = 180;
+                    topLeft = edgeRock;
+                    topLeftRotation = 90;
                 }
-                else if (topRightInnerCorner)
+                if (rightOccupied && !upOccupied)
                 {
-                    rocks[x, y] = innerCornerRock;
-                    rotations[x, y] = 90;
+                    topRight = edgeRock;
+                    topRightRotation = 0;
                 }
-                else if (bottomRightInnerCorner)
+                if (downOccupied && !rightOccupied)
                 {
-                    rocks[x, y] = innerCornerRock;
+                    bottomRight = edgeRock;
+                    bottomRightRotation = 270;
                 }
-                else if (bottomLeftInnerCorner)
+                if (leftOccupied && !downOccupied)
                 {
-                    rocks[x, y] = innerCornerRock;
-                    rotations[x, y] = 270;
+                    bottomLeft = edgeRock;
+                    bottomLeftRotation = 180;
                 }
-                else if (!leftOccupied && rightOccupied)
+                if (downOccupied && !leftOccupied)
                 {
-                    rocks[x, y] = edgeRock;
-                    rotations[x, y] = 90;
+                    bottomLeft = edgeRock;
+                    bottomLeftRotation = 90;
                 }
-                else if (!downOccupied && upOccupied)
+                if (leftOccupied && !upOccupied)
                 {
-                    rocks[x, y] = edgeRock;
-                    rotations[x, y] = 180;
+                    topLeft = edgeRock;
+                    topLeftRotation = 0;
                 }
-                else if (!rightOccupied && leftOccupied)
+                if (upOccupied && !rightOccupied)
                 {
-                    rocks[x, y] = edgeRock;
-                    rotations[x, y] = -90;
+                    topRight = edgeRock;
+                    topRightRotation = 270;
                 }
-                else if (!upOccupied && downOccupied)
+                if (rightOccupied && !downOccupied)
                 {
-                    rocks[x, y] = edgeRock;
+                    bottomRight = edgeRock;
+                    bottomRightRotation = 180;
                 }
-                // if none of these is the case, set the sprite to filler and rotate it randomly
-                else
+                if (topLeftInnerCorner)
                 {
-                    rocks[x, y] = fillerRock;
-                    rotations[x, y] = random.Next(0, 4) * 90;
+                    topLeft = innerCornerRock;
+                    topLeftRotation = 0;
                 }
+                if (topRightInnerCorner)
+                {
+                    topRight = innerCornerRock;
+                    topRightRotation = 270;
+                }
+                if (bottomRightInnerCorner)
+                {
+                    bottomRight = innerCornerRock;
+                    bottomRightRotation = 180;
+                }
+                if (bottomLeftInnerCorner)
+                {
+                    bottomLeft = innerCornerRock;
+                    bottomLeftRotation = 90;
+                }
+                rocks[x*2, y*2] = bottomLeft;
+                rocks[x*2 + 1, y*2] = bottomRight;
+                rocks[x*2, y*2 + 1] = topLeft;
+                rocks[x*2 + 1, y*2 + 1] = topRight;
+                rotations[x*2, y*2] = bottomLeftRotation;
+                rotations[x*2 + 1, y*2] = bottomRightRotation;
+                rotations[x*2, y*2 + 1] = topLeftRotation;
+                rotations[x*2 + 1, y*2 + 1] = topRightRotation;
             }
             yield return null;
         }
 
         // spawn GameObjects with sprites
-        for (int x = 0; x < width; x++)
+        for (int x = 0; x < width*2; x++)
         {
-            for (int y = 0; y < height; y++)
+            for (int y = 0; y < height*2; y++)
             {
                 if (rocks[x, y] != null)
                 {
                     GameObject rock = new("Rock");
-                    rock.transform.position = new Vector3((-width/2 + x) * rockSpacing, (-height + y) * rockSpacing, 0);
+                    rock.transform.position = new Vector3((-width/2 + x) * rockSpacing + 5, (-height + y) * rockSpacing - 10, 0);
                     rock.AddComponent<SpriteRenderer>().sprite = rocks[x, y];
-                    // also add a collider
-                    rock.AddComponent<BoxCollider2D>();
+                    // also add a collider if this is not a filler rock
+                    if (rocks[x, y] != fillerRock)
+                        rock.AddComponent<BoxCollider2D>();
                     // layer is "Terrain"
                     rock.layer = 9;
                     // set the rotation
