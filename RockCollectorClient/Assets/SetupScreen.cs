@@ -17,6 +17,8 @@ public class SetupScreen : MonoBehaviour
     public float buySubmarineHorizontalSpacing = 1.0f;
 
     public Submarine submarine;
+    public LoadingScreen loadingScreen;
+    public Environment environment;
     public UnityEngine.UI.Image submarineDisplay;
     public TMP_Text submarineDurabilityText;
     public TMP_Text valueRemainingText;
@@ -91,7 +93,7 @@ public class SetupScreen : MonoBehaviour
             DepthController depthController = new();
             AddAvailableModule("Depth Controller", depthController);
             depthController.description = "Control the depth of the submarine by adjusting the mass of the submarine.";
-            depthController.depthControlMass = 300f;
+            depthController.depthControlMass = 1200f;
             depthController.depthControlTime = 1f;
             depthController.continuousPower = 0.1f;
             modules.Add(depthController);
@@ -401,14 +403,32 @@ public class SetupScreen : MonoBehaviour
 
     public void Dive()
     {
+        loadingScreen.StartCoroutine(DoDiveSequence());
+    }
+
+    public IEnumerator DoDiveSequence()
+    {
+        gameObject.SetActive(false);
+
+        // wait for both the loading screen and the environment to finish
+        // performing both coroutines at the same time
+        IEnumerator loadingScreenEnumerator = loadingScreen.DoLoadingDisplay();
+        IEnumerator environmentEnumerator = environment.Generate(UnityEngine.Random.Range(0, 1000));
+        while (environmentEnumerator.MoveNext())
+        {
+            loadingScreenEnumerator.MoveNext();
+            yield return null;
+        }
+        loadingScreen.Stop();
+
         List<Equipment> modules = new();
         foreach (PurchasedModulePanel button in purchasedModules)
         {
             modules.Add(button.module);
         }
         submarine.AddEquipment(modules);
-        gameObject.SetActive(false);
         submarine.gameObject.SetActive(true);
+
         OnSetupComplete?.Invoke();
     }
 }

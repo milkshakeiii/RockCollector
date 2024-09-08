@@ -67,7 +67,7 @@ public class ModulesSpawner : MonoBehaviour
     {
         // scroll through the shootables with the mouse wheel
         float scroll = Input.GetAxis("Mouse ScrollWheel");
-        if (scroll != 0)
+        if (scroll != 0 && images.Count > 1)
         {
             images[currentShootableIndex].SetActive(false);
             worldObjects[currentShootableIndex].SetActive(false);
