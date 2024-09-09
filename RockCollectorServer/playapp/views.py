@@ -1,14 +1,13 @@
 from django.http import HttpResponse
 from rest_framework.authtoken.models import Token
-from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.contrib.auth.models import User
 
-import time
-import datetime
-import json
+import numbers
 import httpx
+
+import playapp.models as models
 
 
 def index(request):
@@ -126,3 +125,64 @@ def users_authenticate_or_create_from_steam(request):
 
     # return the auth token
     return Response({'token': auth_token.key})
+
+@api_view(['POST'])
+def report_score(request):
+    """
+    View for reporting a score for a user.
+
+    Request body should be a JSON object with the following fields:
+    - groups (list of strings): the competition groups the score counts for
+    - one entry each for each score type to be reported, values should be floats or integers. example:
+        - "points": 100
+        - "time": 60.0
+        - "enemies_defeated": 15
+
+    Returns:
+    - a success message if the score is reported successfully
+    """
+    # validate request
+    error = validations(request, {'groups': list})
+    if error:
+        return error
+    
+    # expect at least one score field
+    if len(request.data) < 2:
+        return error_response("At least one score field is required.")
+
+    # validate score fields
+    for key, value in request.data.items():
+        if key != 'groups' and not isinstance(value, numbers.Number):
+            return error_response("Invalid type for field " + key + ". Expected number, got " + str(value))
+
+    # get the user
+    user = request.user
+
+    # get the groups
+    groups = request.data['groups']
+
+    # get the scores
+    scores = request.data
+    del scores['groups']
+
+    # get the group objects
+    group_objects = []
+    for group_name in groups:
+        category, _ = models.Group.objects.get_or_create(name=group_name)
+        group_objects.append(category)
+
+    # create the score objects
+    for score_type, value in scores.items():
+        score = models.Score(user=user, score_type=score_type, value=value)
+        score.save()
+        score.groups.set(group_objects)
+
+    # for each group and each score type, find the number of scores in the group that are greater than the user's score
+    place_rankings = {}
+    for group in group_objects:
+        place_rankings[group.name] = {}
+        for score_type in scores:
+            place_rankings[group.name][score_type] = models.Score.objects.filter(groups=group, score_type=score_type, value__gt=value).count() + 1
+
+    # return place rankings
+    return Response(place_rankings)
