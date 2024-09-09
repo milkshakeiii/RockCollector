@@ -182,7 +182,84 @@ def report_score(request):
     for group in group_objects:
         place_rankings[group.name] = {}
         for score_type in scores:
-            place_rankings[group.name][score_type] = models.Score.objects.filter(groups=group, score_type=score_type, value__gt=value).count() + 1
+            place_rankings[group.name][score_type] = models.Score.objects.filter(groups=group, score_type=score_type, value__gt=value).count()
 
     # return place rankings
     return Response(place_rankings)
+
+# next up: endpoint to retrieve scores by group, score type, and ranking position either absolute or relative to the user's ranking
+@api_view(['POST'])
+def get_scores(request):
+    """
+    View for retrieving scores by group, score type, and ranking position either absolute or relative to the user's ranking.
+
+    Request query parameters:
+    - groups (list of strings): retrive scores that belong to every group in the list (AND relationship)
+    - score_type (string): the type of score to retrieve
+    - count (int): the number of scores to retrieve
+    - start (int, optional): the ranking position to start from
+    - around_user (bool, optional): if true, instead retrieve scores around the user's ranking position
+
+    Returns:
+    - a JSON object with the scores for the specified group, score type, and ranking position
+    """
+    # validate request
+    error = validations(request, {'groups': list, 'score_type': str, 'count': int})
+    if error:
+        return error
+    
+    # exactly one of start and around_user must be provided
+    if 'start' in request.data == 'around_user' in request.data:
+        return error_response("Exactly one of start and around_user must be provided.")
+
+    # get the groups
+    groups = request.data['groups']
+
+    # get the score type
+    score_type = request.data['score_type']
+
+    # get the count
+    count = request.data['count']
+
+    # get the start
+    start = request.data.get('start', 0)
+    if not isinstance(start, int):
+        return error_response("Invalid type for field start. Expected int, got " + str(start))
+
+    # get the around_user
+    around_user = request.data.get('around_user', False)
+    if not isinstance(around_user, bool):
+        return error_response("Invalid type for field around_user. Expected bool, got " + str(around_user))
+
+    # get the user
+    user = request.user
+
+    # get the group objects
+    group_objects = []
+    for group_name in groups:
+        category, _ = models.Group.objects.get_or_create(name=group_name)
+        group_objects.append(category)
+
+    # get the scores
+    scores = models.Score.objects.filter(groups__in=group_objects, score_type=score_type).order_by('-value')
+
+    # get the scores around the user's ranking if requested
+    if around_user:
+        # get the user's score and get the ranking position of the highest score
+        user_score = scores.filter(user=user).first()
+        user_ranking = scores.filter(value__gt=user_score.value).count()
+        start = max(0, user_ranking - count // 2)
+    
+    # get the scores from the determined start position
+    scores = scores[start:start + count]
+
+    # serialize the scores
+    scores_data = []
+    for score in scores:
+        scores_data.append({
+            'user': score.user.username,
+            'value': score.value
+        })
+
+    # return the scores
+    return Response(scores_data)

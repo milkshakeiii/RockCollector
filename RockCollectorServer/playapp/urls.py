@@ -21,4 +21,5 @@ app_name = "playapp"
 urlpatterns = [
     path("", views.index, name="index"),
     path("users_authenticate_or_create_from_steam", views.users_authenticate_or_create_from_steam, name="users_authenticate_or_create_from_steam"),
+    path("report_score", views.report_score, name="report_score"),
 ]
