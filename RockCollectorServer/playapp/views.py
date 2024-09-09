@@ -52,6 +52,7 @@ def error_response(message):
     # return the error response
     return Response(error)
 
+
 def success_response(message):
     """
     helper function to return success response.
@@ -126,6 +127,7 @@ def users_authenticate_or_create_from_steam(request):
     # return the auth token
     return Response({'token': auth_token.key})
 
+
 @api_view(['POST'])
 def report_score(request):
     """
@@ -187,7 +189,7 @@ def report_score(request):
     # return place rankings
     return Response(place_rankings)
 
-# next up: endpoint to retrieve scores by group, score type, and ranking position either absolute or relative to the user's ranking
+
 @api_view(['POST'])
 def get_scores(request):
     """
@@ -263,3 +265,105 @@ def get_scores(request):
 
     # return the scores
     return Response(scores_data)
+
+
+@api_view(['POST'])
+def get_market_prices(request):
+    """
+    View for retrieving market prices for a list of items.
+
+    Request body should be a JSON object with the following fields:
+    - items (list of strings): the list of items to retrieve prices for
+    - price_groups (list of strings): the price groups for the items
+
+    Returns:
+    - a JSON object with the prices for the specified items
+    """
+    # validate request
+    error = validations(request, {'items': list, 'price_groups': list})
+    if error:
+        return error
+    
+    # get the items
+    items = request.data['items']
+
+    # get the price groups
+    price_groups = request.data.get('price_groups', [])
+
+    # require itmes and price groups to be the same length
+    if len(items) != len(price_groups):
+        return error_response("items and price_groups must be the same length.")
+
+    # get the item objects
+    item_objects = []
+    for item_name in items:
+        item, _ = models.Item.objects.get_or_create(name=item_name)
+        item_objects.append(item)
+
+    # get the price group objects
+    price_group_objects = []
+    for price_group_name in price_groups:
+        price_group, _ = models.PriceGroup.objects.get_or_create(name=price_group_name)
+        price_group_objects.append(price_group)
+
+    # get the prices (sum of item price and price group price)
+    prices_data = {}
+    for item, group in zip(item_objects, price_group_objects):
+        prices_data[item.name] = item.price + group.price_modifier
+
+    # return the prices
+    return Response(prices_data)
+
+
+@api_view(['POST'])
+def report_purchase(request):
+    """
+    View for reporting a purchase of an item.
+
+    Request body should be a JSON object with the following fields:
+    - item (string): the name of the item that was purchased
+    - price_group (string): the price group the item was purchased from
+    - price_adjustment (float or int): increase the price of the item by this amount
+        - and decrease the price of the price group by this amount divided by
+        - the number of items in the price group
+
+    Returns:
+    - the new price of the item and the price group modifier
+    """
+    # validate request
+    error = validations(request, {'item': str, 'price_group': str, 'price_adjustment': numbers.Number})
+    if error:
+        return error
+    
+    # get the price adjustment
+    price_adjustment = request.data['price_adjustment']
+
+    # get the item
+    item_name = request.data['item']
+    item, _ = models.Item.objects.get_or_create(name=item_name)
+
+    # get the price group and make sure the item is in the price group
+    price_group_name = request.data['price_group']
+    price_group, _ = models.PriceGroup.objects.get_or_create(name=price_group_name)
+    price_group.items.add(item)
+
+    # count the number of items in the price group
+    num_items = price_group.items.count()
+
+    # adjust the price of the item
+    item.price += price_adjustment
+
+    # adjust the price_modifier of the price group
+    price_modifier_change = -price_adjustment / num_items
+    price_group.price_modifier += price_modifier_change
+
+    # save the changes
+    item.save()
+    price_group.save()
+
+    # return the price modifier change in case the client wants to update the prices
+    return Response({
+        item_name: item.price,
+        price_group_name: price_group.price_modifier,
+        'price_modifier_change': price_modifier_change
+    })

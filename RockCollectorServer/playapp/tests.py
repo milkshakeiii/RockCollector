@@ -9,7 +9,7 @@ import playapp.models as models
 import playapp.views as views
 
 
-class TestHighScores(TestCase):
+class TestPlayApp(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
 
@@ -90,3 +90,71 @@ class TestHighScores(TestCase):
             {'user': 'test2', 'value': 70.0},
             {'user': 'test', 'value': 60.0}
         ]
+
+    def test_get_market_prices(self):
+        # create items
+        item1 = models.Item.objects.create(name='item1', price=100)
+        item2 = models.Item.objects.create(name='item2', price=200)
+        item3 = models.Item.objects.create(name='item3', price=300)
+
+        # create price groups
+        price_group1 = models.PriceGroup.objects.create(name='price_group1', price_modifier=-50)
+        price_group1.items.add(item1, item2)
+        price_group2 = models.PriceGroup.objects.create(name='price_group2', price_modifier=-60)
+        price_group2.items.add(item2, item3)
+
+        # get the prices
+        request = self.factory.post('unused', {
+            "price_groups": ["price_group1", "price_group2", "price_group2"],
+            "items": ["item1", "item2", "item3"],
+        }, format='json', HTTP_AUTHORIZATION=f'Token {self.token1}')
+        response = views.get_market_prices(request)
+        data = response.data
+        assert data == {
+            'item1': 50.0,
+            'item2': 140.0,
+            'item3': 240.0,
+        }
+
+    def test_report_purchase(self):
+        # report a purchase
+        request = self.factory.post('unused', {
+            "item": "item1",
+            "price_group": "price_group1",
+            "price_adjustment": 1,
+        }, format='json', HTTP_AUTHORIZATION=f'Token {self.token1}')
+        response = views.report_purchase(request)
+        data = response.data
+        assert data == {
+            'item1': 1,
+            'price_group1': -1,
+            'price_modifier_change': -1,   
+        }
+
+        # report a second purchase in the same price group
+        request = self.factory.post('unused', {
+            "item": "item2",
+            "price_group": "price_group1",
+            "price_adjustment": 1,
+        }, format='json', HTTP_AUTHORIZATION=f'Token {self.token1}')
+        response = views.report_purchase(request)
+        data = response.data
+        assert data == {
+            'item2': 1,
+            'price_group1': -1.5,
+            'price_modifier_change': -0.5,
+        }
+
+        # buy the first item again
+        request = self.factory.post('unused', {
+            "item": "item1",
+            "price_group": "price_group1",
+            "price_adjustment": 1,
+        }, format='json', HTTP_AUTHORIZATION=f'Token {self.token1}')
+        response = views.report_purchase(request)
+        data = response.data
+        assert data == {
+            'item1': 2,
+            'price_group1': -2,
+            'price_modifier_change': -0.5,
+        }
