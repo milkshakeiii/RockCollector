@@ -1,4 +1,4 @@
-# Copyright 2020 Google LLC
+# Copyright 2021 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,13 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
 from rest_framework.authtoken import views
 
 urlpatterns = [
-    path("", include("polls.urls")),
+    path('api-token-auth/', views.obtain_auth_token),
+    path("playapp/", include("playapp.urls")),
     path("admin/", admin.site.urls),
-    path('api-token-auth/', views.obtain_auth_token)
 ]
