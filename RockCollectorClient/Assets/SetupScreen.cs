@@ -166,28 +166,48 @@ public class SetupScreen : MonoBehaviour
             submarineTypes.Add(submarineType3);
         } // submarine types
 
-        StartCoroutine(SpawnModulesWithPrices(modules, submarineTypes));
+        SpawnModulesWithPrices(modules, submarineTypes);
     }
 
     // fetch the module prices from the server
-    private IEnumerator SpawnModulesWithPrices(List<Equipment> modules, List<SubmarineType> submarineTypes)
+    private void SpawnModulesWithPrices(List<Equipment> modules, List<SubmarineType> submarineTypes)
     {
-        // simulate a delay
-        yield return new WaitForSeconds(1f);
-
+        List<string> moduleNames = new();
+        List<string> priceGroups = new();
         foreach (Equipment module in modules)
         {
-            modulePrices[module.name] = Random.Range(1f, 10f);
+            moduleNames.Add(module.name);
+            priceGroups.Add("module");
+        }
+        foreach (SubmarineType submarineType in submarineTypes)
+        {
+            moduleNames.Add(submarineType.name);
+            priceGroups.Add("submarine");
         }
 
-        foreach (Equipment module in modules)
+        void callback(Newtonsoft.Json.Linq.JObject response) => SpawnModulesWithPricesCallback(modules, submarineTypes, response);
+        WebRequests.GetInstance().GetPrices(moduleNames, priceGroups, callback);
+    }
+
+    private void SpawnModulesWithPricesCallback(List<Equipment> modules, List<SubmarineType> submarineTypes, Newtonsoft.Json.Linq.JObject response)
+    {
+        foreach (Equipment module in modulesAvailable.Values)
+        {
+            modulePrices[module.name] = float.Parse(response.GetValue(module.name).ToString());
+        }
+
+        foreach (SubmarineType submarineType in submarineTypesAvailable.Values)
+        {
+            submarineTypePrices[submarineType.name] = float.Parse(response.GetValue(submarineType.name).ToString());
+        }
+
+        foreach (Equipment module in modulesAvailable.Values)
         {
             AddModule(module);
         }
 
-        foreach (SubmarineType submarineType in submarineTypes)
+        foreach (SubmarineType submarineType in submarineTypesAvailable.Values)
         {
-            submarineTypePrices[submarineType.name] = Random.Range(1f, 10f);
             AddSubmarine(submarineType);
         }
     }
