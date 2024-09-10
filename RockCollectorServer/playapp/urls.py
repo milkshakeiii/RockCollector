@@ -22,4 +22,7 @@ urlpatterns = [
     path("", views.index, name="index"),
     path("users_authenticate_or_create_from_steam", views.users_authenticate_or_create_from_steam, name="users_authenticate_or_create_from_steam"),
     path("report_score", views.report_score, name="report_score"),
+    path("get_scores", views.get_scores, name="get_scores"),
+    path("get_market_prices", views.get_market_prices, name="get_market_prices"),
+    path("report_purchase", views.report_purchase, name="report_purchase"),
 ]
