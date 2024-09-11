@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 public class WebRequests : MonoBehaviour
 {
-    private const string baseUrl = "http://127.0.0.1:8080/playapp/";
+    private const string baseUrl = "https://polls-service-7527wqjyaq-uc.a.run.app/playapp/";
     private const string getAuthTokenUrl = baseUrl + "users_authenticate_or_create_from_steam";
     private const string getPricesUrl = baseUrl + "get_market_prices";
 
