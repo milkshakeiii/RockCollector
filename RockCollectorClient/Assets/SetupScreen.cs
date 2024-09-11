@@ -7,6 +7,8 @@ public class SetupScreen : MonoBehaviour
 {
     public delegate void SetupComplete();
     public static event SetupComplete OnSetupComplete;
+    public delegate void PurchaseCallback(Newtonsoft.Json.Linq.JObject response);
+    public static event PurchaseCallback OnPurchaseCallback;
 
     public float buyHorizontalSpacing = 1.0f;
     public float buyVerticalSpacing = 1.0f;
@@ -194,14 +196,14 @@ public class SetupScreen : MonoBehaviour
         foreach (Equipment module in modulesAvailable.Values)
         {
             float price = float.Parse(response.GetValue(module.name).ToString());
-            modulePrices[module.name] = price;
+            modulePrices[module.name] = Mathf.Max(0, module.basePrice + price);
             Debug.Log(module.name + " price: " + price);
         }
 
         foreach (SubmarineType submarineType in submarineTypesAvailable.Values)
         {
             float price = float.Parse(response.GetValue(submarineType.name).ToString());
-            submarineTypePrices[submarineType.name] = price;
+            submarineTypePrices[submarineType.name] = submarineType.basePrice + price;
             Debug.Log(submarineType.name + " price: " + price);
         }
 
@@ -225,7 +227,7 @@ public class SetupScreen : MonoBehaviour
 
         // get list of modules and their remaing durabilities from player prefs
         string[] moduleNames = PlayerPrefs.GetString("LastRunModules", "").Split(',');
-        string[] modulePrices = PlayerPrefs.GetString("LastRunDurabilities", "").Split(',');
+        string[] moduleDurabilities = PlayerPrefs.GetString("LastRunDurabilities", "").Split(',');
 
         // add the modules to purchased modules with their remaining durabilities
         for (int i = 0; i < moduleNames.Length; i++)
@@ -234,7 +236,7 @@ public class SetupScreen : MonoBehaviour
             {
                 continue;
             }
-            int durability = int.Parse(modulePrices[i]);
+            int durability = int.Parse(moduleDurabilities[i]);
             Equipment newModule = BuyModule(modulesAvailable[moduleNames[i]], false, durability);
         }
 
@@ -270,7 +272,7 @@ public class SetupScreen : MonoBehaviour
         // zero out the module object rect transform offsets
         moduleObject.GetComponent<RectTransform>().offsetMin = Vector2.zero;
         moduleObject.GetComponent<RectTransform>().offsetMax = Vector2.zero;
-        moduleObject.GetComponent<BuyModulePanel>().Initialize(module, this);
+        moduleObject.GetComponent<BuyModulePanel>().Initialize(module, modulePrices[module.name], this);
 
         moduleBuyButtonCount++;
     }
@@ -286,7 +288,7 @@ public class SetupScreen : MonoBehaviour
         // zero out the submarine object rect transform offsets
         submarineObject.GetComponent<RectTransform>().offsetMin = Vector2.zero;
         submarineObject.GetComponent<RectTransform>().offsetMax = Vector2.zero;
-        submarineObject.GetComponent<BuySubmarinePanel>().Initialize(submarineType, this);
+        submarineObject.GetComponent<BuySubmarinePanel>().Initialize(submarineType, submarinePrices[submarineType.name], this);
 
         submarineBuyButtonCount++;
     }
@@ -310,6 +312,9 @@ public class SetupScreen : MonoBehaviour
         // update the value remaining text
         UpdateValueRemainingText();
 
+        // report the purchase to the market server
+        WebRequests.GetInstance().ReportPurchase(module.name, "module", (response) => OnPurchaseCallback?.Invoke(response));
+
         return addedModule;
     }
 
@@ -331,6 +336,9 @@ public class SetupScreen : MonoBehaviour
         submarine.SetSubmarineType(submarineType);
         submarine.SetRemainingDurability(durability);
         UpdateCurrentSubmarineDisplay();
+
+        // report the purchase to the market server
+        WebRequests.GetInstance().ReportPurchase(submarineType.name, "submarine", (response) => OnPurchaseCallback?.Invoke(response));
 
         // update the value remaining text
         UpdateValueRemainingText();

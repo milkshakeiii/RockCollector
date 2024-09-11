@@ -8,6 +8,7 @@ public class SubmarineType
 {
     public string name = "";
     public string description = "A submarine with engines, depth control, and fish catching capabilities.";
+    public float basePrice = 10f;
     public float startingDrag = 10f;
     public float startingMass = 3000f;
     public float baseFishStorageCapacity = 1000f;

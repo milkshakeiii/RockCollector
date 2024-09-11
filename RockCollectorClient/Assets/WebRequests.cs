@@ -45,6 +45,19 @@ public class WebRequests : MonoBehaviour
         StartCoroutine(Post(getPricesUrl, data, callback));
     }
 
+    public void ReportPurchase(string item, string priceGroup, System.Action<Newtonsoft.Json.Linq.JObject> callback)
+    {
+        // create a json object with the item and priceGroup
+        Newtonsoft.Json.Linq.JObject data = new()
+        {
+            { "item", item },
+            { "price_group", priceGroup },
+            { "price_adjustment", 0.1 }
+        };
+
+        StartCoroutine(Post(baseUrl + "report_purchase", data, callback));
+    }
+
     public void GetAuthTokenViaSteamLogin(string sessionTicket)
     {
         // create a json object with the sessionTicket

@@ -16,6 +16,8 @@ public class BuyModulePanel : MonoBehaviour
 
         moduleNameText.text = module.name;
         moduleDescriptionText.text = module.description;
+
+        SetupScreen.OnPurchaseCallback += ReportPurchaseCallbackHandler;
     }
 
     public void Clicked()
@@ -23,15 +25,8 @@ public class BuyModulePanel : MonoBehaviour
         setupScreen.BuyModule(module, true, module.maxDurability);
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void ReportPurchaseCallbackHandler(Newtonsoft.Json.Linq.JObject response)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        Debug.Log(response);
     }
 }
