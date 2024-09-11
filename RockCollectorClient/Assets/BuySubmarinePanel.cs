@@ -5,17 +5,30 @@ public class BuySubmarinePanel : MonoBehaviour
 {
     public TMP_Text submarineNameText;
     public TMP_Text submarineDescriptionText;
+    public TMP_Text priceText;
 
     private SubmarineType submarineType;
     private SetupScreen setupScreen;
 
-    public void Initialize(SubmarineType submarineType, SetupScreen setupScreen)
+    public void Initialize(SubmarineType submarineType, float price, SetupScreen setupScreen)
     {
         this.submarineType = submarineType;
         this.setupScreen = setupScreen;
 
         submarineNameText.text = submarineType.name;
         submarineDescriptionText.text = submarineType.description;
+        // display price with 2 decimal places
+        priceText.text = price.ToString("F2");
+
+        SetupScreen.OnPurchaseCallback += ReportPurchaseCallbackHandler;
+    }
+
+    private void ReportPurchaseCallbackHandler(string updatedItem, float newPrice)
+    {
+        if (updatedItem == submarineType.name)
+        {
+            priceText.text = newPrice.ToString("F2");
+        }
     }
 
     public void Clicked()

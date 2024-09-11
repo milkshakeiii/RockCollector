@@ -7,7 +7,7 @@ public class SetupScreen : MonoBehaviour
 {
     public delegate void SetupComplete();
     public static event SetupComplete OnSetupComplete;
-    public delegate void PurchaseCallback(Newtonsoft.Json.Linq.JObject response);
+    public delegate void PurchaseCallback(string updatedItem, float newPrice);
     public static event PurchaseCallback OnPurchaseCallback;
 
     public float buyHorizontalSpacing = 1.0f;
@@ -203,7 +203,7 @@ public class SetupScreen : MonoBehaviour
         foreach (SubmarineType submarineType in submarineTypesAvailable.Values)
         {
             float price = float.Parse(response.GetValue(submarineType.name).ToString());
-            submarineTypePrices[submarineType.name] = submarineType.basePrice + price;
+            submarineTypePrices[submarineType.name] = Mathf.Max(0, submarineType.basePrice + price);
             Debug.Log(submarineType.name + " price: " + price);
         }
 
@@ -288,9 +288,44 @@ public class SetupScreen : MonoBehaviour
         // zero out the submarine object rect transform offsets
         submarineObject.GetComponent<RectTransform>().offsetMin = Vector2.zero;
         submarineObject.GetComponent<RectTransform>().offsetMax = Vector2.zero;
-        submarineObject.GetComponent<BuySubmarinePanel>().Initialize(submarineType, submarinePrices[submarineType.name], this);
+        submarineObject.GetComponent<BuySubmarinePanel>().Initialize(submarineType, submarineTypePrices[submarineType.name], this);
 
         submarineBuyButtonCount++;
+    }
+
+    private void HandlePurchaseCallback(Newtonsoft.Json.Linq.JObject response, string purchasedName, float basePrice)
+    {
+        float groupPrice;
+        if (response.ContainsKey("module"))
+        {
+            groupPrice = response.GetValue("module").ToObject<float>();
+        }
+        else if (response.ContainsKey("submarine"))
+        {
+            groupPrice = response.GetValue("submarine").ToObject<float>();
+        }
+        else
+        {
+            throw new System.Exception("No price group name found in response");
+        }
+
+        // update prices of modules and submarines
+        Debug.Log(response);
+        Debug.Log(purchasedName);   
+        Newtonsoft.Json.Linq.JToken newModulePriceJToken = response.GetValue(purchasedName);
+        float newModulePrice = newModulePriceJToken.ToObject<float>();
+
+        float newTotalPrice = basePrice + groupPrice + newModulePrice;
+        if (response.ContainsKey("module"))
+        {
+            modulePrices[purchasedName] = Mathf.Max(0, newTotalPrice);
+        }
+        else if (response.ContainsKey("submarine"))
+        {
+            submarineTypePrices[purchasedName] = Mathf.Max(0, newTotalPrice);
+        }
+
+        OnPurchaseCallback?.Invoke(purchasedName, newTotalPrice);
     }
 
     public Equipment BuyModule(Equipment module, bool pay, int durability)
@@ -303,6 +338,9 @@ public class SetupScreen : MonoBehaviour
                 return null;
             }
             this.spentValue += modulePrices[module.name];
+
+            // report the purchase to the market server
+            WebRequests.GetInstance().ReportPurchase(module.name, "module", (response) => HandlePurchaseCallback(response, module.name, module.basePrice), false);
         }
 
         Equipment addedModule = module.Copy();
@@ -312,14 +350,17 @@ public class SetupScreen : MonoBehaviour
         // update the value remaining text
         UpdateValueRemainingText();
 
-        // report the purchase to the market server
-        WebRequests.GetInstance().ReportPurchase(module.name, "module", (response) => OnPurchaseCallback?.Invoke(response));
-
         return addedModule;
     }
 
     public void BuySubmarine(SubmarineType submarineType, bool pay, int durability)
     {
+        // return if the player is trying to buy the same submarine
+        if (submarine.SubmarineType() == submarineType)
+        {
+            return;
+        }
+
         if (pay)
         {
             float currentValue = submarineTypePrices[submarine.SubmarineType().name] * ((float)submarine.RemainingDurability() / (float)submarine.SubmarineType().maxDurability);
@@ -328,17 +369,25 @@ public class SetupScreen : MonoBehaviour
             {
                 return;
             }
-            // sell the current submarine
+            // sell the current submarine and buy the new one
             this.spentValue -= currentValue;
             this.spentValue += submarineTypePrices[submarineType.name];
+
+            // if the current submarine is at full durability, report a sale to the market server
+            if (submarine.RemainingDurability() == submarine.SubmarineType().maxDurability)
+            {
+                string returnedSubmarineName = submarine.SubmarineType().name;
+                float returnedSubmarineBasePrice = submarine.SubmarineType().basePrice;
+                WebRequests.GetInstance().ReportPurchase(submarine.SubmarineType().name, "submarine", (response) => HandlePurchaseCallback(response, returnedSubmarineName, returnedSubmarineBasePrice), true);
+            }
+
+            // report the purchase to the market server
+            WebRequests.GetInstance().ReportPurchase(submarineType.name, "submarine", (response) => HandlePurchaseCallback(response, submarineType.name, submarineType.basePrice), false);
         }
 
         submarine.SetSubmarineType(submarineType);
         submarine.SetRemainingDurability(durability);
         UpdateCurrentSubmarineDisplay();
-
-        // report the purchase to the market server
-        WebRequests.GetInstance().ReportPurchase(submarineType.name, "submarine", (response) => OnPurchaseCallback?.Invoke(response));
 
         // update the value remaining text
         UpdateValueRemainingText();
@@ -394,6 +443,12 @@ public class SetupScreen : MonoBehaviour
 
         // update the value remaining text
         UpdateValueRemainingText();
+
+        // if the returned module was at full durability, report a sale to the market server
+        if (returnedModule.remainingDurability == returnedModule.maxDurability)
+        {
+            WebRequests.GetInstance().ReportPurchase(returnedModule.name, "module", (response) => HandlePurchaseCallback(response, returnedModule.name, returnedModule.basePrice), true);
+        }
     }
 
     public void AddDurability(Equipment module)
