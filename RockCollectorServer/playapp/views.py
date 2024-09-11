@@ -20,11 +20,11 @@ def validations(request, parameters):
     """
     if request.method != 'POST':
         # return error response
-        return Response(status=405, content="Only POST requests are allowed.")
+        return error_response("Only POST requests are allowed.")
     
     if request.user.is_anonymous:
         # return error response
-        return Response(status=401, content="User is not authenticated.")
+        return error_response("User is not authenticated.")
 
     for name, type in parameters.items():
         if name not in request.data:

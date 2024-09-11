@@ -193,12 +193,16 @@ public class SetupScreen : MonoBehaviour
     {
         foreach (Equipment module in modulesAvailable.Values)
         {
-            modulePrices[module.name] = float.Parse(response.GetValue(module.name).ToString());
+            float price = float.Parse(response.GetValue(module.name).ToString());
+            modulePrices[module.name] = price;
+            Debug.Log(module.name + " price: " + price);
         }
 
         foreach (SubmarineType submarineType in submarineTypesAvailable.Values)
         {
-            submarineTypePrices[submarineType.name] = float.Parse(response.GetValue(submarineType.name).ToString());
+            float price = float.Parse(response.GetValue(submarineType.name).ToString());
+            submarineTypePrices[submarineType.name] = price;
+            Debug.Log(submarineType.name + " price: " + price);
         }
 
         foreach (Equipment module in modulesAvailable.Values)

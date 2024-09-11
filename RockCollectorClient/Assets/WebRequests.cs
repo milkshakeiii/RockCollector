@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 public class WebRequests : MonoBehaviour
 {
-    private const string baseUrl = "https://polls-service-7527wqjyaq-uc.a.run.app/playapp/";
+    private const string baseUrl = "http://127.0.0.1:8080/playapp/";
     private const string getAuthTokenUrl = baseUrl + "users_authenticate_or_create_from_steam";
     private const string getPricesUrl = baseUrl + "get_market_prices";
 
@@ -35,19 +35,23 @@ public class WebRequests : MonoBehaviour
 
     public void GetPrices(List<string> items, List<string> priceGroups, System.Action<Newtonsoft.Json.Linq.JObject> callback)
     {
-        Dictionary<string, string> data = new Dictionary<string, string>();
-
-        data.Add("items", JsonConvert.SerializeObject(items));
-        data.Add("price_groups", JsonConvert.SerializeObject(priceGroups));
+        // create a json object with the items and priceGroups
+        Newtonsoft.Json.Linq.JObject data = new()
+        {
+            { "items", new Newtonsoft.Json.Linq.JArray(items) },
+            { "price_groups", new Newtonsoft.Json.Linq.JArray(priceGroups) }
+        };
 
         StartCoroutine(Post(getPricesUrl, data, callback));
     }
 
     public void GetAuthTokenViaSteamLogin(string sessionTicket)
     {
-        Dictionary<string, string> data = new Dictionary<string, string>();
-
-        data.Add("steam_auth_ticket", sessionTicket);
+        // create a json object with the sessionTicket
+        Newtonsoft.Json.Linq.JObject data = new()
+        {
+            { "steam_auth_ticket", sessionTicket }
+        };
 
         StartCoroutine(Post(getAuthTokenUrl, data, (response) =>
         {
@@ -56,13 +60,8 @@ public class WebRequests : MonoBehaviour
         }));
     }
 
-    public IEnumerator Post(string url, Dictionary<string, string> data, System.Action<Newtonsoft.Json.Linq.JObject> callback)
+    public IEnumerator Post(string url, Newtonsoft.Json.Linq.JObject data, System.Action<Newtonsoft.Json.Linq.JObject> callback)
     {
-        WWWForm form = new WWWForm();
-        foreach (KeyValuePair<string, string> pair in data)
-        {
-            form.AddField(pair.Key, pair.Value);
-        }
         if (url != getAuthTokenUrl)
         {
             // wait for the authToken to be set
@@ -70,21 +69,26 @@ public class WebRequests : MonoBehaviour
             {
                 yield return new WaitForSeconds(0.1f);
             }
-            form.headers.Add("Authorization", "Token " + authToken);
         }
-        using (UnityWebRequest www = UnityWebRequest.Post(url, form))
+        using UnityWebRequest www = UnityWebRequest.Post(url, data.ToString(), "application/json");
+        if (url != getAuthTokenUrl)
         {
-            yield return www.SendWebRequest();
-            if (www.result != UnityWebRequest.Result.Success)
+            www.SetRequestHeader("Authorization", "Token " + authToken);
+        }
+        yield return www.SendWebRequest();
+        if (www.result != UnityWebRequest.Result.Success)
+        {
+            Debug.Log(www.error);
+        }
+        else
+        {
+            // the response is a json string, so we need to convert it to a dictionary
+            Newtonsoft.Json.Linq.JObject response = JsonConvert.DeserializeObject<Newtonsoft.Json.Linq.JObject>(www.downloadHandler.text);
+            if (response.GetValue("error") != null)
             {
-                Debug.Log(www.error);
+                Debug.Log("Error: " + response.GetValue("error").ToString());
             }
-            else
-            {
-                // the response is a json string, so we need to convert it to a dictionary
-                Newtonsoft.Json.Linq.JObject response = JsonConvert.DeserializeObject<Newtonsoft.Json.Linq.JObject>(www.downloadHandler.text);
-                callback(response);
-            }
+            callback(response);
         }
     }
 }
