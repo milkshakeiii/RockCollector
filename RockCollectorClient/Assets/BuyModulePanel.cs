@@ -5,17 +5,22 @@ public class BuyModulePanel : MonoBehaviour
 {
     public TMP_Text moduleNameText;
     public TMP_Text moduleDescriptionText;
+    public TMP_Text priceText;
 
     private Equipment module;
     private SetupScreen setupScreen;
 
-    public void Initialize(Equipment module, SetupScreen setupScreen)
+    public void Initialize(Equipment module, float price, SetupScreen setupScreen)
     {
         this.module = module;
         this.setupScreen = setupScreen;
 
         moduleNameText.text = module.name;
         moduleDescriptionText.text = module.description;
+        // display price with 2 decimal places
+        priceText.text = price.ToString("F2");
+
+        SetupScreen.OnPurchaseCallback += ReportPurchaseCallbackHandler;
     }
 
     public void Clicked()
@@ -23,15 +28,11 @@ public class BuyModulePanel : MonoBehaviour
         setupScreen.BuyModule(module, true, module.maxDurability);
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void ReportPurchaseCallbackHandler(string updatedItem, float newPrice)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        if (updatedItem == module.name)
+        {
+            priceText.text = newPrice.ToString("F2");
+        }
     }
 }

@@ -25,6 +25,7 @@ public class Equipment
 
     public EquipmentSlot slot = EquipmentSlot.Core; // Slot used by the equipment
 
+    public float basePrice = 10f; // Base price of the equipment, modified by the market
     public float mass = 0f; // Mass in kilograms
     public float activationPower = 0f; // Instantaneous power cost to activate
     public float continuousPower = 0f; // Continuous power cost per second
