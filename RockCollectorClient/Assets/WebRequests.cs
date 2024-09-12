@@ -11,6 +11,9 @@ public class WebRequests : MonoBehaviour
     private const string baseUrl = "https://polls-service-7527wqjyaq-uc.a.run.app/playapp/";
     private const string getAuthTokenUrl = baseUrl + "users_authenticate_or_create_from_steam";
     private const string getPricesUrl = baseUrl + "get_market_prices";
+    private const string reportPurchaseUrl = baseUrl + "report_purchase";
+    private const string reportScoreUrl = baseUrl + "report_score";
+    private const string getScoresUrl = baseUrl + "get_scores";
 
     private string authToken = "";
 
@@ -31,6 +34,38 @@ public class WebRequests : MonoBehaviour
     public static WebRequests GetInstance()
     {
         return instance;
+    }
+
+    public void ReportScore(List<string> scoreGroups, Dictionary<string, float> scores, System.Action<Newtonsoft.Json.Linq.JObject> callback)
+    {
+        // create a json object with the scoreGroups and scores
+        Newtonsoft.Json.Linq.JObject data = new()
+        {
+            { "score_groups", new Newtonsoft.Json.Linq.JArray(scoreGroups) },
+        };
+        foreach (KeyValuePair<string, float> score in scores)
+        {
+            data.Add(score.Key, score.Value);
+        }
+
+        StartCoroutine(Post(reportScoreUrl, data, callback));
+    }
+
+    public void GetScores(List<string> scoreGroups, string scoreType, int count, System.Action<Newtonsoft.Json.Linq.JObject> callback, int start = -1)
+    {
+        // create a json object with the scoreGroups, scoreType, count, and start if start is not -1
+        Newtonsoft.Json.Linq.JObject data = new()
+        {
+            { "score_groups", new Newtonsoft.Json.Linq.JArray(scoreGroups) },
+            { "score_type", scoreType },
+            { "count", count }
+        };
+        if (start != -1)
+        {
+            data.Add("start", start);
+        }
+
+        StartCoroutine(Post(reportScoreUrl, data, callback));
     }
 
     public void GetPrices(List<string> items, List<string> priceGroups, System.Action<Newtonsoft.Json.Linq.JObject> callback)
@@ -55,7 +90,7 @@ public class WebRequests : MonoBehaviour
             { "price_adjustment", isSale ? -0.1 : 0.1 }
         };
 
-        StartCoroutine(Post(baseUrl + "report_purchase", data, callback));
+        StartCoroutine(Post(reportPurchaseUrl, data, callback));
     }
 
     public void GetAuthTokenViaSteamLogin(string sessionTicket)
