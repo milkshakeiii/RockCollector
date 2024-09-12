@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class EndOfRunScreen : MonoBehaviour
 {
     public Submarine submarine;
+    public Environment environment;
 
     public GameObject fishPanelPrefab;
     public GameObject fishPanelParent;
@@ -14,11 +15,13 @@ public class EndOfRunScreen : MonoBehaviour
 
     private void OnEnable()
     {
+        float biggestCatch = 0;
         // create a fish panel for each fish in the submarine
         List<Timefish> allCatches = submarine.AllCatches();
         for (int i = 0; i < allCatches.Count; i++)
         {
             Timefish fish = allCatches[i];
+            biggestCatch = Mathf.Max(biggestCatch, fish.TradeValue());
 
             GameObject fishPanel = Instantiate(fishPanelPrefab, fishPanelParent.transform);
             // increment fish panel anchor min and max to space them out
@@ -42,6 +45,16 @@ public class EndOfRunScreen : MonoBehaviour
 
         // set the run result in player prefs
         PlayerPrefs.SetFloat("LastRunValue", totalValue);
+
+        // report the score to the server
+        string seedString = environment.GetLastSeed().ToString();
+        string cohort = "pluto";
+        List<string> scoreGroups = new() { seedString, cohort, "universe" };
+        Dictionary<string, float> scores = new() { { "value", totalValue }, { "biggest_catch", biggestCatch } };
+        WebRequests.GetInstance().ReportScore(scoreGroups, scores, (response) =>
+        {
+            Debug.Log("Score reported: " + response);
+        });
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created

@@ -1,4 +1,5 @@
 using System.Collections;
+using UnityEditor.UI;
 using UnityEngine;
 
 public class Environment : MonoBehaviour
@@ -9,6 +10,12 @@ public class Environment : MonoBehaviour
     public Sprite innerCornerRock;
 
     private const float rockSpacing = 0.159f;
+    private int lastSeed = 0;
+
+    public int GetLastSeed()
+    {
+        return lastSeed;
+    }
 
     public IEnumerator Generate(int seed)
     {
@@ -223,5 +230,7 @@ public class Environment : MonoBehaviour
                 }
             }
         }
+
+        lastSeed = seed;
     }
 }
