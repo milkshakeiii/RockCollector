@@ -200,7 +200,7 @@ def get_scores(request):
     - score_type (string): the type of score to retrieve
     - count (int): the number of scores to retrieve
     - start (int, optional): the ranking position to start from
-    - around_user (bool, optional): if true, instead retrieve scores around the user's ranking position
+      - if not provided, instead retrieve scores around the user's ranking position
 
     Returns:
     - a JSON object with the scores for the specified group, score type, and ranking position
@@ -209,10 +209,6 @@ def get_scores(request):
     error = validations(request, {'groups': list, 'score_type': str, 'count': int})
     if error:
         return error
-    
-    # exactly one of start and around_user must be provided
-    if 'start' in request.data == 'around_user' in request.data:
-        return error_response("Exactly one of start and around_user must be provided.")
 
     # get the groups
     groups = request.data['groups']
@@ -228,11 +224,6 @@ def get_scores(request):
     if not isinstance(start, int):
         return error_response("Invalid type for field start. Expected int, got " + str(start))
 
-    # get the around_user
-    around_user = request.data.get('around_user', False)
-    if not isinstance(around_user, bool):
-        return error_response("Invalid type for field around_user. Expected bool, got " + str(around_user))
-
     # get the user
     user = request.user
 
@@ -246,7 +237,7 @@ def get_scores(request):
     scores = models.Score.objects.filter(groups__in=group_objects, score_type=score_type).order_by('-value')
 
     # get the scores around the user's ranking if requested
-    if around_user:
+    if not 'start' in request.data:
         # get the user's score and get the ranking position of the highest score
         user_score = scores.filter(user=user).first()
         user_ranking = scores.filter(value__gt=user_score.value).count()

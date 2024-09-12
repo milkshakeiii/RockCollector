@@ -76,12 +76,11 @@ class TestPlayApp(TestCase):
             {'user': 'test2', 'value': 50.0}
         ]
 
-        # get scores using around_user
+        # get scores around the user
         request = self.factory.post('unused', {
             "groups": ["test_group"],
             "score_type": "points",
             "count": 3,
-            "around_user": True,
         }, format='json', HTTP_AUTHORIZATION=f'Token {self.token2}')
         response = views.get_scores(request)
         data = response.data
