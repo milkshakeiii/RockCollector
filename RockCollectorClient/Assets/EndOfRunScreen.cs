@@ -50,7 +50,7 @@ public class EndOfRunScreen : MonoBehaviour
         string seedString = environment.GetLastSeed().ToString();
         string cohort = "pluto";
         List<string> scoreGroups = new() { seedString, cohort, "universe" };
-        Dictionary<string, float> scores = new() { { "value", totalValue }, { "biggest_catch", biggestCatch } };
+        Dictionary<string, float> scores = new() { { "total value", totalValue }, { "largest catch", biggestCatch } };
         WebRequests.GetInstance().ReportScore(scoreGroups, scores, (response) =>
         {
             Debug.Log("Score reported: " + response);

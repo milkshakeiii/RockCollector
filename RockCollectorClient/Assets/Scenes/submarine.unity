@@ -2241,7 +2241,7 @@ GameObject:
   - component: {fileID: 529987132}
   - component: {fileID: 529987131}
   m_Layer: 5
-  m_Name: Button
+  m_Name: 'Jump to my position '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2310,7 +2310,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 529987132}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 822233859}
+        m_TargetAssemblyTypeName: HighScoreScreen, Assembly-CSharp
+        m_MethodName: MakeRequest
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!114 &529987132
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3688,7 +3700,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &822233855
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3784,8 +3796,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f8b6d600d8f60e42ac601e4e96545f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cohortDropdown: {fileID: 0}
-  scoreTypeDropdown: {fileID: 0}
+  cohortDropdown: {fileID: 872462366}
+  scoreTypeDropdown: {fileID: 1681056850}
+  startPositionInput: {fileID: 1061823766}
+  diveLocationFilter: {fileID: 1393218270}
+  diveLocationFilterToggle: {fileID: 1558284014}
 --- !u!1 &833362945
 GameObject:
   m_ObjectHideFlags: 0
@@ -4075,7 +4090,19 @@ MonoBehaviour:
       m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 822233859}
+        m_TargetAssemblyTypeName: HighScoreScreen, Assembly-CSharp
+        m_MethodName: MakeRequest
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_AlphaFadeSpeed: 0.15
 --- !u!114 &872462367
 MonoBehaviour:
@@ -5308,6 +5335,7 @@ GameObject:
   - component: {fileID: 1061823768}
   - component: {fileID: 1061823767}
   - component: {fileID: 1061823766}
+  - component: {fileID: 1061823769}
   m_Layer: 5
   m_Name: position input
   m_TagString: Untagged
@@ -5414,7 +5442,19 @@ MonoBehaviour:
       m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1061823769}
+        m_TargetAssemblyTypeName: NumbersOnlyInput, Assembly-CSharp
+        m_MethodName: OnValueChanged
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnTouchScreenKeyboardStatusChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -5474,6 +5514,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1061823764}
   m_CullTransparentMesh: 1
+--- !u!114 &1061823769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1061823764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54bdf48a7cc718f4ebbb0c8c1eda4993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxDigits: 6
+  inputField: {fileID: 0}
 --- !u!1 &1109796875
 GameObject:
   m_ObjectHideFlags: 0
@@ -5556,7 +5610,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1109796878}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 822233859}
+        m_TargetAssemblyTypeName: HighScoreScreen, Assembly-CSharp
+        m_MethodName: MakeRequest
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1109796878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6783,8 +6849,9 @@ GameObject:
   - component: {fileID: 1393218272}
   - component: {fileID: 1393218271}
   - component: {fileID: 1393218270}
+  - component: {fileID: 1393218273}
   m_Layer: 5
-  m_Name: InputField (TMP)
+  m_Name: dive lolcation InputField (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6889,7 +6956,19 @@ MonoBehaviour:
       m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1393218273}
+        m_TargetAssemblyTypeName: DiveLocationInput, Assembly-CSharp
+        m_MethodName: OnValueChanged
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnTouchScreenKeyboardStatusChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -6949,6 +7028,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1393218268}
   m_CullTransparentMesh: 1
+--- !u!114 &1393218273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1393218268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54bdf48a7cc718f4ebbb0c8c1eda4993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxDigits: 4
+  inputField: {fileID: 0}
 --- !u!1 &1398606375
 GameObject:
   m_ObjectHideFlags: 0
@@ -7951,7 +8044,7 @@ GameObject:
   - component: {fileID: 1574166921}
   - component: {fileID: 1574166920}
   m_Layer: 5
-  m_Name: Button
+  m_Name: filter button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8020,7 +8113,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1574166921}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 822233859}
+        m_TargetAssemblyTypeName: HighScoreScreen, Assembly-CSharp
+        m_MethodName: MakeRequest
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1574166921
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9197,7 +9302,19 @@ MonoBehaviour:
       m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 822233859}
+        m_TargetAssemblyTypeName: HighScoreScreen, Assembly-CSharp
+        m_MethodName: MakeRequest
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_AlphaFadeSpeed: 0.15
 --- !u!114 &1681056851
 MonoBehaviour:

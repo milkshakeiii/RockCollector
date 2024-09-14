@@ -56,7 +56,7 @@ public class WebRequests : MonoBehaviour
         // create a json object with the scoreGroups, scoreType, count, and start if start is not -1
         Newtonsoft.Json.Linq.JObject data = new()
         {
-            { "score_groups", new Newtonsoft.Json.Linq.JArray(scoreGroups) },
+            { "groups", new Newtonsoft.Json.Linq.JArray(scoreGroups) },
             { "score_type", scoreType },
             { "count", count }
         };
@@ -65,7 +65,7 @@ public class WebRequests : MonoBehaviour
             data.Add("start", start);
         }
 
-        StartCoroutine(Post(reportScoreUrl, data, callback));
+        StartCoroutine(Post(getScoresUrl, data, callback));
     }
 
     public void GetPrices(List<string> items, List<string> priceGroups, System.Action<Newtonsoft.Json.Linq.JObject> callback)
