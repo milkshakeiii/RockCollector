@@ -16,4 +16,14 @@ public class HighScoreScreen : MonoBehaviour
     {
         
     }
+
+    void MakeRequest()
+    {
+
+    }
+
+    void GetScoresCallback()
+    {
+
+    }
 }
