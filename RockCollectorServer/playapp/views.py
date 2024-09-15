@@ -247,12 +247,7 @@ def get_scores(request):
     scores = scores[start:start + count]
 
     # serialize the scores
-    scores_data = []
-    for score in scores:
-        scores_data.append({
-            'user': score.user.username,
-            'value': score.value
-        })
+    scores_data = { score.user.username: score.value for score in scores }
 
     # return the scores
     return Response(scores_data)

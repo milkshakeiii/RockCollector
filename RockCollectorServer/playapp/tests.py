@@ -67,14 +67,14 @@ class TestPlayApp(TestCase):
         }, format='json', HTTP_AUTHORIZATION=f'Token {self.token1}')
         response = views.get_scores(request)
         data = response.data
-        assert data == [
-            {'user': 'test', 'value': 100.0},
-            {'user': 'test', 'value': 90.0},
-            {'user': 'test', 'value': 80.0},
-            {'user': 'test2', 'value': 70.0},
-            {'user': 'test', 'value': 60.0},
-            {'user': 'test2', 'value': 50.0}
-        ]
+        assert data == {
+            'test': 100.0,
+            'test': 90.0,
+            'test': 80.0,
+            'test2': 70.0,
+            'test': 60.0,
+            'test2': 50.0,
+        }
 
         # get scores around the user
         request = self.factory.post('unused', {
@@ -84,11 +84,11 @@ class TestPlayApp(TestCase):
         }, format='json', HTTP_AUTHORIZATION=f'Token {self.token2}')
         response = views.get_scores(request)
         data = response.data
-        assert data == [
-            {'user': 'test', 'value': 80.0},
-            {'user': 'test2', 'value': 70.0},
-            {'user': 'test', 'value': 60.0}
-        ]
+        assert data == {
+            'test': 80.0,
+            'test2': 70.0,
+            'test': 60.0,
+        }
 
     def test_get_market_prices(self):
         # create items
