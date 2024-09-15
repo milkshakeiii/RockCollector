@@ -1,4 +1,6 @@
+using NUnit.Framework;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Environment : MonoBehaviour
@@ -7,8 +9,16 @@ public class Environment : MonoBehaviour
     public Sprite edgeRock;
     public Sprite fillerRock;
     public Sprite innerCornerRock;
+    public List<Sprite> inner_prop_1;
+    public List<Sprite> inner_prop_2;
 
     private const float rockSpacing = 0.159f;
+    private int lastSeed = 0;
+
+    public int GetLastSeed()
+    {
+        return lastSeed;
+    }
 
     public IEnumerator Generate(int seed)
     {
@@ -223,5 +233,70 @@ public class Environment : MonoBehaviour
                 }
             }
         }
+
+        // place some inner props randomly
+        for (int i = 0; i < 200; i++)
+        {
+            // randomly choose a prop list
+            List<Sprite> propList = random.Next(0, 2) == 0 ? inner_prop_1 : inner_prop_2;
+            // randomly choose up, down, left, or right
+            List<Vector2Int> directions = new() { new Vector2Int(0, 1), new Vector2Int(0, -1), new Vector2Int(-1, 0), new Vector2Int(1, 0) };
+            Vector2Int direction = directions[random.Next(0, 4)];
+
+            // randomly choose a position
+            int x = random.Next(0, width*2);
+            int y = random.Next(0, height*2);
+
+            // add direction to get the positions of all the sprites
+            List<Vector2Int> positions = new() { new Vector2Int(x, y) };
+            for (int j = 0; j < propList.Count - 1; j++)
+            {
+                positions.Add(positions[j] + direction);
+            }
+
+            // only continue if all positions are within bounds and are currently filler rock
+            bool valid = true;
+            foreach (Vector2Int position in positions)
+            {
+                if (position.x < 0 || position.x >= width*2 || position.y < 0 || position.y >= height*2 || rocks[position.x, position.y] != fillerRock)
+                {
+                    valid = false;
+                    break;
+                }
+            }
+            if (!valid)
+            {
+                continue;
+            }
+
+            // spawn the game objects
+            for (int j = 0; j < propList.Count; j++)
+            {
+                GameObject prop = new("Prop");
+                prop.transform.position = new Vector3((-width/2 + positions[j].x) * rockSpacing + 5, (-height + positions[j].y) * rockSpacing - 10, 0);
+                prop.AddComponent<SpriteRenderer>().sprite = propList[j];
+                prop.GetComponent<SpriteRenderer>().sortingOrder = 1;
+                prop.layer = 9;
+                // set the rotation according to the direction
+                if (direction == new Vector2Int(0, -1))
+                {
+                    prop.transform.Rotate(Vector3.forward, 270f);
+                }
+                else if (direction == new Vector2Int(1, 0))
+                {
+                    prop.transform.Rotate(Vector3.forward, 0f);
+                }
+                else if (direction == new Vector2Int(0, 1))
+                {
+                    prop.transform.Rotate(Vector3.forward, 90f);
+                }
+                else if (direction == new Vector2Int(-1, 0))
+                {
+                    prop.transform.Rotate(Vector3.forward, 180f);
+                }
+            }
+        }
+
+        lastSeed = seed;
     }
 }
