@@ -95,7 +95,7 @@ public class SetupScreen : MonoBehaviour
             DepthController depthController = new();
             AddAvailableModule("Depth Controller", depthController);
             depthController.description = "Control the depth of the submarine by adjusting the mass of the submarine.";
-            depthController.depthControlMass = 1200f;
+            depthController.depthControlMass = 12000f;
             depthController.depthControlTime = 1f;
             depthController.continuousPower = 0.1f;
             modules.Add(depthController);
@@ -103,7 +103,7 @@ public class SetupScreen : MonoBehaviour
             Engine engine = new();
             AddAvailableModule("Engine", engine);
             engine.description = "Propel the submarine forward with the engine.";
-            engine.thrust = 8000f;
+            engine.thrust = 80000f;
             engine.continuousPower = 0.1f;
             modules.Add(engine);
 

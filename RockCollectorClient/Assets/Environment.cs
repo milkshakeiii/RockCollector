@@ -32,19 +32,38 @@ public class Environment : MonoBehaviour
         // start with a grid to make into the terrain shape
         bool[,] terrainGrid = new bool[width, height];
         
-        int mountainStartX = random.Next(30, 100);
-        int mountainStartY = 0;
-        int mountainEndX = Mathf.Min(mountainStartX + random.Next(30, 100), width-1);
-        int mountainEndY = Mathf.Min(mountainStartY + random.Next(30, 100), height-1);
-        int mountainWidth = mountainEndX - mountainStartX;
-        int mountainCenter = random.Next(mountainStartX + mountainWidth / 4, mountainEndX - mountainWidth / 4);
-        Debug.Log("Mountain start: " + mountainStartX + ", " + mountainStartY);
-        Debug.Log("Mountain end: " + mountainEndX + ", " + mountainEndY);
-        Debug.Log("Mountain center: " + mountainCenter);
-        IEnumerator mountainEnumerator = AddMountain(random, mountainStartX, mountainStartY, mountainEndX, mountainEndY, mountainCenter, terrainGrid);
-        while (mountainEnumerator.MoveNext())
+        int mountainStartX = 0;
+        for (int i = 0; i < 3; i++) { // make three mountains
+            mountainStartX = mountainStartX + random.Next(30, 100);
+            // if we're already past the width, break
+            if (mountainStartX >= width) {
+                break;
+            }
+
+            int mountainStartY = 0;
+            int mountainEndX = Mathf.Min(mountainStartX + random.Next(30, 100), width-1);
+            int mountainEndY = Mathf.Min(mountainStartY + random.Next(30, 100), height-1);
+            int mountainWidth = mountainEndX - mountainStartX;
+            int mountainCenter = random.Next(mountainStartX + mountainWidth / 4, mountainEndX - mountainWidth / 4);
+            Debug.Log("Mountain start: " + mountainStartX + ", " + mountainStartY);
+            Debug.Log("Mountain end: " + mountainEndX + ", " + mountainEndY);
+            Debug.Log("Mountain center: " + mountainCenter);
+            IEnumerator mountainEnumerator = AddMountain(random, mountainStartX, mountainStartY, mountainEndX, mountainEndY, mountainCenter, terrainGrid);
+            while (mountainEnumerator.MoveNext())
+            {
+                yield return null;
+            }
+        }
+
+        // make the left, right, and bottom edges solid
+        for (int x = 0; x < width; x++)
         {
-            yield return null;
+            terrainGrid[x, 0] = true;
+        }
+        for (int y = 0; y < height; y++)
+        {
+            terrainGrid[0, y] = true;
+            terrainGrid[width - 1, y] = true;
         }
 
         // each grid cell covers 4 sprites with 4 rotations
@@ -262,7 +281,7 @@ public class Environment : MonoBehaviour
                 if (sprites[x, y] != null)
                 {
                     GameObject rock = new("Rock");
-                    rock.transform.position = new Vector3((-width / 2 + x) * rockSpacing + 5, (-height + y) * rockSpacing - 10, 0);
+                    rock.transform.position = new Vector3((-width / 2 + x) * rockSpacing + 5, (-height + y) * rockSpacing, 0);
                     rock.AddComponent<SpriteRenderer>().sprite = sprites[x, y];
                     // also add a collider if this is not a filler rock
                     if (sprites[x, y] != fillerRock)
