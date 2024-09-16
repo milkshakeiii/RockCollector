@@ -135,6 +135,7 @@ def report_score(request):
 
     Request body should be a JSON object with the following fields:
     - groups (list of strings): the competition groups the score counts for
+    - name (string): a name for the score
     - one entry each for each score type to be reported, values should be floats or integers. example:
         - "points": 100
         - "time": 60.0
@@ -144,7 +145,8 @@ def report_score(request):
     - a success message if the score is reported successfully
     """
     # validate request
-    error = validations(request, {'groups': list})
+    parameters = {'groups': list, 'name': str}
+    error = validations(request, parameters)
     if error:
         return error
     
@@ -154,18 +156,20 @@ def report_score(request):
 
     # validate score fields
     for key, value in request.data.items():
-        if key != 'groups' and not isinstance(value, numbers.Number):
+        if key not in parameters and not isinstance(value, numbers.Number):
             return error_response("Invalid type for field " + key + ". Expected number, got " + str(value))
 
     # get the user
     user = request.user
 
+    # get the name
+    name = request.data['name']
+
     # get the groups
     groups = request.data['groups']
 
     # get the scores
-    scores = request.data
-    del scores['groups']
+    scores = { key: value for key, value in request.data.items() if key not in parameters }
 
     # get the group objects
     group_objects = []
@@ -175,7 +179,7 @@ def report_score(request):
 
     # create the score objects
     for score_type, value in scores.items():
-        score = models.Score(user=user, score_type=score_type, value=value)
+        score = models.Score(user=user, score_type=score_type, value=value, name=name)
         score.save()
         score.groups.set(group_objects)
 
@@ -247,12 +251,9 @@ def get_scores(request):
     scores = scores[start:start + count]
 
     # serialize the scores
-    scores_data = []
-    for score in scores:
-        scores_data.append({
-            'user': score.user.username,
-            'value': score.value
-        })
+    scores_data = {}
+    for i, score in enumerate(scores):
+        scores_data[start+i] = {score.name: score.value}
 
     # return the scores
     return Response(scores_data)

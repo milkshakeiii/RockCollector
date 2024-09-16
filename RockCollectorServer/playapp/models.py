@@ -17,6 +17,10 @@ class Score(models.Model):
     score_type = models.CharField(max_length=100)
     value = models.FloatField()
     groups = models.ManyToManyField(Group, related_name='scores')
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f'{self.name} - {self.score_type} - {self.value}'
 ### END MODELS FOR HIGH SCORES ###
 
 
