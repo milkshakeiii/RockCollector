@@ -11,6 +11,10 @@ public class HighScoreScreen : MonoBehaviour
     public TMPro.TMP_InputField diveLocationFilter;
     public Toggle diveLocationFilterToggle;
 
+    public GameObject highScoreRowParent;
+    public GameObject highScoreRowPrefab;
+    public float rowOffset = 0.1f;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -49,6 +53,18 @@ public class HighScoreScreen : MonoBehaviour
 
     void GetScoresCallback(Newtonsoft.Json.Linq.JObject result)
     {
-        Debug.Log("Scores: " + result);
+        // instantiate one highScoreRowPrefab for each key in result
+        int row = 0;
+        foreach (var resultRow in result)
+        {
+            GameObject highScoreRow = Instantiate(highScoreRowPrefab, highScoreRowParent.transform);
+            highScoreRow.GetComponent<HighScoreEntryPanel>().Initialize(resultRow);
+            highScoreRow.GetComponent<RectTransform>().anchorMin += new Vector2(0, -row * rowOffset);
+            highScoreRow.GetComponent<RectTransform>().anchorMax += new Vector2(0, -row * rowOffset);
+            // set bounds to zero to move highScoreRow to its anchors
+            highScoreRow.GetComponent<RectTransform>().offsetMin = Vector2.zero;
+            highScoreRow.GetComponent<RectTransform>().offsetMax = Vector2.zero;
+            row++;
+        }
     }
 }
