@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 167fe586b70b2794ba12c2be8b298273
+guid: 33b49369297f366419892de99218d12b
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5299352137869551163
-    second: Rock_Px_Type_01_Guide_0
+      213: 4178324874323465199
+    second: README_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Rock_Px_Type_01_Guide_0
+      name: README_0
       rect:
         serializedVersion: 2
         x: 0
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b36eb6531b41b8940800000000000000
-      internalID: 5299352137869551163
+      spriteID: fe39a32e5546cf930800000000000000
+      internalID: 4178324874323465199
       vertices: []
       indices: 
       edges: []
@@ -134,8 +134,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      Rock_Px_Type_01_Guide_0: 5299352137869551163
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
