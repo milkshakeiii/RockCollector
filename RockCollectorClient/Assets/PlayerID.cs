@@ -23,7 +23,7 @@ public class PlayerID : MonoBehaviour
         void OnAuthCallback(GetTicketForWebApiResponse_t callback)
         {
             m_SessionTicket = BitConverter.ToString(callback.m_rgubTicket).Replace("-", string.Empty);
-            Debug.Log(m_SessionTicket);   
+            //Debug.Log(m_SessionTicket);   
         }
     }
 

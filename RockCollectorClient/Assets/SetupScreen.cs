@@ -197,14 +197,14 @@ public class SetupScreen : MonoBehaviour
         {
             float price = float.Parse(response.GetValue(module.name).ToString());
             modulePrices[module.name] = Mathf.Max(0, module.basePrice + price);
-            Debug.Log(module.name + " price: " + price);
+            //Debug.Log(module.name + " price: " + price);
         }
 
         foreach (SubmarineType submarineType in submarineTypesAvailable.Values)
         {
             float price = float.Parse(response.GetValue(submarineType.name).ToString());
             submarineTypePrices[submarineType.name] = Mathf.Max(0, submarineType.basePrice + price);
-            Debug.Log(submarineType.name + " price: " + price);
+            //Debug.Log(submarineType.name + " price: " + price);
         }
 
         foreach (Equipment module in modulesAvailable.Values)
@@ -310,8 +310,8 @@ public class SetupScreen : MonoBehaviour
         }
 
         // update prices of modules and submarines
-        Debug.Log(response);
-        Debug.Log(purchasedName);   
+        //Debug.Log(response);
+        //Debug.Log(purchasedName);   
         Newtonsoft.Json.Linq.JToken newModulePriceJToken = response.GetValue(purchasedName);
         float newModulePrice = newModulePriceJToken.ToObject<float>();
 
