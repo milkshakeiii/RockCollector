@@ -5,10 +5,11 @@ using UnityEngine;
 
 public class Environment : MonoBehaviour
 {
-    public Sprite cornerRock;
-    public Sprite edgeRock;
-    public Sprite fillerRock;
-    public Sprite innerCornerRock;
+    public Sprite leftCornerRock;
+    public Sprite rightCornerRock;
+    public List<Sprite> edgeRocks;
+    public List<Sprite> topEdgeRocks;
+    public List<Sprite> fillerRocks;
     public List<Sprite> inner_prop_1;
     public List<Sprite> inner_prop_2;
 
@@ -166,10 +167,10 @@ public class Environment : MonoBehaviour
                 bool bottomLeftInnerCorner = !downLeftOccupied && downOccupied && leftOccupied;
 
                 // based on the grid neighbors, set 4 sprites per grid cell
-                Sprite topLeft = fillerRock;
-                Sprite topRight = fillerRock;
-                Sprite bottomRight = fillerRock;
-                Sprite bottomLeft = fillerRock;
+                Sprite topLeft = fillerRocks[random.Next(fillerRocks.Count)];
+                Sprite topRight = fillerRocks[random.Next(fillerRocks.Count)];
+                Sprite bottomRight = fillerRocks[random.Next(fillerRocks.Count)];
+                Sprite bottomLeft = fillerRocks[random.Next(fillerRocks.Count)];
                 // begin with random rotations
                 int topLeftRotation = random.Next(0, 4) * 90;
                 int topRightRotation = random.Next(0, 4) * 90;
@@ -177,85 +178,84 @@ public class Environment : MonoBehaviour
                 int bottomLeftRotation = random.Next(0, 4) * 90;
                 if (topLeftCornerFree)
                 {
-                    topLeft = cornerRock;
+                    topLeft = leftCornerRock;
                     topLeftRotation = 0;
                 }
                 if (topRightCornerFree)
                 {
-                    topRight = cornerRock;
-
+                    topRight = rightCornerRock;
                     topRightRotation = 270;
                 }
                 if (bottomRightCornerFree)
                 {
-                    bottomRight = cornerRock;
-                    bottomRightRotation = 180;
+                    bottomRight = edgeRocks[random.Next(edgeRocks.Count)];
+                    bottomRightRotation = 270;
                 }
                 if (bottomLeftCornerFree)
                 {
-                    bottomLeft = cornerRock;
+                    bottomLeft = edgeRocks[random.Next(edgeRocks.Count)];
                     bottomLeftRotation = 90;
                 }
                 if (upOccupied && !leftOccupied)
                 {
-                    topLeft = edgeRock;
+                    topLeft = edgeRocks[random.Next(edgeRocks.Count)];
                     topLeftRotation = 90;
                 }
                 if (rightOccupied && !upOccupied)
                 {
-                    topRight = edgeRock;
+                    topRight = topEdgeRocks[random.Next(topEdgeRocks.Count)];
                     topRightRotation = 0;
                 }
                 if (downOccupied && !rightOccupied)
                 {
-                    bottomRight = edgeRock;
+                    bottomRight = edgeRocks[random.Next(edgeRocks.Count)];
                     bottomRightRotation = 270;
                 }
-                if (leftOccupied && !downOccupied)
-                {
-                    bottomLeft = edgeRock;
-                    bottomLeftRotation = 180;
-                }
+                //if (leftOccupied && !downOccupied)
+                //{
+                //    bottomLeft = edgeRocks[random.Next(edgeRocks.Count)];
+                //    bottomLeftRotation = 270;
+                //}
                 if (downOccupied && !leftOccupied)
                 {
-                    bottomLeft = edgeRock;
+                    bottomLeft = edgeRocks[random.Next(edgeRocks.Count)];
                     bottomLeftRotation = 90;
                 }
                 if (leftOccupied && !upOccupied)
                 {
-                    topLeft = edgeRock;
+                    topLeft = topEdgeRocks[random.Next(topEdgeRocks.Count)];
                     topLeftRotation = 0;
                 }
                 if (upOccupied && !rightOccupied)
                 {
-                    topRight = edgeRock;
+                    topRight = edgeRocks[random.Next(edgeRocks.Count)];
                     topRightRotation = 270;
                 }
-                if (rightOccupied && !downOccupied)
-                {
-                    bottomRight = edgeRock;
-                    bottomRightRotation = 180;
-                }
-                if (topLeftInnerCorner)
-                {
-                    topLeft = innerCornerRock;
-                    topLeftRotation = 0;
-                }
-                if (topRightInnerCorner)
-                {
-                    topRight = innerCornerRock;
-                    topRightRotation = 270;
-                }
-                if (bottomRightInnerCorner)
-                {
-                    bottomRight = innerCornerRock;
-                    bottomRightRotation = 180;
-                }
-                if (bottomLeftInnerCorner)
-                {
-                    bottomLeft = innerCornerRock;
-                    bottomLeftRotation = 90;
-                }
+                //if (rightOccupied && !downOccupied)
+                //{
+                //    bottomRight = edgeRock;
+                //    bottomRightRotation = 180;
+                //}
+                //if (topLeftInnerCorner)
+                //{
+                //    topLeft = innerCornerRock;
+                //    topLeftRotation = 0;
+                //}
+                //if (topRightInnerCorner)
+                //{
+                //    topRight = innerCornerRock;
+                //    topRightRotation = 270;
+                //}
+                //if (bottomRightInnerCorner)
+                //{
+                //    bottomRight = innerCornerRock;
+                //    bottomRightRotation = 180;
+                //}
+                //if (bottomLeftInnerCorner)
+                //{
+                //    bottomLeft = innerCornerRock;
+                //    bottomLeftRotation = 90;
+                //}
                 sprites[x * 2, y * 2] = bottomLeft;
                 sprites[x * 2 + 1, y * 2] = bottomRight;
                 sprites[x * 2, y * 2 + 1] = topLeft;
@@ -284,7 +284,7 @@ public class Environment : MonoBehaviour
                     rock.transform.position = new Vector3((-width / 2 + x) * rockSpacing + 5, (-height + y) * rockSpacing, 0);
                     rock.AddComponent<SpriteRenderer>().sprite = sprites[x, y];
                     // also add a collider if this is not a filler rock
-                    if (sprites[x, y] != fillerRock)
+                    if (!fillerRocks.Contains(sprites[x, y]))
                         rock.AddComponent<BoxCollider2D>();
                     // layer is "Terrain"
                     rock.layer = 9;

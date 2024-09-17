@@ -1103,10 +1103,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccfecbf9f69a0484086f5cf772503fc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cornerRock: {fileID: 1890878202799708285, guid: 4d7276fbb6d4439478a4f1139577a0a2, type: 3}
-  edgeRock: {fileID: 3829694965880949741, guid: cf1be3f98e38d704a9f38e5a80a557e8, type: 3}
-  fillerRock: {fileID: 6003724952541663929, guid: 2ed87b9c78355ba4aad43a66dd8bafca, type: 3}
-  innerCornerRock: {fileID: 1773679949993703170, guid: cdafed031f9863d4c9b354c76b214adb, type: 3}
+  leftCornerRock: {fileID: 21300000, guid: d04471abdd554374ca387b36f24545c2, type: 3}
+  rightCornerRock: {fileID: 21300000, guid: d8e102b3a5914164fa0b31e140502f8b, type: 3}
+  edgeRocks:
+  - {fileID: 21300000, guid: 3f5f254d5e6bfe64c9db2d0353756e1e, type: 3}
+  - {fileID: 21300000, guid: 8b3fa08410207d646a0be1a8c3148132, type: 3}
+  - {fileID: 21300000, guid: 3da4e2426bee8124397450882f57b3d2, type: 3}
+  topEdgeRocks:
+  - {fileID: 21300000, guid: 1e0e8331286e8df409b4d21add872c9f, type: 3}
+  - {fileID: 21300000, guid: 5b6c8c191822e3640a99543c25f221a4, type: 3}
+  - {fileID: 21300000, guid: b641e4a05a06cfb44847ef68691c759d, type: 3}
+  fillerRocks:
+  - {fileID: 21300000, guid: 07b6beaca5b8bda46b8461f7aabc7c65, type: 3}
+  - {fileID: 21300000, guid: aed272c1842e9c44b8ba8b082aa2ff2e, type: 3}
+  - {fileID: 21300000, guid: 877fb8731882a514292faea63fa5a0d7, type: 3}
+  - {fileID: 21300000, guid: 91d76c75626db9743a8d1a6af3751a1f, type: 3}
+  - {fileID: 21300000, guid: b4e40a87a8774a546a4271ccb00ba340, type: 3}
+  - {fileID: 21300000, guid: 7678c13025edca641b956813378eb2f3, type: 3}
+  - {fileID: 21300000, guid: bda1502c71420974aa7b01f2ff7cc475, type: 3}
+  - {fileID: 21300000, guid: 32ddde3f3a0f1dd47a802798e92d7d8e, type: 3}
+  - {fileID: 21300000, guid: 708ae2c3e6ed78e419c841c810edf942, type: 3}
   inner_prop_1:
   - {fileID: 21300000, guid: 6252780cff85f0e4bac7686622879e24, type: 3}
   - {fileID: 21300000, guid: 103f0019ef5d6f54dab7d698bc8cecb3, type: 3}
