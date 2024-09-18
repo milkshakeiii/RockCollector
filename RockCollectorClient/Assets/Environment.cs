@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class Environment : MonoBehaviour
@@ -27,30 +28,59 @@ public class Environment : MonoBehaviour
 
         yield return null;
 
-        int width = random.Next(90, 300);
-        int height = random.Next(90, 300);
+        int width = random.Next(150, 400);
+        int height = random.Next(150, 400);
+        Debug.Log("Width: " + width + " Height: " + height);
 
         // start with a grid to make into the terrain shape
         bool[,] terrainGrid = new bool[width, height];
-        
-        int mountainStartX = 0;
-        for (int i = 0; i < 3; i++) { // make three mountains
-            mountainStartX = mountainStartX + random.Next(30, 100);
-            // if we're already past the width, break
-            if (mountainStartX >= width) {
-                break;
-            }
 
-            int mountainStartY = 0;
-            int mountainEndX = Mathf.Min(mountainStartX + random.Next(30, 100), width-1);
-            int mountainEndY = Mathf.Min(mountainStartY + random.Next(30, 100), height-1);
-            int mountainWidth = mountainEndX - mountainStartX;
-            int mountainCenter = random.Next(mountainStartX + mountainWidth / 4, mountainEndX - mountainWidth / 4);
-            Debug.Log("Mountain start: " + mountainStartX + ", " + mountainStartY);
-            Debug.Log("Mountain end: " + mountainEndX + ", " + mountainEndY);
-            Debug.Log("Mountain center: " + mountainCenter);
-            IEnumerator mountainEnumerator = AddMountain(random, mountainStartX, mountainStartY, mountainEndX, mountainEndY, mountainCenter, terrainGrid);
-            while (mountainEnumerator.MoveNext())
+        // create horizontal and vertical imaginary lines to divide the terrain into sectors
+        int numberOfHorizontalLines = random.Next(1, 3);
+        int numberOfVerticalLines = random.Next(1, 3);
+        List<int> horizontalLines = new();
+        List<int> verticalLines = new();
+        for (int i = 0; i < numberOfHorizontalLines; i++)
+        {
+            horizontalLines.Add(random.Next(0, height));
+        }
+        for (int i = 0; i < numberOfVerticalLines; i++)
+        {
+            verticalLines.Add(random.Next(0, width));
+        }
+        horizontalLines.Add(height);
+        verticalLines.Add(width);
+        horizontalLines.Add(0);
+        verticalLines.Add(0);
+        horizontalLines.Sort();
+        verticalLines.Sort();
+        List<Vector2Int> sectorStarts = new();
+        List<Vector2Int> sectorSizes = new();
+        for (int i = 0; i < horizontalLines.Count - 1; i++)
+        {
+            for (int j = 0; j < verticalLines.Count - 1; j++)
+            {
+                int sectorStartX = verticalLines[j];
+                int sectorStartY = horizontalLines[i];
+                int sectorWidth = verticalLines[j + 1] - verticalLines[j];
+                int sectorHeight = horizontalLines[i + 1] - horizontalLines[i];
+                sectorStarts.Add(new Vector2Int(sectorStartX, sectorStartY));
+                sectorSizes.Add(new Vector2Int(sectorWidth, sectorHeight));
+            }
+        }
+        
+
+        // determine the terrain for each sector
+        for (int i = 0; i < sectorStarts.Count; i++)
+        {
+            int sectorWidth = sectorSizes[i].x;
+            int sectorHeight = sectorSizes[i].y;
+            int sectorStartX = sectorStarts[i].x;
+            int sectorStartY = sectorStarts[i].y;
+            Debug.Log("Sector start: " + sectorStartX + ", " + sectorStartY);
+            Debug.Log("Sector size: " + sectorWidth + ", " + sectorHeight);
+            IEnumerator sectorEnumator = MakeMountainSector(random, sectorWidth, sectorHeight, sectorStartX, sectorStartY, terrainGrid);
+            while (sectorEnumator.MoveNext())
             {
                 yield return null;
             }
@@ -85,7 +115,33 @@ public class Environment : MonoBehaviour
 
         // TODO spawn timefish
 
+
         lastSeed = seed;
+    }
+
+    private IEnumerator MakeMountainSector(System.Random random, int sectorWidth, int sectorHeight, int sectorStartX, int sectorStartY, bool[,] terrainGrid)
+    {
+        int mountainStartX = sectorStartX;
+        for (int i = 0; i < 3; i++)
+        { // make three mountains
+            mountainStartX = mountainStartX + random.Next(30, 100);
+            // if we're already past the width, break
+            if (mountainStartX >= sectorStartX + sectorWidth)
+            {
+                break;
+            }
+
+            int mountainStartY = sectorStartY;
+            int mountainEndX = Mathf.Min(mountainStartX + random.Next(30, 100), sectorStartX + sectorWidth - 1);
+            int mountainEndY = Mathf.Min(mountainStartY + random.Next(30, 100), sectorStartY + sectorHeight - 1);
+            int mountainWidth = mountainEndX - mountainStartX;
+            int mountainCenter = random.Next(mountainStartX + mountainWidth / 4, mountainEndX - mountainWidth / 4);
+            IEnumerator mountainEnumerator = AddMountain(random, mountainStartX, mountainStartY, mountainEndX, mountainEndY, mountainCenter, terrainGrid);
+            while (mountainEnumerator.MoveNext())
+            {
+                yield return null;
+            }
+        }
     }
 
     private IEnumerator AddMountain(System.Random random, int startX, int startY, int endX, int endY, int center, bool[,] grid)
@@ -93,11 +149,11 @@ public class Environment : MonoBehaviour
 
         int currentX = startX;
         int currentY = startY;
-        // starting at the bottom left corner, determine sprites
+        // starting at the bottom left corner, create a mountain contour
         int conservativeHeight = endY - 7;
         while (currentX < endX)
         {
-            if (currentY < endY && currentY >= 0)
+            if (currentY < endY && currentY >= startY)
             {
                 //Debug.Log("xIndex: " + currentX + " yIndex: " + currentY);
                 grid[currentX, currentY] = true;
@@ -116,10 +172,10 @@ public class Environment : MonoBehaviour
         }
 
         // fill in the rest of the rocks one column at a time
-        for (int x = 0; x < endX; x++)
+        for (int x = startX; x < endX; x++)
         {
             bool fill = false;
-            for (int y = endY - 1; y >= 0; y--)
+            for (int y = endY - 1; y >= startY; y--)
             {
                 if (grid[x, y])
                 {
