@@ -83,6 +83,8 @@ public class Environment : MonoBehaviour
             yield return null;
         }
 
+        // TODO spawn timefish
+
         lastSeed = seed;
     }
 
