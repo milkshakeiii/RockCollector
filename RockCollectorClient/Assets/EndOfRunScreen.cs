@@ -50,8 +50,9 @@ public class EndOfRunScreen : MonoBehaviour
         string seedString = environment.GetLastSeed().ToString();
         string cohort = "pluto";
         List<string> scoreGroups = new() { seedString, cohort, "universe" };
-        Dictionary<string, float> scores = new() { { "total value", totalValue }, { "largest catch", biggestCatch } };
-        WebRequests.GetInstance().ReportScore(scoreGroups, scores, (response) =>
+        Dictionary<string, float> scores = new() { { "total value", totalValue-1.2f }, { "largest catch", biggestCatch-0.6f } };
+        string name = PlayerPrefs.GetString("PlayerName", Random.Range(0, 10).ToString());
+        WebRequests.GetInstance().ReportScore(scoreGroups, scores, name, (response) =>
         {
             Debug.Log("Score reported: " + response);
         });

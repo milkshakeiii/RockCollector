@@ -95,7 +95,7 @@ public class SetupScreen : MonoBehaviour
             DepthController depthController = new();
             AddAvailableModule("Depth Controller", depthController);
             depthController.description = "Control the depth of the submarine by adjusting the mass of the submarine.";
-            depthController.depthControlMass = 1200f;
+            depthController.depthControlMass = 12000f;
             depthController.depthControlTime = 1f;
             depthController.continuousPower = 0.1f;
             modules.Add(depthController);
@@ -103,7 +103,7 @@ public class SetupScreen : MonoBehaviour
             Engine engine = new();
             AddAvailableModule("Engine", engine);
             engine.description = "Propel the submarine forward with the engine.";
-            engine.thrust = 8000f;
+            engine.thrust = 80000f;
             engine.continuousPower = 0.1f;
             modules.Add(engine);
 
@@ -197,14 +197,14 @@ public class SetupScreen : MonoBehaviour
         {
             float price = float.Parse(response.GetValue(module.name).ToString());
             modulePrices[module.name] = Mathf.Max(0, module.basePrice + price);
-            Debug.Log(module.name + " price: " + price);
+            //Debug.Log(module.name + " price: " + price);
         }
 
         foreach (SubmarineType submarineType in submarineTypesAvailable.Values)
         {
             float price = float.Parse(response.GetValue(submarineType.name).ToString());
             submarineTypePrices[submarineType.name] = Mathf.Max(0, submarineType.basePrice + price);
-            Debug.Log(submarineType.name + " price: " + price);
+            //Debug.Log(submarineType.name + " price: " + price);
         }
 
         foreach (Equipment module in modulesAvailable.Values)
@@ -310,8 +310,8 @@ public class SetupScreen : MonoBehaviour
         }
 
         // update prices of modules and submarines
-        Debug.Log(response);
-        Debug.Log(purchasedName);   
+        //Debug.Log(response);
+        //Debug.Log(purchasedName);   
         Newtonsoft.Json.Linq.JToken newModulePriceJToken = response.GetValue(purchasedName);
         float newModulePrice = newModulePriceJToken.ToObject<float>();
 
