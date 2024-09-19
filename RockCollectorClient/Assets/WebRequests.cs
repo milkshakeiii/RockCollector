@@ -36,12 +36,13 @@ public class WebRequests : MonoBehaviour
         return instance;
     }
 
-    public void ReportScore(List<string> scoreGroups, Dictionary<string, float> scores, System.Action<Newtonsoft.Json.Linq.JObject> callback)
+    public void ReportScore(List<string> scoreGroups, Dictionary<string, float> scores, string name, System.Action<Newtonsoft.Json.Linq.JObject> callback)
     {
         // create a json object with the scoreGroups and scores
         Newtonsoft.Json.Linq.JObject data = new()
         {
-            { "score_groups", new Newtonsoft.Json.Linq.JArray(scoreGroups) },
+            { "groups", new Newtonsoft.Json.Linq.JArray(scoreGroups) },
+            { "name", name }
         };
         foreach (KeyValuePair<string, float> score in scores)
         {

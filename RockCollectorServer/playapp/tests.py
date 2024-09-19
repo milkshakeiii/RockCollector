@@ -33,29 +33,29 @@ class TestPlayApp(TestCase):
 
     def test_report_score(self):
         # report a score
-        request = self.factory.post('unused', {'groups': ['test_group'], 'points': 100}, format='json', HTTP_AUTHORIZATION=f'Token {self.token1}')
+        request = self.factory.post('unused', {'groups': ['test_group'], 'name': 'bob', 'points': 100}, format='json', HTTP_AUTHORIZATION=f'Token {self.token1}')
         response = views.report_score(request)
         data = response.data
         assert data == {'test_group': {'points': 0}}
 
-        request = self.factory.post('unused', {'groups': ['test_group', 'test_group_2'], 'points': 50}, format='json', HTTP_AUTHORIZATION=f'Token {self.token1}')
+        request = self.factory.post('unused', {'groups': ['test_group', 'test_group_2'], 'name': 'bob', 'points': 50}, format='json', HTTP_AUTHORIZATION=f'Token {self.token1}')
         response = views.report_score(request)
         data = response.data
         assert data == {'test_group': {'points': 1}, 'test_group_2': {'points': 0}}
 
     def test_get_scores(self):
         # report 6 scores
-        request = self.factory.post('unused', {'groups': ['test_group'], 'points': 100}, format='json', HTTP_AUTHORIZATION=f'Token {self.token1}')
+        request = self.factory.post('unused', {'groups': ['test_group'], 'name': 'joe', 'points': 100}, format='json', HTTP_AUTHORIZATION=f'Token {self.token1}')
         response = views.report_score(request)
-        request = self.factory.post('unused', {'groups': ['test_group'], 'points': 90}, format='json', HTTP_AUTHORIZATION=f'Token {self.token1}')
+        request = self.factory.post('unused', {'groups': ['test_group'], 'name': 'joe', 'points': 90}, format='json', HTTP_AUTHORIZATION=f'Token {self.token1}')
         response = views.report_score(request)
-        request = self.factory.post('unused', {'groups': ['test_group'], 'points': 80}, format='json', HTTP_AUTHORIZATION=f'Token {self.token1}')
+        request = self.factory.post('unused', {'groups': ['test_group'], 'name': 'joe', 'points': 80}, format='json', HTTP_AUTHORIZATION=f'Token {self.token1}')
         response = views.report_score(request)
-        request = self.factory.post('unused', {'groups': ['test_group'], 'points': 70}, format='json', HTTP_AUTHORIZATION=f'Token {self.token2}')
+        request = self.factory.post('unused', {'groups': ['test_group'], 'name': 'joe2', 'points': 70}, format='json', HTTP_AUTHORIZATION=f'Token {self.token2}')
         response = views.report_score(request)
-        request = self.factory.post('unused', {'groups': ['test_group'], 'points': 60}, format='json', HTTP_AUTHORIZATION=f'Token {self.token1}')
+        request = self.factory.post('unused', {'groups': ['test_group'], 'name': 'joe', 'points': 60}, format='json', HTTP_AUTHORIZATION=f'Token {self.token1}')
         response = views.report_score(request)
-        request = self.factory.post('unused', {'groups': ['test_group'], 'points': 50}, format='json', HTTP_AUTHORIZATION=f'Token {self.token2}')
+        request = self.factory.post('unused', {'groups': ['test_group'], 'name': 'joe2', 'points': 50}, format='json', HTTP_AUTHORIZATION=f'Token {self.token2}')
         response = views.report_score(request)
 
         # get the score
@@ -67,14 +67,12 @@ class TestPlayApp(TestCase):
         }, format='json', HTTP_AUTHORIZATION=f'Token {self.token1}')
         response = views.get_scores(request)
         data = response.data
-        assert data == {
-            'test': 100.0,
-            'test': 90.0,
-            'test': 80.0,
-            'test2': 70.0,
-            'test': 60.0,
-            'test2': 50.0,
-        }
+        assert data[0] == {'joe': 100.0}
+        assert data[1] == {'joe': 90.0}
+        assert data[2] == {'joe': 80.0}
+        assert data[3] == {'joe2': 70.0}
+        assert data[4] == {'joe': 60.0}
+        assert data[5] == {'joe2': 50.0}
 
         # get scores around the user
         request = self.factory.post('unused', {
@@ -84,11 +82,10 @@ class TestPlayApp(TestCase):
         }, format='json', HTTP_AUTHORIZATION=f'Token {self.token2}')
         response = views.get_scores(request)
         data = response.data
-        assert data == {
-            'test': 80.0,
-            'test2': 70.0,
-            'test': 60.0,
-        }
+        assert data[2] == {'joe': 80.0}
+        assert data[3] == {'joe2': 70.0}
+        assert data[4] == {'joe': 60.0}
+
 
     def test_get_market_prices(self):
         # create items
