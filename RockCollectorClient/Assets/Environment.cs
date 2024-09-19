@@ -14,7 +14,7 @@ public class Environment : MonoBehaviour
     public List<Sprite> inner_prop_1;
     public List<Sprite> inner_prop_2;
 
-    private const float rockSpacing = 0.159f;
+    public float rockSpacing = 0.240f;
     private int lastSeed = 0;
 
     public int GetLastSeed()

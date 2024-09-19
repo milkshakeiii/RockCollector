@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Base_Rock_Tile_Edge_rt_Corner_0: -6974698180887182396
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
