@@ -111,6 +111,16 @@ public class Environment : MonoBehaviour
             terrainGrid[width - 1, y] = true;
         }
 
+        // make sure there's space for the return ship
+        // make sure the terrain grid is false for a rectangle at the top center
+        for (int x = width / 2 - 5; x < width / 2 + 5; x++)
+        {
+            for (int y = height - 40; y < height; y++)
+            {
+                terrainGrid[x, y] = false;
+            }
+        }
+
         // each grid cell covers 4 sprites with 4 rotations
         Sprite[,] sprites = new Sprite[width * 2, height * 2];
         int[,] rotations = new int[width * 2, height * 2];
@@ -155,10 +165,9 @@ public class Environment : MonoBehaviour
         int maximumWidth,
         int maximumHeight)
     {
-        int mountainStartX = sectorStartX;
+        int mountainStartX = sectorStartX + random.Next(0, maximumSpacing); ;
         for (int i = 0; i < mountainCount; i++)
         { // make mountainCount many mountains
-            mountainStartX = mountainStartX + random.Next(30, maximumSpacing);
             // if we're already past the width, break
             if (mountainStartX >= sectorStartX + sectorWidth)
             {
@@ -175,6 +184,7 @@ public class Environment : MonoBehaviour
             {
                 yield return null;
             }
+            mountainStartX = mountainStartX + random.Next(30, maximumSpacing);
         }
     }
 
@@ -392,7 +402,7 @@ public class Environment : MonoBehaviour
                 if (sprites[x, y] != null)
                 {
                     GameObject rock = new("Rock");
-                    rock.transform.position = new Vector3((-width / 2 + x) * rockSpacing + 5, (-height + y) * rockSpacing, 0);
+                    rock.transform.position = new Vector3((-width / 2 + x) * rockSpacing, (-height + y) * rockSpacing, 0);
                     rock.AddComponent<SpriteRenderer>().sprite = sprites[x, y];
                     // also add a collider if this is not a filler rock
                     if (!fillerRocks.Contains(sprites[x, y]))
