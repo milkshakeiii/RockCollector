@@ -5,9 +5,12 @@ using UnityEngine;
 public class TimefishSpawner : MonoBehaviour
 {
     public GameObject timefishPrefab;
+    public List<Sprite> bodies;
+    public List<Sprite> fins;
+    public List<Sprite> eyes;
+    public List<Sprite> tails;
 
-    // Start is called before the first frame update
-    void Start()
+    public void Initialize(System.Random random)
     {
         for (int i = 0; i < 3; i++)
         {
@@ -24,7 +27,12 @@ public class TimefishSpawner : MonoBehaviour
             testSpecies.baseTradeValue = 10f;
             testSpecies.aggressive = true;
 
-            System.Random random = new();
+            testSpecies.bodySprite = bodies[random.Next(bodies.Count)];
+            testSpecies.finSprite = fins[random.Next(fins.Count)];
+            testSpecies.eyeSprite = eyes[random.Next(eyes.Count)];
+            testSpecies.tailSprite = tails[random.Next(tails.Count)];
+
+            // spawn 10 fish
             for (int j = 0; j < 10; j++)
             {
                 float y = Random.Range(-10, 10);
@@ -33,11 +41,17 @@ public class TimefishSpawner : MonoBehaviour
                 {
                     y = -y;
                 }
-                GameObject newTimefish = Instantiate(timefishPrefab, new Vector3(Random.Range(-10, 10), y, 0), Quaternion.identity);
+                GameObject newTimefish = Instantiate(timefishPrefab, this.transform.position + new Vector3(Random.Range(-10, 10), y, 0), Quaternion.identity);
                 Timefish timefish = newTimefish.GetComponent<Timefish>();
-                timefish.Initialize(testSpecies, random);
+                timefish.Initialize(testSpecies);
             }
         }
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        
     }
 
     // Update is called once per frame

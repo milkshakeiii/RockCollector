@@ -821,51 +821,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 149867956}
   m_CullTransparentMesh: 1
---- !u!1 &248294595
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 248294597}
-  - component: {fileID: 248294596}
-  m_Layer: 0
-  m_Name: timefish spawner
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &248294596
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 248294595}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d8c870a4edca91049b023ef5d2a9b5f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  timefishPrefab: {fileID: 3472175717510504469, guid: 733c4d9c25df7fa45ae973b231f96fa8, type: 3}
---- !u!4 &248294597
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 248294595}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 293042491}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &256396611
 GameObject:
   m_ObjectHideFlags: 0
@@ -1086,7 +1041,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 248294597}
   - {fileID: 484722399}
   - {fileID: 1137200778}
   m_Father: {fileID: 0}
@@ -1103,6 +1057,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccfecbf9f69a0484086f5cf772503fc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timefishSpawnerPrefab: {fileID: 7914929191339618506, guid: 593a45389f87cbd4dba5bdd0cca23d58, type: 3}
   leftCornerRock: {fileID: -7488026923455815707, guid: 557e51381eebc8e459c505a44c35242b, type: 3}
   rightCornerRock: {fileID: -6974698180887182396, guid: 1ac21e90c6764be4ca595589e7483fa1, type: 3}
   edgeRocks:
@@ -4837,7 +4792,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1007321792
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5834,7 +5789,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1114927330
 MonoBehaviour:
   m_ObjectHideFlags: 0
