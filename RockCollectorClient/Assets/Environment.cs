@@ -14,7 +14,7 @@ public class Environment : MonoBehaviour
     public List<Sprite> inner_prop_1;
     public List<Sprite> inner_prop_2;
 
-    private const float rockSpacing = 0.159f;
+    public float rockSpacing = 0.240f;
     private int lastSeed = 0;
 
     public int GetLastSeed()
@@ -34,6 +34,9 @@ public class Environment : MonoBehaviour
 
         // start with a grid to make into the terrain shape
         bool[,] terrainGrid = new bool[width, height];
+        // and a corresponding grid to keep track of danger levels,
+        // which will be used to spawn timefish and other dangers
+        float[,] dangerGrid = new float[width, height];
 
         // create horizontal and vertical imaginary lines to divide the terrain into sectors
         int numberOfHorizontalLines = random.Next(1, 3);
@@ -79,10 +82,21 @@ public class Environment : MonoBehaviour
             int sectorStartY = sectorStarts[i].y;
             Debug.Log("Sector start: " + sectorStartX + ", " + sectorStartY);
             Debug.Log("Sector size: " + sectorWidth + ", " + sectorHeight);
-            IEnumerator sectorEnumator = MakeMountainSector(random, sectorWidth, sectorHeight, sectorStartX, sectorStartY, terrainGrid);
-            while (sectorEnumator.MoveNext())
+            if (sectorStartY == 0)
             {
-                yield return null;
+                IEnumerator sectorEnumator = MakeMountainSector(random, sectorWidth, sectorHeight, sectorStartX, sectorStartY, terrainGrid, 3, 100, 100, 100);
+                while (sectorEnumator.MoveNext())
+                {
+                    yield return null;
+                }
+            }
+            else if (sectorStartY == height - sectorHeight)
+            {
+                IEnumerator sectorEnumator = MakeInvertedMountainSector(random, sectorWidth, sectorHeight, sectorStartX, sectorStartY, terrainGrid);
+                while (sectorEnumator.MoveNext())
+                {
+                    yield return null;
+                }
             }
         }
 
@@ -95,6 +109,16 @@ public class Environment : MonoBehaviour
         {
             terrainGrid[0, y] = true;
             terrainGrid[width - 1, y] = true;
+        }
+
+        // make sure there's space for the return ship
+        // make sure the terrain grid is false for a rectangle at the top center
+        for (int x = width / 2 - 5; x < width / 2 + 5; x++)
+        {
+            for (int y = height - 40; y < height; y++)
+            {
+                terrainGrid[x, y] = false;
+            }
         }
 
         // each grid cell covers 4 sprites with 4 rotations
@@ -119,12 +143,31 @@ public class Environment : MonoBehaviour
         lastSeed = seed;
     }
 
-    private IEnumerator MakeMountainSector(System.Random random, int sectorWidth, int sectorHeight, int sectorStartX, int sectorStartY, bool[,] terrainGrid)
+    private IEnumerator MakeInvertedMountainSector(System.Random random, int sectorWidth, int sectorHeight, int sectorStartX, int sectorStartY, bool[,] terrainGrid)
     {
-        int mountainStartX = sectorStartX;
-        for (int i = 0; i < 3; i++)
-        { // make three mountains
-            mountainStartX = mountainStartX + random.Next(30, 100);
+        IEnumerator mountainEnumerator = MakeMountainSector(random, sectorWidth, sectorHeight, sectorStartX, sectorStartY, terrainGrid, 6, 50, 100, 50);
+        while (mountainEnumerator.MoveNext())
+        {
+            yield return null;
+        }
+        FlipSector(sectorWidth, sectorHeight, sectorStartX, sectorStartY, terrainGrid);
+    }
+
+    private IEnumerator MakeMountainSector(
+        System.Random random,
+        int sectorWidth,
+        int sectorHeight,
+        int sectorStartX,
+        int sectorStartY,
+        bool[,] terrainGrid,
+        int mountainCount,
+        int maximumSpacing,
+        int maximumWidth,
+        int maximumHeight)
+    {
+        int mountainStartX = sectorStartX + random.Next(0, maximumSpacing); ;
+        for (int i = 0; i < mountainCount; i++)
+        { // make mountainCount many mountains
             // if we're already past the width, break
             if (mountainStartX >= sectorStartX + sectorWidth)
             {
@@ -132,14 +175,34 @@ public class Environment : MonoBehaviour
             }
 
             int mountainStartY = sectorStartY;
-            int mountainEndX = Mathf.Min(mountainStartX + random.Next(30, 100), sectorStartX + sectorWidth - 1);
-            int mountainEndY = Mathf.Min(mountainStartY + random.Next(30, 100), sectorStartY + sectorHeight - 1);
+            int mountainEndX = Mathf.Min(mountainStartX + random.Next(30, maximumWidth), sectorStartX + sectorWidth - 1);
+            int mountainEndY = Mathf.Min(mountainStartY + random.Next(30, maximumHeight), sectorStartY + sectorHeight - 1);
             int mountainWidth = mountainEndX - mountainStartX;
             int mountainCenter = random.Next(mountainStartX + mountainWidth / 4, mountainEndX - mountainWidth / 4);
             IEnumerator mountainEnumerator = AddMountain(random, mountainStartX, mountainStartY, mountainEndX, mountainEndY, mountainCenter, terrainGrid);
             while (mountainEnumerator.MoveNext())
             {
                 yield return null;
+            }
+            mountainStartX = mountainStartX + random.Next(30, maximumSpacing);
+        }
+    }
+
+    private void FlipSector(int sectorWidth, int sectorHeight, int sectorStartX, int sectorStartY, bool[,] terrainGrid)
+    {
+        bool[,] sectorCopy = new bool[sectorWidth, sectorHeight];
+        for (int x = 0; x < sectorWidth; x++)
+        {
+            for (int y = 0; y < sectorHeight; y++)
+            {
+                sectorCopy[x, y] = terrainGrid[sectorStartX + x, sectorStartY + y];
+            }
+        }
+        for (int x = 0; x < sectorWidth; x++)
+        {
+            for (int y = 0; y < sectorHeight; y++)
+            {
+                terrainGrid[sectorStartX + x, sectorStartY + y] = sectorCopy[x, sectorHeight - y - 1];
             }
         }
     }
@@ -339,7 +402,7 @@ public class Environment : MonoBehaviour
                 if (sprites[x, y] != null)
                 {
                     GameObject rock = new("Rock");
-                    rock.transform.position = new Vector3((-width / 2 + x) * rockSpacing + 5, (-height + y) * rockSpacing, 0);
+                    rock.transform.position = new Vector3((-width / 2 + x) * rockSpacing, (-height + y) * rockSpacing, 0);
                     rock.AddComponent<SpriteRenderer>().sprite = sprites[x, y];
                     // also add a collider if this is not a filler rock
                     if (!fillerRocks.Contains(sprites[x, y]))
