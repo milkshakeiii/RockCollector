@@ -16,7 +16,7 @@ public class Environment : MonoBehaviour
     public List<Sprite> fillerRocks;
     public List<Sprite> coralSprites;
 
-    public float terrainSpacing = 0.240f;
+    public float terrainSpacing = 0.319f;
     private int lastSeed = 0;
 
     public int GetLastSeed()
@@ -42,7 +42,7 @@ public class Environment : MonoBehaviour
         float[,] dangerGrid = new float[width, height];
 
         // create horizontal and vertical imaginary lines to divide the terrain into sectors
-        int numberOfHorizontalLines = random.Next(1, 3);
+        int numberOfHorizontalLines = Mathf.Max(Mathf.RoundToInt(2f + (float)NormalDistribution(random)), 1);
         int numberOfVerticalLines = random.Next(1, 3);
         List<int> horizontalLines = new();
         List<int> verticalLines = new();
@@ -286,9 +286,25 @@ public class Environment : MonoBehaviour
         {
             for (int y = sectorStartY; y < sectorStartY + sectorHeight; y++)
             {
-                if (random.Next(0, 100) < 2)
+                if (Mathf.PerlinNoise(x / 10f, y / 10f) > 0.5f)
                 {
                     coralGrid[x, y] = true;
+                }
+            }
+        }
+        for (int x = sectorStartX; x < sectorStartX + sectorWidth; x++)
+        {
+            for (int y = sectorStartY; y < sectorStartY + sectorHeight; y++)
+            {
+                int distanceFromLeft = x - sectorStartX;
+                int distanceFromRight = sectorStartX + sectorWidth - x;
+                int distanceFromBottom = y - sectorStartY;
+                int distanceFromTop = sectorStartY + sectorHeight - y;
+                int closestEdge = Mathf.Min(distanceFromLeft, distanceFromRight, distanceFromBottom, distanceFromTop);
+                float edgeNearnessFactor = (1 / (float)closestEdge) * 0.3f;
+                if (Mathf.PerlinNoise(x / 100f, y / 100f) < 0.7f + edgeNearnessFactor)
+                {
+                    coralGrid[x, y] = false;
                 }
             }
         }
@@ -498,6 +514,19 @@ public class Environment : MonoBehaviour
             }
             yield return null;
         }
+    }
+
+    /// <summary>
+    /// Use the random number generator to generate a number from a normal distribution
+    /// </summary>
+    /// <param name="random"></param>
+    /// <returns>Number from a normal distribution with mean 0 and standard deviation 1</returns>
+    public static double NormalDistribution(System.Random random)
+    {
+        float u1 = (float)random.NextDouble();
+        float u2 = (float)random.NextDouble();
+        double z0 = Mathf.Sqrt(-2 * Mathf.Log(u1)) * Mathf.Cos(2 * Mathf.PI * u2);
+        return z0;
     }
 }
 

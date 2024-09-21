@@ -1084,7 +1084,7 @@ MonoBehaviour:
   - {fileID: -6453336580290173732, guid: a5e2224dfabab3649b009048575c3101, type: 3}
   - {fileID: 1537494367165113875, guid: bb337da9a8edfbf48b33f8614fb2e289, type: 3}
   - {fileID: 7527200073356989704, guid: 0dbf5a38445f61d4a8ef13b4e16cf128, type: 3}
-  rockSpacing: 0.32
+  terrainSpacing: 0.319
 --- !u!1 &293148836
 GameObject:
   m_ObjectHideFlags: 0

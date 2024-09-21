@@ -25,9 +25,7 @@ public class Timefish : MonoBehaviour
         // size follows a normal distribution with a mean of 40% species base size and a standard deviation of 10% of the base size
         // use the Box-Muller transform to generate a random number from a normal distribution
         float smallSize = species.baseSize * 0.4f;
-        float u1 = (float)random.NextDouble();
-        float u2 = (float)random.NextDouble();
-        float z0 = Mathf.Sqrt(-2 * Mathf.Log(u1)) * Mathf.Cos(2 * Mathf.PI * u2);
+        float z0 = (float)Environment.NormalDistribution(random);
         size = smallSize + 0.1f * smallSize * z0;
 
         // randomly, 20% of the time, size instead follows a normal distribution with a mean of 60% species base size
@@ -35,9 +33,7 @@ public class Timefish : MonoBehaviour
         if (random.Next(0, 100) < 20)
         {
             float mediumSize = species.baseSize * 0.6f;
-            u1 = (float)random.NextDouble();
-            u2 = (float)random.NextDouble();
-            z0 = Mathf.Sqrt(-2 * Mathf.Log(u1)) * Mathf.Cos(2 * Mathf.PI * u2);
+            z0 = (float)Environment.NormalDistribution(random);
             size = mediumSize + 0.15f * mediumSize * z0;
         }
 
@@ -46,9 +42,7 @@ public class Timefish : MonoBehaviour
         if (random.Next(0, 100) < 5)
         {
             float largeSize = species.baseSize * 0.8f;
-            u1 = (float)random.NextDouble();
-            u2 = (float)random.NextDouble();
-            z0 = Mathf.Sqrt(-2 * Mathf.Log(u1)) * Mathf.Cos(2 * Mathf.PI * u2);
+            z0 = (float)Environment.NormalDistribution(random);
             size = largeSize + 0.2f * largeSize * z0;
         }
 
