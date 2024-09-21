@@ -1078,8 +1078,12 @@ MonoBehaviour:
   - {fileID: -3246231223996363373, guid: 4f52a7f39ab9e66458a3f8dd7a26000d, type: 3}
   - {fileID: 6306519884310786428, guid: 6e7d25e8279d3e6449738908cd614954, type: 3}
   - {fileID: 691714316288774454, guid: 6b2b12e23c5cbc340939ec2d80772401, type: 3}
-  inner_prop_1: []
-  inner_prop_2: []
+  coralSprites:
+  - {fileID: 7665927050974607356, guid: 8cd08d1555c65d94a86bcaab5d59bd82, type: 3}
+  - {fileID: -886268691871216286, guid: 366252b5f856c37458364600e5634013, type: 3}
+  - {fileID: -6453336580290173732, guid: a5e2224dfabab3649b009048575c3101, type: 3}
+  - {fileID: 1537494367165113875, guid: bb337da9a8edfbf48b33f8614fb2e289, type: 3}
+  - {fileID: 7527200073356989704, guid: 0dbf5a38445f61d4a8ef13b4e16cf128, type: 3}
   rockSpacing: 0.32
 --- !u!1 &293148836
 GameObject:

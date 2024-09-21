@@ -14,10 +14,9 @@ public class Environment : MonoBehaviour
     public List<Sprite> edgeRocks;
     public List<Sprite> topEdgeRocks;
     public List<Sprite> fillerRocks;
-    public List<Sprite> inner_prop_1;
-    public List<Sprite> inner_prop_2;
+    public List<Sprite> coralSprites;
 
-    public float rockSpacing = 0.240f;
+    public float terrainSpacing = 0.240f;
     private int lastSeed = 0;
 
     public int GetLastSeed()
@@ -35,8 +34,9 @@ public class Environment : MonoBehaviour
         int height = random.Next(150, 400);
         Debug.Log("Width: " + width + " Height: " + height);
 
-        // start with a grid to make into the terrain shape
-        bool[,] terrainGrid = new bool[width, height];
+        bool[,] rockGrid = new bool[width, height];
+        bool[,] coralGrid = new bool[width*2, height*2];
+
         // and a corresponding grid to keep track of danger levels,
         // which will be used to spawn timefish and other dangers
         float[,] dangerGrid = new float[width, height];
@@ -87,7 +87,7 @@ public class Environment : MonoBehaviour
             Debug.Log("Sector size: " + sectorWidth + ", " + sectorHeight);
             if (sectorStartY == 0)
             {
-                IEnumerator sectorEnumator = MakeMountainSector(random, sectorWidth, sectorHeight, sectorStartX, sectorStartY, terrainGrid, 3, 100, 100, 100);
+                IEnumerator sectorEnumator = MakeMountainSector(random, sectorWidth, sectorHeight, sectorStartX, sectorStartY, rockGrid, 3, 100, 100, 100);
                 while (sectorEnumator.MoveNext())
                 {
                     yield return null;
@@ -95,7 +95,15 @@ public class Environment : MonoBehaviour
             }
             else if (sectorStartY == height - sectorHeight)
             {
-                IEnumerator sectorEnumator = MakeInvertedMountainSector(random, sectorWidth, sectorHeight, sectorStartX, sectorStartY, terrainGrid);
+                IEnumerator sectorEnumator = MakeInvertedMountainSector(random, sectorWidth, sectorHeight, sectorStartX, sectorStartY, rockGrid);
+                while (sectorEnumator.MoveNext())
+                {
+                    yield return null;
+                }
+            }
+            else
+            {
+                IEnumerator sectorEnumator = MakeCoralSector(random, sectorWidth*2, sectorHeight*2, sectorStartX*2, sectorStartY*2, coralGrid);
                 while (sectorEnumator.MoveNext())
                 {
                     yield return null;
@@ -106,12 +114,12 @@ public class Environment : MonoBehaviour
         // make the left, right, and bottom edges solid
         for (int x = 0; x < width; x++)
         {
-            terrainGrid[x, 0] = true;
+            rockGrid[x, 0] = true;
         }
         for (int y = 0; y < height; y++)
         {
-            terrainGrid[0, y] = true;
-            terrainGrid[width - 1, y] = true;
+            rockGrid[0, y] = true;
+            rockGrid[width - 1, y] = true;
         }
 
         bool[,] hasTimefishSpawner = new bool[width, height];
@@ -120,7 +128,7 @@ public class Environment : MonoBehaviour
         {
             for (int y = 0; y < height; y++)
             {
-                if (!terrainGrid[x, y] && random.Next(0, 5000) == 0)
+                if (!rockGrid[x, y] && random.Next(0, 5000) == 0)
                 {
                     hasTimefishSpawner[x, y] = true;
                 }
@@ -133,15 +141,21 @@ public class Environment : MonoBehaviour
         {
             for (int y = height - 40; y < height; y++)
             {
-                terrainGrid[x, y] = false;
+                rockGrid[x, y] = false;
             }
         }
 
         // each grid cell covers 4 sprites with 4 rotations
         Sprite[,] sprites = new Sprite[width * 2, height * 2];
         int[,] rotations = new int[width * 2, height * 2];
-        IEnumerator spritesEnumerator = DecideSpritesAndRotations(random, terrainGrid, sprites, rotations);
-        while (spritesEnumerator.MoveNext())
+        IEnumerator rockSpritesEnumerator = DecideRockSpritesAndRotations(random, rockGrid, sprites, rotations);
+        while (rockSpritesEnumerator.MoveNext())
+        {
+            yield return null;
+        }
+
+        IEnumerator coralSpritesEnumerator = DecideCoralSpritesAndRotations(random, coralGrid, sprites, rotations);
+        while (coralSpritesEnumerator.MoveNext())
         {
             yield return null;
         }
@@ -266,7 +280,22 @@ public class Environment : MonoBehaviour
         }
     }
 
-    private IEnumerator DecideSpritesAndRotations(System.Random random, bool[,] grid, Sprite[,] sprites, int[,] rotations)
+    private IEnumerator MakeCoralSector(System.Random random, int sectorWidth, int sectorHeight, int sectorStartX, int sectorStartY, bool[,] coralGrid)
+    {   
+        for (int x = sectorStartX; x < sectorStartX + sectorWidth; x++)
+        {
+            for (int y = sectorStartY; y < sectorStartY + sectorHeight; y++)
+            {
+                if (random.Next(0, 100) < 2)
+                {
+                    coralGrid[x, y] = true;
+                }
+            }
+        }
+        yield return null;
+    }
+
+    private IEnumerator DecideRockSpritesAndRotations(System.Random random, bool[,] grid, Sprite[,] sprites, int[,] rotations)
     {
         int width = grid.GetLength(0);
         int height = grid.GetLength(1);
@@ -406,6 +435,27 @@ public class Environment : MonoBehaviour
         }
     }
 
+    private IEnumerator DecideCoralSpritesAndRotations(System.Random random, bool[,] coralGrid, Sprite[,] sprites, int[,] rotations)
+    {
+        int width = coralGrid.GetLength(0);
+        int height = coralGrid.GetLength(1);
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if (!coralGrid[x, y])
+                {
+                    continue;
+                }
+                // set the sprite to a random coral sprite
+                sprites[x, y] = coralSprites[random.Next(coralSprites.Count)];
+                // set the rotation to a random multiple of 90 degrees
+                rotations[x, y] = random.Next(0, 4) * 90;
+            }
+        }
+        yield return null;
+    }
+
     private IEnumerator SpawnGameObjects(System.Random random, Sprite[,] sprites, int[,] rotations, bool[,] hasTimefishSpawner)
     {
         int width = sprites.GetLength(0);
@@ -417,16 +467,16 @@ public class Environment : MonoBehaviour
             {
                 if (sprites[x, y] != null)
                 {
-                    GameObject rock = new("Rock");
-                    rock.transform.position = new Vector3((-width / 2 + x) * rockSpacing, (-height + y) * rockSpacing, 0);
-                    rock.AddComponent<SpriteRenderer>().sprite = sprites[x, y];
+                    GameObject terrainObject = new(sprites[x, y].name);
+                    terrainObject.transform.position = new Vector3((-width / 2 + x) * terrainSpacing, (-height + y) * terrainSpacing, 0);
+                    terrainObject.AddComponent<SpriteRenderer>().sprite = sprites[x, y];
                     // also add a collider if this is not a filler rock
                     if (!fillerRocks.Contains(sprites[x, y]))
-                        rock.AddComponent<BoxCollider2D>();
+                        terrainObject.AddComponent<BoxCollider2D>();
                     // layer is "Terrain"
-                    rock.layer = 9;
+                    terrainObject.layer = 9;
                     // set the rotation
-                    rock.transform.Rotate(Vector3.forward, rotations[x, y]);
+                    terrainObject.transform.Rotate(Vector3.forward, rotations[x, y]);
                 }
             }
             yield return null;
@@ -442,11 +492,16 @@ public class Environment : MonoBehaviour
                 if (hasTimefishSpawner[x, y])
                 {
                     GameObject timefishSpawner = Instantiate(timefishSpawnerPrefab);
-                    timefishSpawner.transform.position = new Vector3((-undoubledWidth / 2 + x) * rockSpacing * 2, (-undoubledHeight + y) * rockSpacing * 2, 0);
+                    timefishSpawner.transform.position = new Vector3((-undoubledWidth / 2 + x) * terrainSpacing * 2, (-undoubledHeight + y) * terrainSpacing * 2, 0);
                     timefishSpawner.GetComponent<TimefishSpawner>().Initialize(random);
                 }
             }
             yield return null;
         }
     }
+}
+
+public class TerrainGrid
+{
+
 }
