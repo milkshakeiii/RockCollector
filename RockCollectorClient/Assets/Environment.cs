@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -6,6 +7,8 @@ using UnityEngine;
 
 public class Environment : MonoBehaviour
 {
+    public GameObject timefishSpawnerPrefab;
+
     public Sprite leftCornerRock;
     public Sprite rightCornerRock;
     public List<Sprite> edgeRocks;
@@ -111,6 +114,19 @@ public class Environment : MonoBehaviour
             terrainGrid[width - 1, y] = true;
         }
 
+        bool[,] hasTimefishSpawner = new bool[width, height];
+        // each tile that is not solid has a 1 in 5000 chance of having a timefish spawner
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if (!terrainGrid[x, y] && random.Next(0, 5000) == 0)
+                {
+                    hasTimefishSpawner[x, y] = true;
+                }
+            }
+        }
+
         // make sure there's space for the return ship
         // make sure the terrain grid is false for a rectangle at the top center
         for (int x = width / 2 - 5; x < width / 2 + 5; x++)
@@ -131,7 +147,7 @@ public class Environment : MonoBehaviour
         }
 
         // spawn the GameObjects
-        IEnumerator spawnEnumerator = SpawnGameObjects(sprites, rotations);
+        IEnumerator spawnEnumerator = SpawnGameObjects(random, sprites, rotations, hasTimefishSpawner);
         while (spawnEnumerator.MoveNext())
         {
             yield return null;
@@ -390,7 +406,7 @@ public class Environment : MonoBehaviour
         }
     }
 
-    private IEnumerator SpawnGameObjects(Sprite[,] sprites, int[,] rotations)
+    private IEnumerator SpawnGameObjects(System.Random random, Sprite[,] sprites, int[,] rotations, bool[,] hasTimefishSpawner)
     {
         int width = sprites.GetLength(0);
         int height = sprites.GetLength(1);
@@ -411,6 +427,23 @@ public class Environment : MonoBehaviour
                     rock.layer = 9;
                     // set the rotation
                     rock.transform.Rotate(Vector3.forward, rotations[x, y]);
+                }
+            }
+            yield return null;
+        }
+
+        // spawn the timefish spawners
+        int undoubledWidth = width / 2;
+        int undoubledHeight = height / 2;
+        for (int x = 0; x < undoubledWidth; x++)
+        {
+            for (int y = 0; y < undoubledHeight; y++)
+            {
+                if (hasTimefishSpawner[x, y])
+                {
+                    GameObject timefishSpawner = Instantiate(timefishSpawnerPrefab);
+                    timefishSpawner.transform.position = new Vector3((-undoubledWidth / 2 + x) * rockSpacing * 2, (-undoubledHeight + y) * rockSpacing * 2, 0);
+                    timefishSpawner.GetComponent<TimefishSpawner>().Initialize(random);
                 }
             }
             yield return null;

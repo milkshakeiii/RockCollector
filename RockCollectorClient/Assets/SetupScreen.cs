@@ -86,7 +86,7 @@ public class SetupScreen : MonoBehaviour
             Ballast ballast = new();
             AddAvailableModule("Ballast", ballast);
             ballast.description = "Drop ballast to decrease the weight of the submarine. Water tank ballasts can be refilled to increase weight again.";
-            ballast.ballastMass = 3000f;
+            ballast.ballastMass = 60000f;
             ballast.ballastDropTime = 1f;
             ballast.ballastRefills = 3;
             ballast.ballastRefillTime = 2f;

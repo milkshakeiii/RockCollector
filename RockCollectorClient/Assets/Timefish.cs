@@ -4,14 +4,21 @@ using UnityEngine;
 
 public class Timefish : MonoBehaviour
 {
+    public GameObject body;
+    public GameObject fin;
+    public GameObject eye;
+    public GameObject tail;
+
     public TimefishSpecies species;
     
     private Behavior currentBehavior;
 
     private float size; //Size(volume) in cubic meters
 
-    public void Initialize(TimefishSpecies newSpecies, System.Random random)
+    public void Initialize(TimefishSpecies newSpecies)
     {
+        System.Random random = new System.Random();
+
         this.species = newSpecies;
 
         // generate size based on species base size
@@ -60,6 +67,12 @@ public class Timefish : MonoBehaviour
 
         // size determines sprite scale
         transform.localScale = new Vector3(size, size, size);
+
+        // use the species sprites
+        body.GetComponent<SpriteRenderer>().sprite = species.bodySprite;
+        fin.GetComponent<SpriteRenderer>().sprite = species.finSprite;
+        eye.GetComponent<SpriteRenderer>().sprite = species.eyeSprite;
+        tail.GetComponent<SpriteRenderer>().sprite = species.tailSprite;
     }
 
     // Start is called before the first frame update
@@ -213,6 +226,12 @@ public class TimefishSpecies
     public float movementSpeed; //Movement speed(greater with size) factor in meters per second
     public float baseTradeValue; //Base trade value factor (for robot versions only) (greater with depth) in trade value units
     public bool aggressive; //Aggressive/not aggressive towards submarines (more likely with depth)
+
+    public Sprite bodySprite;
+    public Sprite finSprite;
+    public Sprite eyeSprite;
+    public Sprite tailSprite;
+
 }
 
 public class  WeakSpot
