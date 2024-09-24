@@ -78,7 +78,7 @@ public class Timefish : MonoBehaviour
         currentBehavior = new StillBehavior();
     }
 
-    // Update is called once per frame
+    // Update is called once per frame  
     void Update()
     {
         currentBehavior.Update(this);
@@ -92,7 +92,7 @@ public class Timefish : MonoBehaviour
     public void TakeDamage(float damage)
     {
         damageTaken += damage;
-        if (damageTaken > Durability())
+        if (damageTaken > Health())
         {
             // turn the fish upside down
             transform.localScale = new Vector3(transform.localScale.x, -transform.localScale.y, transform.localScale.z);
@@ -103,12 +103,12 @@ public class Timefish : MonoBehaviour
 
     public bool IsDisabled()
     {
-        return damageTaken > Durability();
+        return damageTaken > Health();
     }
 
-    public float Durability() //Durability in power units
+    public float Health() // max damage in power units that the fish can take
     {
-        return species.durability * size;
+        return species.healthFactor * size;
     }
 
     public float Mass()
@@ -239,7 +239,7 @@ public class TimefishSpecies
     public float visionConeMiddle; //Vision cone middle in degrees
     public float visionRange; //Vision range factor in meters
     public float biteStrength; //Bite strength(greater with size and with depth, separately) factor in power units
-    public float durability; //Durability factor in power units per cubic meter
+    public float healthFactor; //Durability factor in power units per cubic meter
     public List<WeakSpot> weakSpots; //Weak spots
     public float movementSpeed; //Movement speed(greater with size) factor in meters per second
     public float baseTradeValue; //Base trade value factor (for robot versions only) (greater with depth) in trade value units
