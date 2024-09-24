@@ -514,9 +514,9 @@ public class Environment : MonoBehaviour
                     GameObject timefishSpawner = Instantiate(timefishSpawnerPrefab);
                     timefishSpawner.transform.position = new Vector3((-undoubledWidth / 2 + x) * terrainSpacing * 2, (-undoubledHeight + y) * terrainSpacing * 2, 0);
                     timefishSpawner.GetComponent<TimefishSpawner>().Initialize(random, minX, maxX, minY, maxY);
+                    yield return null;
                 }
             }
-            yield return null;
         }
     }
 

@@ -55,6 +55,7 @@ public class HarpoonGun : Shootable
     public float reelSpeed = 1f; // Speed to reel in the harpoon in m/s
     public float pullStrength = 1f; // Strength of the rope's pull
     public float ropeElasticity = 0.5f; // portion beyond the distance that the rope can stretch before breaking
+    public float damage = 1f; // Damage dealt by the harpoon in power units
 
     public override GameObject SpawnWorldObject(Submarine submarine)
     {

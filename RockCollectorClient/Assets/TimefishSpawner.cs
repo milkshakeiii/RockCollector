@@ -110,7 +110,6 @@ public class TimefishSpawner : MonoBehaviour
         }
         if (spawnShape == 2)
         {
-            Debug.Log("Spawning in a grid");
             // evenly spaced in a grid
             int numPerRow = Mathf.CeilToInt(Mathf.Sqrt(numFish * 2));
             float spacing = species.baseSize * 0.6f;

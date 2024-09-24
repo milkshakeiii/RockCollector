@@ -14,6 +14,7 @@ public class Timefish : MonoBehaviour
     private Behavior currentBehavior;
 
     private float size; //Size(volume) in cubic meters
+    private float damageTaken; //Damage taken in power units
 
     public void Initialize(TimefishSpecies newSpecies)
     {
@@ -86,6 +87,28 @@ public class Timefish : MonoBehaviour
     public void SetBehavior(Behavior newBehavior)
     {
         currentBehavior = newBehavior;
+    }
+
+    public void TakeDamage(float damage)
+    {
+        damageTaken += damage;
+        if (damageTaken > Durability())
+        {
+            // turn the fish upside down
+            transform.localScale = new Vector3(transform.localScale.x, -transform.localScale.y, transform.localScale.z);
+            // set the behavior to still
+            SetBehavior(new StillBehavior());
+        }
+    }
+
+    public bool IsDisabled()
+    {
+        return damageTaken > Durability();
+    }
+
+    public float Durability() //Durability in power units
+    {
+        return species.durability * size;
     }
 
     public float Mass()
@@ -216,7 +239,7 @@ public class TimefishSpecies
     public float visionConeMiddle; //Vision cone middle in degrees
     public float visionRange; //Vision range factor in meters
     public float biteStrength; //Bite strength(greater with size and with depth, separately) factor in power units
-    public float durability; //Durability factor in power units
+    public float durability; //Durability factor in power units per cubic meter
     public List<WeakSpot> weakSpots; //Weak spots
     public float movementSpeed; //Movement speed(greater with size) factor in meters per second
     public float baseTradeValue; //Base trade value factor (for robot versions only) (greater with depth) in trade value units

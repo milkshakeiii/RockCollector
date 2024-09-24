@@ -69,6 +69,9 @@ public class Harpoon : MonoBehaviour
             // make the fish still
             collision.gameObject.GetComponent<Timefish>().SetBehavior(new StillBehavior());
 
+            // damage the fish
+            collision.gameObject.GetComponent<Timefish>().TakeDamage(harpoonGunBehaviour.harpoonGun.damage);
+
             // create the rope sprite
             GameObject newRopeSprite = Instantiate(harpoonRopePrefab, this.transform.position, Quaternion.identity);
             this.ropeSprite = newRopeSprite;
