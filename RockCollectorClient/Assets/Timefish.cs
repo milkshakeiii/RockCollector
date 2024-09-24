@@ -234,16 +234,20 @@ public class TimefishSpecies
 {
     public string name = "test species";
     public float baseSize; //Base size(volume) (greater with depth) in cubic meters
-    public List<TimefishSpecies> preySpecies; //Prey species(usually smaller species found nearby, but can also be larger)
-    public float visionConeArc; //Vision cone arc in degrees
-    public float visionConeMiddle; //Vision cone middle in degrees
-    public float visionRange; //Vision range factor in meters
-    public float biteStrength; //Bite strength(greater with size and with depth, separately) factor in power units
+    
     public float healthFactor; //Durability factor in power units per cubic meter
     public List<WeakSpot> weakSpots; //Weak spots
     public float movementSpeed; //Movement speed(greater with size) factor in meters per second
     public float baseTradeValue; //Base trade value factor (for robot versions only) (greater with depth) in trade value units
-    public bool aggressive; //Aggressive/not aggressive towards submarines (more likely with depth)
+
+    public float visionConeArc; //Vision cone arc in degrees
+    public float visionConeMiddle; //Vision cone middle in degrees
+    public float visionRange; //Vision range factor in meters
+
+    public bool aggressive; // does the fish become aggrivated when submarine enters vision range
+    public bool school; // does the fish school with others of its species
+    public float chaseTime; // how long does the fish remain aggrivated after the submarine leaves vision range
+    public float biteStrength; // Bite strength(greater with size and with depth, separately) factor in power units
 
     public Sprite bodySprite;
     public Sprite finSprite;

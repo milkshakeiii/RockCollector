@@ -8,6 +8,7 @@ using UnityEngine;
 public class Environment : MonoBehaviour
 {
     public GameObject timefishSpawnerPrefab;
+    public GameObject rockDecorationPrefab;
 
     public Sprite leftCornerRock;
     public Sprite rightCornerRock;
@@ -474,6 +475,8 @@ public class Environment : MonoBehaviour
 
     private IEnumerator SpawnGameObjects(System.Random random, Sprite[,] sprites, int[,] rotations, bool[,] hasTimefishSpawner)
     {
+        float decorationChance = random.Next(10, 50) / 100f;
+
         int width = sprites.GetLength(0);
         int height = sprites.GetLength(1);
         // spawn GameObjects with sprites
@@ -493,6 +496,16 @@ public class Environment : MonoBehaviour
                     terrainObject.layer = 9;
                     // set the rotation
                     terrainObject.transform.Rotate(Vector3.forward, rotations[x, y]);
+
+                    // chance to add a decoration if this is a top edge
+                    if (topEdgeRocks.Contains(sprites[x, y]))
+                    {
+                        if (random.NextDouble() < decorationChance)
+                        {
+                            // instantiate rockDecorationPrefab
+                            Instantiate(rockDecorationPrefab, terrainObject.transform);
+                        }
+                    }
                 }
             }
             yield return null;

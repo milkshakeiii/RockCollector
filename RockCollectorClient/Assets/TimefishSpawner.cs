@@ -14,7 +14,6 @@ public class TimefishSpawner : MonoBehaviour
     {
         TimefishSpecies testSpecies = new TimefishSpecies();
         testSpecies.baseSize = Random.Range(0.9f, 6.1f);
-        testSpecies.preySpecies = new List<TimefishSpecies>();
         testSpecies.visionConeArc = 90.0f;
         testSpecies.visionConeMiddle = 0f;
         testSpecies.visionRange = 10.0f;
