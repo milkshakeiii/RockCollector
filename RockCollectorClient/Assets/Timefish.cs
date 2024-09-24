@@ -74,7 +74,7 @@ public class Timefish : MonoBehaviour
     {
         GetComponent<Rigidbody2D>().mass = Mass();
 
-        currentBehavior = new IdleBehavior();
+        currentBehavior = new StillBehavior();
     }
 
     // Update is called once per frame
@@ -202,7 +202,8 @@ public class StillBehavior : Behavior
 {
     public override void Update(Timefish fish)
     {
-        // do nothing
+        // float gently up and down
+        fish.transform.position += new Vector3(0, Mathf.Sin(Time.time * fish.species.baseSize) * 0.0005f * fish.species.movementSpeed, 0);
     }
 }
 

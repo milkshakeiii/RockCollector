@@ -123,12 +123,12 @@ public class Environment : MonoBehaviour
         }
 
         bool[,] hasTimefishSpawner = new bool[width, height];
-        // each tile that is not solid has a 1 in 5000 chance of having a timefish spawner
+        // each tile that is not solid has a 1 in 3500 chance of having a timefish spawner
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
-                if (!rockGrid[x, y] && random.Next(0, 5000) == 0)
+                if (!rockGrid[x, y] && random.Next(0, 3500) == 0)
                 {
                     hasTimefishSpawner[x, y] = true;
                 }
@@ -501,6 +501,10 @@ public class Environment : MonoBehaviour
         // spawn the timefish spawners
         int undoubledWidth = width / 2;
         int undoubledHeight = height / 2;
+        float minX = (-width / 2) * terrainSpacing;
+        float maxX = (width / 2) * terrainSpacing;
+        float minY = (-height) * terrainSpacing;
+        float maxY = 0;
         for (int x = 0; x < undoubledWidth; x++)
         {
             for (int y = 0; y < undoubledHeight; y++)
@@ -509,7 +513,7 @@ public class Environment : MonoBehaviour
                 {
                     GameObject timefishSpawner = Instantiate(timefishSpawnerPrefab);
                     timefishSpawner.transform.position = new Vector3((-undoubledWidth / 2 + x) * terrainSpacing * 2, (-undoubledHeight + y) * terrainSpacing * 2, 0);
-                    timefishSpawner.GetComponent<TimefishSpawner>().Initialize(random);
+                    timefishSpawner.GetComponent<TimefishSpawner>().Initialize(random, minX, maxX, minY, maxY);
                 }
             }
             yield return null;
@@ -527,6 +531,23 @@ public class Environment : MonoBehaviour
         float u2 = (float)random.NextDouble();
         double z0 = Mathf.Sqrt(-2 * Mathf.Log(u1)) * Mathf.Cos(2 * Mathf.PI * u2);
         return z0;
+    }
+
+    public static double MultimodalDistribution(System.Random random, List<int> percentileDividors, List<double> maxima, List<double> sigmas, bool rerandomize)
+    {
+        int percentile = random.Next(0, 100);
+        if (rerandomize)
+        {
+            random = new System.Random();
+        }
+        for (int i = 0; i < percentileDividors.Count; i++)
+        {
+            if (percentile < percentileDividors[i])
+            {
+                return NormalDistribution(random) * sigmas[i] + maxima[i];
+            }
+        }
+        return NormalDistribution(random) * sigmas[^1] + maxima[^1];
     }
 }
 
