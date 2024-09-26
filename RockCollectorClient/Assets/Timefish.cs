@@ -247,7 +247,8 @@ public class TimefishSpecies
     public bool aggressive; // does the fish become aggrivated when submarine enters vision range
     public bool school; // does the fish school with others of its species
     public float chaseTime; // how long does the fish remain aggrivated after the submarine leaves vision range
-    public float biteStrength; // Bite strength(greater with size and with depth, separately) factor in power units
+    public float biteStrength; // Bite strength factor in power units
+    public float energyWeaponStrength; // Energy weapon strength factor in power units
 
     public Sprite bodySprite;
     public Sprite finSprite;
