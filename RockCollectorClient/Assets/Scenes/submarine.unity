@@ -1058,7 +1058,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timefishSpawnerPrefab: {fileID: 7914929191339618506, guid: 593a45389f87cbd4dba5bdd0cca23d58, type: 3}
-  rockDecorationPrefab: {fileID: 5338728940540939239, guid: d539d868ab2f4c445bf8f9b06f25194f, type: 3}
+  seaweedPrefab: {fileID: 5338728940540939239, guid: d539d868ab2f4c445bf8f9b06f25194f, type: 3}
+  smallDecorRockPrefab: {fileID: 5338728940540939239, guid: e353865e30d65614583a075bd4b0b2f5, type: 3}
+  largeDecorRockPrefab: {fileID: 5338728940540939239, guid: d4171d0ba42b109429546dccbcaee182, type: 3}
   leftCornerRock: {fileID: -7488026923455815707, guid: 557e51381eebc8e459c505a44c35242b, type: 3}
   rightCornerRock: {fileID: -6974698180887182396, guid: 1ac21e90c6764be4ca595589e7483fa1, type: 3}
   edgeRocks:

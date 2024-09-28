@@ -8,7 +8,9 @@ using UnityEngine;
 public class Environment : MonoBehaviour
 {
     public GameObject timefishSpawnerPrefab;
-    public GameObject rockDecorationPrefab;
+    public GameObject seaweedPrefab;
+    public GameObject smallDecorRockPrefab;
+    public GameObject largeDecorRockPrefab;
 
     public Sprite leftCornerRock;
     public Sprite rightCornerRock;
@@ -475,7 +477,8 @@ public class Environment : MonoBehaviour
 
     private IEnumerator SpawnGameObjects(System.Random random, Sprite[,] sprites, int[,] rotations, bool[,] hasTimefishSpawner)
     {
-        float decorationChance = random.Next(10, 50) / 100f;
+        float seaweedChance = random.Next(10, 50) / 100f;
+        float decorRockChance = random.Next(10, 40) / 100f;
 
         int width = sprites.GetLength(0);
         int height = sprites.GetLength(1);
@@ -500,10 +503,31 @@ public class Environment : MonoBehaviour
                     // chance to add a decoration if this is a top edge
                     if (topEdgeRocks.Contains(sprites[x, y]))
                     {
-                        if (random.NextDouble() < decorationChance)
+                        if (random.NextDouble() < seaweedChance)
                         {
-                            // instantiate rockDecorationPrefab
-                            Instantiate(rockDecorationPrefab, terrainObject.transform);
+                            // instantiate seaweed prefab
+                            GameObject seaweed = Instantiate(seaweedPrefab, terrainObject.transform);
+                            seaweed.GetComponent<RockDecoration>().Initialize(random);
+                        }
+                        else if (random.NextDouble() < decorRockChance)
+                        {
+                            bool flatArea = true;
+                            if (!topEdgeRocks.Contains(sprites[x-1, y]) || !topEdgeRocks.Contains(sprites[x+1, y]))
+                            {
+                                flatArea = false;
+                            }
+                            if (random.NextDouble() < 0.25 && flatArea)
+                            {
+                                GameObject largeRock = Instantiate(largeDecorRockPrefab, terrainObject.transform);
+                                largeRock.GetComponent<RockDecoration>().Initialize(random);
+                                // large rock should always be behind the terrain
+                                largeRock.GetComponent<SpriteRenderer>().sortingOrder = random.Next(-200, -87);
+                            }
+                            else
+                            {
+                                GameObject smallRock = Instantiate(smallDecorRockPrefab, terrainObject.transform);
+                                smallRock.GetComponent<RockDecoration>().Initialize(random);
+                            }
                         }
                     }
                 }
