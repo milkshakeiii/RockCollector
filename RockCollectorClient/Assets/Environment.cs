@@ -557,8 +557,7 @@ public class Environment : MonoBehaviour
                         if (emptyNeighbors.Count > 0 && random.NextDouble() < coralDecorationChance)
                         {
                             Vector2Int emptyNeighbor = emptyNeighbors[random.Next(emptyNeighbors.Count)];
-                            GameObject coralDecoration = Instantiate(coralDecorationPrefab);
-                            coralDecoration.transform.position = new Vector3((-width / 2 + emptyNeighbor.x) * terrainSpacing, (-height + emptyNeighbor.y) * terrainSpacing, 0);
+                            GameObject coralDecoration = Instantiate(coralDecorationPrefab, terrainObject.transform);
                             coralDecoration.GetComponent<SpriteRenderer>().sortingOrder = random.Next(100, 200);
                             Vector2Int baseDirection = new Vector2Int(x - emptyNeighbor.x, y - emptyNeighbor.y);
                             coralDecoration.GetComponent<CoralDecoration>().Initialize(random, baseDirection);
