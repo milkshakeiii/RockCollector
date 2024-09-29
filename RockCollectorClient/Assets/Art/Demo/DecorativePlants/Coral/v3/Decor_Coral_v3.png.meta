@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: d74f151f875f2ca48a1263998e0c1fc2
+guid: d297ae41db722f4468711f4d6aa13f29
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4178324874323465199
-    second: README_0
+      213: -9054950822373470847
+    second: Decor_Coral_v3_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,7 +46,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: README_0
+      name: Decor_Coral_v3_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1920
-        height: 1080
+        width: 124
+        height: 133
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: fe39a32e5546cf930800000000000000
-      internalID: 4178324874323465199
+      spriteID: 18d4cc5c33a565280800000000000000
+      internalID: -9054950822373470847
       vertices: []
       indices: 
       edges: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Decor_Coral_v3_0: -9054950822373470847
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
