@@ -5251,3 +5251,53 @@ Memory consumption went from 114.4 MB to 113.2 MB.
 Total: 6.497500 ms (FindLiveObjects: 0.550400 ms CreateObjectMapping: 0.609600 ms MarkObjects: 4.182800 ms  DeleteObjects: 1.153900 ms)
 
 Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Prepare
+Refreshing native plugins compatible for Editor in 2.49 ms, found 5 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 4442 unused Assets / (0.9 MB). Loaded Objects now: 5252.
+Memory consumption went from 114.5 MB to 113.6 MB.
+Total: 76.836600 ms (FindLiveObjects: 1.081000 ms CreateObjectMapping: 0.957100 ms MarkObjects: 71.527600 ms  DeleteObjects: 3.268900 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Import Request.
+  Time since last request: 3940.951587 seconds.
+  path: Assets/Prefabs/timefish.prefab
+  artifactKey: Guid(733c4d9c25df7fa45ae973b231f96fa8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/timefish.prefab using Guid(733c4d9c25df7fa45ae973b231f96fa8) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
+ -> (artifact id: '2e4d58f528b795e66646fea852b821ee') in 0.3498763 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 30
+
+========================================================================
+Received Prepare
+Refreshing native plugins compatible for Editor in 3.22 ms, found 5 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 4442 unused Assets / (1.1 MB). Loaded Objects now: 5253.
+Memory consumption went from 114.6 MB to 113.5 MB.
+Total: 10.294000 ms (FindLiveObjects: 0.765100 ms CreateObjectMapping: 0.963400 ms MarkObjects: 6.702200 ms  DeleteObjects: 1.861900 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Import Request.
+  Time since last request: 45.198838 seconds.
+  path: Assets/Prefabs/timefish.prefab
+  artifactKey: Guid(733c4d9c25df7fa45ae973b231f96fa8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/timefish.prefab using Guid(733c4d9c25df7fa45ae973b231f96fa8) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
+ -> (artifact id: '3db4db8ac8adaa88b6f2777637965faa') in 0.0180053 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 30
+
+========================================================================
+Received Prepare
+Refreshing native plugins compatible for Editor in 3.55 ms, found 5 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 4442 unused Assets / (1.5 MB). Loaded Objects now: 5253.
+Memory consumption went from 114.6 MB to 113.1 MB.
+Total: 48.193300 ms (FindLiveObjects: 0.818200 ms CreateObjectMapping: 1.088300 ms MarkObjects: 43.671900 ms  DeleteObjects: 2.613300 ms)
+
+Prepare: number of updated asset objects reloaded= 0

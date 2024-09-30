@@ -230,6 +230,29 @@ public class StillBehavior : Behavior
     }
 }
 
+public class AggressiveBehavior : Behavior
+{ // TODO write this
+    private float chaseTime;
+    private float timeChasing;
+
+    public AggressiveBehavior(float chaseTime)
+    {
+        this.chaseTime = chaseTime;
+        timeChasing = 0f;
+    }
+
+    public override void Update(Timefish fish)
+    {
+        // chase the submarine
+        fish.transform.position += fish.transform.right * fish.Speed() * Time.deltaTime;
+        timeChasing += Time.deltaTime;
+        if (timeChasing > chaseTime)
+        {
+            fish.SetBehavior(new IdleBehavior());
+        }
+    }
+}
+
 public class TimefishSpecies
 {
     public string name = "test species";
@@ -243,6 +266,18 @@ public class TimefishSpecies
     public float visionConeArc; //Vision cone arc in degrees
     public float visionConeMiddle; //Vision cone middle in degrees
     public float visionRange; //Vision range factor in meters
+
+    public bool hasEnergyBallAttack; //Does the fish have an energy ball attack
+    public float energyBallCooldown; //Energy ball attack cooldown in seconds
+    public float energyBallChargeTime; //Energy ball attack charge time in seconds
+    public float energyBallSpeed; //Energy ball fly speed in meters per second
+    public float energyBallDamage; //Energy ball damage in power units
+
+    public bool hasBiteAttack; //Does the fish have a bite attack
+    public float biteCooldown; //Bite attack cooldown in seconds
+    public float biteSpeedBoost; //Bite attack speed boost factor
+    public float biteBoostRange; //Bite attack speed boost distance swum in meters
+    public float biteDamage; //Bite attack damage in power units
 
     public bool aggressive; // does the fish become aggrivated when submarine enters vision range
     public bool school; // does the fish school with others of its species
