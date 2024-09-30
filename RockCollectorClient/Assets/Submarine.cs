@@ -212,29 +212,18 @@ public class Submarine : MonoBehaviour
     void Update()
     {
         Planet planet = new();
-
         {
-            // apply an upward force to the submarine according to the buoyancy
-            float verticalForce = Buoyancy(planet);
-
-            // if part of the submarine is above the surface
-            float submarineHeight = this.GetComponent<SpriteRenderer>().bounds.size.y;
-            if (this.transform.position.y > 0 /* the surface */ - submarineHeight / 2)
+            if (PowerRemaining() <= 0)
             {
-                float percentAboveSurface = (this.transform.position.y + submarineHeight / 2) / submarineHeight;
-                // reduce the vertical force by the percent above the surface
-                verticalForce *= 1 - percentAboveSurface;
+                Destroy(this.gameObject);
             }
+        } // destroy the submarine if out of power
+    }
 
-            // apply a downward force to the submarine according to gravity
-            float totalMass = CurrentMass();
-            float gravityForce = totalMass * planet.gravity;
-
-            float netForce = verticalForce - gravityForce;
-            this.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, netForce));
-        } // apply vertical forces to the submarine
-
-        { 
+    private void FixedUpdate()
+    {
+        Planet planet = new();
+        {
             if (UnityEngine.Input.GetKey(KeyCode.W))
             {
                 GetLighter();
@@ -266,6 +255,32 @@ public class Submarine : MonoBehaviour
         } // control the mass with W and S keys
 
         {
+            this.GetComponent<Rigidbody2D>().mass = CurrentMass();
+            this.GetComponent<Rigidbody2D>().linearDamping = drag;
+        } // update rigidbody mass and drag
+
+        {
+            // apply an upward force to the submarine according to the buoyancy
+            float verticalForce = Buoyancy(planet);
+
+            // if part of the submarine is above the surface
+            float submarineHeight = this.GetComponent<SpriteRenderer>().bounds.size.y;
+            if (this.transform.position.y > 0 /* the surface */ - submarineHeight / 2)
+            {
+                float percentAboveSurface = (this.transform.position.y + submarineHeight / 2) / submarineHeight;
+                // reduce the vertical force by the percent above the surface
+                verticalForce *= 1 - percentAboveSurface;
+            }
+
+            // apply a downward force to the submarine according to gravity
+            float totalMass = CurrentMass();
+            float gravityForce = totalMass * planet.gravity;
+
+            float netForce = verticalForce - gravityForce;
+            this.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, netForce));
+        } // apply vertical forces to the submarine
+
+        {
             // if neither A nor D is pressed, do nothing
             if (UnityEngine.Input.GetKey(KeyCode.A) || UnityEngine.Input.GetKey(KeyCode.D))
             {
@@ -292,18 +307,6 @@ public class Submarine : MonoBehaviour
             }
 
         } // control the propulsion with A and D keys
-
-        {
-            this.GetComponent<Rigidbody2D>().mass = CurrentMass();
-            this.GetComponent<Rigidbody2D>().linearDamping = drag;
-        } // update rigidbody mass and drag
-
-        {
-            if (PowerRemaining() <= 0)
-            {
-                Destroy(this.gameObject);
-            }
-        } // destroy the submarine if out of power
     }
 
     private IEnumerator Turn180Degrees()
