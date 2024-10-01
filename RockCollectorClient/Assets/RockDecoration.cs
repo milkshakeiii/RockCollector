@@ -19,9 +19,6 @@ public class RockDecoration : MonoBehaviour
         // randomize the size
         this.transform.localScale = new Vector3(Range(random, 0.4f, 0.8f), Range(random, 0.4f, 0.8f), 1);
 
-        // layer is "terrain"                      
-        gameObject.layer = 9;
-
         //some decorations are placed on top of the rocks, some behind
         this.GetComponent<SpriteRenderer>().sortingOrder = random.Next(-100, 100);
 

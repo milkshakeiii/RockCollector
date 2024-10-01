@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5919250633288957461}
   - component: {fileID: 3870689277606373417}
   - component: {fileID: -8058269532104432720}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Decor_Coral_v3_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}

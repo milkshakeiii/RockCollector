@@ -481,6 +481,7 @@ public class Environment : MonoBehaviour
         float seaweedChance = random.Next(10, 50) / 100f;
         float decorRockChance = random.Next(10, 40) / 100f;
         float coralDecorationChance = random.Next(10, 60) / 100f;
+        HashSet<Vector2Int> squaresWithCoralDecorations = new();
 
         int width = sprites.GetLength(0);
         int height = sprites.GetLength(1);
@@ -538,29 +539,30 @@ public class Environment : MonoBehaviour
                     {
                         // only proceed if an orthogonally adjacent square is empty
                         List<Vector2Int> emptyNeighbors = new List<Vector2Int>();
-                        if (sprites[x+1, y] == null)
+                        List<Vector2Int> neighborOffsets = new List<Vector2Int>
                         {
-                            emptyNeighbors.Add(new Vector2Int(x+1, y));
-                        }   
-                        if (sprites[x-1, y] == null)
+                            new Vector2Int(1, 0),
+                            new Vector2Int(-1, 0),
+                            new Vector2Int(0, 1),
+                            new Vector2Int(0, -1)
+                        };
+                        foreach (Vector2Int offset in neighborOffsets)
                         {
-                            emptyNeighbors.Add(new Vector2Int(x-1, y));
-                        }
-                        if (sprites[x, y+1] == null)
-                        {
-                            emptyNeighbors.Add(new Vector2Int(x, y+1));
-                        }
-                        if (sprites[x, y-1] == null)
-                        {
-                            emptyNeighbors.Add(new Vector2Int(x, y-1));
+                            Vector2Int neighbor = new Vector2Int(x + offset.x, y + offset.y);
+                            if (sprites[neighbor.x, neighbor.y] == null && !squaresWithCoralDecorations.Contains(neighbor))
+                            {
+                                emptyNeighbors.Add(neighbor);
+                            }
                         }
                         if (emptyNeighbors.Count > 0 && random.NextDouble() < coralDecorationChance)
                         {
-                            Vector2Int emptyNeighbor = emptyNeighbors[random.Next(emptyNeighbors.Count)];
+                            Vector2Int newCoralDecorationPosition = emptyNeighbors[random.Next(emptyNeighbors.Count)];
                             GameObject coralDecoration = Instantiate(coralDecorationPrefab, terrainObject.transform);
                             coralDecoration.GetComponent<SpriteRenderer>().sortingOrder = random.Next(100, 200);
-                            Vector2Int baseDirection = new Vector2Int(x - emptyNeighbor.x, y - emptyNeighbor.y);
+                            Vector2Int baseDirection = new Vector2Int(x - newCoralDecorationPosition.x, y - newCoralDecorationPosition.y);
                             coralDecoration.GetComponent<CoralDecoration>().Initialize(random, baseDirection);
+
+                            squaresWithCoralDecorations.Add(newCoralDecorationPosition);
                         }
                     }
                 }

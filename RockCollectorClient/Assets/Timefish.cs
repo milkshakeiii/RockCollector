@@ -231,7 +231,7 @@ public class StillBehavior : Behavior
 }
 
 public class AggressiveBehavior : Behavior
-{ // TODO write this
+{ // TODO write this?
     private float chaseTime;
     private float timeChasing;
 

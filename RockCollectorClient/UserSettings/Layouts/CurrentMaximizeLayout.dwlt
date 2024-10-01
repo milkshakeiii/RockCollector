@@ -24,7 +24,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 23119
+  controlID: 31206
   draggingID: 0
 --- !u!114 &2
 MonoBehaviour:
@@ -150,7 +150,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 23120
+  controlID: 31207
   draggingID: 0
 --- !u!114 &4
 MonoBehaviour:
@@ -176,7 +176,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 50}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 23121
+  controlID: 31208
   draggingID: 0
 --- !u!114 &5
 MonoBehaviour:
@@ -243,9 +243,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 100b0100
-      m_LastClickedID: 68368
-      m_ExpandedIDs: 1c64b3fff031b8ff924bbafff2c4bbfff446bcff5653bcffa457bcffc059bcff7027c6ffa027c6ffae29c6ffdc72c6ff4482c8ffc6d6c8ffba39caff3686d2ff30c9d4ffd203d5ff0204d5ff1806d5ffae0ed5ffe40ed5fff610d5ffee9ee3ff369fe3ffa29fe3ffbefaffff5c090100
+      m_SelectedIDs: 948a0100
+      m_LastClickedID: 101012
+      m_ExpandedIDs: 146763ff9a9c65ff7ab665ffeaee6afffaef6aff0af06aff36f16aff922b6cff0a7f6fffa48e71ffb48e71ff749271ff789d71ffb8a371fff44b75fffe0679ffdc0779ff320979ff740c79ffd4ce7bffb4eb7effb41881ff3ec691ff6ec691ff8ac891ffdccd95ff1ace95ff34d095ffccba9eff1c64b3fff031b8ff924bbafff2c4bbfff446bcff5653bcffa457bcffc059bcff7027c6ffa027c6ffae29c6ffdc72c6ff4482c8ffc6d6c8ffba39caff3686d2ff30c9d4ffd203d5ff0204d5ff1806d5ffae0ed5ffe40ed5fff610d5ffee9ee3ff369fe3ffa29fe3ffbefaffff5c090100b8090100a40a0100b80c01009c6e0100d688010048ac0100
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -876,9 +876,9 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: -52.871773, y: -245.90569, z: -8.778852}
+    m_Target: {x: 70.87746, y: -36.8089, z: -57.202263}
     speed: 2
-    m_Value: {x: -52.871773, y: -245.90569, z: -8.778852}
+    m_Value: {x: 70.87746, y: -36.8089, z: -57.202263}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -924,13 +924,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.056662153, y: 0.011045061, z: 0.0008691814, w: -0.9984625}
+    m_Target: {x: 0.022191675, y: 0.0020555102, z: 0.00024389864, w: -0.99991125}
     speed: 2
-    m_Value: {x: 0, y: 0, z: 0, w: 1}
+    m_Value: {x: 0.023687735, y: 0.0020548138, z: 0.0002469442, w: -0.9997173}
   m_Size:
-    m_Target: 0.24739107
+    m_Target: 7.640465
     speed: 2
-    m_Value: 0.24739107
+    m_Value: 7.640465
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -1035,7 +1035,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Art/Demo/DecorativeRocks/v4
+    - Assets/Art/Demo/DecorativePlants/Coral/v3
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -1045,15 +1045,15 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Art/Demo/DecorativeRocks/v4
+  - Assets/Art/Demo/DecorativePlants/Coral/v3
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\milks\Documents\github\RockCollector\RockCollectorClient
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 120}
-    m_SelectedIDs: 600d0100
-    m_LastClickedID: 68960
+    m_SelectedIDs: 940d0100
+    m_LastClickedID: 69012
     m_ExpandedIDs: 000000006c900000b6900000f89000000091000002910000e4b70000e6b7000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -1109,9 +1109,9 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 100b0100
-    m_LastClickedInstanceID: 68368
-    m_HadKeyboardFocusLastEvent: 0
+    m_SelectedInstanceIDs: 948a0100
+    m_LastClickedInstanceID: 101012
+    m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c6230000866a00000000000022610000a4770000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -1196,8 +1196,8 @@ MonoBehaviour:
     y: 0
     width: 410
     height: 933
-  m_MinSize: {x: 276, y: 76}
-  m_MaxSize: {x: 4001, y: 4026}
+  m_MinSize: {x: 275, y: 50}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 13}
   m_Panes:
   - {fileID: 13}

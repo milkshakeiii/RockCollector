@@ -8,11 +8,9 @@ public class CoralDecoration : MonoBehaviour
 
     public void Initialize(System.Random random, Vector2Int baseDirection)
     {
-        // for now, make the scale 0.2f
-        this.transform.localScale = new Vector3(0.2f, 0.2f, 1f);
-
-        // layer is "terrain"
-        gameObject.layer = 9;
+        // randomize scale
+        float scale = Mathf.Abs((float)Environment.NormalDistribution(random) * 0.1f) + 0.2f;
+        this.transform.localScale = new Vector3(scale, scale, 1f);
 
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.sprite = possibleSprites[random.Next(possibleSprites.Count)];
@@ -23,6 +21,10 @@ public class CoralDecoration : MonoBehaviour
 
         // place the decoration on top of the parent (coral)
         float height = this.GetComponent<SpriteRenderer>().bounds.size.y;
+        if (baseDirection.y == 0)
+        {
+            height = this.GetComponent<SpriteRenderer>().bounds.size.x;
+        }
         float parentHeight = this.transform.parent.GetComponent<SpriteRenderer>().bounds.size.y;
         Vector3 baseDirectionFloat = new(baseDirection.x, baseDirection.y, 0);
         this.transform.position = this.transform.position - (height + parentHeight) * 0.9f * baseDirectionFloat.normalized / 2;
