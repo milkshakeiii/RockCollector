@@ -84,6 +84,18 @@ public class Timefish : MonoBehaviour
         currentBehavior.Update(this);
     }
 
+    public void CheckAggro()
+    {
+        // non aggressive fish don't care about the submarine
+        if (!species.aggressive)
+        {
+            return;
+        }
+
+        // check if the submarine is in the vision cone
+
+    }
+
     public void SetBehavior(Behavior newBehavior)
     {
         currentBehavior = newBehavior;
@@ -92,7 +104,7 @@ public class Timefish : MonoBehaviour
     public void TakeDamage(float damage)
     {
         damageTaken += damage;
-        if (damageTaken > Health())
+        if (IsDisabled())
         {
             // turn the fish upside down
             transform.localScale = new Vector3(transform.localScale.x, -transform.localScale.y, transform.localScale.z);
@@ -142,7 +154,7 @@ public abstract class Behavior
     public abstract void Update(Timefish fish);
 }
 
-public class IdleBehavior : Behavior
+public class RoamBehavior : Behavior
 {
     private float maximumSwimForwardTime = 5f;
     private float maximumReangleArc = 90f;
@@ -231,7 +243,7 @@ public class StillBehavior : Behavior
 }
 
 public class AggressiveBehavior : Behavior
-{ // TODO write this?
+{
     private float chaseTime;
     private float timeChasing;
 
@@ -243,12 +255,13 @@ public class AggressiveBehavior : Behavior
 
     public override void Update(Timefish fish)
     {
-        // chase the submarine
-        fish.transform.position += fish.transform.right * fish.Speed() * Time.deltaTime;
+
+
+        // chase the submarine for a limited amount of time
         timeChasing += Time.deltaTime;
         if (timeChasing > chaseTime)
         {
-            fish.SetBehavior(new IdleBehavior());
+            fish.SetBehavior(new RoamBehavior());
         }
     }
 }
@@ -267,29 +280,14 @@ public class TimefishSpecies
     public float visionConeMiddle; //Vision cone middle in degrees
     public float visionRange; //Vision range factor in meters
 
-    public bool hasEnergyBallAttack; //Does the fish have an energy ball attack
-    public float energyBallCooldown; //Energy ball attack cooldown in seconds
-    public float energyBallChargeTime; //Energy ball attack charge time in seconds
-    public float energyBallSpeed; //Energy ball fly speed in meters per second
-    public float energyBallDamage; //Energy ball damage in power units
-
-    public bool hasBiteAttack; //Does the fish have a bite attack
-    public float biteCooldown; //Bite attack cooldown in seconds
-    public float biteSpeedBoost; //Bite attack speed boost factor
-    public float biteBoostRange; //Bite attack speed boost distance swum in meters
-    public float biteDamage; //Bite attack damage in power units
-
     public bool aggressive; // does the fish become aggrivated when submarine enters vision range
     public bool school; // does the fish school with others of its species
     public float chaseTime; // how long does the fish remain aggrivated after the submarine leaves vision range
-    public float biteStrength; // Bite strength factor in power units
-    public float energyWeaponStrength; // Energy weapon strength factor in power units
 
     public Sprite bodySprite;
     public Sprite finSprite;
     public Sprite eyeSprite;
     public Sprite tailSprite;
-
 }
 
 public class  WeakSpot

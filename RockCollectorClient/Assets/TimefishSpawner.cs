@@ -17,7 +17,6 @@ public class TimefishSpawner : MonoBehaviour
         testSpecies.visionConeArc = 90.0f;
         testSpecies.visionConeMiddle = 0f;
         testSpecies.visionRange = 10.0f;
-        testSpecies.biteStrength = 1.0f;
         testSpecies.healthFactor = 10.0f;
         testSpecies.weakSpots = new List<WeakSpot>();
         testSpecies.movementSpeed = 1.0f;
