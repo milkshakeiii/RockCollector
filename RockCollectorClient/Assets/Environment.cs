@@ -18,6 +18,13 @@ public class Environment : MonoBehaviour
     public List<Sprite> edgeRocks;
     public List<Sprite> topEdgeRocks;
     public List<Sprite> fillerRocks;
+
+    public Sprite leftCornerIce;
+    public Sprite rightCornerIce;
+    public List<Sprite> edgeIce;
+    public List<Sprite> topEdgeIce;
+    public List<Sprite> fillerIce;
+
     public List<Sprite> coralSprites;
 
     public float terrainSpacing = 0.319f;
@@ -39,6 +46,7 @@ public class Environment : MonoBehaviour
         Debug.Log("Width: " + width + " Height: " + height);
 
         bool[,] rockGrid = new bool[width, height];
+        bool[,] iceGrid = new bool[width, height];
         bool[,] coralGrid = new bool[width*2, height*2];
 
         // and a corresponding grid to keep track of danger levels,
@@ -99,7 +107,7 @@ public class Environment : MonoBehaviour
             }
             else if (sectorStartY == height - sectorHeight)
             {
-                IEnumerator sectorEnumator = MakeInvertedMountainSector(random, sectorWidth, sectorHeight, sectorStartX, sectorStartY, rockGrid);
+                IEnumerator sectorEnumator = MakeInvertedMountainSector(random, sectorWidth, sectorHeight, sectorStartX, sectorStartY, iceGrid);
                 while (sectorEnumator.MoveNext())
                 {
                     yield return null;
@@ -154,6 +162,12 @@ public class Environment : MonoBehaviour
         int[,] rotations = new int[width * 2, height * 2];
         IEnumerator rockSpritesEnumerator = DecideRockSpritesAndRotations(random, rockGrid, sprites, rotations);
         while (rockSpritesEnumerator.MoveNext())
+        {
+            yield return null;
+        }
+
+        IEnumerator iceSpritesEnumerator = DecideIceSpritesAndRotations(random, iceGrid, sprites, rotations);
+        while (iceSpritesEnumerator.MoveNext())
         {
             yield return null;
         }
@@ -317,9 +331,39 @@ public class Environment : MonoBehaviour
 
     private IEnumerator DecideRockSpritesAndRotations(System.Random random, bool[,] grid, Sprite[,] sprites, int[,] rotations)
     {
+        IEnumerator rockStyleEnumerator = DecideRockStyleSpritesAndRotations(
+            random, grid, sprites, rotations, edgeRocks, topEdgeRocks, fillerRocks, leftCornerRock, rightCornerRock);
+        while (rockStyleEnumerator.MoveNext())
+        {
+            yield return null;
+        }
+    }
+
+    private IEnumerator DecideIceSpritesAndRotations(System.Random random, bool[,] iceGrid, Sprite[,] sprites, int[,] rotations)
+    {
+        IEnumerator iceStyleEnumerator = DecideRockStyleSpritesAndRotations(
+            random, iceGrid, sprites, rotations, edgeIce, topEdgeIce, fillerIce, leftCornerIce, rightCornerIce);
+        while (iceStyleEnumerator.MoveNext())
+        {
+            yield return null;
+        }
+    }
+
+    private IEnumerator DecideRockStyleSpritesAndRotations(
+        System.Random random,
+        bool[,] grid,
+        Sprite[,] sprites,
+        int[,] rotations,
+        List<Sprite> useEdgeRocks,
+        List<Sprite> useTopRocks,
+        List<Sprite> useFillerRocks,
+        Sprite useLeftCornerRock,
+        Sprite useRightCornerRock
+    )
+    {
         int width = grid.GetLength(0);
         int height = grid.GetLength(1);
-        // set filler, edge, inner corner, and inner edge rocks
+        // set filler, edge, corner
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
@@ -353,10 +397,10 @@ public class Environment : MonoBehaviour
                 bool bottomLeftInnerCorner = !downLeftOccupied && downOccupied && leftOccupied;
 
                 // based on the grid neighbors, set 4 sprites per grid cell
-                Sprite topLeft = fillerRocks[random.Next(fillerRocks.Count)];
-                Sprite topRight = fillerRocks[random.Next(fillerRocks.Count)];
-                Sprite bottomRight = fillerRocks[random.Next(fillerRocks.Count)];
-                Sprite bottomLeft = fillerRocks[random.Next(fillerRocks.Count)];
+                Sprite topLeft = useFillerRocks[random.Next(useFillerRocks.Count)];
+                Sprite topRight = useFillerRocks[random.Next(useFillerRocks.Count)];
+                Sprite bottomRight = useFillerRocks[random.Next(useFillerRocks.Count)];
+                Sprite bottomLeft = useFillerRocks[random.Next(useFillerRocks.Count)];
                 // begin with random rotations
                 int topLeftRotation = random.Next(0, 4) * 90;
                 int topRightRotation = random.Next(0, 4) * 90;
@@ -364,37 +408,37 @@ public class Environment : MonoBehaviour
                 int bottomLeftRotation = random.Next(0, 4) * 90;
                 if (topLeftCornerFree)
                 {
-                    topLeft = leftCornerRock;
+                    topLeft = useLeftCornerRock;
                     topLeftRotation = 0;
                 }
                 if (topRightCornerFree)
                 {
-                    topRight = rightCornerRock;
+                    topRight = useRightCornerRock;
                     topRightRotation = 270;
                 }
                 if (bottomRightCornerFree)
                 {
-                    bottomRight = edgeRocks[random.Next(edgeRocks.Count)];
+                    bottomRight = useEdgeRocks[random.Next(useEdgeRocks.Count)];
                     bottomRightRotation = 270;
                 }
                 if (bottomLeftCornerFree)
                 {
-                    bottomLeft = edgeRocks[random.Next(edgeRocks.Count)];
+                    bottomLeft = useEdgeRocks[random.Next(useEdgeRocks.Count)];
                     bottomLeftRotation = 90;
                 }
                 if (upOccupied && !leftOccupied)
                 {
-                    topLeft = edgeRocks[random.Next(edgeRocks.Count)];
+                    topLeft = useEdgeRocks[random.Next(useEdgeRocks.Count)];
                     topLeftRotation = 90;
                 }
                 if (rightOccupied && !upOccupied)
                 {
-                    topRight = topEdgeRocks[random.Next(topEdgeRocks.Count)];
+                    topRight = useTopRocks[random.Next(useTopRocks.Count)];
                     topRightRotation = 0;
                 }
                 if (downOccupied && !rightOccupied)
                 {
-                    bottomRight = edgeRocks[random.Next(edgeRocks.Count)];
+                    bottomRight = useEdgeRocks[random.Next(useEdgeRocks.Count)];
                     bottomRightRotation = 270;
                 }
                 //if (leftOccupied && !downOccupied)
@@ -404,17 +448,17 @@ public class Environment : MonoBehaviour
                 //}
                 if (downOccupied && !leftOccupied)
                 {
-                    bottomLeft = edgeRocks[random.Next(edgeRocks.Count)];
+                    bottomLeft = useEdgeRocks[random.Next(useEdgeRocks.Count)];
                     bottomLeftRotation = 90;
                 }
                 if (leftOccupied && !upOccupied)
                 {
-                    topLeft = topEdgeRocks[random.Next(topEdgeRocks.Count)];
+                    topLeft = useTopRocks[random.Next(useTopRocks.Count)];
                     topLeftRotation = 0;
                 }
                 if (upOccupied && !rightOccupied)
                 {
-                    topRight = edgeRocks[random.Next(edgeRocks.Count)];
+                    topRight = useEdgeRocks[random.Next(useEdgeRocks.Count)];
                     topRightRotation = 270;
                 }
                 //if (rightOccupied && !downOccupied)
@@ -495,15 +539,15 @@ public class Environment : MonoBehaviour
                     GameObject terrainObject = new(sprites[x, y].name);
                     terrainObject.transform.position = new Vector3((-width / 2 + x) * terrainSpacing, (-height + y) * terrainSpacing, 0);
                     terrainObject.AddComponent<SpriteRenderer>().sprite = sprites[x, y];
-                    // also add a collider if this is not a filler rock
-                    if (!fillerRocks.Contains(sprites[x, y]))
+                    // also add a collider if this is not a filler rock or ice
+                    if (!fillerRocks.Contains(sprites[x, y]) && !fillerIce.Contains(sprites[x, y]))
                         terrainObject.AddComponent<BoxCollider2D>();
                     // layer is "Terrain"
                     terrainObject.layer = 9;
                     // set the rotation
                     terrainObject.transform.Rotate(Vector3.forward, rotations[x, y]);
 
-                    // chance to add a decoration if this is a top edge
+                    // chance to add a decoration if this is a top edge rock
                     if (topEdgeRocks.Contains(sprites[x, y]))
                     {
                         if (random.NextDouble() < seaweedChance)
