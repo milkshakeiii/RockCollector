@@ -153,7 +153,7 @@ public class Environment : MonoBehaviour
         {
             for (int y = height - 40; y < height; y++)
             {
-                rockGrid[x, y] = false;
+                iceGrid[x, y] = false;
             }
         }
 
@@ -418,12 +418,12 @@ public class Environment : MonoBehaviour
                 }
                 if (bottomRightCornerFree)
                 {
-                    bottomRight = useEdgeRocks[random.Next(useEdgeRocks.Count)];
-                    bottomRightRotation = 270;
+                    bottomRight = useLeftCornerRock;
+                    bottomRightRotation = 180;
                 }
                 if (bottomLeftCornerFree)
                 {
-                    bottomLeft = useEdgeRocks[random.Next(useEdgeRocks.Count)];
+                    bottomLeft = useRightCornerRock;
                     bottomLeftRotation = 90;
                 }
                 if (upOccupied && !leftOccupied)
@@ -441,11 +441,11 @@ public class Environment : MonoBehaviour
                     bottomRight = useEdgeRocks[random.Next(useEdgeRocks.Count)];
                     bottomRightRotation = 270;
                 }
-                //if (leftOccupied && !downOccupied)
-                //{
-                //    bottomLeft = edgeRocks[random.Next(edgeRocks.Count)];
-                //    bottomLeftRotation = 270;
-                //}
+                if (leftOccupied && !downOccupied)
+                {
+                    bottomLeft = useEdgeRocks[random.Next(edgeRocks.Count)];
+                    bottomLeftRotation = 180;
+                }
                 if (downOccupied && !leftOccupied)
                 {
                     bottomLeft = useEdgeRocks[random.Next(useEdgeRocks.Count)];
@@ -461,11 +461,11 @@ public class Environment : MonoBehaviour
                     topRight = useEdgeRocks[random.Next(useEdgeRocks.Count)];
                     topRightRotation = 270;
                 }
-                //if (rightOccupied && !downOccupied)
-                //{
-                //    bottomRight = edgeRock;
-                //    bottomRightRotation = 180;
-                //}
+                if (rightOccupied && !downOccupied)
+                {
+                    bottomRight = useEdgeRocks[random.Next(useEdgeRocks.Count)];
+                    bottomRightRotation = 180;
+                }
                 //if (topLeftInnerCorner)
                 //{
                 //    topLeft = innerCornerRock;
