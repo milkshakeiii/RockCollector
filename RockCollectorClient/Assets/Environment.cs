@@ -21,6 +21,8 @@ public class Environment : MonoBehaviour
 
     public Sprite leftCornerIce;
     public Sprite rightCornerIce;
+    public Sprite leftInnerCornerIce;
+    public Sprite rightInnerCornerIce;
     public List<Sprite> edgeIce;
     public List<Sprite> topEdgeIce;
     public List<Sprite> fillerIce;
@@ -332,7 +334,7 @@ public class Environment : MonoBehaviour
     private IEnumerator DecideRockSpritesAndRotations(System.Random random, bool[,] grid, Sprite[,] sprites, int[,] rotations)
     {
         IEnumerator rockStyleEnumerator = DecideRockStyleSpritesAndRotations(
-            random, grid, sprites, rotations, edgeRocks, topEdgeRocks, fillerRocks, leftCornerRock, rightCornerRock);
+            random, grid, sprites, rotations, edgeRocks, topEdgeRocks, fillerRocks, leftCornerRock, rightCornerRock, null, null);
         while (rockStyleEnumerator.MoveNext())
         {
             yield return null;
@@ -342,7 +344,7 @@ public class Environment : MonoBehaviour
     private IEnumerator DecideIceSpritesAndRotations(System.Random random, bool[,] iceGrid, Sprite[,] sprites, int[,] rotations)
     {
         IEnumerator iceStyleEnumerator = DecideRockStyleSpritesAndRotations(
-            random, iceGrid, sprites, rotations, edgeIce, topEdgeIce, fillerIce, leftCornerIce, rightCornerIce);
+            random, iceGrid, sprites, rotations, edgeIce, topEdgeIce, fillerIce, leftCornerIce, rightCornerIce, leftInnerCornerIce, rightInnerCornerIce);
         while (iceStyleEnumerator.MoveNext())
         {
             yield return null;
@@ -358,7 +360,9 @@ public class Environment : MonoBehaviour
         List<Sprite> useTopRocks,
         List<Sprite> useFillerRocks,
         Sprite useLeftCornerRock,
-        Sprite useRightCornerRock
+        Sprite useRightCornerRock,
+        Sprite useLeftInnerCornerRock,
+        Sprite useRightInnerCornerRock
     )
     {
         int width = grid.GetLength(0);
@@ -466,26 +470,26 @@ public class Environment : MonoBehaviour
                     bottomRight = useEdgeRocks[random.Next(useEdgeRocks.Count)];
                     bottomRightRotation = 180;
                 }
-                //if (topLeftInnerCorner)
-                //{
-                //    topLeft = innerCornerRock;
-                //    topLeftRotation = 0;
-                //}
-                //if (topRightInnerCorner)
-                //{
-                //    topRight = innerCornerRock;
-                //    topRightRotation = 270;
-                //}
-                //if (bottomRightInnerCorner)
-                //{
-                //    bottomRight = innerCornerRock;
-                //    bottomRightRotation = 180;
-                //}
-                //if (bottomLeftInnerCorner)
-                //{
-                //    bottomLeft = innerCornerRock;
-                //    bottomLeftRotation = 90;
-                //}
+                if (topLeftInnerCorner && useLeftInnerCornerRock != null)
+                {
+                    topLeft = useLeftInnerCornerRock;
+                    topLeftRotation = 0;
+                }
+                if (topRightInnerCorner && useRightInnerCornerRock != null)
+                {
+                    topRight = useRightInnerCornerRock;
+                    topRightRotation = 0;
+                }
+                if (bottomRightInnerCorner && useLeftInnerCornerRock != null)
+                {
+                    bottomRight = useLeftInnerCornerRock;
+                    bottomRightRotation = 180;
+                }
+                if (bottomLeftInnerCorner && useRightInnerCornerRock != null)
+                {
+                    bottomLeft = useRightInnerCornerRock;
+                    bottomLeftRotation = 180;
+                }
                 sprites[x * 2, y * 2] = bottomLeft;
                 sprites[x * 2 + 1, y * 2] = bottomRight;
                 sprites[x * 2, y * 2 + 1] = topLeft;
