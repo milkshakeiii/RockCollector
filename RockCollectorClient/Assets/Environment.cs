@@ -169,17 +169,21 @@ public class Environment : MonoBehaviour
         }
 
         bool[,] hasTimefishSpawner = new bool[width, height];
-        // each tile that is not solid has a 1 in 8000 chance of having a timefish spawner
-        // that chance is 1 in 1200 instead if there is an adjacent rock or coral tile
+        // each tile that is not solid has a 1 in ~8000 chance of having a timefish spawner
+        // that chance is 1 in ~1200 instead if there is an adjacent rock or ~600 for adjacent coral tile
+        int openWaterSpawnChance = random.Next(3000, 12000);
+        int rockSpawnChance = random.Next(900, 1400);
+        int coralSpawnChance = random.Next(300, 800);
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
-                if (!rockGrid[x, y] && random.Next(0, 8000) == 0)
+                if (!rockGrid[x, y] && random.Next(0, openWaterSpawnChance) == 0)
                 {
                     hasTimefishSpawner[x, y] = true;
                 }
-                bool adjacentRockOrCoral = false;
+                bool adjacentRock = false;
+                bool adjacentCoral = false;
                 List<Vector2Int> neighborOffsets = new()
                 {
                     new Vector2Int(1, 0),
@@ -192,14 +196,21 @@ public class Environment : MonoBehaviour
                     Vector2Int neighbor = new Vector2Int(x + offset.x, y + offset.y);
                     if (neighbor.x >= 0 && neighbor.x < width && neighbor.y >= 0 && neighbor.y < height)
                     {
-                        if (rockGrid[neighbor.x, neighbor.y] || coralGrid[neighbor.x*2, neighbor.y*2]) // account for the doubled size of the coral grid
+                        if (rockGrid[neighbor.x, neighbor.y])
                         {
-                            adjacentRockOrCoral = true;
-                            break;
+                            adjacentRock = true;
+                        }
+                        if (coralGrid[neighbor.x*2, neighbor.y*2])
+                        {
+                            adjacentCoral = true;
                         }
                     }
                 }
-                if (adjacentRockOrCoral && random.Next(0, 1200) == 0)
+                if (adjacentRock && random.Next(0, rockSpawnChance) == 0)
+                {
+                    hasTimefishSpawner[x, y] = true;
+                }
+                if (adjacentCoral && random.Next(0, coralSpawnChance) == 0)
                 {
                     hasTimefishSpawner[x, y] = true;
                 }
