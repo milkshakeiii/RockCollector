@@ -12,6 +12,7 @@ public class Environment : MonoBehaviour
     public GameObject smallDecorRockPrefab;
     public GameObject largeDecorRockPrefab;
     public GameObject coralDecorationPrefab;
+    public GameObject iceDecorationPrefab;
 
     public Sprite leftCornerRock;
     public Sprite rightCornerRock;
@@ -529,6 +530,7 @@ public class Environment : MonoBehaviour
         float seaweedChance = random.Next(10, 50) / 100f;
         float decorRockChance = random.Next(10, 40) / 100f;
         float coralDecorationChance = random.Next(10, 60) / 100f;
+        float iceDecorationChance = random.Next(30, 90) / 100f;
         HashSet<Vector2Int> squaresWithCoralDecorations = new();
 
         int width = sprites.GetLength(0);
@@ -611,6 +613,19 @@ public class Environment : MonoBehaviour
                             coralDecoration.GetComponent<CoralDecoration>().Initialize(random, baseDirection);
 
                             squaresWithCoralDecorations.Add(newCoralDecorationPosition);
+                        }
+                    }
+
+                    // chance to add an ice decoration if this is an edge or corner ice sprite and the square below is empty
+                    bool squareBelowEmpty = y > 0 && sprites[x, y - 1] == null;
+                    if (edgeIce.Contains(sprites[x, y]) || sprites[x, y] == leftCornerIce || sprites[x, y] == rightCornerIce && squareBelowEmpty)
+                    {
+                        if (random.NextDouble() < iceDecorationChance)
+                        {
+                            GameObject iceDecoration = Instantiate(iceDecorationPrefab, terrainObject.transform);
+                            iceDecoration.GetComponent<IcicleDecoration>().Initialize(random);
+                            // ice decoration should always be behind the terrain
+                            iceDecoration.GetComponent<SpriteRenderer>().sortingOrder = random.Next(-200, -87);
                         }
                     }
                 }
