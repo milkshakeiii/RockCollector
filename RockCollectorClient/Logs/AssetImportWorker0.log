@@ -9249,3 +9249,133 @@ Memory consumption went from 114.6 MB to 113.2 MB.
 Total: 7.201400 ms (FindLiveObjects: 0.550900 ms CreateObjectMapping: 0.604000 ms MarkObjects: 4.398900 ms  DeleteObjects: 1.646100 ms)
 
 Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Import Request.
+  Time since last request: 189682.881060 seconds.
+  path: Assets/Art/Demo/IceTilemaps/v2/EDGE01.png
+  artifactKey: Guid(a005bbddff285a14f9c37a17917be288) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Demo/IceTilemaps/v2/EDGE01.png using Guid(a005bbddff285a14f9c37a17917be288) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
+ -> (artifact id: '5fcec8b37899193315b3f256fda99494') in 0.9295498 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000662 seconds.
+  path: Assets/Art/Demo/IceTilemaps/v2/FILLER07.png
+  artifactKey: Guid(c255574343cc9df4d802677bbd3dfe75) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Demo/IceTilemaps/v2/FILLER07.png using Guid(c255574343cc9df4d802677bbd3dfe75) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
+ -> (artifact id: 'f136cec1b78a21411d599ad9e5696772') in 0.0247188 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000029 seconds.
+  path: Assets/Art/Demo/IceTilemaps/v2/EDGE_LftCorner.png
+  artifactKey: Guid(7ef0f1e7f547048449caf6fc527c5a22) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Demo/IceTilemaps/v2/EDGE_LftCorner.png using Guid(7ef0f1e7f547048449caf6fc527c5a22) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
+ -> (artifact id: 'fa9b51259d40c9c5f8e22e78e6507066') in 0.0247627 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000026 seconds.
+  path: Assets/Art/Demo/IceTilemaps/v2/ICICLE05.png
+  artifactKey: Guid(3a9809c93454a1044bd19342be95479c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Demo/IceTilemaps/v2/ICICLE05.png using Guid(3a9809c93454a1044bd19342be95479c) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
+ -> (artifact id: '772a8d760f4a146b003e22ea0b65461d') in 0.0298693 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000043 seconds.
+  path: Assets/Art/Demo/IceTilemaps/v2/FILLER01.png
+  artifactKey: Guid(43807add486ff9f428168753ec825517) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Demo/IceTilemaps/v2/FILLER01.png using Guid(43807add486ff9f428168753ec825517) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
+ -> (artifact id: 'afb72905dca5fad905f5be52b4d32999') in 0.0274658 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000015 seconds.
+  path: Assets/Art/Demo/IceTilemaps/v2/FILLER03.png
+  artifactKey: Guid(6361bd4a5a59ec24cbddbf817f4abd9a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Demo/IceTilemaps/v2/FILLER03.png using Guid(6361bd4a5a59ec24cbddbf817f4abd9a) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
+ -> (artifact id: '67c53ff449c4238eb9a0364140940e6b') in 0.0230484 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000020 seconds.
+  path: Assets/Art/Demo/IceTilemaps/v2/FILLER06.png
+  artifactKey: Guid(4a268803c2e0ffa488a3b61525cdc9aa) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Demo/IceTilemaps/v2/FILLER06.png using Guid(4a268803c2e0ffa488a3b61525cdc9aa) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
+ -> (artifact id: '1d857666b84d24e23ae3d511d4d87719') in 0.0299303 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000050 seconds.
+  path: Assets/Art/Demo/IceTilemaps/v2/INNTER_RT.png
+  artifactKey: Guid(c2d369ec05ae0aa408867d9d420b982d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Demo/IceTilemaps/v2/INNTER_RT.png using Guid(c2d369ec05ae0aa408867d9d420b982d) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
+ -> (artifact id: '5e70012f7a717b5f0298c1ea90d33e17') in 0.0219768 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000021 seconds.
+  path: Assets/Art/Demo/IceTilemaps/v2/ICICLE02.png
+  artifactKey: Guid(6dbafa09783aa9145916fb6149647225) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Demo/IceTilemaps/v2/ICICLE02.png using Guid(6dbafa09783aa9145916fb6149647225) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
+ -> (artifact id: '604d017e695c607e2b17b7e6436b42ae') in 0.0259957 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000028 seconds.
+  path: Assets/Art/Demo/IceTilemaps/v2/EDGE04.png
+  artifactKey: Guid(a69f4c6c724d9ea48abb2463909b5fa6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Demo/IceTilemaps/v2/EDGE04.png using Guid(a69f4c6c724d9ea48abb2463909b5fa6) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
+ -> (artifact id: 'f202d5355f829f80175f5b13aece811f') in 0.0232898 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000018 seconds.
+  path: Assets/Art/Demo/IceTilemaps/v2/INNTER_LFT.png
+  artifactKey: Guid(fa2484cf494716547bf4524caae52dcf) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Demo/IceTilemaps/v2/INNTER_LFT.png using Guid(fa2484cf494716547bf4524caae52dcf) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
+ -> (artifact id: '416349de09641482ee41c52c220706b9') in 0.0233231 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000022 seconds.
+  path: Assets/Art/Demo/IceTilemaps/v2/FILLER04.png
+  artifactKey: Guid(db936c6ca66c1364abec3e86a8f0be14) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Demo/IceTilemaps/v2/FILLER04.png using Guid(db936c6ca66c1364abec3e86a8f0be14) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
+ -> (artifact id: 'af9845daa4dc0516d038919c49016587') in 0.0182841 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000021 seconds.
+  path: Assets/Art/Demo/IceTilemaps/v2/FILLER09.png
+  artifactKey: Guid(9bbe6c51032307a48bdec0bbe3492915) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Demo/IceTilemaps/v2/FILLER09.png using Guid(9bbe6c51032307a48bdec0bbe3492915) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
+ -> (artifact id: 'ab8e15421fbd15592d60ca536cf04d53') in 0.0234655 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
