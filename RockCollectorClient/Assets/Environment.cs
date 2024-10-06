@@ -137,19 +137,6 @@ public class Environment : MonoBehaviour
             rockGrid[width - 1, y] = true;
         }
 
-        bool[,] hasTimefishSpawner = new bool[width, height];
-        // each tile that is not solid has a 1 in 3500 chance of having a timefish spawner
-        for (int x = 0; x < width; x++)
-        {
-            for (int y = 0; y < height; y++)
-            {
-                if (!rockGrid[x, y] && random.Next(0, 3500) == 0)
-                {
-                    hasTimefishSpawner[x, y] = true;
-                }
-            }
-        }
-
         // make sure there's space for the return ship
         // make sure the terrain grid is false for a rectangle at the top center
         for (int x = width / 2 - 5; x < width / 2 + 5; x++)
@@ -179,6 +166,44 @@ public class Environment : MonoBehaviour
         while (coralSpritesEnumerator.MoveNext())
         {
             yield return null;
+        }
+
+        bool[,] hasTimefishSpawner = new bool[width, height];
+        // each tile that is not solid has a 1 in 8000 chance of having a timefish spawner
+        // that chance is 1 in 1200 instead if there is an adjacent rock or coral tile
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if (!rockGrid[x, y] && random.Next(0, 8000) == 0)
+                {
+                    hasTimefishSpawner[x, y] = true;
+                }
+                bool adjacentRockOrCoral = false;
+                List<Vector2Int> neighborOffsets = new()
+                {
+                    new Vector2Int(1, 0),
+                    new Vector2Int(-1, 0),
+                    new Vector2Int(0, 1),
+                    new Vector2Int(0, -1)
+                };
+                foreach (Vector2Int offset in neighborOffsets)
+                {
+                    Vector2Int neighbor = new Vector2Int(x + offset.x, y + offset.y);
+                    if (neighbor.x >= 0 && neighbor.x < width && neighbor.y >= 0 && neighbor.y < height)
+                    {
+                        if (rockGrid[neighbor.x, neighbor.y] || coralGrid[neighbor.x*2, neighbor.y*2]) // account for the doubled size of the coral grid
+                        {
+                            adjacentRockOrCoral = true;
+                            break;
+                        }
+                    }
+                }
+                if (adjacentRockOrCoral && random.Next(0, 1200) == 0)
+                {
+                    hasTimefishSpawner[x, y] = true;
+                }
+            }
         }
 
         // spawn the GameObjects
@@ -544,7 +569,9 @@ public class Environment : MonoBehaviour
                 {
                     GameObject terrainObject = new(sprites[x, y].name);
                     terrainObject.transform.position = new Vector3((-width / 2 + x) * terrainSpacing, (-height + y) * terrainSpacing, 0);
-                    terrainObject.AddComponent<SpriteRenderer>().sprite = sprites[x, y];
+                    SpriteRenderer renderer = terrainObject.AddComponent<SpriteRenderer>();
+                    renderer.sprite = sprites[x, y];
+                    renderer.sortingOrder = 0;
                     // also add a collider if this is not a filler rock or ice
                     if (!fillerRocks.Contains(sprites[x, y]) && !fillerIce.Contains(sprites[x, y]))
                         terrainObject.AddComponent<BoxCollider2D>();

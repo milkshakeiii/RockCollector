@@ -68,6 +68,17 @@ public class Timefish : MonoBehaviour
         fin.GetComponent<SpriteRenderer>().sprite = species.finSprite;
         eye.GetComponent<SpriteRenderer>().sprite = species.eyeSprite;
         tail.GetComponent<SpriteRenderer>().sprite = species.tailSprite;
+        body.GetComponent<SpriteRenderer>().sortingOrder = this.GetComponent<SpriteRenderer>().sortingOrder;
+        fin.GetComponent<SpriteRenderer>().sortingOrder = this.GetComponent<SpriteRenderer>().sortingOrder;
+        eye.GetComponent<SpriteRenderer>().sortingOrder = this.GetComponent<SpriteRenderer>().sortingOrder;
+        tail.GetComponent<SpriteRenderer>().sortingOrder = this.GetComponent<SpriteRenderer>().sortingOrder;
+
+        // delete self if spawned on top of a collider (other than self)
+        float diameter = size * 2;
+        if (Physics2D.OverlapCircleAll(transform.position, diameter).Length > 1)
+        {
+            Destroy(gameObject);
+        }
     }
 
     // Start is called before the first frame update

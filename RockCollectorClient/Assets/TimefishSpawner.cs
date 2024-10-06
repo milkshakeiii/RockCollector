@@ -59,6 +59,7 @@ public class TimefishSpawner : MonoBehaviour
             }
             GameObject newTimefish = Instantiate(timefishPrefab, newPosition, Quaternion.identity);
             Timefish timefish = newTimefish.GetComponent<Timefish>();
+            timefish.GetComponent<SpriteRenderer>().sortingOrder = -1;
             timefish.Initialize(testSpecies);
         }
     }
