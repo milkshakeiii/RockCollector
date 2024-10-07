@@ -28,7 +28,7 @@ public class HarpoonGunBehaviour : MonoBehaviour
         // clear destroyed harpoons
         harpoons.RemoveAll(harpoon => harpoon == null);
         bool harpoonsAvailable = harpoons.Count < harpoonGun.maxHarpoons;
-        if (harpoonsAvailable && Input.GetMouseButtonDown(0))
+        if (harpoonsAvailable && Input.GetButton("button1"))
         {
             // pay the activation power cost
             Submarine submarine = transform.parent.GetComponent<Submarine>();

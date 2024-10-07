@@ -224,11 +224,11 @@ public class Submarine : MonoBehaviour
     {
         Planet planet = new();
         {
-            if (UnityEngine.Input.GetKey(KeyCode.W))
+            if (Input.GetButton("up"))
             {
                 GetLighter();
             }
-            else if (UnityEngine.Input.GetKey(KeyCode.S))
+            else if (Input.GetButton("down"))
             {
                 GetHeavier();
             }
@@ -282,7 +282,7 @@ public class Submarine : MonoBehaviour
 
         {
             // if neither A nor D is pressed, do nothing
-            if (UnityEngine.Input.GetKey(KeyCode.A) || UnityEngine.Input.GetKey(KeyCode.D))
+            if (Input.GetButton("left") || Input.GetButton("right"))
             {
                 bool facingRight = this.transform.localScale.x > 0;
                 bool turningRight = UnityEngine.Input.GetKey(KeyCode.D);

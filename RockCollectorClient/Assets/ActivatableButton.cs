@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ActivatableButton : MonoBehaviour
 {
@@ -11,11 +12,23 @@ public class ActivatableButton : MonoBehaviour
     {
         this.submarine = submarine;
         this.activatable = activatable;
+
+        // randomize the button color
+        GetComponent<Image>().material.color = Random.ColorHSV();
     }
 
     public void Click()
     {
         Debug.Log("Activating module: " + activatable);
         submarine.ActivateModule(activatable);
+    }
+
+    void Update()
+    {
+        // also activate the module when button 2 is pressed
+        if (Input.GetButtonDown("button2"))
+        {
+            Click();
+        }
     }
 }

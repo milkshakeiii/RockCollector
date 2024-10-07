@@ -12,9 +12,11 @@ public class ModulesSpawner : MonoBehaviour
 
     public Submarine submarine;
 
-    private List<GameObject> images = new List<GameObject>();
-    private List<GameObject> worldObjects = new List<GameObject>();
+    private List<GameObject> shootablesImages = new List<GameObject>();
+    private List<GameObject> shootablesWorldObjects = new List<GameObject>();
     private int currentShootableIndex = 0;
+
+    private bool hotSwapMode = false;
 
     // Start is called before the first frame update
     void Start()
@@ -26,19 +28,19 @@ public class ModulesSpawner : MonoBehaviour
                 GameObject shootablesImage = Instantiate(shootablesImagePrefab, shootablesImageParent.transform);
                 shootablesImage.GetComponent<ShootableImage>().Initialize(shootable);
                 // deactivate the shootable image if it is not the first one
-                if (images.Count > 0)
+                if (shootablesImages.Count > 0)
                 {
                     shootablesImage.SetActive(false);
                 }
-                images.Add(shootablesImage);
+                shootablesImages.Add(shootablesImage);
 
                 GameObject shootableWorldObject = shootable.SpawnWorldObject(submarine);
                 // deactivate the shootable world object if it is not the first one
-                if (worldObjects.Count > 0)
+                if (shootablesWorldObjects.Count > 0)
                 {
                     shootableWorldObject.SetActive(false);
                 }
-                worldObjects.Add(shootableWorldObject);
+                shootablesWorldObjects.Add(shootableWorldObject);
             }
         }
 
@@ -65,15 +67,19 @@ public class ModulesSpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // scroll through the shootables with the mouse wheel
-        float scroll = Input.GetAxis("Mouse ScrollWheel");
-        if (scroll != 0 && images.Count > 1)
+        // toggle hot swap mode with button3
+        if (Input.GetButtonDown("button3"))
         {
-            images[currentShootableIndex].SetActive(false);
-            worldObjects[currentShootableIndex].SetActive(false);
-            currentShootableIndex = (currentShootableIndex + images.Count + (scroll > 0 ? 1 : -1)) % images.Count;
-            images[currentShootableIndex].SetActive(true);
-            worldObjects[currentShootableIndex].SetActive(true);
+            hotSwapMode = !hotSwapMode;
+        }
+        // scroll through the shootables with button1 if hot swap mode is on
+        if (hotSwapMode && Input.GetButtonDown("button1") && shootablesImages.Count > 1)
+        {
+            shootablesImages[currentShootableIndex].SetActive(false);
+            shootablesWorldObjects[currentShootableIndex].SetActive(false);
+            currentShootableIndex = (currentShootableIndex + shootablesImages.Count + 1) % shootablesImages.Count;
+            shootablesImages[currentShootableIndex].SetActive(true);
+            shootablesWorldObjects[currentShootableIndex].SetActive(true);
         }
     }
 }

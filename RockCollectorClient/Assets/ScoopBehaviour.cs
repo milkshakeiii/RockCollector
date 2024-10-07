@@ -24,7 +24,7 @@ public class ScoopBehaviour : MonoBehaviour
     void Update()
     {
         // scoop on left mouse click
-        if (!scooping && Input.GetMouseButtonDown(0))
+        if (!scooping && Input.GetButton("button1"))
         {
             StartCoroutine(DoScoop());
         }
