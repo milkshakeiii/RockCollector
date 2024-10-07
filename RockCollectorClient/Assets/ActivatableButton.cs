@@ -14,7 +14,7 @@ public class ActivatableButton : MonoBehaviour
         this.activatable = activatable;
 
         // randomize the button color
-        GetComponent<Image>().material.color = Random.ColorHSV();
+        GetComponent<UnityEngine.UI.Image>().color = new Color(Random.value, Random.value, Random.value);
     }
 
     public void Click()

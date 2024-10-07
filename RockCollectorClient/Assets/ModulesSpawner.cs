@@ -68,8 +68,9 @@ public class ModulesSpawner : MonoBehaviour
     void Update()
     {
         // toggle hot swap mode with button3
-        if (Input.GetButtonDown("button3"))
+        if (Input.GetButtonUp("button3"))
         {
+            Debug.Log("Toggling hot swap mode");
             hotSwapMode = !hotSwapMode;
         }
         // scroll through the shootables with button1 if hot swap mode is on
