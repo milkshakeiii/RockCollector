@@ -12,6 +12,9 @@ public class ModulesSpawner : MonoBehaviour
 
     public Submarine submarine;
 
+    private List<GameObject> activatablesImages = new List<GameObject>();
+    private int currentActivatableIndex = 0;
+
     private List<GameObject> shootablesImages = new List<GameObject>();
     private List<GameObject> shootablesWorldObjects = new List<GameObject>();
     private int currentShootableIndex = 0;
@@ -48,11 +51,13 @@ public class ModulesSpawner : MonoBehaviour
         for (int i = 0; i < activatables.Count; i++)
         {
             GameObject activatableButton = Instantiate(activatableButtonPrefab, activatableButtonParent.transform);
-            // positions the button in a row from left to right
-            activatableButton.transform.localPosition = new Vector3(-150 + i * 40, 0, 0);
-            // Initialize the button with the submarine and the activatable module
             ActivatableButton button = activatableButton.GetComponent<ActivatableButton>();
             button.Initialize(submarine, activatables[i]);
+            if (i > 0)
+            {
+                activatableButton.SetActive(false);
+            }
+            activatablesImages.Add(activatableButton);
         }
 
         foreach (Equipment equipment in submarine.AllModules())
@@ -81,6 +86,13 @@ public class ModulesSpawner : MonoBehaviour
             currentShootableIndex = (currentShootableIndex + shootablesImages.Count + 1) % shootablesImages.Count;
             shootablesImages[currentShootableIndex].SetActive(true);
             shootablesWorldObjects[currentShootableIndex].SetActive(true);
+        }
+        // scroll through the activatables with button2 if hot swap mode is on
+        if (hotSwapMode && Input.GetButtonDown("button2") && activatablesImages.Count > 1)
+        {
+            activatablesImages[currentActivatableIndex].SetActive(false);
+            currentActivatableIndex = (currentActivatableIndex + activatablesImages.Count + 1) % activatablesImages.Count;
+            activatablesImages[currentActivatableIndex].SetActive(true);
         }
     }
 }
