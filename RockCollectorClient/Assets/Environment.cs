@@ -51,6 +51,7 @@ public class Environment : MonoBehaviour
         bool[,] rockGrid = new bool[width, height];
         bool[,] iceGrid = new bool[width, height];
         bool[,] coralGrid = new bool[width*2, height*2];
+        bool[,] caveGrid = new bool[width * 2, height * 2];
 
         // and a corresponding grid to keep track of danger levels,
         // which will be used to spawn timefish and other dangers
@@ -89,8 +90,9 @@ public class Environment : MonoBehaviour
                 sectorSizes.Add(new Vector2Int(sectorWidth, sectorHeight));
             }
         }
-        
 
+        int edgeCaveChance = Math.Clamp(Mathf.RoundToInt((float)Math.Abs(NormalDistribution(random) * 20 + 15)), 0, 100);
+        bool falseBottom = true;
         // determine the terrain for each sector
         for (int i = 0; i < sectorStarts.Count; i++)
         {
@@ -100,9 +102,25 @@ public class Environment : MonoBehaviour
             int sectorStartY = sectorStarts[i].y;
             Debug.Log("Sector start: " + sectorStartX + ", " + sectorStartY);
             Debug.Log("Sector size: " + sectorWidth + ", " + sectorHeight);
-            if (sectorStartY == 0)
+            if ((sectorStartX == 0 || sectorStartX == width - sectorWidth) && random.Next(100) < edgeCaveChance)
+            {
+                IEnumerator sectorEnumator = MakeCaveSector(random, sectorWidth * 2, sectorHeight * 2, sectorStartX * 2, sectorStartY * 2, coralGrid);
+                while (sectorEnumator.MoveNext())
+                {
+                    yield return null;
+                }
+            }
+            else if ((!falseBottom && sectorStartY == 0) || falseBottom && sectorStartY < 100 && sectorStartY != 0)
             {
                 IEnumerator sectorEnumator = MakeMountainSector(random, sectorWidth, sectorHeight, sectorStartX, sectorStartY, rockGrid, 3, 100, 100, 100);
+                while (sectorEnumator.MoveNext())
+                {
+                    yield return null;
+                }
+            }
+            else if (sectorStartY == 0 && falseBottom)
+            {
+                IEnumerator sectorEnumator = MakeCaveSector(random, sectorWidth * 2, sectorHeight * 2, sectorStartX * 2, sectorStartY * 2, coralGrid);
                 while (sectorEnumator.MoveNext())
                 {
                     yield return null;

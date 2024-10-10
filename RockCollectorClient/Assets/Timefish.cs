@@ -295,6 +295,10 @@ public class TimefishSpecies
     public bool school; // does the fish school with others of its species
     public float chaseTime; // how long does the fish remain aggrivated after the submarine leaves vision range
 
+    public int maneuverability;
+    public int stealth;
+    public int armor;
+
     public Sprite bodySprite;
     public Sprite finSprite;
     public Sprite eyeSprite;
