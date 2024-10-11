@@ -29,6 +29,7 @@ public class Environment : MonoBehaviour
     public List<Sprite> fillerIce;
 
     public List<Sprite> coralSprites;
+    public List<Sprite> caveSprites;
 
     public float terrainSpacing = 0.319f;
     private int lastSeed = 0;
@@ -70,6 +71,11 @@ public class Environment : MonoBehaviour
         {
             verticalLines.Add(random.Next(0, width));
         }
+        int secondLowestHorizontalLine = int.MaxValue;
+        foreach (int line in horizontalLines)
+        {
+            secondLowestHorizontalLine = Math.Min(secondLowestHorizontalLine, line);
+        }
         horizontalLines.Add(height);
         verticalLines.Add(width);
         horizontalLines.Add(0);
@@ -104,14 +110,15 @@ public class Environment : MonoBehaviour
             Debug.Log("Sector size: " + sectorWidth + ", " + sectorHeight);
             if ((sectorStartX == 0 || sectorStartX == width - sectorWidth) && random.Next(100) < edgeCaveChance)
             {
-                IEnumerator sectorEnumator = MakeCaveSector(random, sectorWidth * 2, sectorHeight * 2, sectorStartX * 2, sectorStartY * 2, coralGrid);
+                IEnumerator sectorEnumator = MakeCaveSector(random, sectorWidth * 2, sectorHeight * 2, sectorStartX * 2, sectorStartY * 2, caveGrid);
                 while (sectorEnumator.MoveNext())
                 {
                     yield return null;
                 }
             }
-            else if ((!falseBottom && sectorStartY == 0) || falseBottom && sectorStartY < 100 && sectorStartY != 0)
+            else if ((!falseBottom && sectorStartY == 0) || falseBottom && (sectorStartY == secondLowestHorizontalLine) && sectorStartY != 0)
             {
+                Debug.Log("mountain sector: " + sectorStartX + ", " + sectorStartY);
                 IEnumerator sectorEnumator = MakeMountainSector(random, sectorWidth, sectorHeight, sectorStartX, sectorStartY, rockGrid, 3, 100, 100, 100);
                 while (sectorEnumator.MoveNext())
                 {
@@ -120,7 +127,7 @@ public class Environment : MonoBehaviour
             }
             else if (sectorStartY == 0 && falseBottom)
             {
-                IEnumerator sectorEnumator = MakeCaveSector(random, sectorWidth * 2, sectorHeight * 2, sectorStartX * 2, sectorStartY * 2, coralGrid);
+                IEnumerator sectorEnumator = MakeCaveSector(random, sectorWidth * 2, sectorHeight * 2, sectorStartX * 2, sectorStartY * 2, caveGrid);
                 while (sectorEnumator.MoveNext())
                 {
                     yield return null;
@@ -182,6 +189,12 @@ public class Environment : MonoBehaviour
 
         IEnumerator coralSpritesEnumerator = DecideCoralSpritesAndRotations(random, coralGrid, sprites, rotations);
         while (coralSpritesEnumerator.MoveNext())
+        {
+            yield return null;
+        }
+
+        IEnumerator caveSpritesEnumerator = DecideCaveSpritesAndRotations(random, caveGrid, sprites, rotations);
+        while (caveSpritesEnumerator.MoveNext())
         {
             yield return null;
         }
@@ -385,6 +398,22 @@ public class Environment : MonoBehaviour
         }
         yield return null;
     }
+    
+    // This will also add holes in the sector above it unless it is already a topmost sector
+    private IEnumerator MakeCaveSector(System.Random random, int sectorWidth, int sectorHeight, int sectorStartX, int sectorStartY, bool[,] caveGrid)
+    {
+        for (int x = sectorStartX; x < sectorStartX + sectorWidth; x++)
+        {
+            for (int y = sectorStartY; y < sectorStartY + sectorHeight; y++)
+            {
+                if (Mathf.PerlinNoise(x / 10f, y / 10f) > 0.5f)
+                {
+                    caveGrid[x, y] = true;
+                }
+            }
+        }
+        yield return null;
+    }
 
     private IEnumerator DecideRockSpritesAndRotations(System.Random random, bool[,] grid, Sprite[,] sprites, int[,] rotations)
     {
@@ -572,6 +601,27 @@ public class Environment : MonoBehaviour
                 }
                 // set the sprite to a random coral sprite
                 sprites[x, y] = coralSprites[random.Next(coralSprites.Count)];
+                // set the rotation to a random multiple of 90 degrees
+                rotations[x, y] = random.Next(0, 4) * 90;
+            }
+        }
+        yield return null;
+    }
+
+    private IEnumerator DecideCaveSpritesAndRotations(System.Random random, bool[,] caveGrid, Sprite[,] sprites, int[,] rotations)
+    {
+        int width = caveGrid.GetLength(0);
+        int height = caveGrid.GetLength(1);
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if (!caveGrid[x, y])
+                {
+                    continue;
+                }
+                // set the sprite to a random cave sprite
+                sprites[x, y] = caveSprites[random.Next(caveSprites.Count)];
                 // set the rotation to a random multiple of 90 degrees
                 rotations[x, y] = random.Next(0, 4) * 90;
             }
