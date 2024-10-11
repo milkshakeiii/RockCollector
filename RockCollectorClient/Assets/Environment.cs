@@ -13,6 +13,7 @@ public class Environment : MonoBehaviour
     public GameObject largeDecorRockPrefab;
     public GameObject coralDecorationPrefab;
     public GameObject iceDecorationPrefab;
+    public GameObject stalactiteDecorationPrefab;
 
     public Sprite leftCornerRock;
     public Sprite rightCornerRock;
@@ -635,6 +636,8 @@ public class Environment : MonoBehaviour
         float decorRockChance = random.Next(10, 40) / 100f;
         float coralDecorationChance = random.Next(10, 60) / 100f;
         float iceDecorationChance = random.Next(30, 90) / 100f;
+        float stalactiteDecorationChance = random.Next(10, 50) / 100f;
+        float cavePlantDecorationChance = random.Next(10, 70) / 100f;
         HashSet<Vector2Int> squaresWithCoralDecorations = new();
 
         int width = sprites.GetLength(0);
@@ -733,6 +736,16 @@ public class Environment : MonoBehaviour
                             // ice decoration should always be behind the terrain
                             iceDecoration.GetComponent<SpriteRenderer>().sortingOrder = random.Next(-200, -87);
                         }
+                    }
+
+                    // chance to add a stalactite decoration if this is a cave sprite and the square above or below is empty
+                    bool squareAboveEmpty = y < height - 1 && sprites[x, y + 1] == null;
+                    if (caveSprites.Contains(sprites[x, y]) && random.NextDouble() < stalactiteDecorationChance && (squareAboveEmpty || squareBelowEmpty))
+                    {
+                        GameObject stalactiteDecoration = Instantiate(stalactiteDecorationPrefab, terrainObject.transform);
+                        stalactiteDecoration.GetComponent<StalactiteDecoration>().Initialize(random, squareBelowEmpty);
+                        // stalactite decoration should always be behind the terrain
+                        stalactiteDecoration.GetComponent<SpriteRenderer>().sortingOrder = random.Next(-200, -87);
                     }
                 }
             }
