@@ -1064,6 +1064,7 @@ MonoBehaviour:
   coralDecorationPrefab: {fileID: 3867676492792244468, guid: 9b1d1177a1564d543b5270495f345575, type: 3}
   iceDecorationPrefab: {fileID: 5338728940540939239, guid: ebae4dec2b060144a94ac634e4efce50, type: 3}
   stalactiteDecorationPrefab: {fileID: 5338728940540939239, guid: b9f68f2b21d021a498ccb5eaf05499fd, type: 3}
+  cavePlanetDecorationPrefab: {fileID: 3867676492792244468, guid: 79d0fa31bccfc82499044d4cdf4b5ce9, type: 3}
   leftCornerRock: {fileID: -7488026923455815707, guid: 557e51381eebc8e459c505a44c35242b, type: 3}
   rightCornerRock: {fileID: -6974698180887182396, guid: 1ac21e90c6764be4ca595589e7483fa1, type: 3}
   edgeRocks:

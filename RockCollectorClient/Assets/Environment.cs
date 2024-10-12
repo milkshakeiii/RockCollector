@@ -14,6 +14,7 @@ public class Environment : MonoBehaviour
     public GameObject coralDecorationPrefab;
     public GameObject iceDecorationPrefab;
     public GameObject stalactiteDecorationPrefab;
+    public GameObject cavePlanetDecorationPrefab;
 
     public Sprite leftCornerRock;
     public Sprite rightCornerRock;
@@ -637,8 +638,9 @@ public class Environment : MonoBehaviour
         float coralDecorationChance = random.Next(10, 60) / 100f;
         float iceDecorationChance = random.Next(30, 90) / 100f;
         float stalactiteDecorationChance = random.Next(10, 50) / 100f;
-        float cavePlantDecorationChance = random.Next(10, 70) / 100f;
+        float cavePlantDecorationChance = random.Next(30, 90) / 100f;
         HashSet<Vector2Int> squaresWithCoralDecorations = new();
+        HashSet<Vector2Int> squaresWithCaveDecorations = new();
 
         int width = sprites.GetLength(0);
         int height = sprites.GetLength(1);
@@ -746,6 +748,46 @@ public class Environment : MonoBehaviour
                         stalactiteDecoration.GetComponent<StalactiteDecoration>().Initialize(random, squareBelowEmpty);
                         // stalactite decoration should always be behind the terrain
                         stalactiteDecoration.GetComponent<SpriteRenderer>().sortingOrder = random.Next(-200, -87);
+                        if (squareBelowEmpty)
+                        {
+                            squaresWithCaveDecorations.Add(new Vector2Int(x, y - 1));
+                        }
+                        else
+                        {
+                            squaresWithCaveDecorations.Add(new Vector2Int(x, y + 1));
+                        }
+                    }
+
+                    // chance to add a cave planet decoration if this is a cave sprite
+                    if (caveSprites.Contains(sprites[x, y]) && x > 1 && x < width - 2 && y > 1 && y < height - 2)
+                    {
+                        // only proceed if an orthogonally adjacent square is empty
+                        List<Vector2Int> emptyNeighbors = new List<Vector2Int>();
+                        List<Vector2Int> neighborOffsets = new List<Vector2Int>
+                        {
+                            new Vector2Int(1, 0),
+                            new Vector2Int(-1, 0),
+                            new Vector2Int(0, 1),
+                            new Vector2Int(0, -1)
+                        };
+                        foreach (Vector2Int offset in neighborOffsets)
+                        {
+                            Vector2Int neighbor = new Vector2Int(x + offset.x, y + offset.y);
+                            if (sprites[neighbor.x, neighbor.y] == null && !squaresWithCaveDecorations.Contains(neighbor))
+                            {
+                                emptyNeighbors.Add(neighbor);
+                            }
+                        }
+                        if (emptyNeighbors.Count > 0 && random.NextDouble() < cavePlantDecorationChance)
+                        {
+                            Vector2Int newCaveDecorationPosition = emptyNeighbors[random.Next(emptyNeighbors.Count)];
+                            GameObject coralDecoration = Instantiate(cavePlanetDecorationPrefab, terrainObject.transform);
+                            coralDecoration.GetComponent<SpriteRenderer>().sortingOrder = random.Next(100, 200);
+                            Vector2Int baseDirection = new Vector2Int(x - newCaveDecorationPosition.x, y - newCaveDecorationPosition.y);
+                            coralDecoration.GetComponent<CoralDecoration>().Initialize(random, baseDirection);
+
+                            squaresWithCaveDecorations.Add(newCaveDecorationPosition);
+                        }
                     }
                 }
             }
