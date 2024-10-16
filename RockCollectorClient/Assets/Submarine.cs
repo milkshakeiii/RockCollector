@@ -37,6 +37,8 @@ public class SubmarineType
 
 public class Submarine : MonoBehaviour
 {
+    public static Submarine Instance;
+
     public delegate void FishStored(Timefish fish, float percentFull);
     public static event FishStored OnFishStored;
 
@@ -130,6 +132,8 @@ public class Submarine : MonoBehaviour
 
     void OnEnable()
     {
+        Submarine.Instance = this;
+
         AddDrag(SubmarineType().startingDrag);
         AddMass(SubmarineType().startingMass);
 
@@ -138,6 +142,8 @@ public class Submarine : MonoBehaviour
 
     void OnDisable()
     {
+        Submarine.Instance = null;
+
         DiveExit.OnDiveExitEvent -= EndOfRun;
     }
 

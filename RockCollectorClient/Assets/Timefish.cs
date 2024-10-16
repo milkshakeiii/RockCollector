@@ -104,7 +104,32 @@ public class Timefish : MonoBehaviour
         }
 
         // check if the submarine is in the vision cone
+        if (SubmarineInVisionCone())
+        {
+            // aggro the fish if the submarine is in the vision cone
+            SetBehavior(new AggressiveBehavior(species.chaseTime));
+        }
+    }
 
+    public bool SubmarineInVisionCone()
+    {
+        if (Submarine.Instance == null)
+        {
+            return false;
+        }
+        Vector3 toSub = Submarine.Instance.transform.position - transform.position;
+        float angle = Vector3.Angle(transform.up, toSub);
+        return angle < species.visionConeArc / 2 && toSub.magnitude < species.visionRange;
+    }
+
+    public void FishRotate(float angle)
+    {
+        this.transform.Rotate(0, 0, angle * Time.deltaTime);
+        // make sure the fish doesn't turn upside down by flipping it if it does
+        if (this.transform.up.y < 0)
+        {
+            this.transform.localScale = new Vector3(this.transform.localScale.x, -this.transform.localScale.y, this.transform.localScale.z);
+        }
     }
 
     public void SetBehavior(Behavior newBehavior)
@@ -226,12 +251,7 @@ public class RoamBehavior : Behavior
         float time = 0f;
         while (time < 1f)
         {
-            fish.transform.Rotate(0, 0, arc * Time.deltaTime);
-            // make sure the fish doesn't turn upside down by reversing direction if it does
-            if (fish.transform.up.y < 0)
-            {
-                arc = -arc;
-            }
+            fish.FishRotate(arc * Time.deltaTime);
             time += Time.deltaTime;
             yield return null;
         }
@@ -266,13 +286,21 @@ public class AggressiveBehavior : Behavior
 
     public override void Update(Timefish fish)
     {
-
-
         // chase the submarine for a limited amount of time
         timeChasing += Time.deltaTime;
         if (timeChasing > chaseTime)
         {
             fish.SetBehavior(new RoamBehavior());
+        }
+
+        // if the submarine is still in vision range, rotate towards it and swim forward
+        if (fish.SubmarineInVisionCone())
+        {
+            Vector3 toSub = Submarine.Instance.transform.position - fish.transform.position;
+            float angle = Vector3.SignedAngle(fish.transform.up, toSub, Vector3.forward);
+            fish.FishRotate(angle);
+
+            fish.transform.position += fish.Speed() * Time.deltaTime * fish.transform.right;
         }
     }
 }
