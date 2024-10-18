@@ -22,6 +22,7 @@ public class TimefishSpawner : MonoBehaviour
         testSpecies.movementSpeed = 1.0f;
         testSpecies.baseTradeValue = 10f;
         testSpecies.aggressive = true;
+        testSpecies.chaseTime = 15.0f;
 
         testSpecies.bodySprite = bodies[random.Next(bodies.Count)];
         testSpecies.finSprite = fins[random.Next(fins.Count)];

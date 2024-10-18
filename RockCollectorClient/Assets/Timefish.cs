@@ -108,6 +108,7 @@ public class Timefish : MonoBehaviour
         {
             // aggro the fish if the submarine is in the vision cone
             SetBehavior(new AggressiveBehavior(species.chaseTime));
+            Debug.Log("Chasing for " + species.chaseTime + " seconds");
         }
     }
 
@@ -118,7 +119,8 @@ public class Timefish : MonoBehaviour
             return false;
         }
         Vector3 toSub = Submarine.Instance.transform.position - transform.position;
-        float angle = Vector3.Angle(transform.up, toSub);
+        float angle = Vector3.Angle(transform.right, toSub);
+        // Debug.Log("Angle: " + angle + " Magnitude" + toSub.magnitude);
         return angle < species.visionConeArc / 2 && toSub.magnitude < species.visionRange;
     }
 
@@ -270,6 +272,9 @@ public class StillBehavior : Behavior
     {
         // float gently up and down
         fish.transform.position += new Vector3(0, Mathf.Sin(Time.time * fish.species.baseSize) * 0.0005f * fish.species.movementSpeed, 0);
+
+        // check if the submarine is in vision range
+        fish.CheckAggro();
     }
 }
 
@@ -290,7 +295,7 @@ public class AggressiveBehavior : Behavior
         timeChasing += Time.deltaTime;
         if (timeChasing > chaseTime)
         {
-            fish.SetBehavior(new RoamBehavior());
+            fish.SetBehavior(new StillBehavior());
         }
 
         // if the submarine is still in vision range, rotate towards it and swim forward
