@@ -128,7 +128,11 @@ public class Timefish : MonoBehaviour
     {
         this.transform.Rotate(0, 0, angle * Time.deltaTime);
         // make sure the fish doesn't turn upside down by flipping it if it does
-        if (this.transform.up.y < 0)
+        if (this.transform.up.y < 0 && this.transform.localScale.y > 0)
+        {
+            this.transform.localScale = new Vector3(this.transform.localScale.x, -this.transform.localScale.y, this.transform.localScale.z);
+        }
+        if (this.transform.up.y > 0 && this.transform.localScale.y < 0)
         {
             this.transform.localScale = new Vector3(this.transform.localScale.x, -this.transform.localScale.y, this.transform.localScale.z);
         }
@@ -173,12 +177,12 @@ public class Timefish : MonoBehaviour
 
     public float Speed()
     {
-        return species.movementSpeed * size;
+        return species.speedFactor * size;
     }
 
     public float ReangleSpeed()
     {
-        return species.movementSpeed * size;
+        return species.speedFactor * size;
     }
 
     public float TradeValue()
@@ -271,7 +275,7 @@ public class StillBehavior : Behavior
     public override void Update(Timefish fish)
     {
         // float gently up and down
-        fish.transform.position += new Vector3(0, Mathf.Sin(Time.time * fish.species.baseSize) * 0.0005f * fish.species.movementSpeed, 0);
+        fish.transform.position += new Vector3(0, Mathf.Sin(Time.time * fish.species.baseSize) * 0.0005f * fish.species.speedFactor, 0);
 
         // check if the submarine is in vision range
         fish.CheckAggro();
@@ -302,7 +306,7 @@ public class AggressiveBehavior : Behavior
         if (fish.SubmarineInVisionCone())
         {
             Vector3 toSub = Submarine.Instance.transform.position - fish.transform.position;
-            float angle = Vector3.SignedAngle(fish.transform.up, toSub, Vector3.forward);
+            float angle = Vector3.SignedAngle(fish.transform.right, toSub, Vector3.forward);
             fish.FishRotate(angle);
 
             fish.transform.position += fish.Speed() * Time.deltaTime * fish.transform.right;
@@ -317,7 +321,7 @@ public class TimefishSpecies
     
     public float healthFactor; //Durability factor in power units per cubic meter
     public List<WeakSpot> weakSpots; //Weak spots
-    public float movementSpeed; //Movement speed(greater with size) factor in meters per second
+    public float speedFactor; //Movement speed(greater with size) factor in meters per second
     public float baseTradeValue; //Base trade value factor (for robot versions only) (greater with depth) in trade value units
 
     public float visionConeArc; //Vision cone arc in degrees

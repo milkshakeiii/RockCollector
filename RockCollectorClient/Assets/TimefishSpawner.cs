@@ -19,7 +19,7 @@ public class TimefishSpawner : MonoBehaviour
         testSpecies.visionRange = 10.0f;
         testSpecies.healthFactor = 10.0f;
         testSpecies.weakSpots = new List<WeakSpot>();
-        testSpecies.movementSpeed = 1.0f;
+        testSpecies.speedFactor = 2.0f;
         testSpecies.baseTradeValue = 10f;
         testSpecies.aggressive = true;
         testSpecies.chaseTime = 15.0f;
