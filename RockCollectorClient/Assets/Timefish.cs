@@ -69,9 +69,9 @@ public class Timefish : MonoBehaviour
         eye.GetComponent<SpriteRenderer>().sprite = species.eyeSprite;
         tail.GetComponent<SpriteRenderer>().sprite = species.tailSprite;
         body.GetComponent<SpriteRenderer>().sortingOrder = this.GetComponent<SpriteRenderer>().sortingOrder;
-        fin.GetComponent<SpriteRenderer>().sortingOrder = this.GetComponent<SpriteRenderer>().sortingOrder;
-        eye.GetComponent<SpriteRenderer>().sortingOrder = this.GetComponent<SpriteRenderer>().sortingOrder;
-        tail.GetComponent<SpriteRenderer>().sortingOrder = this.GetComponent<SpriteRenderer>().sortingOrder;
+        fin.GetComponent<SpriteRenderer>().sortingOrder = this.GetComponent<SpriteRenderer>().sortingOrder + 2;
+        eye.GetComponent<SpriteRenderer>().sortingOrder = this.GetComponent<SpriteRenderer>().sortingOrder + 1;
+        tail.GetComponent<SpriteRenderer>().sortingOrder = this.GetComponent<SpriteRenderer>().sortingOrder + 1;
 
         // delete self if spawned on top of a collider (other than self)
         float diameter = size * 2;

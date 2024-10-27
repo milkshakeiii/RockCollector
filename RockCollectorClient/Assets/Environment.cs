@@ -65,7 +65,9 @@ public class Environment : MonoBehaviour
         int numberOfVerticalLines = random.Next(1, 3);
         List<int> horizontalLines = new();
         List<int> verticalLines = new();
-        for (int i = 0; i < numberOfHorizontalLines; i++)
+        // make sure the first horizontal line is low
+        horizontalLines.Add(random.Next(0, height / 3));
+        for (int i = 1; i < numberOfHorizontalLines; i++)
         {
             horizontalLines.Add(random.Next(0, height));
         }
