@@ -72,6 +72,7 @@ public class Timefish : MonoBehaviour
         fin.GetComponent<SpriteRenderer>().sortingOrder = this.GetComponent<SpriteRenderer>().sortingOrder + 2;
         eye.GetComponent<SpriteRenderer>().sortingOrder = this.GetComponent<SpriteRenderer>().sortingOrder + 1;
         tail.GetComponent<SpriteRenderer>().sortingOrder = this.GetComponent<SpriteRenderer>().sortingOrder + 1;
+        tail.transform.position += new Vector3(2.56f * size, 0, 0);
 
         // delete self if spawned on top of a collider (other than self)
         float diameter = size * 2;
