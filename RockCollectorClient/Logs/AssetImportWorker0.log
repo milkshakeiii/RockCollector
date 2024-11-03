@@ -15,7 +15,7 @@ C:/Users/milks/Documents/github/RockCollector/RockCollectorClient
 -logFile
 Logs/AssetImportWorker0.log
 -srvPort
-57247
+60495
 -job-worker-count
 3
 -background-job-worker-count
@@ -59,16 +59,16 @@ C:/Users/milks/Documents/github/RockCollector/RockCollectorClient
     "memorysetup-temp-allocator-size-gi-baking-worker=262144"
     "memorysetup-temp-allocator-size-gi-baking-worker=262144"
     "memorysetup-temp-allocator-size-gfx=262144"
-Player connection [4568]  Target information:
+Player connection [4304]  Target information:
 
-Player connection [4568]  * "[IP] 192.168.0.205 [Port] 0 [Flags] 2 [Guid] 2779240185 [EditorId] 2779240185 [Version] 1048832 [Id] WindowsEditor(7,LAPTOP-QS7EPVME) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+Player connection [4304]  * "[IP] 192.168.0.205 [Port] 0 [Flags] 2 [Guid] 4204277249 [EditorId] 4204277249 [Version] 1048832 [Id] WindowsEditor(7,LAPTOP-QS7EPVME) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
 
-Player connection [4568] Host joined multi-casting on [225.0.0.222:54997]...
-Player connection [4568] Host joined alternative multi-casting on [225.0.0.222:34997]...
+Player connection [4304] Host joined multi-casting on [225.0.0.222:54997]...
+Player connection [4304] Host joined alternative multi-casting on [225.0.0.222:34997]...
 JobSystem: Creating JobQueue using job-worker-count value 3
 Library Redirect Path: Library/
 [PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
-Refreshing native plugins compatible for Editor in 3.35 ms, found 5 plugins.
+Refreshing native plugins compatible for Editor in 3.75 ms, found 5 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Initialize engine version: 6000.0.17f1 (95e1b8cf7a6b)
 [Subsystems] Discovering subsystems at path C:/unity/6000.0.17f1/Editor/Data/Resources/UnitySubsystems
@@ -84,44 +84,44 @@ Initialize mono
 Mono path[0] = 'C:/unity/6000.0.17f1/Editor/Data/Managed'
 Mono path[1] = 'C:/unity/6000.0.17f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
 Mono config path = 'C:/unity/6000.0.17f1/Editor/Data/MonoBleedingEdge/etc'
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56964
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56176
 Begin MonoManager ReloadAssembly
 Registering precompiled unity dll's ...
 Register platform support module: C:/unity/6000.0.17f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
-Registered in 0.002486 seconds.
-- Loaded All Assemblies, in  0.480 seconds
+Registered in 0.002774 seconds.
+- Loaded All Assemblies, in  0.617 seconds
 Native extension for WindowsStandalone target not found
 Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.482 seconds
-Domain Reload Profiling: 960ms
-	BeginReloadAssembly (153ms)
+- Finished resetting the current domain, in  0.520 seconds
+Domain Reload Profiling: 1135ms
+	BeginReloadAssembly (235ms)
 		ExecutionOrderSort (0ms)
 		DisableScriptedObjects (0ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
 		CreateAndSetChildDomain (1ms)
-	RebuildCommonClasses (53ms)
-	RebuildNativeTypeToScriptingClass (16ms)
-	initialDomainReloadingComplete (56ms)
-	LoadAllAssembliesAndSetupDomain (200ms)
-		LoadAssemblies (148ms)
+	RebuildCommonClasses (57ms)
+	RebuildNativeTypeToScriptingClass (25ms)
+	initialDomainReloadingComplete (81ms)
+	LoadAllAssembliesAndSetupDomain (217ms)
+		LoadAssemblies (232ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (197ms)
-			TypeCache.Refresh (195ms)
-				TypeCache.ScanAssembly (179ms)
+		AnalyzeDomain (213ms)
+			TypeCache.Refresh (212ms)
+				TypeCache.ScanAssembly (195ms)
 			BuildScriptInfoCaches (0ms)
 			ResolveRequiredComponents (1ms)
-	FinalizeReload (483ms)
+	FinalizeReload (521ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (428ms)
+		SetupLoadedEditorAssemblies (469ms)
 			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (37ms)
+			InitializePlatformSupportModulesInManaged (34ms)
 			SetLoadedEditorAssemblies (5ms)
 			BeforeProcessingInitializeOnLoad (8ms)
-			ProcessInitializeOnLoadAttributes (268ms)
-			ProcessInitializeOnLoadMethodAttributes (106ms)
-			AfterProcessingInitializeOnLoad (4ms)
+			ProcessInitializeOnLoadAttributes (299ms)
+			ProcessInitializeOnLoadMethodAttributes (119ms)
+			AfterProcessingInitializeOnLoad (3ms)
 			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
 		AwakeInstancesAfterBackupRestoration (0ms)
@@ -130,1625 +130,296 @@ Worker process is ready to serve import requests
 Import Worker Mode flag is 0x00
 Begin MonoManager ReloadAssembly
 Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  1.200 seconds
-Refreshing native plugins compatible for Editor in 2.74 ms, found 5 plugins.
+- Loaded All Assemblies, in  1.254 seconds
+Refreshing native plugins compatible for Editor in 2.92 ms, found 5 plugins.
 Native extension for WindowsStandalone target not found
-Refreshing native plugins compatible for Editor in 3.60 ms, found 5 plugins.
+Refreshing native plugins compatible for Editor in 3.41 ms, found 5 plugins.
 Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.933 seconds
-Domain Reload Profiling: 2128ms
-	BeginReloadAssembly (498ms)
+- Finished resetting the current domain, in  1.000 seconds
+Domain Reload Profiling: 2249ms
+	BeginReloadAssembly (514ms)
 		ExecutionOrderSort (0ms)
 		DisableScriptedObjects (8ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (40ms)
-	RebuildCommonClasses (54ms)
+		CreateAndSetChildDomain (39ms)
+	RebuildCommonClasses (44ms)
 	RebuildNativeTypeToScriptingClass (15ms)
-	initialDomainReloadingComplete (49ms)
-	LoadAllAssembliesAndSetupDomain (579ms)
-		LoadAssemblies (394ms)
+	initialDomainReloadingComplete (48ms)
+	LoadAllAssembliesAndSetupDomain (627ms)
+		LoadAssemblies (431ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (297ms)
-			TypeCache.Refresh (207ms)
-				TypeCache.ScanAssembly (186ms)
-			BuildScriptInfoCaches (78ms)
-			ResolveRequiredComponents (9ms)
-	FinalizeReload (934ms)
+		AnalyzeDomain (318ms)
+			TypeCache.Refresh (217ms)
+				TypeCache.ScanAssembly (193ms)
+			BuildScriptInfoCaches (88ms)
+			ResolveRequiredComponents (10ms)
+	FinalizeReload (1000ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (652ms)
+		SetupLoadedEditorAssemblies (710ms)
 			LogAssemblyErrors (0ms)
 			InitializePlatformSupportModulesInManaged (3ms)
-			SetLoadedEditorAssemblies (4ms)
-			BeforeProcessingInitializeOnLoad (77ms)
-			ProcessInitializeOnLoadAttributes (498ms)
+			SetLoadedEditorAssemblies (3ms)
+			BeforeProcessingInitializeOnLoad (88ms)
+			ProcessInitializeOnLoadAttributes (545ms)
 			ProcessInitializeOnLoadMethodAttributes (62ms)
 			AfterProcessingInitializeOnLoad (8ms)
 			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (6ms)
-Launched and connected shader compiler UnityShaderCompiler.exe after 0.02 seconds
-Refreshing native plugins compatible for Editor in 2.94 ms, found 5 plugins.
+		AwakeInstancesAfterBackupRestoration (7ms)
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.04 seconds
+Refreshing native plugins compatible for Editor in 3.58 ms, found 5 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Unloading 28 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4460 unused Assets / (1.3 MB). Loaded Objects now: 5056.
-Memory consumption went from 120.1 MB to 118.8 MB.
-Total: 11.989400 ms (FindLiveObjects: 0.697900 ms CreateObjectMapping: 0.996500 ms MarkObjects: 8.211300 ms  DeleteObjects: 2.082200 ms)
+Unloading 4460 unused Assets / (1.2 MB). Loaded Objects now: 5056.
+Memory consumption went from 120.1 MB to 118.9 MB.
+Total: 13.129600 ms (FindLiveObjects: 0.772200 ms CreateObjectMapping: 1.115500 ms MarkObjects: 9.280800 ms  DeleteObjects: 1.959200 ms)
 
 ========================================================================
 Received Import Request.
-  Time since last request: 26477.562712 seconds.
-  path: Assets/Prefabs/timefish.prefab
-  artifactKey: Guid(733c4d9c25df7fa45ae973b231f96fa8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Prefabs/timefish.prefab using Guid(733c4d9c25df7fa45ae973b231f96fa8) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
+  Time since last request: 616037.366579 seconds.
+  path: Assets/Art/Demo/Fish/v2/Fish_Tail_Type03.png
+  artifactKey: Guid(4868f702a8f7d914494bcbb568b161ef) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Demo/Fish/v2/Fish_Tail_Type03.png using Guid(4868f702a8f7d914494bcbb568b161ef) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
 [PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '274f322c71acf76f2d872e2fd9dd7c7e') in 0.1105862 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 30
-
-========================================================================
-Received Import Request.
-  Time since last request: 36.466349 seconds.
-  path: Assets/Prefabs/timefish spawner.prefab
-  artifactKey: Guid(593a45389f87cbd4dba5bdd0cca23d58) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Prefabs/timefish spawner.prefab using Guid(593a45389f87cbd4dba5bdd0cca23d58) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: 'd224ed6fb52b007f52756785c201b709') in 0.0057097 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 34
-
-========================================================================
-Received Import Request.
-  Time since last request: 7.051267 seconds.
-  path: Assets/Art/Demo/Fish/v1
-  artifactKey: Guid(02c4e225b3106af4bb82d4f7f1de84f5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v1 using Guid(02c4e225b3106af4bb82d4f7f1de84f5) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '226eaa2c41e29e2a16409de0bf1a5cdb') in 0.0006629 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.051103 seconds.
-  path: Assets/Art/Demo/Fish/v1/Fish_Body_Type01.png
-  artifactKey: Guid(617b816a44564b84d93e0b60b79e7f0c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v1/Fish_Body_Type01.png using Guid(617b816a44564b84d93e0b60b79e7f0c) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '45d88cd145435a9493bdd1c045a4d640') in 0.0416728 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000017 seconds.
-  path: Assets/Art/Demo/Fish/v1/Fish_Eye_Type01.png
-  artifactKey: Guid(93d54fa23323254488bf31c48df3e772) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v1/Fish_Eye_Type01.png using Guid(93d54fa23323254488bf31c48df3e772) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '97e8abcf09c8daa5b7089df041d91b3a') in 0.0175104 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000085 seconds.
-  path: Assets/Art/Demo/Fish/v1/Fish_Tail_Type03.png
-  artifactKey: Guid(59a97133349e72e48ae1ec577f78fe77) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v1/Fish_Tail_Type03.png using Guid(59a97133349e72e48ae1ec577f78fe77) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: 'a71c81754bd7ddba668d61d6fe92293a') in 0.0197651 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000021 seconds.
-  path: Assets/Art/Demo/Fish/v1/Fish_Body_Type04.png
-  artifactKey: Guid(343b4f6c575aa7946bc4534f62ed600e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v1/Fish_Body_Type04.png using Guid(343b4f6c575aa7946bc4534f62ed600e) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '34b3f1a3c71c5e7c5598949fbeaebac6') in 0.0222835 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000017 seconds.
-  path: Assets/Art/Demo/Fish/v1/Fish_Tail_Type02.png
-  artifactKey: Guid(fdcc95855d4884a43bfdfea696233363) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v1/Fish_Tail_Type02.png using Guid(fdcc95855d4884a43bfdfea696233363) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '731e12235dd2edbe6f1861adfaeacedb') in 0.0181974 seconds
+ -> (artifact id: '8b49a1ae35b45ac23f9bc0008da1780c') in 0.1213736 seconds
 Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
 
 ========================================================================
 Received Import Request.
   Time since last request: 0.000019 seconds.
-  path: Assets/Art/Demo/Fish/v1/Fish_Fin_Type03.png
-  artifactKey: Guid(f490402430bfe1548ad6b91583f8c51f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v1/Fish_Fin_Type03.png using Guid(f490402430bfe1548ad6b91583f8c51f) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
+  path: Assets/Art/Demo/Fish/v2/Fish_Eye_Type_01.png
+  artifactKey: Guid(fa8b9434471dc0c4183b5aa33390770e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Demo/Fish/v2/Fish_Eye_Type_01.png using Guid(fa8b9434471dc0c4183b5aa33390770e) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
 [PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '3094f62ece2d8290796eeea43babaf65') in 0.0222533 seconds
+ -> (artifact id: 'a4852361af7f5e3d003701460f6ed125') in 0.0207985 seconds
 Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000032 seconds.
-  path: Assets/Art/Demo/Fish/v1/Fish_Eye_Type05.png
-  artifactKey: Guid(0cddfbee914e7894fb87ebac33722f9b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v1/Fish_Eye_Type05.png using Guid(0cddfbee914e7894fb87ebac33722f9b) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
+  Time since last request: 0.000019 seconds.
+  path: Assets/Art/Demo/Fish/v2/Fish_Tail_Type05.png
+  artifactKey: Guid(3e101c208ac31ab4b9387b9d0d4a3ec5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Demo/Fish/v2/Fish_Tail_Type05.png using Guid(3e101c208ac31ab4b9387b9d0d4a3ec5) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
 [PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: 'a03b36fef03017f1362cc80beee23822') in 0.019201 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000024 seconds.
-  path: Assets/Art/Demo/Fish/v1/Fish_Fin_Type01.png
-  artifactKey: Guid(b95e3e2b6ad58484e9b81f5b40d2b7c7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v1/Fish_Fin_Type01.png using Guid(b95e3e2b6ad58484e9b81f5b40d2b7c7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: 'a7c808b5c91ef9de7a798580c07f3ca4') in 0.0222605 seconds
+ -> (artifact id: 'de99660222ab6f2e6a4338f9bb9deded') in 0.0254267 seconds
 Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
 
 ========================================================================
 Received Import Request.
   Time since last request: 0.000018 seconds.
-  path: Assets/Art/Demo/Fish/v1/Fish_Tail_Type05.png
-  artifactKey: Guid(eda35e5fc213c8142ab613afbe5e9361) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v1/Fish_Tail_Type05.png using Guid(eda35e5fc213c8142ab613afbe5e9361) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
+  path: Assets/Art/Demo/Fish/v2/Fish_Body_Type_02.png
+  artifactKey: Guid(797b3c4fcb0790a4e83959eee631992a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Demo/Fish/v2/Fish_Body_Type_02.png using Guid(797b3c4fcb0790a4e83959eee631992a) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
 [PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '589237fc83f9f2092a2f199a4ae4008a') in 0.0179154 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000028 seconds.
-  path: Assets/Art/Demo/Fish/v1/Fish_Eye_Type02.png
-  artifactKey: Guid(4dcb5b5d54ace564c97ee6a69984779d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v1/Fish_Eye_Type02.png using Guid(4dcb5b5d54ace564c97ee6a69984779d) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '3fb8d7cf8b701ff0ecff0e00b490ae4b') in 0.0217181 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000019 seconds.
-  path: Assets/Art/Demo/Fish/v1/Fish_Fin_Type02.png
-  artifactKey: Guid(645e021d872dc424b8bca64237d9d4dc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v1/Fish_Fin_Type02.png using Guid(645e021d872dc424b8bca64237d9d4dc) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: 'a677b30bf397674f32623fcb5cb245a1') in 0.0213192 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000022 seconds.
-  path: Assets/Art/Demo/Fish/v1/Fish_Tail_Type04.png
-  artifactKey: Guid(04c6ba9de1e21ad429e8812b93f161df) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v1/Fish_Tail_Type04.png using Guid(04c6ba9de1e21ad429e8812b93f161df) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '4e8457fb0b6afa2bb4aef303b216f108') in 0.022936 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 12.616314 seconds.
-  path: Assets/Prefabs/timefish spawner.prefab
-  artifactKey: Guid(593a45389f87cbd4dba5bdd0cca23d58) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Prefabs/timefish spawner.prefab using Guid(593a45389f87cbd4dba5bdd0cca23d58) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '4b9a2322c73072484d7d5c8bfd6086f1') in 0.0046438 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 39
-
-========================================================================
-Received Import Request.
-  Time since last request: 6.016982 seconds.
-  path: Assets/Prefabs/timefish spawner.prefab
-  artifactKey: Guid(593a45389f87cbd4dba5bdd0cca23d58) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Prefabs/timefish spawner.prefab using Guid(593a45389f87cbd4dba5bdd0cca23d58) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '2c8df72e3b75a5ea23fedee5a9965420') in 0.0065453 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 44
-
-========================================================================
-Received Import Request.
-  Time since last request: 4.257370 seconds.
-  path: Assets/Prefabs/timefish spawner.prefab
-  artifactKey: Guid(593a45389f87cbd4dba5bdd0cca23d58) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Prefabs/timefish spawner.prefab using Guid(593a45389f87cbd4dba5bdd0cca23d58) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '85336c0fae8b1477c88d5f135558a80f') in 0.0069298 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 49
-
-========================================================================
-Received Import Request.
-  Time since last request: 4.795067 seconds.
-  path: Assets/Prefabs/timefish spawner.prefab
-  artifactKey: Guid(593a45389f87cbd4dba5bdd0cca23d58) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Prefabs/timefish spawner.prefab using Guid(593a45389f87cbd4dba5bdd0cca23d58) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '8f8c5ed4d384fe3106f5ca55e0110648') in 0.0084249 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 54
-
-========================================================================
-Received Prepare
-Begin MonoManager ReloadAssembly
-Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  0.761 seconds
-Refreshing native plugins compatible for Editor in 2.33 ms, found 5 plugins.
-Native extension for WindowsStandalone target not found
-Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.926 seconds
-Domain Reload Profiling: 1686ms
-	BeginReloadAssembly (222ms)
-		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (17ms)
-		BackupInstance (0ms)
-		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (56ms)
-	RebuildCommonClasses (50ms)
-	RebuildNativeTypeToScriptingClass (17ms)
-	initialDomainReloadingComplete (30ms)
-	LoadAllAssembliesAndSetupDomain (440ms)
-		LoadAssemblies (352ms)
-		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (198ms)
-			TypeCache.Refresh (7ms)
-				TypeCache.ScanAssembly (0ms)
-			BuildScriptInfoCaches (180ms)
-			ResolveRequiredComponents (8ms)
-	FinalizeReload (926ms)
-		ReleaseScriptCaches (0ms)
-		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (610ms)
-			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (2ms)
-			SetLoadedEditorAssemblies (3ms)
-			BeforeProcessingInitializeOnLoad (65ms)
-			ProcessInitializeOnLoadAttributes (464ms)
-			ProcessInitializeOnLoadMethodAttributes (64ms)
-			AfterProcessingInitializeOnLoad (10ms)
-			EditorAssembliesLoaded (0ms)
-		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (9ms)
-Refreshing native plugins compatible for Editor in 3.02 ms, found 5 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4458 unused Assets / (1.4 MB). Loaded Objects now: 5091.
-Memory consumption went from 114.0 MB to 112.6 MB.
-Total: 8.404100 ms (FindLiveObjects: 0.680300 ms CreateObjectMapping: 0.884800 ms MarkObjects: 5.261500 ms  DeleteObjects: 1.575600 ms)
-
-Prepare: number of updated asset objects reloaded= 0
-========================================================================
-Received Import Request.
-  Time since last request: 284.218569 seconds.
-  path: Assets/Art/Demo/Fish/v1/Fish_Fin_Type01.png
-  artifactKey: Guid(b95e3e2b6ad58484e9b81f5b40d2b7c7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v1/Fish_Fin_Type01.png using Guid(b95e3e2b6ad58484e9b81f5b40d2b7c7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '17aab4abd7ba69a3db9efe3fcb07af07') in 0.1644057 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000023 seconds.
-  path: Assets/Art/Demo/Fish/v1/Fish_Eye_Type01.png
-  artifactKey: Guid(93d54fa23323254488bf31c48df3e772) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v1/Fish_Eye_Type01.png using Guid(93d54fa23323254488bf31c48df3e772) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '9e19636e0a369be802c71c91fc9b72f6') in 0.0194826 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000024 seconds.
-  path: Assets/Art/Demo/Fish/v1/Fish_Tail_Type03.png
-  artifactKey: Guid(59a97133349e72e48ae1ec577f78fe77) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v1/Fish_Tail_Type03.png using Guid(59a97133349e72e48ae1ec577f78fe77) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '4025e6b70001cb99abe132e3afe6ad4e') in 0.0213857 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000032 seconds.
-  path: Assets/Art/Demo/Fish/v1/Fish_Tail_Type02.png
-  artifactKey: Guid(fdcc95855d4884a43bfdfea696233363) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v1/Fish_Tail_Type02.png using Guid(fdcc95855d4884a43bfdfea696233363) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '36fa8540d9b672aaa55bbe5c0a251f89') in 0.0232089 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000027 seconds.
-  path: Assets/Art/Demo/Fish/v1/Fish_Fin_Type03.png
-  artifactKey: Guid(f490402430bfe1548ad6b91583f8c51f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v1/Fish_Fin_Type03.png using Guid(f490402430bfe1548ad6b91583f8c51f) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: 'c999480e1f4b7aa13211748c3d06f8d8') in 0.0226483 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000031 seconds.
-  path: Assets/Art/Demo/Fish/v1/Fish_Eye_Type05.png
-  artifactKey: Guid(0cddfbee914e7894fb87ebac33722f9b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v1/Fish_Eye_Type05.png using Guid(0cddfbee914e7894fb87ebac33722f9b) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: 'b766a9acddbf6d6c11328b71eca461ec') in 0.016465 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000019 seconds.
-  path: Assets/Art/Demo/Fish/v1/Fish_Body_Type02.png
-  artifactKey: Guid(f748b93e2eb2512468084d0b6f0f83f3) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v1/Fish_Body_Type02.png using Guid(f748b93e2eb2512468084d0b6f0f83f3) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: 'fade259d9d4f3adff51545f12082e290') in 0.022645 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000024 seconds.
-  path: Assets/Art/Demo/Fish/v1/Fish_Fin_Type05.png
-  artifactKey: Guid(4e1aa808d37307e4f817e11458baf527) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v1/Fish_Fin_Type05.png using Guid(4e1aa808d37307e4f817e11458baf527) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '406911dd70ac2dbe869c9e74be174cb6') in 0.021696 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000022 seconds.
-  path: Assets/Art/Demo/Fish/v1/Fish_Eye_Type02.png
-  artifactKey: Guid(4dcb5b5d54ace564c97ee6a69984779d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v1/Fish_Eye_Type02.png using Guid(4dcb5b5d54ace564c97ee6a69984779d) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '0c1a6c54625addd7a5bedc1036786b9e') in 0.0184414 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000022 seconds.
-  path: Assets/Art/Demo/Fish/v1/Fish_Fin_Type02.png
-  artifactKey: Guid(645e021d872dc424b8bca64237d9d4dc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v1/Fish_Fin_Type02.png using Guid(645e021d872dc424b8bca64237d9d4dc) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '78a788d4494ef285b2bad3acbae5f4be') in 0.0209789 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000025 seconds.
-  path: Assets/Art/Demo/Fish/v1/Fish_Tail_Type04.png
-  artifactKey: Guid(04c6ba9de1e21ad429e8812b93f161df) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v1/Fish_Tail_Type04.png using Guid(04c6ba9de1e21ad429e8812b93f161df) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '873675e68b482a179dfd3d30e7c93210') in 0.0202416 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Prepare
-Refreshing native plugins compatible for Editor in 1.97 ms, found 5 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4444 unused Assets / (1.3 MB). Loaded Objects now: 5092.
-Memory consumption went from 114.4 MB to 113.1 MB.
-Total: 7.691700 ms (FindLiveObjects: 0.518300 ms CreateObjectMapping: 0.577500 ms MarkObjects: 5.356700 ms  DeleteObjects: 1.238300 ms)
-
-Prepare: number of updated asset objects reloaded= 0
-========================================================================
-Received Prepare
-Begin MonoManager ReloadAssembly
-Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  0.832 seconds
-Refreshing native plugins compatible for Editor in 1.97 ms, found 5 plugins.
-Native extension for WindowsStandalone target not found
-Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.772 seconds
-Domain Reload Profiling: 1605ms
-	BeginReloadAssembly (240ms)
-		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (17ms)
-		BackupInstance (0ms)
-		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (55ms)
-	RebuildCommonClasses (47ms)
-	RebuildNativeTypeToScriptingClass (15ms)
-	initialDomainReloadingComplete (34ms)
-	LoadAllAssembliesAndSetupDomain (496ms)
-		LoadAssemblies (386ms)
-		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (237ms)
-			TypeCache.Refresh (12ms)
-				TypeCache.ScanAssembly (1ms)
-			BuildScriptInfoCaches (216ms)
-			ResolveRequiredComponents (6ms)
-	FinalizeReload (773ms)
-		ReleaseScriptCaches (0ms)
-		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (510ms)
-			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (2ms)
-			SetLoadedEditorAssemblies (4ms)
-			BeforeProcessingInitializeOnLoad (64ms)
-			ProcessInitializeOnLoadAttributes (379ms)
-			ProcessInitializeOnLoadMethodAttributes (53ms)
-			AfterProcessingInitializeOnLoad (8ms)
-			EditorAssembliesLoaded (0ms)
-		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (7ms)
-Refreshing native plugins compatible for Editor in 2.12 ms, found 5 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4458 unused Assets / (1.3 MB). Loaded Objects now: 5093.
-Memory consumption went from 114.0 MB to 112.7 MB.
-Total: 7.457200 ms (FindLiveObjects: 0.613400 ms CreateObjectMapping: 0.812700 ms MarkObjects: 4.719500 ms  DeleteObjects: 1.310300 ms)
-
-Prepare: number of updated asset objects reloaded= 0
-========================================================================
-Received Prepare
-Begin MonoManager ReloadAssembly
-Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  0.831 seconds
-Refreshing native plugins compatible for Editor in 2.01 ms, found 5 plugins.
-Native extension for WindowsStandalone target not found
-Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.967 seconds
-Domain Reload Profiling: 1797ms
-	BeginReloadAssembly (217ms)
-		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (17ms)
-		BackupInstance (0ms)
-		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (47ms)
-	RebuildCommonClasses (49ms)
-	RebuildNativeTypeToScriptingClass (20ms)
-	initialDomainReloadingComplete (33ms)
-	LoadAllAssembliesAndSetupDomain (510ms)
-		LoadAssemblies (355ms)
-		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (264ms)
-			TypeCache.Refresh (7ms)
-				TypeCache.ScanAssembly (0ms)
-			BuildScriptInfoCaches (248ms)
-			ResolveRequiredComponents (6ms)
-	FinalizeReload (968ms)
-		ReleaseScriptCaches (0ms)
-		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (663ms)
-			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (5ms)
-			SetLoadedEditorAssemblies (7ms)
-			BeforeProcessingInitializeOnLoad (97ms)
-			ProcessInitializeOnLoadAttributes (480ms)
-			ProcessInitializeOnLoadMethodAttributes (63ms)
-			AfterProcessingInitializeOnLoad (10ms)
-			EditorAssembliesLoaded (0ms)
-		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (9ms)
-Refreshing native plugins compatible for Editor in 2.03 ms, found 5 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4458 unused Assets / (1.3 MB). Loaded Objects now: 5095.
-Memory consumption went from 114.0 MB to 112.7 MB.
-Total: 7.284800 ms (FindLiveObjects: 0.538300 ms CreateObjectMapping: 0.693900 ms MarkObjects: 4.791700 ms  DeleteObjects: 1.259900 ms)
-
-Prepare: number of updated asset objects reloaded= 0
-========================================================================
-Received Import Request.
-  Time since last request: 304.581589 seconds.
-  path: Assets/Prefabs/timefish.prefab
-  artifactKey: Guid(733c4d9c25df7fa45ae973b231f96fa8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Prefabs/timefish.prefab using Guid(733c4d9c25df7fa45ae973b231f96fa8) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '8328eee92b604650a8290f43bcfff533') in 0.0833391 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 30
-
-========================================================================
-Received Import Request.
-  Time since last request: 13.501116 seconds.
-  path: Assets/Prefabs/timefish spawner.prefab
-  artifactKey: Guid(593a45389f87cbd4dba5bdd0cca23d58) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Prefabs/timefish spawner.prefab using Guid(593a45389f87cbd4dba5bdd0cca23d58) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '2d5699eab2e5ddc133b953f16cf01390') in 0.0059752 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 39
-
-========================================================================
-Received Import Request.
-  Time since last request: 3.790146 seconds.
-  path: Assets/Prefabs/timefish spawner.prefab
-  artifactKey: Guid(593a45389f87cbd4dba5bdd0cca23d58) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Prefabs/timefish spawner.prefab using Guid(593a45389f87cbd4dba5bdd0cca23d58) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '5dc38f68e3ebc12ec989c6b31a511990') in 0.0059366 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 44
-
-========================================================================
-Received Import Request.
-  Time since last request: 5.366001 seconds.
-  path: Assets/Prefabs/timefish spawner.prefab
-  artifactKey: Guid(593a45389f87cbd4dba5bdd0cca23d58) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Prefabs/timefish spawner.prefab using Guid(593a45389f87cbd4dba5bdd0cca23d58) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '474d0de51b9565b7a459a8fc81237c32') in 0.0073782 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 49
-
-========================================================================
-Received Import Request.
-  Time since last request: 3.142037 seconds.
-  path: Assets/Prefabs/timefish spawner.prefab
-  artifactKey: Guid(593a45389f87cbd4dba5bdd0cca23d58) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Prefabs/timefish spawner.prefab using Guid(593a45389f87cbd4dba5bdd0cca23d58) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '7cb9577b9aa3b6a765e42a6456582490') in 0.0081426 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 54
-
-========================================================================
-Received Prepare
-Refreshing native plugins compatible for Editor in 3.07 ms, found 5 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4444 unused Assets / (1.2 MB). Loaded Objects now: 5096.
-Memory consumption went from 114.2 MB to 113.0 MB.
-Total: 12.406800 ms (FindLiveObjects: 0.694400 ms CreateObjectMapping: 0.867800 ms MarkObjects: 8.767500 ms  DeleteObjects: 2.075700 ms)
-
-Prepare: number of updated asset objects reloaded= 0
-========================================================================
-Received Prepare
-Begin MonoManager ReloadAssembly
-Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  0.798 seconds
-Refreshing native plugins compatible for Editor in 2.73 ms, found 5 plugins.
-Native extension for WindowsStandalone target not found
-Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.871 seconds
-Domain Reload Profiling: 1668ms
-	BeginReloadAssembly (227ms)
-		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (13ms)
-		BackupInstance (0ms)
-		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (60ms)
-	RebuildCommonClasses (44ms)
-	RebuildNativeTypeToScriptingClass (17ms)
-	initialDomainReloadingComplete (34ms)
-	LoadAllAssembliesAndSetupDomain (474ms)
-		LoadAssemblies (385ms)
-		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (205ms)
-			TypeCache.Refresh (12ms)
-				TypeCache.ScanAssembly (2ms)
-			BuildScriptInfoCaches (184ms)
-			ResolveRequiredComponents (6ms)
-	FinalizeReload (871ms)
-		ReleaseScriptCaches (0ms)
-		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (592ms)
-			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (2ms)
-			SetLoadedEditorAssemblies (3ms)
-			BeforeProcessingInitializeOnLoad (66ms)
-			ProcessInitializeOnLoadAttributes (441ms)
-			ProcessInitializeOnLoadMethodAttributes (69ms)
-			AfterProcessingInitializeOnLoad (10ms)
-			EditorAssembliesLoaded (0ms)
-		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (8ms)
-Refreshing native plugins compatible for Editor in 2.06 ms, found 5 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4458 unused Assets / (1.2 MB). Loaded Objects now: 5097.
-Memory consumption went from 114.0 MB to 112.8 MB.
-Total: 7.087000 ms (FindLiveObjects: 0.547600 ms CreateObjectMapping: 0.648100 ms MarkObjects: 4.575400 ms  DeleteObjects: 1.314700 ms)
-
-Prepare: number of updated asset objects reloaded= 0
-========================================================================
-Received Prepare
-Begin MonoManager ReloadAssembly
-Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  0.739 seconds
-Refreshing native plugins compatible for Editor in 1.98 ms, found 5 plugins.
-Native extension for WindowsStandalone target not found
-Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.915 seconds
-Domain Reload Profiling: 1651ms
-	BeginReloadAssembly (210ms)
-		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (20ms)
-		BackupInstance (0ms)
-		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (54ms)
-	RebuildCommonClasses (38ms)
-	RebuildNativeTypeToScriptingClass (15ms)
-	initialDomainReloadingComplete (30ms)
-	LoadAllAssembliesAndSetupDomain (444ms)
-		LoadAssemblies (340ms)
-		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (201ms)
-			TypeCache.Refresh (8ms)
-				TypeCache.ScanAssembly (0ms)
-			BuildScriptInfoCaches (184ms)
-			ResolveRequiredComponents (6ms)
-	FinalizeReload (915ms)
-		ReleaseScriptCaches (0ms)
-		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (618ms)
-			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (2ms)
-			SetLoadedEditorAssemblies (3ms)
-			BeforeProcessingInitializeOnLoad (75ms)
-			ProcessInitializeOnLoadAttributes (464ms)
-			ProcessInitializeOnLoadMethodAttributes (63ms)
-			AfterProcessingInitializeOnLoad (11ms)
-			EditorAssembliesLoaded (0ms)
-		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (10ms)
-Refreshing native plugins compatible for Editor in 2.93 ms, found 5 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4458 unused Assets / (1.2 MB). Loaded Objects now: 5099.
-Memory consumption went from 114.0 MB to 112.8 MB.
-Total: 9.680300 ms (FindLiveObjects: 0.575900 ms CreateObjectMapping: 0.891500 ms MarkObjects: 6.433100 ms  DeleteObjects: 1.778000 ms)
-
-Prepare: number of updated asset objects reloaded= 0
-========================================================================
-Received Prepare
-Begin MonoManager ReloadAssembly
-Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  6.151 seconds
-Refreshing native plugins compatible for Editor in 3.19 ms, found 5 plugins.
-Native extension for WindowsStandalone target not found
-Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  1.220 seconds
-Domain Reload Profiling: 7371ms
-	BeginReloadAssembly (885ms)
-		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (99ms)
-		BackupInstance (0ms)
-		ReleaseScriptingObjects (1ms)
-		CreateAndSetChildDomain (255ms)
-	RebuildCommonClasses (251ms)
-	RebuildNativeTypeToScriptingClass (23ms)
-	initialDomainReloadingComplete (62ms)
-	LoadAllAssembliesAndSetupDomain (4928ms)
-		LoadAssemblies (4373ms)
-		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (968ms)
-			TypeCache.Refresh (20ms)
-				TypeCache.ScanAssembly (0ms)
-			BuildScriptInfoCaches (932ms)
-			ResolveRequiredComponents (9ms)
-	FinalizeReload (1221ms)
-		ReleaseScriptCaches (0ms)
-		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (817ms)
-			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (4ms)
-			SetLoadedEditorAssemblies (6ms)
-			BeforeProcessingInitializeOnLoad (92ms)
-			ProcessInitializeOnLoadAttributes (619ms)
-			ProcessInitializeOnLoadMethodAttributes (81ms)
-			AfterProcessingInitializeOnLoad (13ms)
-			EditorAssembliesLoaded (0ms)
-		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (11ms)
-Refreshing native plugins compatible for Editor in 3.27 ms, found 5 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4458 unused Assets / (1.1 MB). Loaded Objects now: 5101.
-Memory consumption went from 114.0 MB to 112.9 MB.
-Total: 12.145500 ms (FindLiveObjects: 1.003200 ms CreateObjectMapping: 1.594700 ms MarkObjects: 7.701600 ms  DeleteObjects: 1.844500 ms)
-
-Prepare: number of updated asset objects reloaded= 0
-========================================================================
-Received Prepare
-Begin MonoManager ReloadAssembly
-Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  0.914 seconds
-Refreshing native plugins compatible for Editor in 2.02 ms, found 5 plugins.
-Native extension for WindowsStandalone target not found
-Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  1.084 seconds
-Domain Reload Profiling: 1997ms
-	BeginReloadAssembly (275ms)
-		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (20ms)
-		BackupInstance (0ms)
-		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (73ms)
-	RebuildCommonClasses (52ms)
-	RebuildNativeTypeToScriptingClass (16ms)
-	initialDomainReloadingComplete (38ms)
-	LoadAllAssembliesAndSetupDomain (531ms)
-		LoadAssemblies (450ms)
-		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (209ms)
-			TypeCache.Refresh (10ms)
-				TypeCache.ScanAssembly (0ms)
-			BuildScriptInfoCaches (189ms)
-			ResolveRequiredComponents (7ms)
-	FinalizeReload (1084ms)
-		ReleaseScriptCaches (0ms)
-		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (751ms)
-			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (4ms)
-			SetLoadedEditorAssemblies (5ms)
-			BeforeProcessingInitializeOnLoad (186ms)
-			ProcessInitializeOnLoadAttributes (477ms)
-			ProcessInitializeOnLoadMethodAttributes (68ms)
-			AfterProcessingInitializeOnLoad (10ms)
-			EditorAssembliesLoaded (0ms)
-		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (11ms)
-Refreshing native plugins compatible for Editor in 2.20 ms, found 5 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4458 unused Assets / (1.2 MB). Loaded Objects now: 5103.
-Memory consumption went from 114.0 MB to 112.8 MB.
-Total: 10.231700 ms (FindLiveObjects: 0.884400 ms CreateObjectMapping: 1.185100 ms MarkObjects: 6.741900 ms  DeleteObjects: 1.419000 ms)
-
-Prepare: number of updated asset objects reloaded= 0
-========================================================================
-Received Prepare
-Begin MonoManager ReloadAssembly
-Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  0.785 seconds
-Refreshing native plugins compatible for Editor in 1.97 ms, found 5 plugins.
-Native extension for WindowsStandalone target not found
-Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  1.032 seconds
-Domain Reload Profiling: 1813ms
-	BeginReloadAssembly (220ms)
-		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (15ms)
-		BackupInstance (0ms)
-		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (55ms)
-	RebuildCommonClasses (45ms)
-	RebuildNativeTypeToScriptingClass (15ms)
-	initialDomainReloadingComplete (35ms)
-	LoadAllAssembliesAndSetupDomain (467ms)
-		LoadAssemblies (367ms)
-		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (203ms)
-			TypeCache.Refresh (9ms)
-				TypeCache.ScanAssembly (0ms)
-			BuildScriptInfoCaches (185ms)
-			ResolveRequiredComponents (6ms)
-	FinalizeReload (1033ms)
-		ReleaseScriptCaches (0ms)
-		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (703ms)
-			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (4ms)
-			SetLoadedEditorAssemblies (5ms)
-			BeforeProcessingInitializeOnLoad (79ms)
-			ProcessInitializeOnLoadAttributes (537ms)
-			ProcessInitializeOnLoadMethodAttributes (65ms)
-			AfterProcessingInitializeOnLoad (13ms)
-			EditorAssembliesLoaded (0ms)
-		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (10ms)
-Refreshing native plugins compatible for Editor in 2.85 ms, found 5 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4458 unused Assets / (1.1 MB). Loaded Objects now: 5105.
-Memory consumption went from 114.0 MB to 113.0 MB.
-Total: 10.423300 ms (FindLiveObjects: 0.612700 ms CreateObjectMapping: 0.771200 ms MarkObjects: 7.571200 ms  DeleteObjects: 1.466700 ms)
-
-Prepare: number of updated asset objects reloaded= 0
-========================================================================
-Received Import Request.
-  Time since last request: 416059.304142 seconds.
-  path: Assets/Art/Demo/Fish/v2/Fish_Body_Type01.png
-  artifactKey: Guid(1ad5231f0f947e840a703feb1006a127) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v2/Fish_Body_Type01.png using Guid(1ad5231f0f947e840a703feb1006a127) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '0c95ac115652bda7ed9778096cbcd21f') in 0.1449564 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000015 seconds.
-  path: Assets/Art/Demo/Fish/v2/Fish_Tail_Type03.png
-  artifactKey: Guid(4868f702a8f7d914494bcbb568b161ef) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v2/Fish_Tail_Type03.png using Guid(4868f702a8f7d914494bcbb568b161ef) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: 'b66ff859e67ad9c0624518171b75eb58') in 0.0234838 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000051 seconds.
-  path: Assets/Art/Demo/Fish/v2/Fish_Body_Type_04.png
-  artifactKey: Guid(5b83bac44938adb449bc6d7923c8f641) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v2/Fish_Body_Type_04.png using Guid(5b83bac44938adb449bc6d7923c8f641) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '2f6fa1a3e5862421cd91141f47cd3c0a') in 0.0240778 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000028 seconds.
-  path: Assets/Art/Demo/Fish/v2/Fish_Fin_Type_03.png
-  artifactKey: Guid(20409e293191c7a4fb3617208e2a4992) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v2/Fish_Fin_Type_03.png using Guid(20409e293191c7a4fb3617208e2a4992) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '52596e3517e2c379268933762f5ec082') in 0.0234373 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000030 seconds.
-  path: Assets/Art/Demo/Fish/v2/Fish_Fin_Type_01.png
-  artifactKey: Guid(bdba7bb18b9125f4b90deab88f760355) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v2/Fish_Fin_Type_01.png using Guid(bdba7bb18b9125f4b90deab88f760355) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '69d4d3a4a98f6eba3b585343f91f3f13') in 0.0259717 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000028 seconds.
-  path: Assets/Art/Demo/Fish/v2/Fish_Eye_Type_02.png
-  artifactKey: Guid(b11eb4780ef50d0459ad645d363b88cc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v2/Fish_Eye_Type_02.png using Guid(b11eb4780ef50d0459ad645d363b88cc) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '023dd40918b2a3c2f0d85cfc82aefb95') in 0.0232567 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000040 seconds.
-  path: Assets/Art/Demo/Fish/v2/Fish_Tail_Type04.png
-  artifactKey: Guid(284b10933b84e354bbb6de697473b990) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v2/Fish_Tail_Type04.png using Guid(284b10933b84e354bbb6de697473b990) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: 'cb2f531f5917edec1b661260bd166fa5') in 0.0241088 seconds
+ -> (artifact id: '01f01f0a9ff6bd90ea44c42075fa1daa') in 0.0207979 seconds
 Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
 
 ========================================================================
 Received Import Request.
   Time since last request: 0.000021 seconds.
-  path: Assets/Art/Demo/Fish/v2/Fish_Eye_Type_03.png
-  artifactKey: Guid(2961adb10ac2c224eb8f5bcbd08785c4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v2/Fish_Eye_Type_03.png using Guid(2961adb10ac2c224eb8f5bcbd08785c4) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
+  path: Assets/Art/Demo/Fish/v2/Fish_Fin_Type_05.png
+  artifactKey: Guid(56f06ba08aeb5cf4898e9520fb618df8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Demo/Fish/v2/Fish_Fin_Type_05.png using Guid(56f06ba08aeb5cf4898e9520fb618df8) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
 [PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: 'a526d30a05a05245f45c3b99660a6f39') in 0.0252475 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000062 seconds.
-  path: Assets/Art/Demo/Fish/v2/Fish_Eye_Type_05.png
-  artifactKey: Guid(ecaaff616d1b4bd41957200fba79a76d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v2/Fish_Eye_Type_05.png using Guid(ecaaff616d1b4bd41957200fba79a76d) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '9cf900176ede0cd7672299b0182b1e91') in 0.0200611 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000020 seconds.
-  path: Assets/Art/Demo/Fish/v2/Fish_Body_Type_05.png
-  artifactKey: Guid(17e6603abaea0a049871e135069f46a1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v2/Fish_Body_Type_05.png using Guid(17e6603abaea0a049871e135069f46a1) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '0836ec54f31c3370da9776d4ba0fe676') in 0.0259636 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000017 seconds.
-  path: Assets/Art/Demo/Fish/v2/README.png
-  artifactKey: Guid(a90ddcd4d80568b4daccf43b2e6d2eb9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v2/README.png using Guid(a90ddcd4d80568b4daccf43b2e6d2eb9) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: 'c3d6108e0e47870b7ff5f428e0ac28b9') in 0.0265207 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 31.314479 seconds.
-  path: Assets/Art/Demo/Fish/v2/Fish_Body_Type01.png
-  artifactKey: Guid(1ad5231f0f947e840a703feb1006a127) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v2/Fish_Body_Type01.png using Guid(1ad5231f0f947e840a703feb1006a127) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '3ba58b625edffae0cc6d9c4e2718aa2c') in 0.0280818 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000019 seconds.
-  path: Assets/Art/Demo/Fish/v2/Fish_Tail_Type03.png
-  artifactKey: Guid(4868f702a8f7d914494bcbb568b161ef) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v2/Fish_Tail_Type03.png using Guid(4868f702a8f7d914494bcbb568b161ef) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: 'cfc4760631ef28507dcc443d48f0d257') in 0.0251345 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000034 seconds.
-  path: Assets/Art/Demo/Fish/v2/Fish_Eye_Type_01.png
-  artifactKey: Guid(fa8b9434471dc0c4183b5aa33390770e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v2/Fish_Eye_Type_01.png using Guid(fa8b9434471dc0c4183b5aa33390770e) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '7fb730f24230fb068e8516affb6f87c2') in 0.0260194 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000047 seconds.
-  path: Assets/Art/Demo/Fish/v2/Fish_Tail_Type05.png
-  artifactKey: Guid(3e101c208ac31ab4b9387b9d0d4a3ec5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v2/Fish_Tail_Type05.png using Guid(3e101c208ac31ab4b9387b9d0d4a3ec5) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: 'cd323dbe944cf527261aa9247e150016') in 0.025636 seconds
+ -> (artifact id: '5c449c9ae55e79202438d5d670d42b84') in 0.0200858 seconds
 Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
 
 ========================================================================
 Received Import Request.
   Time since last request: 0.000030 seconds.
-  path: Assets/Art/Demo/Fish/v2/Fish_Tail_Type01.png
-  artifactKey: Guid(b84ab655ee738b448b302a543f23be0e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v2/Fish_Tail_Type01.png using Guid(b84ab655ee738b448b302a543f23be0e) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '6448a6f09baff9a6bbfa54998051373e') in 0.0228354 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000020 seconds.
-  path: Assets/Art/Demo/Fish/v2/Fish_Fin_Type_05.png
-  artifactKey: Guid(56f06ba08aeb5cf4898e9520fb618df8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Demo/Fish/v2/Fish_Fin_Type_05.png using Guid(56f06ba08aeb5cf4898e9520fb618df8) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '5516cd6d976a450c77f5f67bde130001') in 0.0228678 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000023 seconds.
   path: Assets/Art/Demo/Fish/v2/Fish_Body_Type_03.png
   artifactKey: Guid(62b09148f378e8342a969e4c457acc93) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
 Start importing Assets/Art/Demo/Fish/v2/Fish_Body_Type_03.png using Guid(62b09148f378e8342a969e4c457acc93) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
 [PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '8d05109dfd609e4ffb37444cfaff51e3') in 0.0280116 seconds
+ -> (artifact id: '9e9e2a7882a00675886e880347f39365') in 0.022224 seconds
 Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000058 seconds.
+  Time since last request: 0.000028 seconds.
+  path: Assets/Art/Demo/Fish/v2/Fish_Eye_Type_03.png
+  artifactKey: Guid(2961adb10ac2c224eb8f5bcbd08785c4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Demo/Fish/v2/Fish_Eye_Type_03.png using Guid(2961adb10ac2c224eb8f5bcbd08785c4) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
+ -> (artifact id: '661def4843adaeefffe6384ec82aa76e') in 0.0181997 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000018 seconds.
   path: Assets/Art/Demo/Fish/v2/Fish_Eye_Type_05.png
   artifactKey: Guid(ecaaff616d1b4bd41957200fba79a76d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
 Start importing Assets/Art/Demo/Fish/v2/Fish_Eye_Type_05.png using Guid(ecaaff616d1b4bd41957200fba79a76d) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
 [PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '03a21f5f7c04cccecbce8480a9bcb50d') in 0.0247806 seconds
+ -> (artifact id: '307bb644af5e46a9ee1a01c49986ae90') in 0.0170511 seconds
 Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000025 seconds.
+  Time since last request: 0.000029 seconds.
   path: Assets/Art/Demo/Fish/v2/Fish_Body_Type_05.png
   artifactKey: Guid(17e6603abaea0a049871e135069f46a1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
 Start importing Assets/Art/Demo/Fish/v2/Fish_Body_Type_05.png using Guid(17e6603abaea0a049871e135069f46a1) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
 [PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '8409f647eeda979c6097f04e4f443980') in 0.0226863 seconds
+ -> (artifact id: '8ba631175139c861f841ac56956f7152') in 0.0238179 seconds
 Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000024 seconds.
+  Time since last request: 0.000060 seconds.
   path: Assets/Art/Demo/Fish/v2/Fish_Eye_Type_04.png
   artifactKey: Guid(9ca9e7a293addab4e80b30bb309844ab) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
 Start importing Assets/Art/Demo/Fish/v2/Fish_Eye_Type_04.png using Guid(9ca9e7a293addab4e80b30bb309844ab) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
 [PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: 'd768efcfae910a3b4b98b4a79b5ceb18') in 0.0221942 seconds
+ -> (artifact id: '5915fd5f70c545210c40a0569a74b6f1') in 0.0184117 seconds
 Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
 
 ========================================================================
 Received Prepare
 Begin MonoManager ReloadAssembly
 Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  0.833 seconds
-Refreshing native plugins compatible for Editor in 2.04 ms, found 5 plugins.
+- Loaded All Assemblies, in  0.868 seconds
+Refreshing native plugins compatible for Editor in 2.96 ms, found 5 plugins.
 Native extension for WindowsStandalone target not found
 Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.945 seconds
-Domain Reload Profiling: 1775ms
-	BeginReloadAssembly (252ms)
-		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (21ms)
-		BackupInstance (0ms)
-		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (73ms)
-	RebuildCommonClasses (45ms)
-	RebuildNativeTypeToScriptingClass (23ms)
-	initialDomainReloadingComplete (35ms)
-	LoadAllAssembliesAndSetupDomain (474ms)
-		LoadAssemblies (366ms)
-		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (223ms)
-			TypeCache.Refresh (7ms)
-				TypeCache.ScanAssembly (0ms)
-			BuildScriptInfoCaches (207ms)
-			ResolveRequiredComponents (7ms)
-	FinalizeReload (946ms)
-		ReleaseScriptCaches (0ms)
-		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (654ms)
-			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (3ms)
-			SetLoadedEditorAssemblies (4ms)
-			BeforeProcessingInitializeOnLoad (72ms)
-			ProcessInitializeOnLoadAttributes (498ms)
-			ProcessInitializeOnLoadMethodAttributes (65ms)
-			AfterProcessingInitializeOnLoad (11ms)
-			EditorAssembliesLoaded (0ms)
-		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (9ms)
-Refreshing native plugins compatible for Editor in 4.15 ms, found 5 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4458 unused Assets / (1.1 MB). Loaded Objects now: 5119.
-Memory consumption went from 114.1 MB to 113.0 MB.
-Total: 13.256800 ms (FindLiveObjects: 0.669800 ms CreateObjectMapping: 0.689300 ms MarkObjects: 9.234500 ms  DeleteObjects: 2.661200 ms)
-
-Prepare: number of updated asset objects reloaded= 0
-========================================================================
-Received Prepare
-Refreshing native plugins compatible for Editor in 2.71 ms, found 5 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4444 unused Assets / (1.1 MB). Loaded Objects now: 5119.
-Memory consumption went from 114.2 MB to 113.1 MB.
-Total: 9.193900 ms (FindLiveObjects: 0.582400 ms CreateObjectMapping: 0.677700 ms MarkObjects: 6.319200 ms  DeleteObjects: 1.613100 ms)
-
-Prepare: number of updated asset objects reloaded= 0
-========================================================================
-Received Prepare
-Begin MonoManager ReloadAssembly
-Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  3.560 seconds
-Refreshing native plugins compatible for Editor in 2.44 ms, found 5 plugins.
-Native extension for WindowsStandalone target not found
-Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.796 seconds
-Domain Reload Profiling: 4354ms
-	BeginReloadAssembly (439ms)
-		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (14ms)
-		BackupInstance (0ms)
-		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (57ms)
-	RebuildCommonClasses (198ms)
-	RebuildNativeTypeToScriptingClass (16ms)
-	initialDomainReloadingComplete (36ms)
-	LoadAllAssembliesAndSetupDomain (2868ms)
-		LoadAssemblies (2581ms)
-		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (612ms)
-			TypeCache.Refresh (12ms)
-				TypeCache.ScanAssembly (1ms)
-			BuildScriptInfoCaches (590ms)
-			ResolveRequiredComponents (6ms)
-	FinalizeReload (796ms)
-		ReleaseScriptCaches (0ms)
-		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (546ms)
-			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (3ms)
-			SetLoadedEditorAssemblies (3ms)
-			BeforeProcessingInitializeOnLoad (71ms)
-			ProcessInitializeOnLoadAttributes (411ms)
-			ProcessInitializeOnLoadMethodAttributes (51ms)
-			AfterProcessingInitializeOnLoad (8ms)
-			EditorAssembliesLoaded (0ms)
-		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (7ms)
-Refreshing native plugins compatible for Editor in 1.99 ms, found 5 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4458 unused Assets / (1.3 MB). Loaded Objects now: 5121.
-Memory consumption went from 114.1 MB to 112.8 MB.
-Total: 8.008300 ms (FindLiveObjects: 0.763400 ms CreateObjectMapping: 0.737200 ms MarkObjects: 5.049800 ms  DeleteObjects: 1.456800 ms)
-
-Prepare: number of updated asset objects reloaded= 0
-========================================================================
-Received Prepare
-Begin MonoManager ReloadAssembly
-Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  0.845 seconds
-Refreshing native plugins compatible for Editor in 2.28 ms, found 5 plugins.
-Native extension for WindowsStandalone target not found
-Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.882 seconds
-Domain Reload Profiling: 1726ms
-	BeginReloadAssembly (236ms)
+- Finished resetting the current domain, in  1.005 seconds
+Domain Reload Profiling: 1870ms
+	BeginReloadAssembly (267ms)
 		ExecutionOrderSort (0ms)
 		DisableScriptedObjects (18ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (58ms)
-	RebuildCommonClasses (40ms)
+		CreateAndSetChildDomain (63ms)
+	RebuildCommonClasses (58ms)
 	RebuildNativeTypeToScriptingClass (20ms)
-	initialDomainReloadingComplete (32ms)
-	LoadAllAssembliesAndSetupDomain (514ms)
-		LoadAssemblies (426ms)
-		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (205ms)
-			TypeCache.Refresh (7ms)
-				TypeCache.ScanAssembly (0ms)
-			BuildScriptInfoCaches (188ms)
-			ResolveRequiredComponents (6ms)
-	FinalizeReload (883ms)
-		ReleaseScriptCaches (0ms)
-		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (579ms)
-			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (3ms)
-			SetLoadedEditorAssemblies (6ms)
-			BeforeProcessingInitializeOnLoad (81ms)
-			ProcessInitializeOnLoadAttributes (426ms)
-			ProcessInitializeOnLoadMethodAttributes (54ms)
-			AfterProcessingInitializeOnLoad (9ms)
-			EditorAssembliesLoaded (0ms)
-		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (8ms)
-Refreshing native plugins compatible for Editor in 2.95 ms, found 5 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4458 unused Assets / (1.5 MB). Loaded Objects now: 5123.
-Memory consumption went from 114.1 MB to 112.6 MB.
-Total: 9.825200 ms (FindLiveObjects: 0.780800 ms CreateObjectMapping: 0.927500 ms MarkObjects: 5.978700 ms  DeleteObjects: 2.136600 ms)
-
-Prepare: number of updated asset objects reloaded= 0
-========================================================================
-Received Prepare
-Refreshing native plugins compatible for Editor in 2.72 ms, found 5 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4444 unused Assets / (1.2 MB). Loaded Objects now: 5123.
-Memory consumption went from 114.2 MB to 113.0 MB.
-Total: 8.590900 ms (FindLiveObjects: 0.668200 ms CreateObjectMapping: 0.815100 ms MarkObjects: 5.828300 ms  DeleteObjects: 1.278400 ms)
-
-Prepare: number of updated asset objects reloaded= 0
-========================================================================
-Received Prepare
-Begin MonoManager ReloadAssembly
-Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  1.165 seconds
-Refreshing native plugins compatible for Editor in 2.28 ms, found 5 plugins.
-Native extension for WindowsStandalone target not found
-Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.815 seconds
-Domain Reload Profiling: 1976ms
-	BeginReloadAssembly (379ms)
-		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (22ms)
-		BackupInstance (0ms)
-		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (91ms)
-	RebuildCommonClasses (72ms)
-	RebuildNativeTypeToScriptingClass (19ms)
 	initialDomainReloadingComplete (41ms)
-	LoadAllAssembliesAndSetupDomain (649ms)
-		LoadAssemblies (504ms)
-		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (343ms)
-			TypeCache.Refresh (11ms)
-				TypeCache.ScanAssembly (1ms)
-			BuildScriptInfoCaches (319ms)
-			ResolveRequiredComponents (9ms)
-	FinalizeReload (815ms)
-		ReleaseScriptCaches (0ms)
-		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (537ms)
-			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (3ms)
-			SetLoadedEditorAssemblies (5ms)
-			BeforeProcessingInitializeOnLoad (70ms)
-			ProcessInitializeOnLoadAttributes (403ms)
-			ProcessInitializeOnLoadMethodAttributes (48ms)
-			AfterProcessingInitializeOnLoad (8ms)
-			EditorAssembliesLoaded (0ms)
-		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (7ms)
-Refreshing native plugins compatible for Editor in 2.13 ms, found 5 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4458 unused Assets / (1.4 MB). Loaded Objects now: 5125.
-Memory consumption went from 114.1 MB to 112.7 MB.
-Total: 8.609200 ms (FindLiveObjects: 0.540300 ms CreateObjectMapping: 0.649800 ms MarkObjects: 5.451100 ms  DeleteObjects: 1.966400 ms)
-
-Prepare: number of updated asset objects reloaded= 0
-========================================================================
-Received Prepare
-Begin MonoManager ReloadAssembly
-Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  0.825 seconds
-Refreshing native plugins compatible for Editor in 2.47 ms, found 5 plugins.
-Native extension for WindowsStandalone target not found
-Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.921 seconds
-Domain Reload Profiling: 1746ms
-	BeginReloadAssembly (214ms)
-		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (16ms)
-		BackupInstance (0ms)
-		ReleaseScriptingObjects (1ms)
-		CreateAndSetChildDomain (56ms)
-	RebuildCommonClasses (50ms)
-	RebuildNativeTypeToScriptingClass (23ms)
-	initialDomainReloadingComplete (31ms)
-	LoadAllAssembliesAndSetupDomain (506ms)
-		LoadAssemblies (349ms)
-		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (255ms)
-			TypeCache.Refresh (7ms)
-				TypeCache.ScanAssembly (0ms)
-			BuildScriptInfoCaches (234ms)
-			ResolveRequiredComponents (9ms)
-	FinalizeReload (922ms)
-		ReleaseScriptCaches (0ms)
-		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (660ms)
-			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (2ms)
-			SetLoadedEditorAssemblies (5ms)
-			BeforeProcessingInitializeOnLoad (79ms)
-			ProcessInitializeOnLoadAttributes (518ms)
-			ProcessInitializeOnLoadMethodAttributes (46ms)
-			AfterProcessingInitializeOnLoad (9ms)
-			EditorAssembliesLoaded (0ms)
-		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (7ms)
-Refreshing native plugins compatible for Editor in 2.14 ms, found 5 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4458 unused Assets / (1.6 MB). Loaded Objects now: 5127.
-Memory consumption went from 114.1 MB to 112.5 MB.
-Total: 7.990900 ms (FindLiveObjects: 0.574000 ms CreateObjectMapping: 0.579500 ms MarkObjects: 4.925900 ms  DeleteObjects: 1.910300 ms)
-
-Prepare: number of updated asset objects reloaded= 0
-========================================================================
-Received Prepare
-Begin MonoManager ReloadAssembly
-Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  0.941 seconds
-Refreshing native plugins compatible for Editor in 1.97 ms, found 5 plugins.
-Native extension for WindowsStandalone target not found
-Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  1.321 seconds
-Domain Reload Profiling: 2263ms
-	BeginReloadAssembly (249ms)
-		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (19ms)
-		BackupInstance (0ms)
-		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (69ms)
-	RebuildCommonClasses (39ms)
-	RebuildNativeTypeToScriptingClass (15ms)
-	initialDomainReloadingComplete (34ms)
-	LoadAllAssembliesAndSetupDomain (602ms)
-		LoadAssemblies (371ms)
-		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (346ms)
-			TypeCache.Refresh (8ms)
-				TypeCache.ScanAssembly (0ms)
-			BuildScriptInfoCaches (325ms)
-			ResolveRequiredComponents (10ms)
-	FinalizeReload (1323ms)
-		ReleaseScriptCaches (0ms)
-		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (884ms)
-			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (5ms)
-			SetLoadedEditorAssemblies (7ms)
-			BeforeProcessingInitializeOnLoad (113ms)
-			ProcessInitializeOnLoadAttributes (658ms)
-			ProcessInitializeOnLoadMethodAttributes (88ms)
-			AfterProcessingInitializeOnLoad (12ms)
-			EditorAssembliesLoaded (1ms)
-		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (12ms)
-Refreshing native plugins compatible for Editor in 2.56 ms, found 5 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4458 unused Assets / (1.3 MB). Loaded Objects now: 5129.
-Memory consumption went from 114.1 MB to 112.8 MB.
-Total: 11.092700 ms (FindLiveObjects: 1.707200 ms CreateObjectMapping: 1.031500 ms MarkObjects: 6.834100 ms  DeleteObjects: 1.518100 ms)
-
-Prepare: number of updated asset objects reloaded= 0
-========================================================================
-Received Prepare
-Begin MonoManager ReloadAssembly
-Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  0.843 seconds
-Refreshing native plugins compatible for Editor in 2.93 ms, found 5 plugins.
-Native extension for WindowsStandalone target not found
-Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  1.214 seconds
-Domain Reload Profiling: 2056ms
-	BeginReloadAssembly (270ms)
-		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (19ms)
-		BackupInstance (0ms)
-		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (72ms)
-	RebuildCommonClasses (50ms)
-	RebuildNativeTypeToScriptingClass (17ms)
-	initialDomainReloadingComplete (35ms)
-	LoadAllAssembliesAndSetupDomain (470ms)
-		LoadAssemblies (366ms)
-		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (225ms)
-			TypeCache.Refresh (8ms)
-				TypeCache.ScanAssembly (0ms)
-			BuildScriptInfoCaches (207ms)
-			ResolveRequiredComponents (7ms)
-	FinalizeReload (1214ms)
-		ReleaseScriptCaches (0ms)
-		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (813ms)
-			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (3ms)
-			SetLoadedEditorAssemblies (6ms)
-			BeforeProcessingInitializeOnLoad (94ms)
-			ProcessInitializeOnLoadAttributes (625ms)
-			ProcessInitializeOnLoadMethodAttributes (74ms)
-			AfterProcessingInitializeOnLoad (11ms)
-			EditorAssembliesLoaded (0ms)
-		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (11ms)
-Refreshing native plugins compatible for Editor in 3.34 ms, found 5 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4458 unused Assets / (1.4 MB). Loaded Objects now: 5131.
-Memory consumption went from 114.1 MB to 112.7 MB.
-Total: 13.944500 ms (FindLiveObjects: 0.641200 ms CreateObjectMapping: 3.349100 ms MarkObjects: 8.274100 ms  DeleteObjects: 1.678500 ms)
-
-Prepare: number of updated asset objects reloaded= 0
-========================================================================
-Received Prepare
-Begin MonoManager ReloadAssembly
-Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  0.793 seconds
-Refreshing native plugins compatible for Editor in 2.81 ms, found 5 plugins.
-Native extension for WindowsStandalone target not found
-Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.900 seconds
-Domain Reload Profiling: 1693ms
-	BeginReloadAssembly (228ms)
-		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (21ms)
-		BackupInstance (0ms)
-		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (59ms)
-	RebuildCommonClasses (40ms)
-	RebuildNativeTypeToScriptingClass (15ms)
-	initialDomainReloadingComplete (36ms)
-	LoadAllAssembliesAndSetupDomain (473ms)
-		LoadAssemblies (356ms)
-		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (220ms)
-			TypeCache.Refresh (7ms)
-				TypeCache.ScanAssembly (0ms)
-			BuildScriptInfoCaches (200ms)
-			ResolveRequiredComponents (9ms)
-	FinalizeReload (901ms)
-		ReleaseScriptCaches (0ms)
-		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (595ms)
-			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (3ms)
-			SetLoadedEditorAssemblies (5ms)
-			BeforeProcessingInitializeOnLoad (81ms)
-			ProcessInitializeOnLoadAttributes (424ms)
-			ProcessInitializeOnLoadMethodAttributes (65ms)
-			AfterProcessingInitializeOnLoad (16ms)
-			EditorAssembliesLoaded (0ms)
-		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (11ms)
-Refreshing native plugins compatible for Editor in 2.09 ms, found 5 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4458 unused Assets / (1.3 MB). Loaded Objects now: 5133.
-Memory consumption went from 114.1 MB to 112.8 MB.
-Total: 9.417000 ms (FindLiveObjects: 0.966800 ms CreateObjectMapping: 0.792500 ms MarkObjects: 6.294100 ms  DeleteObjects: 1.362300 ms)
-
-Prepare: number of updated asset objects reloaded= 0
-========================================================================
-Received Prepare
-Begin MonoManager ReloadAssembly
-Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  0.804 seconds
-Refreshing native plugins compatible for Editor in 2.00 ms, found 5 plugins.
-Native extension for WindowsStandalone target not found
-Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  1.054 seconds
-Domain Reload Profiling: 1855ms
-	BeginReloadAssembly (226ms)
-		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (17ms)
-		BackupInstance (0ms)
-		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (60ms)
-	RebuildCommonClasses (50ms)
-	RebuildNativeTypeToScriptingClass (17ms)
-	initialDomainReloadingComplete (34ms)
-	LoadAllAssembliesAndSetupDomain (473ms)
-		LoadAssemblies (363ms)
+	LoadAllAssembliesAndSetupDomain (479ms)
+		LoadAssemblies (398ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
 		AnalyzeDomain (219ms)
-			TypeCache.Refresh (7ms)
+			TypeCache.Refresh (9ms)
 				TypeCache.ScanAssembly (0ms)
-			BuildScriptInfoCaches (203ms)
+			BuildScriptInfoCaches (200ms)
 			ResolveRequiredComponents (6ms)
-	FinalizeReload (1055ms)
+	FinalizeReload (1006ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (712ms)
-			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (4ms)
-			SetLoadedEditorAssemblies (4ms)
-			BeforeProcessingInitializeOnLoad (81ms)
-			ProcessInitializeOnLoadAttributes (540ms)
-			ProcessInitializeOnLoadMethodAttributes (71ms)
-			AfterProcessingInitializeOnLoad (11ms)
-			EditorAssembliesLoaded (1ms)
-		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (10ms)
-Refreshing native plugins compatible for Editor in 2.98 ms, found 5 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4458 unused Assets / (1.2 MB). Loaded Objects now: 5135.
-Memory consumption went from 114.1 MB to 112.9 MB.
-Total: 9.279200 ms (FindLiveObjects: 0.787600 ms CreateObjectMapping: 0.828400 ms MarkObjects: 6.170400 ms  DeleteObjects: 1.490400 ms)
-
-Prepare: number of updated asset objects reloaded= 0
-========================================================================
-Received Import Request.
-  Time since last request: 2055.797130 seconds.
-  path: Assets/Prefabs/timefish.prefab
-  artifactKey: Guid(733c4d9c25df7fa45ae973b231f96fa8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Prefabs/timefish.prefab using Guid(733c4d9c25df7fa45ae973b231f96fa8) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '8bf1e69470228968157c16ad23f8e150') in 0.1404535 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 30
-
-========================================================================
-Received Import Request.
-  Time since last request: 51.337936 seconds.
-  path: Assets/Prefabs/timefish spawner.prefab
-  artifactKey: Guid(593a45389f87cbd4dba5bdd0cca23d58) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Prefabs/timefish spawner.prefab using Guid(593a45389f87cbd4dba5bdd0cca23d58) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '6c211a305888c922c221e9dcd318ec68') in 0.0081835 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 39
-
-========================================================================
-Received Import Request.
-  Time since last request: 6.585239 seconds.
-  path: Assets/Prefabs/timefish spawner.prefab
-  artifactKey: Guid(593a45389f87cbd4dba5bdd0cca23d58) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Prefabs/timefish spawner.prefab using Guid(593a45389f87cbd4dba5bdd0cca23d58) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '217f5d7be170e5c7e614ba6a14362552') in 0.007764 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 44
-
-========================================================================
-Received Import Request.
-  Time since last request: 3.951024 seconds.
-  path: Assets/Prefabs/timefish spawner.prefab
-  artifactKey: Guid(593a45389f87cbd4dba5bdd0cca23d58) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Prefabs/timefish spawner.prefab using Guid(593a45389f87cbd4dba5bdd0cca23d58) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: 'f637897506d7679df8590f6dda9bc251') in 0.0122032 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 50
-
-========================================================================
-Received Import Request.
-  Time since last request: 33.038513 seconds.
-  path: Assets/Prefabs/timefish spawner.prefab
-  artifactKey: Guid(593a45389f87cbd4dba5bdd0cca23d58) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Prefabs/timefish spawner.prefab using Guid(593a45389f87cbd4dba5bdd0cca23d58) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '84d01434c552841c0db21d52ee2b8715') in 0.0095119 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 49
-
-========================================================================
-Received Import Request.
-  Time since last request: 2.201674 seconds.
-  path: Assets/Prefabs/timefish spawner.prefab
-  artifactKey: Guid(593a45389f87cbd4dba5bdd0cca23d58) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Prefabs/timefish spawner.prefab using Guid(593a45389f87cbd4dba5bdd0cca23d58) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter)[PhysX] Initialized MultithreadedTaskDispatcher with 4 workers.
- -> (artifact id: '34e723130986a01af1e28fe2f11eaffa') in 0.0102546 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 54
-
-========================================================================
-Received Prepare
-Begin MonoManager ReloadAssembly
-Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  0.971 seconds
-Refreshing native plugins compatible for Editor in 3.22 ms, found 5 plugins.
-Native extension for WindowsStandalone target not found
-Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  1.058 seconds
-Domain Reload Profiling: 2026ms
-	BeginReloadAssembly (269ms)
-		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (16ms)
-		BackupInstance (0ms)
-		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (60ms)
-	RebuildCommonClasses (59ms)
-	RebuildNativeTypeToScriptingClass (20ms)
-	initialDomainReloadingComplete (49ms)
-	LoadAllAssembliesAndSetupDomain (571ms)
-		LoadAssemblies (481ms)
-		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (242ms)
-			TypeCache.Refresh (10ms)
-				TypeCache.ScanAssembly (0ms)
-			BuildScriptInfoCaches (217ms)
-			ResolveRequiredComponents (10ms)
-	FinalizeReload (1058ms)
-		ReleaseScriptCaches (0ms)
-		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (709ms)
+		SetupLoadedEditorAssemblies (665ms)
 			LogAssemblyErrors (0ms)
 			InitializePlatformSupportModulesInManaged (3ms)
 			SetLoadedEditorAssemblies (4ms)
-			BeforeProcessingInitializeOnLoad (85ms)
-			ProcessInitializeOnLoadAttributes (546ms)
-			ProcessInitializeOnLoadMethodAttributes (62ms)
-			AfterProcessingInitializeOnLoad (8ms)
+			BeforeProcessingInitializeOnLoad (82ms)
+			ProcessInitializeOnLoadAttributes (503ms)
+			ProcessInitializeOnLoadMethodAttributes (64ms)
+			AfterProcessingInitializeOnLoad (9ms)
 			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
 		AwakeInstancesAfterBackupRestoration (9ms)
-Refreshing native plugins compatible for Editor in 2.98 ms, found 5 plugins.
+Refreshing native plugins compatible for Editor in 2.53 ms, found 5 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4458 unused Assets / (1.3 MB). Loaded Objects now: 5137.
-Memory consumption went from 114.1 MB to 112.8 MB.
-Total: 9.691800 ms (FindLiveObjects: 0.692000 ms CreateObjectMapping: 0.780300 ms MarkObjects: 6.446200 ms  DeleteObjects: 1.771800 ms)
+Unloading 4458 unused Assets / (1.4 MB). Loaded Objects now: 5066.
+Memory consumption went from 113.8 MB to 112.5 MB.
+Total: 8.010000 ms (FindLiveObjects: 0.558200 ms CreateObjectMapping: 0.646600 ms MarkObjects: 5.174900 ms  DeleteObjects: 1.628800 ms)
 
 Prepare: number of updated asset objects reloaded= 0
 ========================================================================
 Received Prepare
 Begin MonoManager ReloadAssembly
 Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  1.025 seconds
-Refreshing native plugins compatible for Editor in 3.79 ms, found 5 plugins.
+- Loaded All Assemblies, in  0.861 seconds
+Refreshing native plugins compatible for Editor in 3.29 ms, found 5 plugins.
 Native extension for WindowsStandalone target not found
 Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.822 seconds
-Domain Reload Profiling: 1847ms
-	BeginReloadAssembly (251ms)
+- Finished resetting the current domain, in  0.894 seconds
+Domain Reload Profiling: 1752ms
+	BeginReloadAssembly (229ms)
 		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (17ms)
+		DisableScriptedObjects (14ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (63ms)
-	RebuildCommonClasses (53ms)
-	RebuildNativeTypeToScriptingClass (19ms)
-	initialDomainReloadingComplete (41ms)
-	LoadAllAssembliesAndSetupDomain (662ms)
-		LoadAssemblies (487ms)
+		CreateAndSetChildDomain (52ms)
+	RebuildCommonClasses (44ms)
+	RebuildNativeTypeToScriptingClass (15ms)
+	initialDomainReloadingComplete (36ms)
+	LoadAllAssembliesAndSetupDomain (532ms)
+		LoadAssemblies (414ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (304ms)
-			TypeCache.Refresh (9ms)
-				TypeCache.ScanAssembly (0ms)
-			BuildScriptInfoCaches (275ms)
-			ResolveRequiredComponents (12ms)
-	FinalizeReload (822ms)
+		AnalyzeDomain (241ms)
+			TypeCache.Refresh (14ms)
+				TypeCache.ScanAssembly (2ms)
+			BuildScriptInfoCaches (215ms)
+			ResolveRequiredComponents (9ms)
+	FinalizeReload (895ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (529ms)
+		SetupLoadedEditorAssemblies (592ms)
 			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (2ms)
-			SetLoadedEditorAssemblies (6ms)
-			BeforeProcessingInitializeOnLoad (73ms)
-			ProcessInitializeOnLoadAttributes (386ms)
-			ProcessInitializeOnLoadMethodAttributes (51ms)
-			AfterProcessingInitializeOnLoad (11ms)
+			InitializePlatformSupportModulesInManaged (3ms)
+			SetLoadedEditorAssemblies (4ms)
+			BeforeProcessingInitializeOnLoad (68ms)
+			ProcessInitializeOnLoadAttributes (447ms)
+			ProcessInitializeOnLoadMethodAttributes (60ms)
+			AfterProcessingInitializeOnLoad (10ms)
 			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (8ms)
-Refreshing native plugins compatible for Editor in 1.94 ms, found 5 plugins.
+		AwakeInstancesAfterBackupRestoration (7ms)
+Refreshing native plugins compatible for Editor in 2.86 ms, found 5 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4458 unused Assets / (1.3 MB). Loaded Objects now: 5139.
-Memory consumption went from 114.1 MB to 112.8 MB.
-Total: 7.239800 ms (FindLiveObjects: 0.516800 ms CreateObjectMapping: 0.587400 ms MarkObjects: 4.917000 ms  DeleteObjects: 1.217800 ms)
+Unloading 4458 unused Assets / (1.4 MB). Loaded Objects now: 5068.
+Memory consumption went from 113.8 MB to 112.4 MB.
+Total: 8.817400 ms (FindLiveObjects: 0.588500 ms CreateObjectMapping: 0.700400 ms MarkObjects: 5.393100 ms  DeleteObjects: 2.134300 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Prepare
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  0.790 seconds
+Refreshing native plugins compatible for Editor in 2.19 ms, found 5 plugins.
+Native extension for WindowsStandalone target not found
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  1.004 seconds
+Domain Reload Profiling: 1792ms
+	BeginReloadAssembly (215ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (14ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (44ms)
+	RebuildCommonClasses (45ms)
+	RebuildNativeTypeToScriptingClass (18ms)
+	initialDomainReloadingComplete (35ms)
+	LoadAllAssembliesAndSetupDomain (474ms)
+		LoadAssemblies (367ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (219ms)
+			TypeCache.Refresh (9ms)
+				TypeCache.ScanAssembly (0ms)
+			BuildScriptInfoCaches (201ms)
+			ResolveRequiredComponents (7ms)
+	FinalizeReload (1005ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (687ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (3ms)
+			SetLoadedEditorAssemblies (4ms)
+			BeforeProcessingInitializeOnLoad (62ms)
+			ProcessInitializeOnLoadAttributes (540ms)
+			ProcessInitializeOnLoadMethodAttributes (64ms)
+			AfterProcessingInitializeOnLoad (12ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (10ms)
+Refreshing native plugins compatible for Editor in 3.25 ms, found 5 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 4458 unused Assets / (1.1 MB). Loaded Objects now: 5070.
+Memory consumption went from 113.8 MB to 112.8 MB.
+Total: 10.639700 ms (FindLiveObjects: 0.648000 ms CreateObjectMapping: 0.932400 ms MarkObjects: 6.799100 ms  DeleteObjects: 2.259000 ms)
 
 Prepare: number of updated asset objects reloaded= 0
