@@ -4,12 +4,25 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
-    public Transform target;
+    public Transform submarine;
+    public Transform battleEnvironment;
+
+    private Transform target;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        target = submarine;
+    }
+
+    public void JumpToBattle()
+    {
+        target = battleEnvironment;
+    }
+
+    public void JumpToSubmarine()
+    {
+        target = submarine;
     }
 
     // Update is called once per frame
