@@ -235,6 +235,7 @@ public class Submarine : MonoBehaviour
         {
             // Timefish hitFish = collision.gameObject.GetComponent<Timefish>();
             cameraFollow.JumpToBattle();
+            // pass information to battleScreen
         }
     }
 
