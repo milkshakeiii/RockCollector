@@ -42,6 +42,9 @@ public class Submarine : MonoBehaviour
     public delegate void FishStored(Timefish fish, float percentFull);
     public static event FishStored OnFishStored;
 
+    public CameraFollow cameraFollow;
+    public BattleScreen battleScreen;
+
     private SubmarineType submarineType;
     private int remainingDurability = 10;
 
@@ -224,6 +227,15 @@ public class Submarine : MonoBehaviour
                 Destroy(this.gameObject);
             }
         } // destroy the submarine if out of power
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.GetComponent<Timefish>() != null)
+        {
+            // Timefish hitFish = collision.gameObject.GetComponent<Timefish>();
+            cameraFollow.JumpToBattle();
+        }
     }
 
     private void FixedUpdate()

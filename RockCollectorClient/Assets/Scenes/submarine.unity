@@ -2240,8 +2240,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ea06f4fbafed4042892c97e05a71691, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  submarine: {fileID: 0}
-  battleEnvironment: {fileID: 0}
+  submarine: {fileID: 1215720688}
+  battleEnvironment: {fileID: 654888764}
 --- !u!114 &519420034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3018,6 +3018,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 654888764}
+  - component: {fileID: 654888765}
   m_Layer: 0
   m_Name: Battle Enivronment
   m_TagString: Untagged
@@ -3041,6 +3042,18 @@ Transform:
   - {fileID: 1301579077}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &654888765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 654888763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfff2a46a36c5214f93201cdd2163e1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &657970996
 GameObject:
   m_ObjectHideFlags: 0
@@ -6558,6 +6571,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c38bb22df84a3048b7b54faae041b1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cameraFollow: {fileID: 519420033}
+  battleScreen: {fileID: 654888765}
 --- !u!70 &1215720692
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
