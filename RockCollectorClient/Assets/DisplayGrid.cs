@@ -38,8 +38,8 @@ public class DisplayGrid : MonoBehaviour
         uint spriteFullWidth = spritePixelWidth / 8;
         uint spriteFullHeight = spritePixelHeight / 8;
 
-        uint scaleX = width / spriteFullWidth;
-        uint scaleY = height / spriteFullHeight;
+        float scaleX = (float)width / spriteFullWidth;
+        float scaleY = (float)height / spriteFullHeight;
 
         // set the sprite
         newSquare.GetComponent<SpriteRenderer>().sprite = sprite;
