@@ -2,7 +2,7 @@ using NUnit.Framework;
 using UnityEngine;
 using System.Collections.Generic;
 
-public class BattleScreen : MonoBehaviour
+public class SmoothBattleScreen : MonoBehaviour
 {
     void Start()
     {

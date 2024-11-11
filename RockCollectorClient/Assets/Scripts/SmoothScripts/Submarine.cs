@@ -43,7 +43,7 @@ public class Submarine : MonoBehaviour
     public static event FishStored OnFishStored;
 
     public CameraFollow cameraFollow;
-    public BattleScreen battleScreen;
+    public SmoothBattleScreen battleScreen;
 
     private SubmarineType submarineType;
     private int remainingDurability = 10;
