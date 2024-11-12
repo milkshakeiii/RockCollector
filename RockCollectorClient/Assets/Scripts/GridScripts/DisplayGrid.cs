@@ -110,6 +110,11 @@ public class DisplayGrid : MonoBehaviour
         {
             GameObject newFirstSquare = Instantiate(baseSquarePrefab, transform);
             Sprite firstSprite = Resources.Load<Sprite>(spriteName);
+            if (firstSprite == null)
+            {
+                Debug.LogError("Sprite not found: " + spriteName);
+                return null;
+            }
             newFirstSquare.GetComponent<SpriteRenderer>().sprite = firstSprite;
             cachedSprites.Add(spriteName, new List<GameObject> { newFirstSquare });
             return newFirstSquare;
@@ -126,6 +131,11 @@ public class DisplayGrid : MonoBehaviour
 
         GameObject newSquare = Instantiate(baseSquarePrefab, transform);
         Sprite sprite = Resources.Load<Sprite>(spriteName);
+        if (sprite == null)
+        {
+            Debug.LogError("Sprite not found: " + spriteName);
+            return null;
+        }
         newSquare.GetComponent<SpriteRenderer>().sprite = sprite;
         cachedSprites[spriteName].Add(newSquare);
         return newSquare;

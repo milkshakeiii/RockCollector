@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class Game : MonoBehaviour
 {
+    public static Game Instance;
+
     public DisplayGrid displayGrid;
 
     private GameScreen currentScreen;
@@ -9,7 +11,22 @@ public class Game : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        currentScreen = new MainMenu();
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
+        SetCurrentScreen(new MainMenu());
+    }
+
+    public void SetCurrentScreen(GameScreen screen)
+    {
+        currentScreen = screen;
+        currentScreen.Start(displayGrid);
     }
 
     // Update is called once per frame
@@ -17,42 +34,34 @@ public class Game : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
         {
-            displayGrid.Clear();
             currentScreen.UpKey(displayGrid);
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
         {
-            displayGrid.Clear();
             currentScreen.DownKey(displayGrid);
         }
         else if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
         {
-            displayGrid.Clear();
             currentScreen.LeftKey(displayGrid);
         }
         else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
         {
-            displayGrid.Clear();
             currentScreen.RightKey(displayGrid);
         }
         else if (Input.GetKeyDown(KeyCode.E))
         {
-            displayGrid.Clear();
             currentScreen.AKey(displayGrid);
         }
         else if (Input.GetKeyDown(KeyCode.Q))
         {
-            displayGrid.Clear();
             currentScreen.BKey(displayGrid);
         }
         else if (Input.GetKeyDown(KeyCode.F))
         {
-            displayGrid.Clear();
             currentScreen.XKey(displayGrid);
         }
         else if (Input.GetKeyDown(KeyCode.G))
         {
-            displayGrid.Clear();
             currentScreen.YKey(displayGrid);
         }
     }
@@ -60,6 +69,7 @@ public class Game : MonoBehaviour
 
 public abstract class GameScreen
 {
+    public abstract void Start(DisplayGrid displayGrid);
     public abstract void UpKey(DisplayGrid displayGrid);
     public abstract void DownKey(DisplayGrid displayGrid);
     public abstract void LeftKey(DisplayGrid displayGrid);
@@ -73,29 +83,89 @@ public abstract class GameScreen
 // MainMenu
 public class MainMenu : GameScreen
 {
+    int selection = 0;
+
+    public override void Start(DisplayGrid displayGrid)
+    {
+        DrawButtons(displayGrid);
+    }
+
     public override void UpKey(DisplayGrid displayGrid)
     {
-        Debug.Log("Main Menu Up");
+        ChangeSelection(displayGrid, -1);
     }
 
     public override void DownKey(DisplayGrid displayGrid)
     {
-        Debug.Log("Main Menu Down");
+        ChangeSelection(displayGrid, 1);
     }
 
     public override void LeftKey(DisplayGrid displayGrid)
     {
-        Debug.Log("Main Menu Left");
+        ChangeSelection(displayGrid, -1);
     }
 
     public override void RightKey(DisplayGrid displayGrid)
     {
-        Debug.Log("Main Menu Right");
+        ChangeSelection(displayGrid, 1);
+    }
+
+    private void ChangeSelection(DisplayGrid displayGrid, int amount)
+    {
+        selection += amount;
+        DrawButtons(displayGrid);
+    }
+
+    private void DrawButtons(DisplayGrid displayGrid)
+    {
+        string ButtonSprite(int index)
+        {
+            if (selection%5 == index)
+            {
+                return "Art/UI/selected_button";
+            }
+            else
+            {
+                return "Art/UI/button";
+            }
+        }
+
+        displayGrid.Clear();
+        displayGrid.DisplaySprite(ButtonSprite(0), 8, 119, 13, 3, 0);
+        displayGrid.DisplayText("Credits", 10, 120);
+        displayGrid.DisplaySprite(ButtonSprite(1), 8, 99, 13, 3, 0);
+        displayGrid.DisplayText("New Game", 10, 100);
+        displayGrid.DisplaySprite(ButtonSprite(2), 8, 79, 13, 3, 0);
+        displayGrid.DisplayText("Continue", 10, 80);
+        displayGrid.DisplaySprite(ButtonSprite(3), 8, 59, 13, 3, 0);
+        displayGrid.DisplayText("Options", 10, 60);
+        displayGrid.DisplaySprite(ButtonSprite(4), 8, 39, 13, 3, 0);
+        displayGrid.DisplayText("Exit", 10, 40);
     }
 
     public override void AKey(DisplayGrid displayGrid)
     {
-        Debug.Log("Main Menu A");
+        if (selection%5 == 0)
+        {
+            Debug.Log("Credits");
+        }
+        else if (selection%5 == 1)
+        {
+            Debug.Log("New Game");
+            Game.Instance.SetCurrentScreen(new OverworldScreen());
+        }
+        else if (selection%5 == 2)
+        {
+            Debug.Log("Continue");
+        }
+        else if (selection%5 == 3)
+        {
+            Debug.Log("Options");
+        }
+        else if (selection%5 == 4)
+        {
+            Debug.Log("Exit");
+        }
     }
 
     public override void BKey(DisplayGrid displayGrid)
@@ -117,6 +187,12 @@ public class MainMenu : GameScreen
 // Overworld
 public class OverworldScreen : GameScreen
 {
+    public override void Start(DisplayGrid displayGrid)
+    {
+        displayGrid.Clear();
+        Debug.Log("Overworld Start");
+    }
+
     public override void UpKey(DisplayGrid displayGrid)
     {
         Debug.Log("Overworld Up");
@@ -161,6 +237,11 @@ public class OverworldScreen : GameScreen
 // DivePreparation
 public class DivePreparationScreen : GameScreen
 {
+    public override void Start(DisplayGrid displayGrid)
+    {
+        Debug.Log("DivePreparation Start");
+    }
+
     public override void UpKey(DisplayGrid displayGrid)
     {
         Debug.Log("DivePreparation Up");
@@ -205,6 +286,10 @@ public class DivePreparationScreen : GameScreen
 // Submarine
 public class SubmarineScreen : GameScreen
 {
+    public override void Start(DisplayGrid displayGrid)
+    {
+        Debug.Log("Submarine Start");
+    }
     public override void UpKey(DisplayGrid displayGrid)
     {
         Debug.Log("Submarine Up");
@@ -249,6 +334,11 @@ public class SubmarineScreen : GameScreen
 // Battle
 public class BattleScreen : GameScreen
 {
+    public override void Start(DisplayGrid displayGrid)
+    {
+        Debug.Log("Battle Start");
+    }
+
     public override void UpKey(DisplayGrid displayGrid)
     {
         Debug.Log("Battle Up");
@@ -293,6 +383,11 @@ public class BattleScreen : GameScreen
 // DiveResults
 public class DiveResultsScreen : GameScreen
 {
+    public override void Start(DisplayGrid displayGrid)
+    {
+        Debug.Log("DiveResults Start");
+    }
+
     public override void UpKey(DisplayGrid displayGrid)
     {
         Debug.Log("DiveResults Up");
