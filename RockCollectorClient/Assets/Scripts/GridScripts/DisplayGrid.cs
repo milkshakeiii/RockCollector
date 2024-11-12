@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class DisplayGrid : MonoBehaviour
@@ -7,13 +8,17 @@ public class DisplayGrid : MonoBehaviour
     public const int HEIGHT = 135;
 
     public GameObject baseSquarePrefab;
+    public GameObject letterPrefab;
+    public GameObject letterCanvas;
 
     private Dictionary<string, List<GameObject>> cachedSprites = new();
+    private List<GameObject> letters = new();
 
 
     void OnEnable()
     {
         DisplaySprite("Art/UI/plain_white", 0, 0, WIDTH/3, HEIGHT, 0);
+        DisplayText("Hello, World!", 10, 120);
     }
 
     void Update()
@@ -61,6 +66,28 @@ public class DisplayGrid : MonoBehaviour
         newSquare.transform.localScale = new Vector3(scaleX, scaleY, 1);
     }
 
+    public void DisplayText(string text, uint x, uint y)
+    {
+        for (int i = 0; i < text.Length; i++)
+        {
+            DisplayLetter(text[i], (uint)(x + i), y);
+        }
+    }
+
+    private void DisplayLetter(char letter, uint x, uint y)
+    {
+        GameObject newLetter = GetCachedLetter();
+
+        newLetter.GetComponent<TMP_Text>().text = letter.ToString();
+        float xMin = (float)x / WIDTH;
+        float yMin = (float)y / HEIGHT;
+        float xMax = (float)(x + 1) / WIDTH;
+        float yMax = (float)(y + 1) / HEIGHT;
+        newLetter.GetComponent<RectTransform>().anchorMin = new Vector2(xMin, yMin);
+        newLetter.GetComponent<RectTransform>().anchorMax = new Vector2(xMax, yMax);
+        newLetter.GetComponent<RectTransform>().rect.Set(0, 0, 0, 0);
+    }
+
     public void Clear()
     {
         foreach (List<GameObject> squares in cachedSprites.Values)
@@ -69,6 +96,11 @@ public class DisplayGrid : MonoBehaviour
             {
                 square.SetActive(false);
             }
+        }
+
+        foreach (GameObject letter in letters)
+        {
+            letter.SetActive(false);
         }
     }
 
@@ -97,5 +129,21 @@ public class DisplayGrid : MonoBehaviour
         newSquare.GetComponent<SpriteRenderer>().sprite = sprite;
         cachedSprites[spriteName].Add(newSquare);
         return newSquare;
+    }
+
+    private GameObject GetCachedLetter()
+    {
+        foreach (GameObject letter in letters)
+        {
+            if (!letter.activeSelf)
+            {
+                letter.SetActive(true);
+                return letter;
+            }
+        }
+
+        GameObject newLetter = Instantiate(letterPrefab, letterCanvas.transform);
+        letters.Add(newLetter);
+        return newLetter;
     }
 }
