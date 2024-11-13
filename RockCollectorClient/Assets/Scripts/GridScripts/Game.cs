@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class Game : MonoBehaviour
@@ -190,7 +191,71 @@ public class OverworldScreen : GameScreen
     public override void Start(DisplayGrid displayGrid)
     {
         displayGrid.Clear();
-        Debug.Log("Overworld Start");
+        DrawOverworld(displayGrid);
+    }
+
+    private void DrawOverworld(DisplayGrid displayGrid)
+    {
+        float[,] PerlinGrid(int seed)
+        {
+            // Create a 30x30 array of Perlin noise values
+            float[,] grid = new float[30, 30];
+            for (int x = 0; x < 30; x++)
+            {
+                for (int y = 0; y < 30; y++)
+                {
+                    grid[x, y] = Mathf.PerlinNoise(seed + x * 0.1f, seed + y * 0.1f);
+                }
+            }
+            return grid;
+        }
+
+        // create one grid each for coral, rock, ice, and cave biomes
+        float[,] coralGrid = PerlinGrid(111);
+        float[,] rockGrid = PerlinGrid(222);
+        float[,] iceGrid = PerlinGrid(333);
+        float[,] caveGrid = PerlinGrid(444);
+
+        string iceSprite = "Art/Terrain/Ice/FILLER08";
+        string rockSprite = "Art/Terrain/Rock/Base_Rock_Tile_Filler_05";
+        string coralSprite = "Art/Terrain/Reef/Coral_Tile_05";
+        string caveSprite = "Art/Terrain/Cave/CAVE_05";
+        string blankSprite = "Art/UI/selected_button";
+
+        // for each cell in the grid, display the sprite of the biome with the highest value
+        // if no biome has a value above 0.4, display a blank sprite
+        for (int x = 0; x < 30; x++)
+        {
+            for (int y = 0; y < 30; y++)
+            {
+                float coralValue = coralGrid[x, y];
+                float rockValue = rockGrid[x, y];
+                float iceValue = iceGrid[x, y];
+                float caveValue = caveGrid[x, y];
+
+                if (coralValue > rockValue && coralValue > iceValue && coralValue > caveValue && coralValue > 0.4f)
+                {
+                    Debug.Log("Coral");
+                    displayGrid.DisplaySprite(coralSprite, DisplayGrid.WIDTH / 2 - 15 * 4 + (uint)(x * 4), DisplayGrid.HEIGHT / 2 - 15 * 4 + (uint)(y * 4), 4, 4, 0);
+                }
+                else if (rockValue > coralValue && rockValue > iceValue && rockValue > caveValue && rockValue > 0.4f)
+                {
+                    displayGrid.DisplaySprite(rockSprite, DisplayGrid.WIDTH / 2 - 15 * 4 + (uint)(x * 4), DisplayGrid.HEIGHT / 2 - 15 * 4 + (uint)(y * 4), 4, 4, 0);
+                }
+                else if (iceValue > coralValue && iceValue > rockValue && iceValue > caveValue && iceValue > 0.4f)
+                {
+                    displayGrid.DisplaySprite(iceSprite, DisplayGrid.WIDTH / 2 - 15 * 4 + (uint)(x * 4), DisplayGrid.HEIGHT / 2 - 15 * 4 + (uint)(y * 4), 4, 4, 0);
+                }
+                else if (caveValue > coralValue && caveValue > rockValue && caveValue > iceValue && caveValue > 0.4f)
+                {
+                    displayGrid.DisplaySprite(caveSprite, DisplayGrid.WIDTH / 2 - 15 * 4 + (uint)(x * 4), DisplayGrid.HEIGHT / 2 - 15 * 4 + (uint)(y * 4), 4, 4, 0);
+                }
+                else
+                {
+                    displayGrid.DisplaySprite(blankSprite, DisplayGrid.WIDTH / 2 - 15 * 4 + (uint)(x * 4), DisplayGrid.HEIGHT / 2 - 15 * 4 + (uint)(y * 4), 4, 4, 0);
+                }
+            }
+        }
     }
 
     public override void UpKey(DisplayGrid displayGrid)
