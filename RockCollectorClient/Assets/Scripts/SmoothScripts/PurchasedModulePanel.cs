@@ -6,11 +6,11 @@ public class PurchasedModulePanel : MonoBehaviour
     public TMP_Text durabilityText;
     public TMP_Text moduleNameText;
 
-    public Equipment module;
+    public Equipments module;
 
     private SetupScreen setupScreen;
 
-    public void Initialize(Equipment module, SetupScreen setupScreen)
+    public void Initialize(Equipments module, SetupScreen setupScreen)
     {
         this.module = module;
         this.setupScreen = setupScreen;

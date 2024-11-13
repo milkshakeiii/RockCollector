@@ -10,7 +10,7 @@ public class ModulesSpawner : MonoBehaviour
     public GameObject shootablesImagePrefab;
     public GameObject shootablesImageParent;
 
-    public Submarine submarine;
+    public SubmarineBehaviour submarine;
 
     private List<GameObject> activatablesImages = new List<GameObject>();
     private int currentActivatableIndex = 0;
@@ -24,7 +24,7 @@ public class ModulesSpawner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        foreach (Equipment equipment in submarine.AllModules())
+        foreach (Equipments equipment in submarine.AllModules())
         {
             if (equipment is Shootable shootable)
             {
@@ -60,7 +60,7 @@ public class ModulesSpawner : MonoBehaviour
             activatablesImages.Add(activatableButton);
         }
 
-        foreach (Equipment equipment in submarine.AllModules())
+        foreach (Equipments equipment in submarine.AllModules())
         {
             if (equipment is Scoop scoop)
             {

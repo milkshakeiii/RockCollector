@@ -115,11 +115,11 @@ public class Timefish : MonoBehaviour
 
     public bool SubmarineInVisionCone()
     {
-        if (Submarine.Instance == null)
+        if (SubmarineBehaviour.Instance == null)
         {
             return false;
         }
-        Vector3 toSub = Submarine.Instance.transform.position - transform.position;
+        Vector3 toSub = SubmarineBehaviour.Instance.transform.position - transform.position;
         float angle = Vector3.Angle(transform.right, toSub);
         // Debug.Log("Angle: " + angle + " Magnitude" + toSub.magnitude);
         return angle < species.visionConeArc / 2 && toSub.magnitude < species.visionRange;
@@ -306,7 +306,7 @@ public class AggressiveBehavior : Behavior
         // if the submarine is still in vision range, rotate towards it and swim forward
         if (fish.SubmarineInVisionCone())
         {
-            Vector3 toSub = Submarine.Instance.transform.position - fish.transform.position;
+            Vector3 toSub = SubmarineBehaviour.Instance.transform.position - fish.transform.position;
             float angle = Vector3.SignedAngle(fish.transform.right, toSub, Vector3.forward);
             fish.FishRotate(angle);
 

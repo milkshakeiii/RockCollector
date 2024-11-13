@@ -7,12 +7,12 @@ public class FishTank : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        Submarine.OnFishStored += DisplayFish;
+        SubmarineBehaviour.OnFishStored += DisplayFish;
     }
 
     void OnDestroy()
     {
-        Submarine.OnFishStored -= DisplayFish;
+        SubmarineBehaviour.OnFishStored -= DisplayFish;
     }
 
     // Update is called once per frame

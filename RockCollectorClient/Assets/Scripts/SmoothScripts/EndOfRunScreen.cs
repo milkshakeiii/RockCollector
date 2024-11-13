@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class EndOfRunScreen : MonoBehaviour
 {
-    public Submarine submarine;
+    public SubmarineBehaviour submarine;
     public Environment environment;
 
     public GameObject fishPanelPrefab;

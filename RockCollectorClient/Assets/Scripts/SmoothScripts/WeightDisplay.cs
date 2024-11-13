@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class WeightDisplay : MonoBehaviour
 {
-    public Submarine submarine;
+    public SubmarineBehaviour submarine;
     public GameObject barPrefab;
     public UpAndDownIndicatorArrow weightArrow;
     public UpAndDownIndicatorArrow waterArrow;

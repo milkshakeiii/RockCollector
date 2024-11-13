@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DepthText : MonoBehaviour
 {
-    public Submarine submarine;
+    public SubmarineBehaviour submarine;
 
     // Start is called before the first frame update
     void Start()

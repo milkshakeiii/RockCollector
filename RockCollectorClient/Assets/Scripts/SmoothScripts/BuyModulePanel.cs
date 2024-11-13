@@ -7,10 +7,10 @@ public class BuyModulePanel : MonoBehaviour
     public TMP_Text moduleDescriptionText;
     public TMP_Text priceText;
 
-    private Equipment module;
+    private Equipments module;
     private SetupScreen setupScreen;
 
-    public void Initialize(Equipment module, float price, SetupScreen setupScreen)
+    public void Initialize(Equipments module, float price, SetupScreen setupScreen)
     {
         this.module = module;
         this.setupScreen = setupScreen;

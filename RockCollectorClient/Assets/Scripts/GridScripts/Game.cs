@@ -1,3 +1,5 @@
+using NUnit.Framework;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
@@ -507,5 +509,10 @@ public static class SharedScreenElements
     public static void DrawSubmarineSidebar(DisplayGrid displayGrid)
     {
         displayGrid.DisplaySprite("Art/UI/plain_white", 0, 0, DisplayGrid.WIDTH/5, DisplayGrid.HEIGHT, 0);
+
+        Dictionary<string, string> infoRows = new();
+        infoRows.Add("Dive location:", PersistentData.Instance.GetString("dive_location"));
+        infoRows.Add("Credits:", PersistentData.Instance.GetString("credits"));
+
     }
 }

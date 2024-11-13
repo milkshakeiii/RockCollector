@@ -18,7 +18,7 @@ public class SetupScreen : MonoBehaviour
     public int returnModulesPerRow = 6;
     public float buySubmarineHorizontalSpacing = 1.0f;
 
-    public Submarine submarine;
+    public SubmarineBehaviour submarine;
     public LoadingScreen loadingScreen;
     public Environment environment;
     public UnityEngine.UI.Image submarineDisplay;
@@ -38,7 +38,7 @@ public class SetupScreen : MonoBehaviour
 
     private Dictionary<string, SubmarineType> submarineTypesAvailable = new();
     private Dictionary<string, float> submarineTypePrices = new();
-    private Dictionary<string, Equipment> modulesAvailable = new();
+    private Dictionary<string, Equipments> modulesAvailable = new();
     private Dictionary<string, float> modulePrices = new();
 
     private int moduleBuyButtonCount = 0;
@@ -73,7 +73,7 @@ public class SetupScreen : MonoBehaviour
         return spentValue;
     }
 
-    private void AddAvailableModule(string name, Equipment module)
+    private void AddAvailableModule(string name, Equipments module)
     {
         module.name = name;
         modulesAvailable[name] = module;
@@ -81,7 +81,7 @@ public class SetupScreen : MonoBehaviour
 
     public void PostEquipment()
     {
-        List<Equipment> modules = new();
+        List<Equipments> modules = new();
         {
             Ballast ballast = new();
             AddAvailableModule("Ballast", ballast);
@@ -172,11 +172,11 @@ public class SetupScreen : MonoBehaviour
     }
 
     // fetch the module prices from the server
-    private void SpawnModulesWithPrices(List<Equipment> modules, List<SubmarineType> submarineTypes)
+    private void SpawnModulesWithPrices(List<Equipments> modules, List<SubmarineType> submarineTypes)
     {
         List<string> moduleNames = new();
         List<string> priceGroups = new();
-        foreach (Equipment module in modules)
+        foreach (Equipments module in modules)
         {
             moduleNames.Add(module.name);
             priceGroups.Add("module");
@@ -191,9 +191,9 @@ public class SetupScreen : MonoBehaviour
         WebRequests.GetInstance().GetPrices(moduleNames, priceGroups, callback);
     }
 
-    private void SpawnModulesWithPricesCallback(List<Equipment> modules, List<SubmarineType> submarineTypes, Newtonsoft.Json.Linq.JObject response)
+    private void SpawnModulesWithPricesCallback(List<Equipments> modules, List<SubmarineType> submarineTypes, Newtonsoft.Json.Linq.JObject response)
     {
-        foreach (Equipment module in modulesAvailable.Values)
+        foreach (Equipments module in modulesAvailable.Values)
         {
             float price = float.Parse(response.GetValue(module.name).ToString());
             modulePrices[module.name] = Mathf.Max(0, module.basePrice + price);
@@ -207,7 +207,7 @@ public class SetupScreen : MonoBehaviour
             //Debug.Log(submarineType.name + " price: " + price);
         }
 
-        foreach (Equipment module in modulesAvailable.Values)
+        foreach (Equipments module in modulesAvailable.Values)
         {
             AddModule(module);
         }
@@ -237,7 +237,7 @@ public class SetupScreen : MonoBehaviour
                 continue;
             }
             int durability = int.Parse(moduleDurabilities[i]);
-            Equipment newModule = BuyModule(modulesAvailable[moduleNames[i]], false, durability);
+            Equipments newModule = BuyModule(modulesAvailable[moduleNames[i]], false, durability);
         }
 
         // get the submarine type and remaining durability from player prefs
@@ -261,7 +261,7 @@ public class SetupScreen : MonoBehaviour
         
     }
 
-    private void AddModule(Equipment module)
+    private void AddModule(Equipments module)
     {
         float x = moduleBuyButtonCount % buyModulesPerRow * buyHorizontalSpacing;
         float y = -moduleBuyButtonCount / buyModulesPerRow * buyVerticalSpacing;
@@ -328,7 +328,7 @@ public class SetupScreen : MonoBehaviour
         OnPurchaseCallback?.Invoke(purchasedName, newTotalPrice);
     }
 
-    public Equipment BuyModule(Equipment module, bool pay, int durability)
+    public Equipments BuyModule(Equipments module, bool pay, int durability)
     {
         if (pay)
         {
@@ -343,7 +343,7 @@ public class SetupScreen : MonoBehaviour
             WebRequests.GetInstance().ReportPurchase(module.name, "module", (response) => HandlePurchaseCallback(response, module.name, module.basePrice), false);
         }
 
-        Equipment addedModule = module.Copy();
+        Equipments addedModule = module.Copy();
         addedModule.remainingDurability = durability;
         AddReturnModuleButton(addedModule);
 
@@ -393,7 +393,7 @@ public class SetupScreen : MonoBehaviour
         UpdateValueRemainingText();
     }
 
-    public void AddReturnModuleButton(Equipment module)
+    public void AddReturnModuleButton(Equipments module)
     {
         // create the return module button
         GameObject returnModuleObject = Instantiate(returnModulePrefab, returnModuleParent.transform);
@@ -413,10 +413,10 @@ public class SetupScreen : MonoBehaviour
 
     public void ReturnModule(PurchasedModulePanel button)
     {
-        Equipment returnedModule = button.module;
+        Equipments returnedModule = button.module;
 
         // get a list of all the equipment except the one being returned
-        List<Equipment> equipment = new();
+        List<Equipments> equipment = new();
         foreach (PurchasedModulePanel returnModuleButton in purchasedModules)
         {
             if (returnModuleButton != button)
@@ -433,7 +433,7 @@ public class SetupScreen : MonoBehaviour
 
         // create new return module buttons for all the equipment except the one being returned
         purchasedModules.Clear();
-        foreach (Equipment module in equipment)
+        foreach (Equipments module in equipment)
         {
             AddReturnModuleButton(module);
         }
@@ -451,7 +451,7 @@ public class SetupScreen : MonoBehaviour
         }
     }
 
-    public void AddDurability(Equipment module)
+    public void AddDurability(Equipments module)
     {
         // return if the module is at max durability
         if (module.remainingDurability >= module.maxDurability)
@@ -508,7 +508,7 @@ public class SetupScreen : MonoBehaviour
         }
         loadingScreen.Stop();
 
-        List<Equipment> modules = new();
+        List<Equipments> modules = new();
         foreach (PurchasedModulePanel button in purchasedModules)
         {
             modules.Add(button.module);

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PowerDisplay : MonoBehaviour
 {
-    public Submarine submarine;
+    public SubmarineBehaviour submarine;
     public UpAndDownIndicatorArrow powerArrow;
     public TMPro.TMP_Text powerText;
 

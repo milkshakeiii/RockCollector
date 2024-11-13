@@ -31,7 +31,7 @@ public class HarpoonGunBehaviour : MonoBehaviour
         if (harpoonsAvailable && Input.GetButton("button1"))
         {
             // pay the activation power cost
-            Submarine submarine = transform.parent.GetComponent<Submarine>();
+            SubmarineBehaviour submarine = transform.parent.GetComponent<SubmarineBehaviour>();
             submarine.SpendPower(harpoonGun.activationPower);
 
             GameObject harpoon = Instantiate(harpoonPrefab, transform.position, transform.rotation);

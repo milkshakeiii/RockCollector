@@ -35,9 +35,9 @@ public class SubmarineType
     }
 }
 
-public class Submarine : MonoBehaviour
+public class SubmarineBehaviour : MonoBehaviour
 {
-    public static Submarine Instance;
+    public static SubmarineBehaviour Instance;
 
     public delegate void FishStored(Timefish fish, float percentFull);
     public static event FishStored OnFishStored;
@@ -56,9 +56,9 @@ public class Submarine : MonoBehaviour
     private float mass = 0f; // Base mass in kilograms
     private float powerSpent = 0f; // Power spent in power units
 
-    private List<Equipment> coreModules = new(); // modules that are built into the submarine
-    private List<Equipment> internalModules = new(); // modules that are installed inside the submarine
-    private List<Equipment> hullMountedModules = new(); // modules that are installed outside the submarine
+    private List<Equipments> coreModules = new(); // modules that are built into the submarine
+    private List<Equipments> internalModules = new(); // modules that are installed inside the submarine
+    private List<Equipments> hullMountedModules = new(); // modules that are installed outside the submarine
 
     public SubmarineType SubmarineType()
     {
@@ -68,7 +68,7 @@ public class Submarine : MonoBehaviour
     public void EndOfRun()
     {
         // reduce the durability of all modules by 1
-        foreach (Equipment module in AllModules())
+        foreach (Equipments module in AllModules())
         {
             module.remainingDurability -= 1;
         }
@@ -83,7 +83,7 @@ public class Submarine : MonoBehaviour
 
         // create a string of module names separated by commas
         string moduleNames = "";
-        foreach (Equipment module in AllModules())
+        foreach (Equipments module in AllModules())
         {
             moduleNames += module.name + ",";
         }
@@ -94,7 +94,7 @@ public class Submarine : MonoBehaviour
 
         // create a string of module durabilities separated by commas
         string moduleDurabilities = "";
-        foreach (Equipment module in AllModules())
+        foreach (Equipments module in AllModules())
         {
             moduleDurabilities += module.remainingDurability + ",";
         }
@@ -125,9 +125,9 @@ public class Submarine : MonoBehaviour
         this.submarineType = submarineType;
     }
 
-    public void AddEquipment(List<Equipment> equipment)
+    public void AddEquipment(List<Equipments> equipment)
     {
-        foreach (Equipment module in equipment)
+        foreach (Equipments module in equipment)
         {
             coreModules.Add(module);
         }
@@ -135,7 +135,7 @@ public class Submarine : MonoBehaviour
 
     void OnEnable()
     {
-        Submarine.Instance = this;
+        SubmarineBehaviour.Instance = this;
 
         AddDrag(SubmarineType().startingDrag);
         AddMass(SubmarineType().startingMass);
@@ -145,7 +145,7 @@ public class Submarine : MonoBehaviour
 
     void OnDisable()
     {
-        Submarine.Instance = null;
+        SubmarineBehaviour.Instance = null;
 
         DiveExit.OnDiveExitEvent -= EndOfRun;
     }
@@ -388,9 +388,9 @@ public class Submarine : MonoBehaviour
         return buoyancy;
     }
 
-    public List<Equipment> AllModules()
+    public List<Equipments> AllModules()
     {
-        List<Equipment> allModules = new();
+        List<Equipments> allModules = new();
         allModules.AddRange(coreModules);
         allModules.AddRange(internalModules);
         allModules.AddRange(hullMountedModules);
@@ -405,7 +405,7 @@ public class Submarine : MonoBehaviour
     public float CurrentMass()
     {
         float totalMass = mass;
-        foreach (Equipment module in AllModules())
+        foreach (Equipments module in AllModules())
         {
             totalMass += module.AddedMass();
         }
@@ -415,7 +415,7 @@ public class Submarine : MonoBehaviour
     public float MaximumMass()
     {
         float totalMass = mass;
-        foreach (Equipment module in AllModules())
+        foreach (Equipments module in AllModules())
         {
             totalMass += module.mass;
             if (module is DepthController controller)
@@ -433,7 +433,7 @@ public class Submarine : MonoBehaviour
     public float BallastedMass()
     {
         float totalMass = mass;
-        foreach (Equipment module in AllModules())
+        foreach (Equipments module in AllModules())
         {
             totalMass += module.mass;
             if (module is Ballast ballast)
@@ -447,7 +447,7 @@ public class Submarine : MonoBehaviour
     public float DepthControlMass()
     {
         float totalMass = 0;
-        foreach (Equipment module in AllModules())
+        foreach (Equipments module in AllModules())
         {
             if (module is DepthController controller)
             {
@@ -460,7 +460,7 @@ public class Submarine : MonoBehaviour
     public float MinimumMass()
     {
         float totalMass = mass;
-        foreach (Equipment module in AllModules())
+        foreach (Equipments module in AllModules())
         {
             totalMass += module.mass;
         }

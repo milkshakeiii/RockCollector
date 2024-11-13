@@ -32,6 +32,10 @@ public class PersistentData : MonoBehaviour
 
     public string GetString(string key)
     {
+        if (!PlayerPrefs.HasKey(key))
+        {
+            return "null";
+        }
         return PlayerPrefs.GetString(key);
     }
 

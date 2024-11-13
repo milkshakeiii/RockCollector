@@ -5,10 +5,10 @@ using UnityEngine.UI;
 
 public class ActivatableButton : MonoBehaviour
 {
-    private Submarine submarine;
+    private SubmarineBehaviour submarine;
     private Activatable activatable;
 
-    public void Initialize(Submarine submarine, Activatable activatable)
+    public void Initialize(SubmarineBehaviour submarine, Activatable activatable)
     {
         this.submarine = submarine;
         this.activatable = activatable;

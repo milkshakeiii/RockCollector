@@ -72,7 +72,7 @@ public class ScoopBehaviour : MonoBehaviour
         }
 
         // pay the activation power cost
-        Submarine submarine = GetComponentInParent<Submarine>();
+        SubmarineBehaviour submarine = GetComponentInParent<SubmarineBehaviour>();
         submarine.SpendPower(scoop.activationPower);
 
         // TODO: visually close the scoop

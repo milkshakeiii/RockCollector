@@ -15,7 +15,7 @@ public enum EquipmentSlot
     HullMounted
 }
 
-public class Equipment
+public class Equipments
 {
     public int maxDurability = 3; // Maximum durability of the equipment
     public int remainingDurability = 3; // Current durability of the equipment
@@ -30,9 +30,9 @@ public class Equipment
     public float activationPower = 0f; // Instantaneous power cost to activate
     public float continuousPower = 0f; // Continuous power cost per second
 
-    public virtual Equipment Copy()
+    public virtual Equipments Copy()
     {
-        return (Equipment)MemberwiseClone();
+        return (Equipments)MemberwiseClone();
     }
 
     public virtual float AddedMass()
@@ -41,9 +41,9 @@ public class Equipment
     }
 }
 
-public abstract class Shootable : Equipment
+public abstract class Shootable : Equipments
 {
-    public abstract GameObject SpawnWorldObject(Submarine submarine);
+    public abstract GameObject SpawnWorldObject(SubmarineBehaviour submarine);
 }
 
 public class HarpoonGun : Shootable
@@ -57,7 +57,7 @@ public class HarpoonGun : Shootable
     public float ropeElasticity = 0.5f; // portion beyond the distance that the rope can stretch before breaking
     public float damage = 1f; // Damage dealt by the harpoon in power units
 
-    public override GameObject SpawnWorldObject(Submarine submarine)
+    public override GameObject SpawnWorldObject(SubmarineBehaviour submarine)
     {
         // find prefab with name "HarpoonGun"
         GameObject harpoonGunPrefab = Resources.Load<GameObject>("HarpoonGun");
@@ -69,7 +69,7 @@ public class HarpoonGun : Shootable
     }
 }
 
-public abstract class Activatable : Equipment
+public abstract class Activatable : Equipments
 {
     // returns true if power should be deducted, false otherwise
     public abstract bool Activate();
@@ -82,7 +82,7 @@ public class Scoop : Shootable
 
     private List<Timefish> capturedFish = new List<Timefish>();
 
-    public override GameObject SpawnWorldObject(Submarine submarine)
+    public override GameObject SpawnWorldObject(SubmarineBehaviour submarine)
     {
         // find prefab with name "Scoop"
         GameObject scoopPrefab = Resources.Load<GameObject>("Scoop");
@@ -133,7 +133,7 @@ public class Ballast : Activatable
     }
 }
 
-public class DepthController : Equipment
+public class DepthController : Equipments
 {
     public float depthControlMass = 0f; // Mass for depth control in kilograms
     public float depthControlTime = 0f; // Time to apply or remove full depth control mass in seconds
@@ -169,7 +169,7 @@ public class DepthController : Equipment
     }
 }
 
-public class Engine : Equipment
+public class Engine : Equipments
 {
     public float thrust = 0f; // Thrust in newtons
 }
