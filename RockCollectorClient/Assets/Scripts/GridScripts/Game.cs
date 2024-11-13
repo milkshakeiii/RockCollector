@@ -192,6 +192,7 @@ public class OverworldScreen : GameScreen
     {
         displayGrid.Clear();
         DrawOverworld(displayGrid);
+        DrawSidebars(displayGrid);
     }
 
     private void DrawOverworld(DisplayGrid displayGrid)
@@ -256,6 +257,13 @@ public class OverworldScreen : GameScreen
                 }
             }
         }
+    }
+
+    private void DrawSidebars(DisplayGrid displayGrid)
+    {
+        // draw two sidebars, taking up a fifth of the screen on the left and right
+        // the left sidebar is the shared submarine sidebar
+        SharedScreenElements.DrawSubmarineSidebar(displayGrid);
     }
 
     public override void UpKey(DisplayGrid displayGrid)
@@ -491,5 +499,13 @@ public class DiveResultsScreen : GameScreen
     public override void YKey(DisplayGrid displayGrid)
     {
         Debug.Log("DiveResults Y");
+    }
+}
+
+public static class SharedScreenElements
+{
+    public static void DrawSubmarineSidebar(DisplayGrid displayGrid)
+    {
+        displayGrid.DisplaySprite("Art/UI/plain_white", 0, 0, DisplayGrid.WIDTH/5, DisplayGrid.HEIGHT, 0);
     }
 }
