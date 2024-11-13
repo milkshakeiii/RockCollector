@@ -513,6 +513,5 @@ public static class SharedScreenElements
         Dictionary<string, string> infoRows = new();
         infoRows.Add("Dive location:", PersistentData.Instance.GetString("dive_location"));
         infoRows.Add("Credits:", PersistentData.Instance.GetString("credits"));
-
     }
 }

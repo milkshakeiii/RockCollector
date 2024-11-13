@@ -30,5 +30,5 @@ public class Equipment
 
 public class Submarine : Equipment
 {
-
+    
 }

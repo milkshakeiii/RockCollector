@@ -39,6 +39,32 @@ public class PersistentData : MonoBehaviour
         return PlayerPrefs.GetString(key);
     }
 
+    public void StoreStringList(string key, List<string> value)
+    {
+        // throw an error if any of the strings contain a comma
+        foreach (string s in value)
+        {
+            if (s.Contains(","))
+            {
+                throw new System.Exception("String contains a comma");
+            }
+        }
+        // combine the list into a comma-separated string
+        string combined = string.Join(",", value);
+        PlayerPrefs.SetString(key, combined);
+    }
+
+    public List<string> GetStringList(string key)
+    {
+        if (!PlayerPrefs.HasKey(key))
+        {
+            return new List<string>();
+        }
+        // split the comma-separated string into a list
+        string combined = PlayerPrefs.GetString(key);
+        return new List<string>(combined.Split(','));
+    }
+
     public void Save()
     {
         PlayerPrefs.Save();
