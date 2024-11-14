@@ -5,6 +5,10 @@ using UnityEngine;
 
 public class Game : MonoBehaviour
 {
+    public const string DIVE_LOCATION = "dive_location";
+    public const string CREDITS = "credits";
+    public const string EQUIPMENT = "equipment";
+
     public static Game Instance;
 
     public DisplayGrid displayGrid;
@@ -238,7 +242,6 @@ public class OverworldScreen : GameScreen
 
                 if (coralValue > rockValue && coralValue > iceValue && coralValue > caveValue && coralValue > 0.4f)
                 {
-                    Debug.Log("Coral");
                     displayGrid.DisplaySprite(coralSprite, DisplayGrid.WIDTH / 2 - 15 * 4 + (uint)(x * 4), DisplayGrid.HEIGHT / 2 - 15 * 4 + (uint)(y * 4), 4, 4, 0);
                 }
                 else if (rockValue > coralValue && rockValue > iceValue && rockValue > caveValue && rockValue > 0.4f)
@@ -508,10 +511,26 @@ public static class SharedScreenElements
 {
     public static void DrawSubmarineSidebar(DisplayGrid displayGrid)
     {
+        // draw background
         displayGrid.DisplaySprite("Art/UI/plain_white", 0, 0, DisplayGrid.WIDTH/5, DisplayGrid.HEIGHT, 0);
 
+        // draw submarine sprite
+
+        // draw info text
         Dictionary<string, string> infoRows = new();
-        infoRows.Add("Dive location:", PersistentData.Instance.GetString("dive_location"));
-        infoRows.Add("Credits:", PersistentData.Instance.GetString("credits"));
+        infoRows.Add("Dive location:", PersistentData.Instance.GetString(Game.DIVE_LOCATION));
+        infoRows.Add("Credits:", PersistentData.Instance.GetString(Game.CREDITS));
+
+        int infoRowCount = 0;
+        foreach (KeyValuePair<string, string> infoRow in infoRows)
+        {
+            displayGrid.DisplayText(infoRow.Key, 2, (uint)(90 - 10 * infoRowCount));
+            displayGrid.DisplayText(infoRow.Value, (uint)(DisplayGrid.WIDTH / 5 - infoRow.Value.Length - 2), (uint)(90 - 10*infoRowCount));
+
+            infoRowCount++;
+        }
+
+        // draw equipment sprites
+        List<string> equipmentNames = PersistentData.Instance.GetStringList(Game.EQUIPMENT);
     }
 }
