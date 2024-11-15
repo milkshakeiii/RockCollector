@@ -1,11 +1,26 @@
-using NUnit.Framework;
+using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using UnityEngine;
 
 public abstract class Equipment
 {
     public int remainingDurability = 3; // Current durability of the equipment
+
+    public static Equipment EquipmentFromName(string name)
+    {
+        // declare a list of all the leaf node equipment classes
+        List<Type> types = new() { typeof(CapsuleSubmarine) };
+
+        foreach (Type type in types)
+        {
+            Equipment instance = (Equipment)Activator.CreateInstance(type);
+            if (name == instance.Name())
+            {
+                return instance;
+            }
+        }
+
+        return null;
+    }
 
     public virtual int MaxDurability()
     {
@@ -15,7 +30,7 @@ public abstract class Equipment
 
     public abstract string Name(); // Name of the equipment
     public abstract string Description(); // Description of the equipment
-    public abstract string SpriteName(); // Name of the sprite used to represent the equipment
+    public abstract string SpritePath(); // Filepath (within resources) to the sprite used to represent the equipment
 
     public virtual float BasePrice()
     {
@@ -42,7 +57,30 @@ public abstract class Equipment
     }
 }
 
-//public class Submarine : Equipment
-//{
-    
-//}
+public abstract class Submarine : Equipment
+{
+
+}
+
+public class CapsuleSubmarine : Submarine
+{
+    public override string Name()
+    {
+        return "capsule_submarine";
+    }
+
+    public override string Description()
+    {
+        return "The smallest submarine.";
+    }
+
+    public override string SpritePath()
+    {
+        return "Art/Characters/Submarines/Submarine_Small";
+    }
+
+    public override float Mass()
+    {
+        return 1000; // kg
+    }
+}
