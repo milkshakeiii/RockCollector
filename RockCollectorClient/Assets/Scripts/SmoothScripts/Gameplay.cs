@@ -75,7 +75,7 @@ public abstract class Activatable : Equipments
     public abstract bool Activate();
 }
 
-public class Scoop : Shootable
+public class Scoops : Shootable
 {
     public float scoopDiameter = 0f; // Diameter of the scoop in meters
     public float scoopTime = 1f; // Time to scoop in seconds

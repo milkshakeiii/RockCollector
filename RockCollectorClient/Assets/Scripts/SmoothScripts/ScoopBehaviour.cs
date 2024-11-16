@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class ScoopBehaviour : MonoBehaviour
 {
-    private Scoop scoop;
+    private Scoops scoop;
 
     private bool scooping = false;
 
-    public void Initialize(Scoop newScoop)
+    public void Initialize(Scoops newScoop)
     {
         scoop = newScoop;
     }

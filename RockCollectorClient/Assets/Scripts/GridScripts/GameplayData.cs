@@ -8,7 +8,7 @@ public abstract class Equipment
     public static Equipment EquipmentFromName(string name)
     {
         // declare a list of all the leaf node equipment classes
-        List<Type> types = new() { typeof(CapsuleSubmarine) };
+        List<Type> types = new() { typeof(CapsuleSubmarine), typeof(Scoop) };
 
         foreach (Type type in types)
         {
@@ -19,7 +19,7 @@ public abstract class Equipment
             }
         }
 
-        return null;
+        throw new Exception("Equipment name not found: " + name);
     }
 
     public virtual int MaxDurability()
@@ -82,5 +82,28 @@ public class CapsuleSubmarine : Submarine
     public override float Mass()
     {
         return 1000; // kg
+    }
+}
+
+public class Scoop : Equipment
+{
+    public override string Name()
+    {
+        return "scoop";
+    }
+
+    public override string Description()
+    {
+        return "A scoop for collecting small creatures.";
+    }
+
+    public override string SpritePath()
+    {
+        return "Art/Characters/Submarines/Scoop_open";
+    }
+
+    public override float Mass()
+    {
+        return 100; // kg
     }
 }

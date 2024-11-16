@@ -18,6 +18,9 @@ public class Game : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        // test data
+        PersistentData.Instance.StoreStringList(EQUIPMENT, new List<string> { "capsule_submarine", "scoop" });
+
         if (Instance == null)
         {
             Instance = this;
@@ -530,7 +533,22 @@ public static class SharedScreenElements
             infoRowCount++;
         }
 
-        // draw equipment sprites
+        // get equipment
         List<string> equipmentNames = PersistentData.Instance.GetStringList(Game.EQUIPMENT);
+        List<Equipment> allEquipment = new();
+        foreach (string equipmentName in equipmentNames)
+        {
+            allEquipment.Add(Equipment.EquipmentFromName(equipmentName));
+        }
+
+        // draw equipment sprites
+        for (int i = 0; i < allEquipment.Count; i++)
+        {
+            Equipment equipmentPiece = allEquipment[i];
+            // arrange the equipment in rows of 3, starting at x=2, y=60
+            uint x = 2 + (uint)(i % 3) * 18;
+            uint y = 60 - (uint)(i / 3) * 18;
+            displayGrid.DisplaySprite(equipmentPiece.SpritePath(), x, y, 15, 15, 0, overlapLayer: 1);
+        }
     }
 }

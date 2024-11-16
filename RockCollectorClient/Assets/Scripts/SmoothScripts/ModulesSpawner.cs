@@ -62,7 +62,7 @@ public class ModulesSpawner : MonoBehaviour
 
         foreach (Equipments equipment in submarine.AllModules())
         {
-            if (equipment is Scoop scoop)
+            if (equipment is Scoops scoop)
             {
 
             }

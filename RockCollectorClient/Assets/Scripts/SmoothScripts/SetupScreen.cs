@@ -135,7 +135,7 @@ public class SetupScreen : MonoBehaviour
             harpoonGun2.ropeElasticity = 0.5f;
             modules.Add(harpoonGun2);
 
-            Scoop scoop = new();
+            Scoops scoop = new();
             AddAvailableModule("Scoop", scoop);
             scoop.description = "Scoop up fish with the scoop.";
             scoop.scoopDiameter = 1f;

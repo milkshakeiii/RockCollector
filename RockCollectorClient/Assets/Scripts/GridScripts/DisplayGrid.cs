@@ -14,7 +14,6 @@ public class DisplayGrid : MonoBehaviour
     private Dictionary<string, List<GameObject>> cachedSprites = new();
     private List<GameObject> letters = new();
 
-
     void OnEnable()
     {
         DisplaySprite("Art/UI/plain_white", 0, 0, WIDTH/3, HEIGHT, 0);
@@ -35,7 +34,7 @@ public class DisplayGrid : MonoBehaviour
     /// <param name="width"> Width in cells (8 px per cell)</param>
     /// <param name="height"> Height in cells (8 px per cell)</param>
     /// <param name="rotation"> Rotation in 90 degree increments</param>
-    public void DisplaySprite(string spriteName, uint x, uint y, uint width, uint height, int rotation)
+    public void DisplaySprite(string spriteName, uint x, uint y, uint width, uint height, int rotation, int overlapLayer = 0)
     {
         // create a new GameObject
         GameObject newSquare = GetCachedSprite(spriteName);
@@ -49,7 +48,7 @@ public class DisplayGrid : MonoBehaviour
         // pixel width and height must be divisible by 8
         if (spritePixelWidth % 8 != 0 || spritePixelHeight % 8 != 0)
         {
-            Debug.LogError("Sprite width and height must be divisible by 8");
+            Debug.LogError("Sprite width and height must be divisible by 8: " + spriteName);
             return;
         }
 
@@ -64,6 +63,9 @@ public class DisplayGrid : MonoBehaviour
 
         // set the scale
         newSquare.transform.localScale = new Vector3(scaleX, scaleY, 1);
+
+        // set the sorting layer
+        newSquare.GetComponent<SpriteRenderer>().sortingOrder = overlapLayer;
     }
 
     public void DisplayText(string text, uint x, uint y)
