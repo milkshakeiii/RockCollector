@@ -39,6 +39,20 @@ public class PersistentData : MonoBehaviour
         return PlayerPrefs.GetString(key);
     }
 
+    public void StoreInt(string key, int value)
+    {
+        PlayerPrefs.SetInt(key, value);
+    }
+
+    public int GetInt(string key)
+    {
+        if (!PlayerPrefs.HasKey(key))
+        {
+            return -1;
+        }
+        return PlayerPrefs.GetInt(key);
+    }
+
     public void StoreStringList(string key, List<string> value)
     {
         // throw an error if any of the strings contain a comma

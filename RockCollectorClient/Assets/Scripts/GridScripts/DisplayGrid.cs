@@ -40,6 +40,20 @@ public class DisplayGrid : MonoBehaviour
         GameObject newSquare = GetCachedSprite(spriteName);
         newSquare.transform.localPosition = new Vector3(x, y, 0);
         newSquare.transform.Rotate(0, 0, rotation*90);
+        // since the sprites' pivots are in the bottom left corner, we need to adjust the position
+        if (rotation == 1)
+        {
+            newSquare.transform.localPosition += new Vector3(width, 0, 0);
+        }
+        else if (rotation == 2)
+        {
+            newSquare.transform.localPosition += new Vector3(width, height, 0);
+        }
+        else if (rotation == 3)
+        {
+            newSquare.transform.localPosition += new Vector3(0, height, 0);
+        }
+
         Sprite sprite = newSquare.GetComponent<SpriteRenderer>().sprite;
 
         uint spritePixelWidth = (uint)sprite.rect.width;

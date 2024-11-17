@@ -8,6 +8,8 @@ public class Game : MonoBehaviour
     public const string DIVE_LOCATION = "dive_location";
     public const string CREDITS = "credits";
     public const string EQUIPMENT = "equipment";
+    public const string LAST_DIVE_OVERWORLD_X = "last_dive_x";
+    public const string LAST_DIVE_OVERWORLD_Y = "last_dive_y";
 
     public static Game Instance;
 
@@ -20,6 +22,8 @@ public class Game : MonoBehaviour
     {
         // test data
         PersistentData.Instance.StoreStringList(EQUIPMENT, new List<string> { "capsule_submarine", "scoop" });
+        PersistentData.Instance.StoreInt(LAST_DIVE_OVERWORLD_X, 15);
+        PersistentData.Instance.StoreInt(LAST_DIVE_OVERWORLD_Y, 15);
 
         if (Instance == null)
         {
@@ -202,6 +206,7 @@ public class OverworldScreen : GameScreen
         displayGrid.Clear();
         DrawOverworld(displayGrid);
         DrawSidebars(displayGrid);
+        DrawPositionArrow(displayGrid);
     }
 
     private void DrawOverworld(DisplayGrid displayGrid)
@@ -272,6 +277,15 @@ public class OverworldScreen : GameScreen
         // draw two sidebars, taking up a fifth of the screen on the left and right
         // the left sidebar is the shared submarine sidebar
         SharedScreenElements.DrawSubmarineSidebar(displayGrid);
+    }
+
+    private void DrawPositionArrow(DisplayGrid displayGrid)
+    {
+        // draw an arrow at the position of the last dive
+        int x = PersistentData.Instance.GetInt(Game.LAST_DIVE_OVERWORLD_X);
+        int y = PersistentData.Instance.GetInt(Game.LAST_DIVE_OVERWORLD_Y);
+
+        displayGrid.DisplaySprite("Art/UI/arrow", DisplayGrid.WIDTH / 2 - 15 * 4 + (uint)(x * 4), DisplayGrid.HEIGHT / 2 - 15 * 4 + (uint)(y * 4) + 2, 4, 4, 3, overlapLayer: 1);
     }
 
     public override void UpKey(DisplayGrid displayGrid)
