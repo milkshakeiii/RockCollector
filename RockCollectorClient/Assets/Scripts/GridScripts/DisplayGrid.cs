@@ -39,7 +39,7 @@ public class DisplayGrid : MonoBehaviour
         // create a new GameObject
         GameObject newSquare = GetCachedSprite(spriteName);
         newSquare.transform.localPosition = new Vector3(x, y, 0);
-        newSquare.transform.Rotate(0, 0, rotation*90);
+        newSquare.transform.localRotation = Quaternion.Euler(0, 0, rotation * 90);
         // since the sprites' pivots are in the bottom left corner, we need to adjust the position
         if (rotation == 1)
         {

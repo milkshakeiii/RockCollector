@@ -201,9 +201,17 @@ public class MainMenu : GameScreen
 // Overworld
 public class OverworldScreen : GameScreen
 {
+    private int selected_x = 15;
+    private int selected_y = 15;
+
     public override void Start(DisplayGrid displayGrid)
     {
         displayGrid.Clear();
+        DrawEverything(displayGrid);
+    }
+
+    private void DrawEverything(DisplayGrid displayGrid)
+    {
         DrawOverworld(displayGrid);
         DrawSidebars(displayGrid);
         DrawPositionArrow(displayGrid);
@@ -286,26 +294,61 @@ public class OverworldScreen : GameScreen
         int y = PersistentData.Instance.GetInt(Game.LAST_DIVE_OVERWORLD_Y);
 
         displayGrid.DisplaySprite("Art/UI/arrow", DisplayGrid.WIDTH / 2 - 15 * 4 + (uint)(x * 4), DisplayGrid.HEIGHT / 2 - 15 * 4 + (uint)(y * 4) + 2, 4, 4, 3, overlapLayer: 1);
+
+        // draw an arrow at the selected position
+        displayGrid.DisplaySprite("Art/UI/arrow", DisplayGrid.WIDTH / 2 - 15 * 4 + (uint)(selected_x * 4), DisplayGrid.HEIGHT / 2 - 15 * 4 + (uint)(selected_y * 4) + 2, 4, 4, 3, overlapLayer: 1);
     }
 
     public override void UpKey(DisplayGrid displayGrid)
     {
         Debug.Log("Overworld Up");
+        displayGrid.Clear();
+
+        if (selected_y < 29)
+        {
+            selected_y++;
+        }
+
+        DrawEverything(displayGrid);
     }
 
     public override void DownKey(DisplayGrid displayGrid)
     {
         Debug.Log("Overworld Down");
+        displayGrid.Clear();
+
+        if (selected_y > 0)
+        {
+            selected_y--;
+        }
+
+        DrawEverything(displayGrid);
     }
 
     public override void LeftKey(DisplayGrid displayGrid)
     {
         Debug.Log("Overworld Left");
+        displayGrid.Clear();
+
+        if (selected_x > 0)
+        {
+            selected_x--;
+        }
+
+        DrawEverything(displayGrid);
     }
 
     public override void RightKey(DisplayGrid displayGrid)
     {
         Debug.Log("Overworld Right");
+        displayGrid.Clear();
+
+        if (selected_x < 29)
+        {
+            selected_x++;
+        }
+
+        DrawEverything(displayGrid);
     }
 
     public override void AKey(DisplayGrid displayGrid)
