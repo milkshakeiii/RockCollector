@@ -15,7 +15,7 @@ C:/Users/milks/Documents/github/RockCollector/RockCollectorClient
 -logFile
 Logs/AssetImportWorker1.log
 -srvPort
-51822
+58080
 -job-worker-count
 3
 -background-job-worker-count
@@ -59,12 +59,12 @@ C:/Users/milks/Documents/github/RockCollector/RockCollectorClient
     "memorysetup-temp-allocator-size-gi-baking-worker=262144"
     "memorysetup-temp-allocator-size-gi-baking-worker=262144"
     "memorysetup-temp-allocator-size-gfx=262144"
-Player connection [18628]  Target information:
+Player connection [10032]  Target information:
 
-Player connection [18628]  * "[IP] 192.168.0.205 [Port] 0 [Flags] 2 [Guid] 2634536215 [EditorId] 2634536215 [Version] 1048832 [Id] WindowsEditor(7,LAPTOP-QS7EPVME) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+Player connection [10032]  * "[IP] 192.168.0.205 [Port] 0 [Flags] 2 [Guid] 1568606510 [EditorId] 1568606510 [Version] 1048832 [Id] WindowsEditor(7,LAPTOP-QS7EPVME) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
 
-Player connection [18628] Host joined multi-casting on [225.0.0.222:54997]...
-Player connection [18628] Host joined alternative multi-casting on [225.0.0.222:34997]...
+Player connection [10032] Host joined multi-casting on [225.0.0.222:54997]...
+Player connection [10032] Host joined alternative multi-casting on [225.0.0.222:34997]...
 JobSystem: Creating JobQueue using job-worker-count value 3
 [Physics::Module] Initialized fallback backend.
 [Physics::Module] Id: 0xdecafbad
@@ -75,7 +75,7 @@ Library Redirect Path: Library/
 [Physics::Module] SDK Version: 4.1.2
 [Physics::Module] Integration Version: 1.0.0
 [Physics::Module] Threading Mode: Multi-Threaded
-Refreshing native plugins compatible for Editor in 3.54 ms, found 5 plugins.
+Refreshing native plugins compatible for Editor in 3.97 ms, found 5 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Initialize engine version: 6000.0.26f1 (ccb7c73d2c02)
 [Subsystems] Discovering subsystems at path C:/unity/6000.0.26f1/Editor/Data/Resources/UnitySubsystems
@@ -91,44 +91,44 @@ Initialize mono
 Mono path[0] = 'C:/unity/6000.0.26f1/Editor/Data/Managed'
 Mono path[1] = 'C:/unity/6000.0.26f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
 Mono config path = 'C:/unity/6000.0.26f1/Editor/Data/MonoBleedingEdge/etc'
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56340
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56220
 Begin MonoManager ReloadAssembly
 Registering precompiled unity dll's ...
 Register platform support module: C:/unity/6000.0.26f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
-Registered in 0.002636 seconds.
-- Loaded All Assemblies, in  0.515 seconds
+Registered in 0.003359 seconds.
+- Loaded All Assemblies, in  0.535 seconds
 Native extension for WindowsStandalone target not found
 Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.513 seconds
-Domain Reload Profiling: 1026ms
-	BeginReloadAssembly (165ms)
+- Finished resetting the current domain, in  0.545 seconds
+Domain Reload Profiling: 1078ms
+	BeginReloadAssembly (181ms)
 		ExecutionOrderSort (0ms)
 		DisableScriptedObjects (0ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
 		CreateAndSetChildDomain (1ms)
 	RebuildCommonClasses (52ms)
-	RebuildNativeTypeToScriptingClass (17ms)
-	initialDomainReloadingComplete (61ms)
-	LoadAllAssembliesAndSetupDomain (216ms)
-		LoadAssemblies (163ms)
+	RebuildNativeTypeToScriptingClass (16ms)
+	initialDomainReloadingComplete (62ms)
+	LoadAllAssembliesAndSetupDomain (221ms)
+		LoadAssemblies (178ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (212ms)
-			TypeCache.Refresh (210ms)
-				TypeCache.ScanAssembly (192ms)
+		AnalyzeDomain (217ms)
+			TypeCache.Refresh (215ms)
+				TypeCache.ScanAssembly (195ms)
 			BuildScriptInfoCaches (0ms)
 			ResolveRequiredComponents (1ms)
-	FinalizeReload (514ms)
+	FinalizeReload (546ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (456ms)
+		SetupLoadedEditorAssemblies (494ms)
 			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (34ms)
-			SetLoadedEditorAssemblies (5ms)
+			InitializePlatformSupportModulesInManaged (36ms)
+			SetLoadedEditorAssemblies (7ms)
 			BeforeProcessingInitializeOnLoad (8ms)
-			ProcessInitializeOnLoadAttributes (299ms)
-			ProcessInitializeOnLoadMethodAttributes (107ms)
-			AfterProcessingInitializeOnLoad (3ms)
+			ProcessInitializeOnLoadAttributes (317ms)
+			ProcessInitializeOnLoadMethodAttributes (122ms)
+			AfterProcessingInitializeOnLoad (4ms)
 			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
 		AwakeInstancesAfterBackupRestoration (0ms)
@@ -137,769 +137,473 @@ Worker process is ready to serve import requests
 Import Worker Mode flag is 0x00
 Begin MonoManager ReloadAssembly
 Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  1.230 seconds
-Refreshing native plugins compatible for Editor in 2.05 ms, found 5 plugins.
+- Loaded All Assemblies, in  1.437 seconds
+Refreshing native plugins compatible for Editor in 2.25 ms, found 5 plugins.
 Native extension for WindowsStandalone target not found
-Refreshing native plugins compatible for Editor in 3.72 ms, found 5 plugins.
+Refreshing native plugins compatible for Editor in 3.36 ms, found 5 plugins.
 Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  1.026 seconds
-Domain Reload Profiling: 2251ms
-	BeginReloadAssembly (504ms)
+- Finished resetting the current domain, in  1.136 seconds
+Domain Reload Profiling: 2567ms
+	BeginReloadAssembly (612ms)
 		ExecutionOrderSort (0ms)
 		DisableScriptedObjects (9ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (40ms)
-	RebuildCommonClasses (48ms)
-	RebuildNativeTypeToScriptingClass (15ms)
-	initialDomainReloadingComplete (50ms)
-	LoadAllAssembliesAndSetupDomain (609ms)
-		LoadAssemblies (426ms)
+		CreateAndSetChildDomain (45ms)
+	RebuildCommonClasses (63ms)
+	RebuildNativeTypeToScriptingClass (19ms)
+	initialDomainReloadingComplete (62ms)
+	LoadAllAssembliesAndSetupDomain (675ms)
+		LoadAssemblies (498ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (301ms)
-			TypeCache.Refresh (214ms)
-				TypeCache.ScanAssembly (190ms)
-			BuildScriptInfoCaches (76ms)
-			ResolveRequiredComponents (8ms)
-	FinalizeReload (1026ms)
+		AnalyzeDomain (337ms)
+			TypeCache.Refresh (236ms)
+				TypeCache.ScanAssembly (213ms)
+			BuildScriptInfoCaches (88ms)
+			ResolveRequiredComponents (9ms)
+	FinalizeReload (1136ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (741ms)
+		SetupLoadedEditorAssemblies (831ms)
 			LogAssemblyErrors (0ms)
 			InitializePlatformSupportModulesInManaged (3ms)
 			SetLoadedEditorAssemblies (4ms)
-			BeforeProcessingInitializeOnLoad (82ms)
-			ProcessInitializeOnLoadAttributes (584ms)
-			ProcessInitializeOnLoadMethodAttributes (58ms)
-			AfterProcessingInitializeOnLoad (9ms)
+			BeforeProcessingInitializeOnLoad (99ms)
+			ProcessInitializeOnLoadAttributes (652ms)
+			ProcessInitializeOnLoadMethodAttributes (63ms)
+			AfterProcessingInitializeOnLoad (10ms)
 			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
 		AwakeInstancesAfterBackupRestoration (7ms)
-Launched and connected shader compiler UnityShaderCompiler.exe after 0.01 seconds
-Refreshing native plugins compatible for Editor in 3.73 ms, found 5 plugins.
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.02 seconds
+Refreshing native plugins compatible for Editor in 4.26 ms, found 5 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Unloading 28 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4444 unused Assets / (0.8 MB). Loaded Objects now: 5040.
-Memory consumption went from 120.3 MB to 119.5 MB.
-Total: 12.146900 ms (FindLiveObjects: 0.746300 ms CreateObjectMapping: 1.024100 ms MarkObjects: 8.113400 ms  DeleteObjects: 2.261700 ms)
+Unloading 4445 unused Assets / (4.2 MB). Loaded Objects now: 5041.
+Memory consumption went from 118.3 MB to 114.1 MB.
+Total: 13.778600 ms (FindLiveObjects: 0.748700 ms CreateObjectMapping: 1.005000 ms MarkObjects: 10.100800 ms  DeleteObjects: 1.922500 ms)
 
 ========================================================================
 Received Import Request.
-  Time since last request: 362818.216761 seconds.
-  path: Assets/Resources/Art/Backgrounds/General/BG_Plants_Closer_03.png
-  artifactKey: Guid(3b0fa73799cb22b499eb8cc7d00559e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Backgrounds/General/BG_Plants_Closer_03.png using Guid(3b0fa73799cb22b499eb8cc7d00559e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '43e4aa4f03c30cbbc75f04aa46449d77') in 0.1111917 seconds
+  Time since last request: 625949.226638 seconds.
+  path: Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v3_01.png
+  artifactKey: Guid(c087c398b0da30c4d947e811fe5fbad6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v3_01.png using Guid(c087c398b0da30c4d947e811fe5fbad6) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '575c8a5606f35dd38a7a6d5a10d92df2') in 0.1185445 seconds
 Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000095 seconds.
-  path: Assets/Resources/Art/Backgrounds/General/BG_Plants_Farther_01.png
-  artifactKey: Guid(a7b89aada8cda2b49ac66008c8d0140f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Backgrounds/General/BG_Plants_Farther_01.png using Guid(a7b89aada8cda2b49ac66008c8d0140f) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '0fcde3515d80e690934be050a69db68b') in 0.0253915 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 4
+  Time since last request: 0.000026 seconds.
+  path: Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v1_01.png
+  artifactKey: Guid(fbec1767603532c459371ccc72bbee32) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v1_01.png using Guid(fbec1767603532c459371ccc72bbee32) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '9d3c1435b7a885ea3cf3401bddf3c646') in 0.037649 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 5
 
 ========================================================================
 Received Import Request.
   Time since last request: 0.000020 seconds.
-  path: Assets/Resources/Art/Backgrounds/General/BG_Rock_08.png
-  artifactKey: Guid(874445b57aeb54f4dbe4b8cdbc134aa0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Backgrounds/General/BG_Rock_08.png using Guid(874445b57aeb54f4dbe4b8cdbc134aa0) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'cff4095ce58793ba4b3ab53d45be2ec1') in 0.025768 seconds
+  path: Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v2_01.png
+  artifactKey: Guid(03c31beb3b84c9e48a4d60ee4a6f5986) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v2_01.png using Guid(03c31beb3b84c9e48a4d60ee4a6f5986) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '84df980b1f0d18768d0be06be1947640') in 0.0805521 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 11
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000025 seconds.
+  path: Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v5_01.png
+  artifactKey: Guid(2c7dc479fd6e14e4bb6a282ae4364026) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v5_01.png using Guid(2c7dc479fd6e14e4bb6a282ae4364026) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '316c969d3441e0b6c2f6e57892d234a1') in 0.0400578 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 5
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000025 seconds.
+  path: Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v5_02.png
+  artifactKey: Guid(e3068c61a6395f349b070e0f1fc8172a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v5_02.png using Guid(e3068c61a6395f349b070e0f1fc8172a) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '1ca523e94b6e40e83a89ed5e56af7cba') in 0.0296421 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 5
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000016 seconds.
+  path: Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v2_04.png
+  artifactKey: Guid(8ddc8d678b88e6349835654b02fbe0fe) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v2_04.png using Guid(8ddc8d678b88e6349835654b02fbe0fe) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '57b5a77083b5c8a0de94b28bf8afb4d5') in 0.0235769 seconds
 Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000020 seconds.
-  path: Assets/Resources/Art/Backgrounds/General/BG_Plants_Farther_02.png
-  artifactKey: Guid(4f20747a76a01c64293f8ab96661b2b1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Backgrounds/General/BG_Plants_Farther_02.png using Guid(4f20747a76a01c64293f8ab96661b2b1) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '0372e243ddb54fcde5ff3bb3b9541862') in 0.0205943 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+  Time since last request: 0.000072 seconds.
+  path: Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v2_05.png
+  artifactKey: Guid(e234bba56c52e6544903f19b904d1e25) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v2_05.png using Guid(e234bba56c52e6544903f19b904d1e25) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'c50e85dc04e6c57c7efa59cdb6d63609') in 0.0716918 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 11
 
 ========================================================================
 Received Import Request.
   Time since last request: 0.000020 seconds.
-  path: Assets/Resources/Art/Backgrounds/General/BG_Rock_04.png
-  artifactKey: Guid(df9fca4333c31bc449737edab50370b5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Backgrounds/General/BG_Rock_04.png using Guid(df9fca4333c31bc449737edab50370b5) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '2152570829007488aa849782d6b0c038') in 0.0222357 seconds
+  path: Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v5_04.png
+  artifactKey: Guid(994be2284edd6b949b7be7c8d5a7061b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v5_04.png using Guid(994be2284edd6b949b7be7c8d5a7061b) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '028d88fdcbc3ee40c0d032ae5eafe51c') in 0.0235556 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 5
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000019 seconds.
+  path: Assets/Resources/Art/Characters/Crustaceans/v1
+  artifactKey: Guid(0960e784ef787be49b4bce56da490a7f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Crustaceans/v1 using Guid(0960e784ef787be49b4bce56da490a7f) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '5685bf7f165095fa9e23bc4dcd94a18f') in 0.0010641 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000412 seconds.
+  path: Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v4_02.png
+  artifactKey: Guid(e1111b79f25862c45a82e930acc7b1aa) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v4_02.png using Guid(e1111b79f25862c45a82e930acc7b1aa) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '7751c25efcd082d9e0e98d55d85391a4') in 0.0512622 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 12
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000017 seconds.
+  path: Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v2_05.png
+  artifactKey: Guid(694cee9347f489241891f91663b0704b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v2_05.png using Guid(694cee9347f489241891f91663b0704b) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '320bc8b48998ac05bf22e617cc67b100') in 0.0197639 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000341 seconds.
+  path: Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v1_02.png
+  artifactKey: Guid(de4bf00bdf170b64287c327a12a30c64) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v1_02.png using Guid(de4bf00bdf170b64287c327a12a30c64) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '8d7e06ff2e246174c51e99d845b0bac5') in 0.0226502 seconds
 Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
 
 ========================================================================
 Received Import Request.
   Time since last request: 0.000023 seconds.
-  path: Assets/Resources/Art/Backgrounds/General/BG_Plants_Closer_04.png
-  artifactKey: Guid(7ccf5fe5b7c59414e8de3b096a21096d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Backgrounds/General/BG_Plants_Closer_04.png using Guid(7ccf5fe5b7c59414e8de3b096a21096d) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '2efd312d6813d32b8168e915464427bb') in 0.0244758 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 4
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000024 seconds.
-  path: Assets/Resources/Art/Backgrounds/General/BG_Rock_07.png
-  artifactKey: Guid(74bd42b1d73c8e74ab5aa9ae14cdaf40) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Backgrounds/General/BG_Rock_07.png using Guid(74bd42b1d73c8e74ab5aa9ae14cdaf40) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '4c412bce5a2ca12ea0249ef5031e2e07') in 0.0214881 seconds
+  path: Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v3_03.png
+  artifactKey: Guid(62ea15c42cdccdb49b8170f39b1fa7f5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v3_03.png using Guid(62ea15c42cdccdb49b8170f39b1fa7f5) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '1b68ae68a1ce597db3e56b237c608ff6') in 0.0222892 seconds
 Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000017 seconds.
-  path: Assets/Resources/Art/Backgrounds/General/BG_Rock_03.png
-  artifactKey: Guid(fcb8781ab442f7f4e94ab88b53bf0898) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Backgrounds/General/BG_Rock_03.png using Guid(fcb8781ab442f7f4e94ab88b53bf0898) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '5674eb7a841b98224f0c7faf9d83d6a2') in 0.0206194 seconds
+  Time since last request: 0.000016 seconds.
+  path: Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v3_04.png
+  artifactKey: Guid(0102e8969ea15ae4895d4e0987f79076) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v3_04.png using Guid(0102e8969ea15ae4895d4e0987f79076) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '13e75d70e295530f655e93daf4e4425a') in 0.0491856 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 13
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000016 seconds.
+  path: Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v4_02.png
+  artifactKey: Guid(b8cb4a75ff2ac6744827e7ef4da7f3da) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v4_02.png using Guid(b8cb4a75ff2ac6744827e7ef4da7f3da) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '975176ac9c6dbf083464b4df3303f7ed') in 0.0222051 seconds
 Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
 
 ========================================================================
 Received Import Request.
   Time since last request: 0.000018 seconds.
-  path: Assets/Resources/Art/Backgrounds/General/BG_Plants_Closer_01.png
-  artifactKey: Guid(a0b84b132034520489c02e3db3d0fc8a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Backgrounds/General/BG_Plants_Closer_01.png using Guid(a0b84b132034520489c02e3db3d0fc8a) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '4a7826dafea23ca435a6af544670dcab') in 0.0234299 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 4
+  path: Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v5_03.png
+  artifactKey: Guid(65cfa51c30f4d124690f44b9bd4d8837) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v5_03.png using Guid(65cfa51c30f4d124690f44b9bd4d8837) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '4ef45013965d22fbe3a224e8dcbcfdb6') in 0.0228158 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
 
 ========================================================================
-Received Prepare
-Refreshing native plugins compatible for Editor in 3.00 ms, found 5 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4429 unused Assets / (1.1 MB). Loaded Objects now: 5069.
-Memory consumption went from 112.7 MB to 111.7 MB.
-Total: 10.201400 ms (FindLiveObjects: 0.596800 ms CreateObjectMapping: 0.862800 ms MarkObjects: 7.191400 ms  DeleteObjects: 1.549000 ms)
+Received Import Request.
+  Time since last request: 0.000018 seconds.
+  path: Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v2_02.png
+  artifactKey: Guid(f338bb1d3e7ace549b05d66a845623ce) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v2_02.png using Guid(f338bb1d3e7ace549b05d66a845623ce) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'b8a3bea1f8f13ecd1f35b99766ea7c65') in 0.0212613 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
 
-Prepare: number of updated asset objects reloaded= 0
 ========================================================================
-Received Prepare
-Begin MonoManager ReloadAssembly
-Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  0.855 seconds
-Refreshing native plugins compatible for Editor in 1.98 ms, found 5 plugins.
-Native extension for WindowsStandalone target not found
-Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.830 seconds
-Domain Reload Profiling: 1683ms
-	BeginReloadAssembly (222ms)
-		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (14ms)
-		BackupInstance (0ms)
-		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (53ms)
-	RebuildCommonClasses (44ms)
-	RebuildNativeTypeToScriptingClass (20ms)
-	initialDomainReloadingComplete (36ms)
-	LoadAllAssembliesAndSetupDomain (531ms)
-		LoadAssemblies (401ms)
-		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (236ms)
-			TypeCache.Refresh (16ms)
-				TypeCache.ScanAssembly (2ms)
-			BuildScriptInfoCaches (208ms)
-			ResolveRequiredComponents (8ms)
-	FinalizeReload (830ms)
-		ReleaseScriptCaches (0ms)
-		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (569ms)
-			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (2ms)
-			SetLoadedEditorAssemblies (3ms)
-			BeforeProcessingInitializeOnLoad (60ms)
-			ProcessInitializeOnLoadAttributes (453ms)
-			ProcessInitializeOnLoadMethodAttributes (43ms)
-			AfterProcessingInitializeOnLoad (7ms)
-			EditorAssembliesLoaded (0ms)
-		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (7ms)
-Refreshing native plugins compatible for Editor in 2.07 ms, found 5 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4443 unused Assets / (1.2 MB). Loaded Objects now: 5071.
-Memory consumption went from 114.1 MB to 112.9 MB.
-Total: 6.992700 ms (FindLiveObjects: 0.570500 ms CreateObjectMapping: 0.599200 ms MarkObjects: 4.405200 ms  DeleteObjects: 1.417000 ms)
+Received Import Request.
+  Time since last request: 0.000022 seconds.
+  path: Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v4_03.png
+  artifactKey: Guid(56db77376ebfbc445a3fefa3240d9081) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v4_03.png using Guid(56db77376ebfbc445a3fefa3240d9081) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '470826b5e905a20255c1c57aa8a64190') in 0.023074 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
 
-Prepare: number of updated asset objects reloaded= 0
 ========================================================================
-Received Prepare
-Refreshing native plugins compatible for Editor in 2.36 ms, found 5 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4429 unused Assets / (1.1 MB). Loaded Objects now: 5071.
-Memory consumption went from 114.2 MB to 113.1 MB.
-Total: 9.168000 ms (FindLiveObjects: 0.634700 ms CreateObjectMapping: 1.069800 ms MarkObjects: 5.864900 ms  DeleteObjects: 1.597300 ms)
+Received Import Request.
+  Time since last request: 0.000026 seconds.
+  path: Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v5_02.png
+  artifactKey: Guid(c4bf20c3950431c4ba3e552e7c79688e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v5_02.png using Guid(c4bf20c3950431c4ba3e552e7c79688e) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '7736002edf2986210f00665e27067384') in 0.0206637 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
 
-Prepare: number of updated asset objects reloaded= 0
 ========================================================================
-Received Prepare
-Begin MonoManager ReloadAssembly
-Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  0.864 seconds
-Refreshing native plugins compatible for Editor in 1.98 ms, found 5 plugins.
-Native extension for WindowsStandalone target not found
-Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.848 seconds
-Domain Reload Profiling: 1709ms
-	BeginReloadAssembly (248ms)
-		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (15ms)
-		BackupInstance (0ms)
-		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (51ms)
-	RebuildCommonClasses (56ms)
-	RebuildNativeTypeToScriptingClass (16ms)
-	initialDomainReloadingComplete (34ms)
-	LoadAllAssembliesAndSetupDomain (507ms)
-		LoadAssemblies (412ms)
-		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (235ms)
-			TypeCache.Refresh (14ms)
-				TypeCache.ScanAssembly (2ms)
-			BuildScriptInfoCaches (212ms)
-			ResolveRequiredComponents (6ms)
-	FinalizeReload (848ms)
-		ReleaseScriptCaches (0ms)
-		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (587ms)
-			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (3ms)
-			SetLoadedEditorAssemblies (5ms)
-			BeforeProcessingInitializeOnLoad (72ms)
-			ProcessInitializeOnLoadAttributes (456ms)
-			ProcessInitializeOnLoadMethodAttributes (42ms)
-			AfterProcessingInitializeOnLoad (9ms)
-			EditorAssembliesLoaded (0ms)
-		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (10ms)
-Refreshing native plugins compatible for Editor in 2.58 ms, found 5 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4443 unused Assets / (1.1 MB). Loaded Objects now: 5073.
-Memory consumption went from 114.1 MB to 113.0 MB.
-Total: 10.532900 ms (FindLiveObjects: 0.751400 ms CreateObjectMapping: 0.988900 ms MarkObjects: 7.534100 ms  DeleteObjects: 1.257600 ms)
+Received Import Request.
+  Time since last request: 0.000018 seconds.
+  path: Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v4_05.png
+  artifactKey: Guid(eab8595a42717f045b7ecda878b7a1ee) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v4_05.png using Guid(eab8595a42717f045b7ecda878b7a1ee) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'af931f006533d1a8f90ac69293317156') in 0.0202683 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
 
-Prepare: number of updated asset objects reloaded= 0
 ========================================================================
-Received Prepare
-Begin MonoManager ReloadAssembly
-Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  0.807 seconds
-Refreshing native plugins compatible for Editor in 2.79 ms, found 5 plugins.
-Native extension for WindowsStandalone target not found
-Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  1.053 seconds
-Domain Reload Profiling: 1859ms
-	BeginReloadAssembly (231ms)
-		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (24ms)
-		BackupInstance (0ms)
-		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (58ms)
-	RebuildCommonClasses (45ms)
-	RebuildNativeTypeToScriptingClass (16ms)
-	initialDomainReloadingComplete (29ms)
-	LoadAllAssembliesAndSetupDomain (484ms)
-		LoadAssemblies (364ms)
-		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (227ms)
-			TypeCache.Refresh (7ms)
-				TypeCache.ScanAssembly (0ms)
-			BuildScriptInfoCaches (208ms)
-			ResolveRequiredComponents (9ms)
-	FinalizeReload (1054ms)
-		ReleaseScriptCaches (0ms)
-		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (729ms)
-			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (3ms)
-			SetLoadedEditorAssemblies (5ms)
-			BeforeProcessingInitializeOnLoad (79ms)
-			ProcessInitializeOnLoadAttributes (570ms)
-			ProcessInitializeOnLoadMethodAttributes (62ms)
-			AfterProcessingInitializeOnLoad (10ms)
-			EditorAssembliesLoaded (0ms)
-		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (10ms)
-Refreshing native plugins compatible for Editor in 2.63 ms, found 5 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4443 unused Assets / (1.2 MB). Loaded Objects now: 5075.
-Memory consumption went from 114.1 MB to 113.0 MB.
-Total: 9.577400 ms (FindLiveObjects: 0.567800 ms CreateObjectMapping: 0.816500 ms MarkObjects: 6.458900 ms  DeleteObjects: 1.732500 ms)
+Received Import Request.
+  Time since last request: 0.000031 seconds.
+  path: Assets/Resources/Art/Characters/Crustaceans/v1/README.png
+  artifactKey: Guid(d7058a1535393824dbf740e4b66e81aa) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Crustaceans/v1/README.png using Guid(d7058a1535393824dbf740e4b66e81aa) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '7fae71ddc0431164d13f866c2b187864') in 0.0219251 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
 
-Prepare: number of updated asset objects reloaded= 0
 ========================================================================
-Received Prepare
-Refreshing native plugins compatible for Editor in 2.63 ms, found 5 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4429 unused Assets / (1.6 MB). Loaded Objects now: 5075.
-Memory consumption went from 114.2 MB to 112.7 MB.
-Total: 9.122500 ms (FindLiveObjects: 0.834200 ms CreateObjectMapping: 1.213200 ms MarkObjects: 5.332500 ms  DeleteObjects: 1.741400 ms)
+Received Import Request.
+  Time since last request: 0.000016 seconds.
+  path: Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v4_03.png
+  artifactKey: Guid(efcb06c594199144e90a37d79abcca9f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v4_03.png using Guid(efcb06c594199144e90a37d79abcca9f) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '5258c9b2f56d779ad641cccbc1b5de97') in 0.0436525 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 12
 
-Prepare: number of updated asset objects reloaded= 0
 ========================================================================
-Received Prepare
-Begin MonoManager ReloadAssembly
-Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  0.972 seconds
-Refreshing native plugins compatible for Editor in 4.35 ms, found 5 plugins.
-Native extension for WindowsStandalone target not found
-Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.855 seconds
-Domain Reload Profiling: 1820ms
-	BeginReloadAssembly (254ms)
-		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (18ms)
-		BackupInstance (0ms)
-		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (55ms)
-	RebuildCommonClasses (47ms)
-	RebuildNativeTypeToScriptingClass (15ms)
-	initialDomainReloadingComplete (31ms)
-	LoadAllAssembliesAndSetupDomain (617ms)
-		LoadAssemblies (533ms)
-		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (223ms)
-			TypeCache.Refresh (12ms)
-				TypeCache.ScanAssembly (2ms)
-			BuildScriptInfoCaches (202ms)
-			ResolveRequiredComponents (6ms)
-	FinalizeReload (855ms)
-		ReleaseScriptCaches (0ms)
-		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (578ms)
-			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (3ms)
-			SetLoadedEditorAssemblies (5ms)
-			BeforeProcessingInitializeOnLoad (64ms)
-			ProcessInitializeOnLoadAttributes (450ms)
-			ProcessInitializeOnLoadMethodAttributes (47ms)
-			AfterProcessingInitializeOnLoad (9ms)
-			EditorAssembliesLoaded (0ms)
-		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (7ms)
-Refreshing native plugins compatible for Editor in 2.86 ms, found 5 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4443 unused Assets / (1.3 MB). Loaded Objects now: 5077.
-Memory consumption went from 114.1 MB to 112.8 MB.
-Total: 7.387800 ms (FindLiveObjects: 0.561400 ms CreateObjectMapping: 0.595300 ms MarkObjects: 4.744000 ms  DeleteObjects: 1.486200 ms)
+Received Import Request.
+  Time since last request: 0.000018 seconds.
+  path: Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v1_05.png
+  artifactKey: Guid(ec55d4a17860baf4e8b32e6d4ce032b9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v1_05.png using Guid(ec55d4a17860baf4e8b32e6d4ce032b9) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '0c1eba8218840f0f9241e3200d9efcc7') in 0.0278253 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 5
 
-Prepare: number of updated asset objects reloaded= 0
 ========================================================================
-Received Prepare
-Refreshing native plugins compatible for Editor in 4.00 ms, found 5 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4429 unused Assets / (0.7 MB). Loaded Objects now: 5077.
-Memory consumption went from 114.2 MB to 113.5 MB.
-Total: 38.581700 ms (FindLiveObjects: 0.690900 ms CreateObjectMapping: 0.888500 ms MarkObjects: 34.814000 ms  DeleteObjects: 2.177600 ms)
+Received Import Request.
+  Time since last request: 0.000017 seconds.
+  path: Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v3_02.png
+  artifactKey: Guid(b9054a2d3f022f541af0b8cde9817f9a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v3_02.png using Guid(b9054a2d3f022f541af0b8cde9817f9a) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '34166a0658ee908fdae713466cfe5a4a') in 0.0465217 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 13
 
-Prepare: number of updated asset objects reloaded= 0
 ========================================================================
-Received Prepare
-Begin MonoManager ReloadAssembly
-Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  0.896 seconds
-Refreshing native plugins compatible for Editor in 2.24 ms, found 5 plugins.
-Native extension for WindowsStandalone target not found
-Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.875 seconds
-Domain Reload Profiling: 1769ms
-	BeginReloadAssembly (239ms)
-		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (16ms)
-		BackupInstance (0ms)
-		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (64ms)
-	RebuildCommonClasses (44ms)
-	RebuildNativeTypeToScriptingClass (19ms)
-	initialDomainReloadingComplete (34ms)
-	LoadAllAssembliesAndSetupDomain (557ms)
-		LoadAssemblies (386ms)
-		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (287ms)
-			TypeCache.Refresh (10ms)
-				TypeCache.ScanAssembly (1ms)
-			BuildScriptInfoCaches (264ms)
-			ResolveRequiredComponents (9ms)
-	FinalizeReload (876ms)
-		ReleaseScriptCaches (0ms)
-		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (598ms)
-			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (3ms)
-			SetLoadedEditorAssemblies (5ms)
-			BeforeProcessingInitializeOnLoad (61ms)
-			ProcessInitializeOnLoadAttributes (476ms)
-			ProcessInitializeOnLoadMethodAttributes (45ms)
-			AfterProcessingInitializeOnLoad (8ms)
-			EditorAssembliesLoaded (0ms)
-		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (7ms)
-Refreshing native plugins compatible for Editor in 2.62 ms, found 5 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4443 unused Assets / (1.4 MB). Loaded Objects now: 5079.
-Memory consumption went from 114.1 MB to 112.7 MB.
-Total: 10.427000 ms (FindLiveObjects: 0.718100 ms CreateObjectMapping: 0.873400 ms MarkObjects: 6.503400 ms  DeleteObjects: 2.330500 ms)
+Received Import Request.
+  Time since last request: 0.000018 seconds.
+  path: Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v3_02.png
+  artifactKey: Guid(4864aeb1bde535647a1518988077a2d5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v3_02.png using Guid(4864aeb1bde535647a1518988077a2d5) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'c4ab36e88d27370f977fb07364884f4d') in 0.0231276 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
 
-Prepare: number of updated asset objects reloaded= 0
 ========================================================================
-Received Prepare
-Begin MonoManager ReloadAssembly
-Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  0.771 seconds
-Refreshing native plugins compatible for Editor in 2.72 ms, found 5 plugins.
-Native extension for WindowsStandalone target not found
-Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  1.025 seconds
-Domain Reload Profiling: 1795ms
-	BeginReloadAssembly (229ms)
-		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (15ms)
-		BackupInstance (0ms)
-		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (52ms)
-	RebuildCommonClasses (40ms)
-	RebuildNativeTypeToScriptingClass (15ms)
-	initialDomainReloadingComplete (35ms)
-	LoadAllAssembliesAndSetupDomain (450ms)
-		LoadAssemblies (371ms)
-		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (200ms)
-			TypeCache.Refresh (9ms)
-				TypeCache.ScanAssembly (0ms)
-			BuildScriptInfoCaches (181ms)
-			ResolveRequiredComponents (7ms)
-	FinalizeReload (1026ms)
-		ReleaseScriptCaches (0ms)
-		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (735ms)
-			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (2ms)
-			SetLoadedEditorAssemblies (3ms)
-			BeforeProcessingInitializeOnLoad (64ms)
-			ProcessInitializeOnLoadAttributes (593ms)
-			ProcessInitializeOnLoadMethodAttributes (60ms)
-			AfterProcessingInitializeOnLoad (11ms)
-			EditorAssembliesLoaded (0ms)
-		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (8ms)
-Refreshing native plugins compatible for Editor in 3.51 ms, found 5 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4443 unused Assets / (1.3 MB). Loaded Objects now: 5081.
-Memory consumption went from 114.1 MB to 112.9 MB.
-Total: 9.014400 ms (FindLiveObjects: 0.647800 ms CreateObjectMapping: 0.903300 ms MarkObjects: 5.676800 ms  DeleteObjects: 1.784700 ms)
+Received Import Request.
+  Time since last request: 0.000019 seconds.
+  path: Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v5_05.png
+  artifactKey: Guid(5c3e6d71f3457a84e8dc3417c02eee18) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v5_05.png using Guid(5c3e6d71f3457a84e8dc3417c02eee18) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '8d31625904c97a33bec8e2e2e02e3532') in 0.0281319 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 5
 
-Prepare: number of updated asset objects reloaded= 0
 ========================================================================
-Received Prepare
-Refreshing native plugins compatible for Editor in 2.73 ms, found 5 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4429 unused Assets / (1.4 MB). Loaded Objects now: 5081.
-Memory consumption went from 114.3 MB to 112.8 MB.
-Total: 8.208900 ms (FindLiveObjects: 0.555600 ms CreateObjectMapping: 0.660100 ms MarkObjects: 5.164000 ms  DeleteObjects: 1.827900 ms)
+Received Import Request.
+  Time since last request: 0.000029 seconds.
+  path: Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v5_03.png
+  artifactKey: Guid(e4e5f9ea1e300c749967c4183398b9fc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v5_03.png using Guid(e4e5f9ea1e300c749967c4183398b9fc) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '224ea7d1f939cecf63aa3eff25272e9a') in 0.0237179 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 5
 
-Prepare: number of updated asset objects reloaded= 0
 ========================================================================
-Received Prepare
-Begin MonoManager ReloadAssembly
-Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  0.905 seconds
-Refreshing native plugins compatible for Editor in 2.84 ms, found 5 plugins.
-Native extension for WindowsStandalone target not found
-Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.918 seconds
-Domain Reload Profiling: 1822ms
-	BeginReloadAssembly (231ms)
-		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (14ms)
-		BackupInstance (0ms)
-		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (61ms)
-	RebuildCommonClasses (48ms)
-	RebuildNativeTypeToScriptingClass (15ms)
-	initialDomainReloadingComplete (30ms)
-	LoadAllAssembliesAndSetupDomain (580ms)
-		LoadAssemblies (381ms)
-		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (314ms)
-			TypeCache.Refresh (12ms)
-				TypeCache.ScanAssembly (1ms)
-			BuildScriptInfoCaches (288ms)
-			ResolveRequiredComponents (9ms)
-	FinalizeReload (919ms)
-		ReleaseScriptCaches (0ms)
-		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (649ms)
-			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (3ms)
-			SetLoadedEditorAssemblies (4ms)
-			BeforeProcessingInitializeOnLoad (88ms)
-			ProcessInitializeOnLoadAttributes (498ms)
-			ProcessInitializeOnLoadMethodAttributes (47ms)
-			AfterProcessingInitializeOnLoad (8ms)
-			EditorAssembliesLoaded (0ms)
-		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (7ms)
-Refreshing native plugins compatible for Editor in 2.18 ms, found 5 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4443 unused Assets / (1.2 MB). Loaded Objects now: 5083.
-Memory consumption went from 114.1 MB to 113.0 MB.
-Total: 7.658300 ms (FindLiveObjects: 0.528200 ms CreateObjectMapping: 0.612000 ms MarkObjects: 5.056000 ms  DeleteObjects: 1.460900 ms)
+Received Import Request.
+  Time since last request: 218.934566 seconds.
+  path: Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v1_02.png
+  artifactKey: Guid(41acd1100d4ca044089a4ae5f52993c8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v1_02.png using Guid(41acd1100d4ca044089a4ae5f52993c8) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '434ae81386767a1a4c37bd232d1aa33f') in 0.0268765 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
 
-Prepare: number of updated asset objects reloaded= 0
 ========================================================================
-Received Prepare
-Begin MonoManager ReloadAssembly
-Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  0.842 seconds
-Refreshing native plugins compatible for Editor in 2.92 ms, found 5 plugins.
-Native extension for WindowsStandalone target not found
-Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  1.086 seconds
-Domain Reload Profiling: 1925ms
-	BeginReloadAssembly (236ms)
-		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (16ms)
-		BackupInstance (0ms)
-		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (52ms)
-	RebuildCommonClasses (50ms)
-	RebuildNativeTypeToScriptingClass (21ms)
-	initialDomainReloadingComplete (33ms)
-	LoadAllAssembliesAndSetupDomain (499ms)
-		LoadAssemblies (391ms)
-		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (230ms)
-			TypeCache.Refresh (8ms)
-				TypeCache.ScanAssembly (0ms)
-			BuildScriptInfoCaches (212ms)
-			ResolveRequiredComponents (7ms)
-	FinalizeReload (1087ms)
-		ReleaseScriptCaches (0ms)
-		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (751ms)
-			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (4ms)
-			SetLoadedEditorAssemblies (5ms)
-			BeforeProcessingInitializeOnLoad (85ms)
-			ProcessInitializeOnLoadAttributes (588ms)
-			ProcessInitializeOnLoadMethodAttributes (58ms)
-			AfterProcessingInitializeOnLoad (10ms)
-			EditorAssembliesLoaded (0ms)
-		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (10ms)
-Refreshing native plugins compatible for Editor in 3.21 ms, found 5 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4443 unused Assets / (1.8 MB). Loaded Objects now: 5085.
-Memory consumption went from 114.1 MB to 112.4 MB.
-Total: 11.338500 ms (FindLiveObjects: 0.645800 ms CreateObjectMapping: 0.975800 ms MarkObjects: 7.222600 ms  DeleteObjects: 2.492900 ms)
+Received Import Request.
+  Time since last request: 0.000026 seconds.
+  path: Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v3_01.png
+  artifactKey: Guid(c087c398b0da30c4d947e811fe5fbad6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v3_01.png using Guid(c087c398b0da30c4d947e811fe5fbad6) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '2be710ad9211b911c92856403859448a') in 0.02275 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
 
-Prepare: number of updated asset objects reloaded= 0
 ========================================================================
-Received Prepare
-Refreshing native plugins compatible for Editor in 2.66 ms, found 5 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4429 unused Assets / (1.3 MB). Loaded Objects now: 5085.
-Memory consumption went from 114.3 MB to 113.0 MB.
-Total: 11.901600 ms (FindLiveObjects: 0.872300 ms CreateObjectMapping: 1.159800 ms MarkObjects: 8.062100 ms  DeleteObjects: 1.806100 ms)
+Received Import Request.
+  Time since last request: 0.000082 seconds.
+  path: Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v4_01.png
+  artifactKey: Guid(0100779b44b77aa48b917067a2786751) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v4_01.png using Guid(0100779b44b77aa48b917067a2786751) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '943bfd5598a088482dd70a055d71e7e1') in 0.0283375 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
 
-Prepare: number of updated asset objects reloaded= 0
 ========================================================================
-Received Prepare
-Begin MonoManager ReloadAssembly
-Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  0.856 seconds
-Refreshing native plugins compatible for Editor in 1.91 ms, found 5 plugins.
-Native extension for WindowsStandalone target not found
-Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.934 seconds
-Domain Reload Profiling: 1787ms
-	BeginReloadAssembly (238ms)
-		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (16ms)
-		BackupInstance (0ms)
-		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (56ms)
-	RebuildCommonClasses (52ms)
-	RebuildNativeTypeToScriptingClass (23ms)
-	initialDomainReloadingComplete (41ms)
-	LoadAllAssembliesAndSetupDomain (499ms)
-		LoadAssemblies (389ms)
-		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (237ms)
-			TypeCache.Refresh (10ms)
-				TypeCache.ScanAssembly (2ms)
-			BuildScriptInfoCaches (218ms)
-			ResolveRequiredComponents (6ms)
-	FinalizeReload (934ms)
-		ReleaseScriptCaches (0ms)
-		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (670ms)
-			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (3ms)
-			SetLoadedEditorAssemblies (4ms)
-			BeforeProcessingInitializeOnLoad (71ms)
-			ProcessInitializeOnLoadAttributes (530ms)
-			ProcessInitializeOnLoadMethodAttributes (52ms)
-			AfterProcessingInitializeOnLoad (10ms)
-			EditorAssembliesLoaded (0ms)
-		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (8ms)
-Refreshing native plugins compatible for Editor in 2.65 ms, found 5 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4443 unused Assets / (1.4 MB). Loaded Objects now: 5087.
-Memory consumption went from 114.1 MB to 112.7 MB.
-Total: 8.130900 ms (FindLiveObjects: 0.720500 ms CreateObjectMapping: 0.821800 ms MarkObjects: 4.895800 ms  DeleteObjects: 1.691100 ms)
+Received Import Request.
+  Time since last request: 0.000023 seconds.
+  path: Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v2_03.png
+  artifactKey: Guid(5bfbc454a1ba9f24c89546354441d4e7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v2_03.png using Guid(5bfbc454a1ba9f24c89546354441d4e7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '1bfaa7a446dddbf75146f7d3f0f3f3ef') in 0.0302335 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
 
-Prepare: number of updated asset objects reloaded= 0
 ========================================================================
-Received Prepare
-Begin MonoManager ReloadAssembly
-Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  0.786 seconds
-Refreshing native plugins compatible for Editor in 2.81 ms, found 5 plugins.
-Native extension for WindowsStandalone target not found
-Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  1.061 seconds
-Domain Reload Profiling: 1847ms
-	BeginReloadAssembly (222ms)
-		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (18ms)
-		BackupInstance (0ms)
-		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (50ms)
-	RebuildCommonClasses (48ms)
-	RebuildNativeTypeToScriptingClass (16ms)
-	initialDomainReloadingComplete (29ms)
-	LoadAllAssembliesAndSetupDomain (471ms)
-		LoadAssemblies (374ms)
-		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (205ms)
-			TypeCache.Refresh (8ms)
-				TypeCache.ScanAssembly (0ms)
-			BuildScriptInfoCaches (183ms)
-			ResolveRequiredComponents (9ms)
-	FinalizeReload (1062ms)
-		ReleaseScriptCaches (0ms)
-		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (735ms)
-			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (4ms)
-			SetLoadedEditorAssemblies (5ms)
-			BeforeProcessingInitializeOnLoad (89ms)
-			ProcessInitializeOnLoadAttributes (567ms)
-			ProcessInitializeOnLoadMethodAttributes (57ms)
-			AfterProcessingInitializeOnLoad (12ms)
-			EditorAssembliesLoaded (0ms)
-		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (10ms)
-Refreshing native plugins compatible for Editor in 2.98 ms, found 5 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4443 unused Assets / (1.0 MB). Loaded Objects now: 5089.
-Memory consumption went from 114.1 MB to 113.1 MB.
-Total: 10.024300 ms (FindLiveObjects: 0.607000 ms CreateObjectMapping: 0.841000 ms MarkObjects: 6.808500 ms  DeleteObjects: 1.766100 ms)
+Received Import Request.
+  Time since last request: 0.000029 seconds.
+  path: Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v1_05.png
+  artifactKey: Guid(2ee503199c2e90343b51725c43c01f63) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v1_05.png using Guid(2ee503199c2e90343b51725c43c01f63) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'ed4c4c379e3e4cdea64614b64a8a758c') in 0.020529 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
 
-Prepare: number of updated asset objects reloaded= 0
 ========================================================================
-Received Prepare
-Begin MonoManager ReloadAssembly
-Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  0.821 seconds
-Refreshing native plugins compatible for Editor in 2.48 ms, found 5 plugins.
-Native extension for WindowsStandalone target not found
-Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  1.073 seconds
-Domain Reload Profiling: 1893ms
-	BeginReloadAssembly (252ms)
-		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (20ms)
-		BackupInstance (0ms)
-		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (63ms)
-	RebuildCommonClasses (48ms)
-	RebuildNativeTypeToScriptingClass (17ms)
-	initialDomainReloadingComplete (31ms)
-	LoadAllAssembliesAndSetupDomain (471ms)
-		LoadAssemblies (387ms)
-		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (209ms)
-			TypeCache.Refresh (6ms)
-				TypeCache.ScanAssembly (0ms)
-			BuildScriptInfoCaches (193ms)
-			ResolveRequiredComponents (7ms)
-	FinalizeReload (1074ms)
-		ReleaseScriptCaches (0ms)
-		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (744ms)
-			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (4ms)
-			SetLoadedEditorAssemblies (6ms)
-			BeforeProcessingInitializeOnLoad (91ms)
-			ProcessInitializeOnLoadAttributes (577ms)
-			ProcessInitializeOnLoadMethodAttributes (56ms)
-			AfterProcessingInitializeOnLoad (10ms)
-			EditorAssembliesLoaded (0ms)
-		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (9ms)
-Refreshing native plugins compatible for Editor in 2.24 ms, found 5 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4443 unused Assets / (1.4 MB). Loaded Objects now: 5091.
-Memory consumption went from 114.1 MB to 112.8 MB.
-Total: 10.779300 ms (FindLiveObjects: 0.639700 ms CreateObjectMapping: 1.142600 ms MarkObjects: 7.269400 ms  DeleteObjects: 1.726400 ms)
+Received Import Request.
+  Time since last request: 0.000127 seconds.
+  path: Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v5_02.png
+  artifactKey: Guid(e3068c61a6395f349b070e0f1fc8172a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v5_02.png using Guid(e3068c61a6395f349b070e0f1fc8172a) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'ace6229bc1ec411cda2e7761f82b5cf8') in 0.0215642 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
 
-Prepare: number of updated asset objects reloaded= 0
 ========================================================================
-Received Prepare
-Begin MonoManager ReloadAssembly
-Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  0.873 seconds
-Refreshing native plugins compatible for Editor in 2.71 ms, found 5 plugins.
-Native extension for WindowsStandalone target not found
-Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  1.161 seconds
-Domain Reload Profiling: 2032ms
-	BeginReloadAssembly (250ms)
-		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (18ms)
-		BackupInstance (0ms)
-		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (55ms)
-	RebuildCommonClasses (48ms)
-	RebuildNativeTypeToScriptingClass (18ms)
-	initialDomainReloadingComplete (39ms)
-	LoadAllAssembliesAndSetupDomain (514ms)
-		LoadAssemblies (409ms)
-		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (239ms)
-			TypeCache.Refresh (9ms)
-				TypeCache.ScanAssembly (0ms)
-			BuildScriptInfoCaches (220ms)
-			ResolveRequiredComponents (7ms)
-	FinalizeReload (1162ms)
-		ReleaseScriptCaches (0ms)
-		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (810ms)
-			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (4ms)
-			SetLoadedEditorAssemblies (7ms)
-			BeforeProcessingInitializeOnLoad (118ms)
-			ProcessInitializeOnLoadAttributes (611ms)
-			ProcessInitializeOnLoadMethodAttributes (60ms)
-			AfterProcessingInitializeOnLoad (9ms)
-			EditorAssembliesLoaded (0ms)
-		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (9ms)
-Refreshing native plugins compatible for Editor in 2.86 ms, found 5 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4443 unused Assets / (1.6 MB). Loaded Objects now: 5093.
-Memory consumption went from 114.1 MB to 112.5 MB.
-Total: 10.175100 ms (FindLiveObjects: 1.382600 ms CreateObjectMapping: 0.877000 ms MarkObjects: 6.004500 ms  DeleteObjects: 1.909500 ms)
+Received Import Request.
+  Time since last request: 0.000024 seconds.
+  path: Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v5_01.png
+  artifactKey: Guid(9b11b01f920950d46a227c66a84ff3b1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v5_01.png using Guid(9b11b01f920950d46a227c66a84ff3b1) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'e317ccf2f3d409ed0a7da383db918b34') in 0.0240501 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
 
-Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Import Request.
+  Time since last request: 0.000023 seconds.
+  path: Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v2_02.png
+  artifactKey: Guid(56e476706ce91fc4985b628824f584f6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v2_02.png using Guid(56e476706ce91fc4985b628824f584f6) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'af6ec7f4d7767fdbc8c372189a7c24de') in 0.0233927 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000024 seconds.
+  path: Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v4_02.png
+  artifactKey: Guid(e1111b79f25862c45a82e930acc7b1aa) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v4_02.png using Guid(e1111b79f25862c45a82e930acc7b1aa) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'a3865839112e2a08e8c07afdb3ac8d23') in 0.0226253 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000025 seconds.
+  path: Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v3_03.png
+  artifactKey: Guid(2ef3f2a62d779864580f243c10390b4f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v3_03.png using Guid(2ef3f2a62d779864580f243c10390b4f) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '9c060c2947bb06621bcc56a0f81df048') in 0.0198922 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000021 seconds.
+  path: Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v2_05.png
+  artifactKey: Guid(694cee9347f489241891f91663b0704b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v2_05.png using Guid(694cee9347f489241891f91663b0704b) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'ba423bfbd2ff705797291645940cd5b2') in 0.0214989 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000021 seconds.
+  path: Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v4_01.png
+  artifactKey: Guid(1a872f9ef741f9344922b6713eb4b7a4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v4_01.png using Guid(1a872f9ef741f9344922b6713eb4b7a4) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '6510664b95746dcc8d51a09cd771f810') in 0.0204423 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000019 seconds.
+  path: Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v3_03.png
+  artifactKey: Guid(62ea15c42cdccdb49b8170f39b1fa7f5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v3_03.png using Guid(62ea15c42cdccdb49b8170f39b1fa7f5) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'c65129109b90e9481610bb0390049bad') in 0.0217689 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000016 seconds.
+  path: Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v4_05.png
+  artifactKey: Guid(771fcbb4e3c709c429635334d28012f8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v4_05.png using Guid(771fcbb4e3c709c429635334d28012f8) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '4c9f5efd894050984b8aa8b577847e02') in 0.0171365 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000028 seconds.
+  path: Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v5_03.png
+  artifactKey: Guid(65cfa51c30f4d124690f44b9bd4d8837) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v5_03.png using Guid(65cfa51c30f4d124690f44b9bd4d8837) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'df65e4ed5be198d1c9d88b47a50b05b6') in 0.0225891 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000025 seconds.
+  path: Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v1_01.png
+  artifactKey: Guid(965f0550094142b489e458e71e016c11) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v1_01.png using Guid(965f0550094142b489e458e71e016c11) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '96c7e3ec3162dc9c4dcc54a8fa2ddb14') in 0.0227974 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000019 seconds.
+  path: Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v4_03.png
+  artifactKey: Guid(56db77376ebfbc445a3fefa3240d9081) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v4_03.png using Guid(56db77376ebfbc445a3fefa3240d9081) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '1911e376d3bcb5c476fe83ea2204197b') in 0.0212773 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000016 seconds.
+  path: Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v1_03.png
+  artifactKey: Guid(ed01bb317dfc75449925369637f6514e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v1_03.png using Guid(ed01bb317dfc75449925369637f6514e) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '5cfa27e9e027ea35b4b80426cdbf876d') in 0.0202092 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000017 seconds.
+  path: Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v5_02.png
+  artifactKey: Guid(c4bf20c3950431c4ba3e552e7c79688e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v5_02.png using Guid(c4bf20c3950431c4ba3e552e7c79688e) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '0287e831c21cdfdd239e46d8b8145692') in 0.0187807 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000018 seconds.
+  path: Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v3_01.png
+  artifactKey: Guid(b47a8ad2a245a784abc90398644774f6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v3_01.png using Guid(b47a8ad2a245a784abc90398644774f6) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '50fc3fa45fc07d1c59e30eb4ed94b212') in 0.0225038 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000016 seconds.
+  path: Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v4_03.png
+  artifactKey: Guid(efcb06c594199144e90a37d79abcca9f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v4_03.png using Guid(efcb06c594199144e90a37d79abcca9f) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '231f034e886b21060137c92a49e7c2c4') in 0.0192044 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000021 seconds.
+  path: Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v2_04.png
+  artifactKey: Guid(038961d61f024774c80b657893c55edd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v2_04.png using Guid(038961d61f024774c80b657893c55edd) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '7d0a59d4a7d9afcebf0a1a4c9bbe72f0') in 0.0207552 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000018 seconds.
+  path: Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v3_02.png
+  artifactKey: Guid(b9054a2d3f022f541af0b8cde9817f9a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v3_02.png using Guid(b9054a2d3f022f541af0b8cde9817f9a) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '918f35aad28a05914a5eb220b07fe321') in 0.0192349 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000027 seconds.
+  path: Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v5_05.png
+  artifactKey: Guid(5c3e6d71f3457a84e8dc3417c02eee18) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v5_05.png using Guid(5c3e6d71f3457a84e8dc3417c02eee18) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '7c8acd6d95d389f9ab569d493def14b0') in 0.0183796 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000021 seconds.
+  path: Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v3_04.png
+  artifactKey: Guid(f46fa2b5b96b6454bb40e079877eb1f4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v3_04.png using Guid(f46fa2b5b96b6454bb40e079877eb1f4) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '0ba67319892bbea565337f503684714a') in 0.0209247 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000020 seconds.
+  path: Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v5_03.png
+  artifactKey: Guid(e4e5f9ea1e300c749967c4183398b9fc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v5_03.png using Guid(e4e5f9ea1e300c749967c4183398b9fc) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '4a1d43e0de96834cb28f810be89833bb') in 0.0209903 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
