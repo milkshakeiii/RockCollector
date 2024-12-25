@@ -15,7 +15,7 @@ C:/Users/milks/Documents/github/RockCollector/RockCollectorClient
 -logFile
 Logs/AssetImportWorker0.log
 -srvPort
-58080
+51176
 -job-worker-count
 3
 -background-job-worker-count
@@ -59,12 +59,12 @@ C:/Users/milks/Documents/github/RockCollector/RockCollectorClient
     "memorysetup-temp-allocator-size-gi-baking-worker=262144"
     "memorysetup-temp-allocator-size-gi-baking-worker=262144"
     "memorysetup-temp-allocator-size-gfx=262144"
-Player connection [22732]  Target information:
+Player connection [8996]  Target information:
 
-Player connection [22732]  * "[IP] 192.168.0.205 [Port] 0 [Flags] 2 [Guid] 4102040379 [EditorId] 4102040379 [Version] 1048832 [Id] WindowsEditor(7,LAPTOP-QS7EPVME) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+Player connection [8996]  * "[IP] 192.168.0.47 [Port] 0 [Flags] 2 [Guid] 1873629474 [EditorId] 1873629474 [Version] 1048832 [Id] WindowsEditor(7,LAPTOP-QS7EPVME) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
 
-Player connection [22732] Host joined multi-casting on [225.0.0.222:54997]...
-Player connection [22732] Host joined alternative multi-casting on [225.0.0.222:34997]...
+Player connection [8996] Host joined multi-casting on [225.0.0.222:54997]...
+Player connection [8996] Host joined alternative multi-casting on [225.0.0.222:34997]...
 JobSystem: Creating JobQueue using job-worker-count value 3
 [Physics::Module] Initialized fallback backend.
 [Physics::Module] Id: 0xdecafbad
@@ -75,7 +75,7 @@ Library Redirect Path: Library/
 [Physics::Module] SDK Version: 4.1.2
 [Physics::Module] Integration Version: 1.0.0
 [Physics::Module] Threading Mode: Multi-Threaded
-Refreshing native plugins compatible for Editor in 3.70 ms, found 5 plugins.
+Refreshing native plugins compatible for Editor in 4.33 ms, found 5 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Initialize engine version: 6000.0.26f1 (ccb7c73d2c02)
 [Subsystems] Discovering subsystems at path C:/unity/6000.0.26f1/Editor/Data/Resources/UnitySubsystems
@@ -86,49 +86,49 @@ Direct3D:
     Renderer: NVIDIA GeForce GTX 1660 Ti with Max-Q Design (ID=0x2191)
     Vendor:   NVIDIA
     VRAM:     5966 MB
-    Driver:   32.0.15.5613
+    Driver:   32.0.15.6636
 Initialize mono
 Mono path[0] = 'C:/unity/6000.0.26f1/Editor/Data/Managed'
 Mono path[1] = 'C:/unity/6000.0.26f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
 Mono config path = 'C:/unity/6000.0.26f1/Editor/Data/MonoBleedingEdge/etc'
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56304
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56152
 Begin MonoManager ReloadAssembly
 Registering precompiled unity dll's ...
 Register platform support module: C:/unity/6000.0.26f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
-Registered in 0.003583 seconds.
-- Loaded All Assemblies, in  0.537 seconds
+Registered in 0.002712 seconds.
+- Loaded All Assemblies, in  0.547 seconds
 Native extension for WindowsStandalone target not found
 Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.541 seconds
-Domain Reload Profiling: 1075ms
-	BeginReloadAssembly (182ms)
+- Finished resetting the current domain, in  0.533 seconds
+Domain Reload Profiling: 1079ms
+	BeginReloadAssembly (186ms)
 		ExecutionOrderSort (0ms)
 		DisableScriptedObjects (0ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
 		CreateAndSetChildDomain (1ms)
-	RebuildCommonClasses (53ms)
+	RebuildCommonClasses (52ms)
 	RebuildNativeTypeToScriptingClass (18ms)
-	initialDomainReloadingComplete (61ms)
-	LoadAllAssembliesAndSetupDomain (220ms)
-		LoadAssemblies (178ms)
+	initialDomainReloadingComplete (66ms)
+	LoadAllAssembliesAndSetupDomain (223ms)
+		LoadAssemblies (183ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (217ms)
-			TypeCache.Refresh (215ms)
-				TypeCache.ScanAssembly (196ms)
+		AnalyzeDomain (219ms)
+			TypeCache.Refresh (217ms)
+				TypeCache.ScanAssembly (201ms)
 			BuildScriptInfoCaches (0ms)
 			ResolveRequiredComponents (1ms)
-	FinalizeReload (542ms)
+	FinalizeReload (534ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (497ms)
+		SetupLoadedEditorAssemblies (477ms)
 			LogAssemblyErrors (0ms)
 			InitializePlatformSupportModulesInManaged (34ms)
-			SetLoadedEditorAssemblies (5ms)
-			BeforeProcessingInitializeOnLoad (9ms)
-			ProcessInitializeOnLoadAttributes (324ms)
-			ProcessInitializeOnLoadMethodAttributes (121ms)
-			AfterProcessingInitializeOnLoad (4ms)
+			SetLoadedEditorAssemblies (7ms)
+			BeforeProcessingInitializeOnLoad (8ms)
+			ProcessInitializeOnLoadAttributes (312ms)
+			ProcessInitializeOnLoadMethodAttributes (114ms)
+			AfterProcessingInitializeOnLoad (3ms)
 			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
 		AwakeInstancesAfterBackupRestoration (0ms)
@@ -137,473 +137,89 @@ Worker process is ready to serve import requests
 Import Worker Mode flag is 0x00
 Begin MonoManager ReloadAssembly
 Symbol file LoadedFromMemory is not a mono symbol file
-- Loaded All Assemblies, in  1.427 seconds
-Refreshing native plugins compatible for Editor in 2.22 ms, found 5 plugins.
+- Loaded All Assemblies, in  1.404 seconds
+Refreshing native plugins compatible for Editor in 2.73 ms, found 5 plugins.
 Native extension for WindowsStandalone target not found
-Refreshing native plugins compatible for Editor in 3.97 ms, found 5 plugins.
+Refreshing native plugins compatible for Editor in 5.20 ms, found 5 plugins.
 Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  1.119 seconds
-Domain Reload Profiling: 2540ms
-	BeginReloadAssembly (607ms)
+- Finished resetting the current domain, in  1.096 seconds
+Domain Reload Profiling: 2495ms
+	BeginReloadAssembly (597ms)
 		ExecutionOrderSort (0ms)
 		DisableScriptedObjects (8ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (45ms)
-	RebuildCommonClasses (64ms)
-	RebuildNativeTypeToScriptingClass (21ms)
-	initialDomainReloadingComplete (56ms)
-	LoadAllAssembliesAndSetupDomain (672ms)
-		LoadAssemblies (511ms)
+		CreateAndSetChildDomain (46ms)
+	RebuildCommonClasses (71ms)
+	RebuildNativeTypeToScriptingClass (17ms)
+	initialDomainReloadingComplete (61ms)
+	LoadAllAssembliesAndSetupDomain (650ms)
+		LoadAssemblies (500ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (331ms)
-			TypeCache.Refresh (238ms)
-				TypeCache.ScanAssembly (214ms)
-			BuildScriptInfoCaches (81ms)
-			ResolveRequiredComponents (9ms)
-	FinalizeReload (1120ms)
+		AnalyzeDomain (315ms)
+			TypeCache.Refresh (225ms)
+				TypeCache.ScanAssembly (199ms)
+			BuildScriptInfoCaches (79ms)
+			ResolveRequiredComponents (8ms)
+	FinalizeReload (1097ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (809ms)
+		SetupLoadedEditorAssemblies (784ms)
 			LogAssemblyErrors (0ms)
 			InitializePlatformSupportModulesInManaged (3ms)
 			SetLoadedEditorAssemblies (4ms)
-			BeforeProcessingInitializeOnLoad (95ms)
-			ProcessInitializeOnLoadAttributes (638ms)
-			ProcessInitializeOnLoadMethodAttributes (60ms)
-			AfterProcessingInitializeOnLoad (8ms)
+			BeforeProcessingInitializeOnLoad (92ms)
+			ProcessInitializeOnLoadAttributes (618ms)
+			ProcessInitializeOnLoadMethodAttributes (58ms)
+			AfterProcessingInitializeOnLoad (9ms)
 			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (8ms)
+		AwakeInstancesAfterBackupRestoration (7ms)
 Launched and connected shader compiler UnityShaderCompiler.exe after 0.02 seconds
-Refreshing native plugins compatible for Editor in 3.59 ms, found 5 plugins.
+Refreshing native plugins compatible for Editor in 3.96 ms, found 5 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Unloading 28 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4445 unused Assets / (4.3 MB). Loaded Objects now: 5041.
-Memory consumption went from 118.4 MB to 114.1 MB.
-Total: 11.946900 ms (FindLiveObjects: 0.691100 ms CreateObjectMapping: 0.916300 ms MarkObjects: 7.344600 ms  DeleteObjects: 2.993500 ms)
+Unloading 4445 unused Assets / (4.6 MB). Loaded Objects now: 5041.
+Memory consumption went from 118.4 MB to 113.7 MB.
+Total: 15.228800 ms (FindLiveObjects: 0.690600 ms CreateObjectMapping: 1.168100 ms MarkObjects: 10.501000 ms  DeleteObjects: 2.866900 ms)
 
 ========================================================================
 Received Import Request.
-  Time since last request: 625949.207272 seconds.
-  path: Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v3_05.png
-  artifactKey: Guid(397a3b42b97cdf24e8ea233aaf832446) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v3_05.png using Guid(397a3b42b97cdf24e8ea233aaf832446) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '28ea268af0dd805cc5553f11a96e6e1d') in 0.1785591 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 13
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000023 seconds.
-  path: Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v4_01.png
-  artifactKey: Guid(0100779b44b77aa48b917067a2786751) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v4_01.png using Guid(0100779b44b77aa48b917067a2786751) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'c0438dd1fe0172a501988eb477b71181') in 0.0241584 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000020 seconds.
-  path: Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v3_05.png
-  artifactKey: Guid(a8e2a75d50d5475448ceae003e7121b0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v3_05.png using Guid(a8e2a75d50d5475448ceae003e7121b0) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'cd08a01e6ab45c63241b1d318460b3ee') in 0.024479 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000020 seconds.
-  path: Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v2_01.png
-  artifactKey: Guid(55cc0dfff60cf8a41a7db7b17bdb491c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v2_01.png using Guid(55cc0dfff60cf8a41a7db7b17bdb491c) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '30e6f042d06cae6a0b329823cff47edd') in 0.0226208 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000033 seconds.
-  path: Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v1_05.png
-  artifactKey: Guid(2ee503199c2e90343b51725c43c01f63) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v1_05.png using Guid(2ee503199c2e90343b51725c43c01f63) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'd9b3eec000d2a142efcee4d2e6478083') in 0.0264017 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000019 seconds.
-  path: Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v2_03.png
-  artifactKey: Guid(5bfbc454a1ba9f24c89546354441d4e7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v2_03.png using Guid(5bfbc454a1ba9f24c89546354441d4e7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '4e51396b52faf4f6cf6c3d2a72d8b10f') in 0.0646652 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 11
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000016 seconds.
-  path: Assets/Resources/Art/Characters/Jellyfish/v1
-  artifactKey: Guid(01826c359d38e3c478495e8e2119bdc0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Jellyfish/v1 using Guid(01826c359d38e3c478495e8e2119bdc0) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'a3cafac590935a4a825f6c02b7856d18') in 0.0011926 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000087 seconds.
-  path: Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v5_01.png
-  artifactKey: Guid(9b11b01f920950d46a227c66a84ff3b1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v5_01.png using Guid(9b11b01f920950d46a227c66a84ff3b1) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '2ab05602a04b423118bf5f934c96335e') in 0.027886 seconds
+  Time since last request: 8891.127094 seconds.
+  path: Assets/Resources/Art/Backgrounds/Planktons/README.png
+  artifactKey: Guid(cd8eaadda1eb018408e79205d4dffee6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Backgrounds/Planktons/README.png using Guid(cd8eaadda1eb018408e79205d4dffee6) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'a69a74342b4bec68c92a34eb01668715') in 0.1674928 seconds
 Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
 
 ========================================================================
 Received Import Request.
   Time since last request: 0.000024 seconds.
-  path: Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v2_02.png
-  artifactKey: Guid(56e476706ce91fc4985b628824f584f6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v2_02.png using Guid(56e476706ce91fc4985b628824f584f6) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '43b253a90c423610833cf75485f0c432') in 0.0554491 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 11
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000016 seconds.
-  path: Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v5_05.png
-  artifactKey: Guid(a89ce1286d1147449960315c2468c8d3) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v5_05.png using Guid(a89ce1286d1147449960315c2468c8d3) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '9475521e69452cc7393053334c5cf2a1') in 0.01987 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000024 seconds.
-  path: Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v3_03.png
-  artifactKey: Guid(2ef3f2a62d779864580f243c10390b4f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v3_03.png using Guid(2ef3f2a62d779864580f243c10390b4f) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '57ceb604a282e1182f72b52e3d5ad89b') in 0.0415046 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 13
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000018 seconds.
-  path: Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v2_03.png
-  artifactKey: Guid(8f4157bed4e5cc3498d8d329487127ab) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v2_03.png using Guid(8f4157bed4e5cc3498d8d329487127ab) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '6ec5f7dd94d84b69fd901bbffb5cdf96') in 0.0208749 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000027 seconds.
-  path: Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v4_04.png
-  artifactKey: Guid(df3970ddce80475409fc2030ad75c2b8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v4_04.png using Guid(df3970ddce80475409fc2030ad75c2b8) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '8783d4d0c6cae6e303496813028fafb7') in 0.0250898 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000017 seconds.
-  path: Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v4_01.png
-  artifactKey: Guid(1a872f9ef741f9344922b6713eb4b7a4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v4_01.png using Guid(1a872f9ef741f9344922b6713eb4b7a4) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '77b83e57077e20eebe5b26f698534e8d') in 0.047445 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 12
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000019 seconds.
-  path: Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v1_02.png
-  artifactKey: Guid(41acd1100d4ca044089a4ae5f52993c8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v1_02.png using Guid(41acd1100d4ca044089a4ae5f52993c8) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '570bfb44999953dff81af880a9ebbf8a') in 0.0283292 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 5
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000039 seconds.
-  path: Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v4_05.png
-  artifactKey: Guid(771fcbb4e3c709c429635334d28012f8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v4_05.png using Guid(771fcbb4e3c709c429635334d28012f8) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '8275ec50c195e0c6d5c5188864d81582') in 0.0415209 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 12
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000016 seconds.
-  path: Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v1_01.png
-  artifactKey: Guid(965f0550094142b489e458e71e016c11) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v1_01.png using Guid(965f0550094142b489e458e71e016c11) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'db6f9b82f0686f5e15688336fb3e8c18') in 0.021089 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000040 seconds.
-  path: Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v1_04.png
-  artifactKey: Guid(e757de35290003d468fce25f1242cf3c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v1_04.png using Guid(e757de35290003d468fce25f1242cf3c) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '443623b6654da4459abaea24b5ceca48') in 0.020738 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000028 seconds.
-  path: Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v1_03.png
-  artifactKey: Guid(ed01bb317dfc75449925369637f6514e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v1_03.png using Guid(ed01bb317dfc75449925369637f6514e) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '7f4e585910ded44287cb759679d1deee') in 0.0260528 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 5
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000022 seconds.
-  path: Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v1_04.png
-  artifactKey: Guid(5f4bdfa084917b747b977d3f5f800e02) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v1_04.png using Guid(5f4bdfa084917b747b977d3f5f800e02) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'd296c9d3bb98b93166d7293a21c77212') in 0.0237943 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 5
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000025 seconds.
-  path: Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v3_01.png
-  artifactKey: Guid(b47a8ad2a245a784abc90398644774f6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v3_01.png using Guid(b47a8ad2a245a784abc90398644774f6) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'e28d2e0b6e8eb32f7040fae34153286e') in 0.0423527 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 13
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000021 seconds.
-  path: Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v5_04.png
-  artifactKey: Guid(65adf2c1150759f40a1361a5c5e08820) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v5_04.png using Guid(65adf2c1150759f40a1361a5c5e08820) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'eca2aea1bf709d0b960c080a1e864043') in 0.0187129 seconds
+  path: Assets/Resources/Art/Backgrounds/Planktons/BG_Plankton_04.png
+  artifactKey: Guid(21ab8659ae33cb4468b485c6016af31a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Backgrounds/Planktons/BG_Plankton_04.png using Guid(21ab8659ae33cb4468b485c6016af31a) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'ee1a2a83ae3b0a1f4a4e59d8f71a6636') in 0.0291262 seconds
 Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
 
 ========================================================================
 Received Import Request.
   Time since last request: 0.000019 seconds.
-  path: Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v2_04.png
-  artifactKey: Guid(038961d61f024774c80b657893c55edd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v2_04.png using Guid(038961d61f024774c80b657893c55edd) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'e507120855b9a20095d555eb69fd6f72') in 0.0404197 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 11
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000018 seconds.
-  path: Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v3_04.png
-  artifactKey: Guid(f46fa2b5b96b6454bb40e079877eb1f4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v3_04.png using Guid(f46fa2b5b96b6454bb40e079877eb1f4) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '9f21742f6f97731edbfb4e4a356b2c72') in 0.0222634 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000021 seconds.
-  path: Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v4_04.png
-  artifactKey: Guid(2e2c5932217003844a16bfa638b58a17) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Crustaceans/v1/Crustaceans_v4_04.png using Guid(2e2c5932217003844a16bfa638b58a17) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '6ef26f36f4a8be0f3e33685bc0d4c203') in 0.0402224 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 12
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000021 seconds.
-  path: Assets/Resources/Art/Characters/Jellyfish/v1/README.png
-  artifactKey: Guid(b2d49f59bbb176a4fb9b255e8f7c6b8e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Jellyfish/v1/README.png using Guid(b2d49f59bbb176a4fb9b255e8f7c6b8e) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'efa1d271d689198e299f0e237c72dcbd') in 0.0243321 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000017 seconds.
-  path: Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v1_03.png
-  artifactKey: Guid(b2de375eec4759d47ab30b60af8b9299) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Jellyfish/v1/Jellyfish_v1_03.png using Guid(b2de375eec4759d47ab30b60af8b9299) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'd99c0e32849744bcfc164762d0cd1eb5') in 0.0236099 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 218.875615 seconds.
-  path: Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v3_02.png
-  artifactKey: Guid(4864aeb1bde535647a1518988077a2d5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v3_02.png using Guid(4864aeb1bde535647a1518988077a2d5) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'c17a3365ced086cb1f5b708cb79ba8f4') in 0.0216902 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.036709 seconds.
-  path: Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v1_01.png
-  artifactKey: Guid(fbec1767603532c459371ccc72bbee32) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v1_01.png using Guid(fbec1767603532c459371ccc72bbee32) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '7eb1ea7a9dc6d5e0e7ccd46b49872997') in 0.0247525 seconds
+  path: Assets/Resources/Art/Backgrounds/Planktons/BG_Plankton_08.png
+  artifactKey: Guid(8f2555594cb4e9f48b5322e7c46b973d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Backgrounds/Planktons/BG_Plankton_08.png using Guid(8f2555594cb4e9f48b5322e7c46b973d) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'ade693e5a14c267eb761d0db32b9104d') in 0.0255434 seconds
 Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
 
 ========================================================================
 Received Import Request.
   Time since last request: 0.000024 seconds.
-  path: Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v3_05.png
-  artifactKey: Guid(397a3b42b97cdf24e8ea233aaf832446) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v3_05.png using Guid(397a3b42b97cdf24e8ea233aaf832446) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '07c1025403b4156d3fec493db066d831') in 0.0233232 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000024 seconds.
-  path: Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v2_01.png
-  artifactKey: Guid(03c31beb3b84c9e48a4d60ee4a6f5986) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v2_01.png using Guid(03c31beb3b84c9e48a4d60ee4a6f5986) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '6dcbf3534dc769efd81edc73f03fc7e0') in 0.0204746 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000019 seconds.
-  path: Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v3_05.png
-  artifactKey: Guid(a8e2a75d50d5475448ceae003e7121b0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v3_05.png using Guid(a8e2a75d50d5475448ceae003e7121b0) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'd32181ffb5e03c944bb4d3df7474d0d7') in 0.0282401 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000046 seconds.
-  path: Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v5_01.png
-  artifactKey: Guid(2c7dc479fd6e14e4bb6a282ae4364026) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v5_01.png using Guid(2c7dc479fd6e14e4bb6a282ae4364026) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'abd75700b658e357a3d847e950c306a7') in 0.0242025 seconds
+  path: Assets/Resources/Art/Backgrounds/Planktons/BG_Plankton_01.png
+  artifactKey: Guid(efc22d89bd43b8445ad2e9bf8a01083d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Backgrounds/Planktons/BG_Plankton_01.png using Guid(efc22d89bd43b8445ad2e9bf8a01083d) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '28605224c08acb0ea9f06fc7120b152f') in 0.0224862 seconds
 Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
 
 ========================================================================
 Received Import Request.
   Time since last request: 0.000036 seconds.
-  path: Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v2_01.png
-  artifactKey: Guid(55cc0dfff60cf8a41a7db7b17bdb491c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v2_01.png using Guid(55cc0dfff60cf8a41a7db7b17bdb491c) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '06f76af4a3ff9f571cec3dd61754379f') in 0.0214496 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000029 seconds.
-  path: Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v2_04.png
-  artifactKey: Guid(8ddc8d678b88e6349835654b02fbe0fe) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v2_04.png using Guid(8ddc8d678b88e6349835654b02fbe0fe) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '80977d80e4b6625bd5c8620676b25a77') in 0.0189183 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000025 seconds.
-  path: Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v2_05.png
-  artifactKey: Guid(e234bba56c52e6544903f19b904d1e25) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v2_05.png using Guid(e234bba56c52e6544903f19b904d1e25) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'd577c29a5cab977bf68c6fc4acca54f3') in 0.0258301 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000018 seconds.
-  path: Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v5_04.png
-  artifactKey: Guid(994be2284edd6b949b7be7c8d5a7061b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v5_04.png using Guid(994be2284edd6b949b7be7c8d5a7061b) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'c8a4fb169a2fb81a34dbb7d5b8a6abe8') in 0.0267419 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000022 seconds.
-  path: Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v5_05.png
-  artifactKey: Guid(a89ce1286d1147449960315c2468c8d3) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v5_05.png using Guid(a89ce1286d1147449960315c2468c8d3) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'c010901852f4772d058a7091252c1837') in 0.0210178 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000022 seconds.
-  path: Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v2_03.png
-  artifactKey: Guid(8f4157bed4e5cc3498d8d329487127ab) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v2_03.png using Guid(8f4157bed4e5cc3498d8d329487127ab) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'b415003a74e8cb589cc061c2f3c8fac8') in 0.0198997 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000034 seconds.
-  path: Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v4_04.png
-  artifactKey: Guid(df3970ddce80475409fc2030ad75c2b8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v4_04.png using Guid(df3970ddce80475409fc2030ad75c2b8) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '87d5b84f8492e32be31a9a433ec5d392') in 0.0218318 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000021 seconds.
-  path: Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v1_02.png
-  artifactKey: Guid(de4bf00bdf170b64287c327a12a30c64) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v1_02.png using Guid(de4bf00bdf170b64287c327a12a30c64) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '4c7c15bd8a59513fa3d936b9c2a3ac6a') in 0.020116 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000018 seconds.
-  path: Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v3_04.png
-  artifactKey: Guid(0102e8969ea15ae4895d4e0987f79076) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v3_04.png using Guid(0102e8969ea15ae4895d4e0987f79076) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'ccb0563631fd4b989d5c242c82ccf0e8') in 0.0217409 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000019 seconds.
-  path: Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v4_02.png
-  artifactKey: Guid(b8cb4a75ff2ac6744827e7ef4da7f3da) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v4_02.png using Guid(b8cb4a75ff2ac6744827e7ef4da7f3da) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'f54c2cd4897406c285987de4b9366b23') in 0.0231639 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000019 seconds.
-  path: Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v2_02.png
-  artifactKey: Guid(f338bb1d3e7ace549b05d66a845623ce) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v2_02.png using Guid(f338bb1d3e7ace549b05d66a845623ce) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'fde19a614b75457b55670cd52d2b7894') in 0.0219982 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000022 seconds.
-  path: Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v1_04.png
-  artifactKey: Guid(e757de35290003d468fce25f1242cf3c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v1_04.png using Guid(e757de35290003d468fce25f1242cf3c) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '5c87701c1c48bde8c138bc20f8eb14ce') in 0.0215898 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000023 seconds.
-  path: Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v1_04.png
-  artifactKey: Guid(5f4bdfa084917b747b977d3f5f800e02) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v1_04.png using Guid(5f4bdfa084917b747b977d3f5f800e02) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'bbfa3246f8e78e2f8b8706eb96dbf520') in 0.0196733 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000033 seconds.
-  path: Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v4_05.png
-  artifactKey: Guid(eab8595a42717f045b7ecda878b7a1ee) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v4_05.png using Guid(eab8595a42717f045b7ecda878b7a1ee) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'ff109108dfdd332b2e8b3b1db944a44f') in 0.0204401 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000019 seconds.
-  path: Assets/Resources/Art/Characters/Crustaceans/README.png
-  artifactKey: Guid(d7058a1535393824dbf740e4b66e81aa) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Crustaceans/README.png using Guid(d7058a1535393824dbf740e4b66e81aa) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '2e01b51d9894dfc52b7f6358aeb64581') in 0.0401155 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000022 seconds.
-  path: Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v5_04.png
-  artifactKey: Guid(65adf2c1150759f40a1361a5c5e08820) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v5_04.png using Guid(65adf2c1150759f40a1361a5c5e08820) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '19b1ea9e151fa617c2dd5d3154b91dad') in 0.0201928 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000017 seconds.
-  path: Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v1_05.png
-  artifactKey: Guid(ec55d4a17860baf4e8b32e6d4ce032b9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v1_05.png using Guid(ec55d4a17860baf4e8b32e6d4ce032b9) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'be40436bc913ae24c78643c91937f8c9') in 0.0184326 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000017 seconds.
-  path: Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v4_04.png
-  artifactKey: Guid(2e2c5932217003844a16bfa638b58a17) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Crustaceans/Crustaceans_v4_04.png using Guid(2e2c5932217003844a16bfa638b58a17) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'ab5a83aeff31f5813d322b6c924f7f43') in 0.0219103 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000024 seconds.
-  path: Assets/Resources/Art/Characters/Jellyfish/README.png
-  artifactKey: Guid(b2d49f59bbb176a4fb9b255e8f7c6b8e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Jellyfish/README.png using Guid(b2d49f59bbb176a4fb9b255e8f7c6b8e) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'a6b4b96c58de892ed880ba2652fbca1c') in 0.028585 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000021 seconds.
-  path: Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v1_03.png
-  artifactKey: Guid(b2de375eec4759d47ab30b60af8b9299) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Art/Characters/Jellyfish/Jellyfish_v1_03.png using Guid(b2de375eec4759d47ab30b60af8b9299) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '823ad4bc10cdee8b008d7311158aeb89') in 0.0206924 seconds
+  path: Assets/Resources/Art/Backgrounds/Planktons/BG_Plankton_06.png
+  artifactKey: Guid(961ec8cb78bcdb349aa17a3a98c068e1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Art/Backgrounds/Planktons/BG_Plankton_06.png using Guid(961ec8cb78bcdb349aa17a3a98c068e1) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '12e69a0dcce76ab0c853e38b49b84211') in 0.0212405 seconds
 Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
 
