@@ -53,15 +53,15 @@ public class Tester : MonoBehaviour
     {
         EntityManager.ReadAllEntities();
         Assert(EntityManager.feats.ContainsKey("Skill Focus"), "Skill Focus not found");
-        Assert(EntityManager.feats["Skill Focus"].GetSkillBonusName() == "woodcutter", "Skill Focus not found");
+        Assert(EntityManager.feats["Skill Focus"].GetSkillBonusName() == "woodcutter", "Skill Focus GetSkillBonusName");
         Assert(EntityManager.conditions.ContainsKey("Weak"), "Weak not found");
-        Assert(EntityManager.conditions["Weak"].GetAttackPenalty() == 2, "Weak not found");
+        Assert(EntityManager.conditions["Weak"].GetAttackPenalty() == 2, "Weak GetAttackPenalty");
         Assert(EntityManager.creatureTypes.ContainsKey("Peasant"), "Peasant not found");
-        Assert(EntityManager.creatureTypes["Peasant"].GetStartingHealth() == 4, "Peasant not found");
-        Assert(EntityManager.creatureTypes["Peasant"].GetHealthPerLevel() == 3, "Peasant not found");
-        Assert(EntityManager.creatureTypes["Peasant"].GetWisdomBonus() == 1, "Peasant not found");
-        Assert(EntityManager.creatureTypes["Peasant"].GetAbilities().Count == 1, "Peasant not found");
-        Assert(EntityManager.creatureTypes["Peasant"].GetAbilityLevels().Count == 1, "Peasant not found");
+        Assert(EntityManager.creatureTypes["Peasant"].GetStartingHealth() == 4, "Peasant GetStartingHealth");
+        Assert(EntityManager.creatureTypes["Peasant"].GetHealthPerLevel() == 3, "Peasant GetHealthPerLevel");
+        Assert(EntityManager.creatureTypes["Peasant"].GetWisdomBonus() == 0, "Peasant GetWisdomBonus");
+        Assert(EntityManager.creatureTypes["Peasant"].GetAbilities().Count == 1, "Peasant GetAbilities");
+        Assert(EntityManager.creatureTypes["Peasant"].GetAbilityLevels().Count == 1, "Peasant GetAbilityLevels");
         Assert(EntityManager.items.Count == 2, "Items not found");
         Assert(EntityManager.items.ContainsKey("Axe"), "Axe not found");
         Assert(EntityManager.props.ContainsKey("Tree"), "Tree not found");

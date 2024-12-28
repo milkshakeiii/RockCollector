@@ -27094,3 +27094,891 @@ Memory consumption went from 115.7 MB to 114.5 MB.
 Total: 10.879000 ms (FindLiveObjects: 0.823800 ms CreateObjectMapping: 0.832900 ms MarkObjects: 7.584100 ms  DeleteObjects: 1.636600 ms)
 
 Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Prepare
+Refreshing native plugins compatible for Editor in 5.92 ms, found 5 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 4432 unused Assets / (1.3 MB). Loaded Objects now: 5377.
+Memory consumption went from 115.9 MB to 114.6 MB.
+Total: 15.792800 ms (FindLiveObjects: 1.118600 ms CreateObjectMapping: 1.460000 ms MarkObjects: 11.041900 ms  DeleteObjects: 2.170000 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Prepare
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  1.626 seconds
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Refreshing native plugins compatible for Editor in 4.73 ms, found 5 plugins.
+Native extension for WindowsStandalone target not found
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  1.897 seconds
+Domain Reload Profiling: 3521ms
+	BeginReloadAssembly (432ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (34ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (95ms)
+	RebuildCommonClasses (79ms)
+	RebuildNativeTypeToScriptingClass (31ms)
+	initialDomainReloadingComplete (74ms)
+	LoadAllAssembliesAndSetupDomain (1008ms)
+		LoadAssemblies (782ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (456ms)
+			TypeCache.Refresh (19ms)
+				TypeCache.ScanAssembly (3ms)
+			BuildScriptInfoCaches (416ms)
+			ResolveRequiredComponents (15ms)
+	FinalizeReload (1898ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (1271ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (8ms)
+			SetLoadedEditorAssemblies (13ms)
+			BeforeProcessingInitializeOnLoad (206ms)
+			ProcessInitializeOnLoadAttributes (932ms)
+			ProcessInitializeOnLoadMethodAttributes (90ms)
+			AfterProcessingInitializeOnLoad (21ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (15ms)
+Refreshing native plugins compatible for Editor in 4.21 ms, found 5 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 4446 unused Assets / (1.7 MB). Loaded Objects now: 5379.
+Memory consumption went from 115.7 MB to 114.1 MB.
+Total: 15.314900 ms (FindLiveObjects: 0.911800 ms CreateObjectMapping: 1.082900 ms MarkObjects: 9.902700 ms  DeleteObjects: 3.415800 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Prepare
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  1.340 seconds
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Refreshing native plugins compatible for Editor in 4.27 ms, found 5 plugins.
+Native extension for WindowsStandalone target not found
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  1.589 seconds
+Domain Reload Profiling: 2929ms
+	BeginReloadAssembly (363ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (24ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (83ms)
+	RebuildCommonClasses (80ms)
+	RebuildNativeTypeToScriptingClass (27ms)
+	initialDomainReloadingComplete (63ms)
+	LoadAllAssembliesAndSetupDomain (806ms)
+		LoadAssemblies (632ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (368ms)
+			TypeCache.Refresh (11ms)
+				TypeCache.ScanAssembly (0ms)
+			BuildScriptInfoCaches (339ms)
+			ResolveRequiredComponents (12ms)
+	FinalizeReload (1591ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (1123ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (5ms)
+			SetLoadedEditorAssemblies (9ms)
+			BeforeProcessingInitializeOnLoad (123ms)
+			ProcessInitializeOnLoadAttributes (891ms)
+			ProcessInitializeOnLoadMethodAttributes (81ms)
+			AfterProcessingInitializeOnLoad (14ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (12ms)
+Refreshing native plugins compatible for Editor in 5.69 ms, found 5 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 4446 unused Assets / (1.2 MB). Loaded Objects now: 5381.
+Memory consumption went from 115.7 MB to 114.6 MB.
+Total: 22.059100 ms (FindLiveObjects: 1.075100 ms CreateObjectMapping: 1.854000 ms MarkObjects: 14.983400 ms  DeleteObjects: 4.144000 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Prepare
+Refreshing native plugins compatible for Editor in 4.12 ms, found 5 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 4432 unused Assets / (1.2 MB). Loaded Objects now: 5381.
+Memory consumption went from 115.9 MB to 114.7 MB.
+Total: 14.049500 ms (FindLiveObjects: 0.789400 ms CreateObjectMapping: 0.814400 ms MarkObjects: 10.531000 ms  DeleteObjects: 1.912400 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Prepare
+Refreshing native plugins compatible for Editor in 6.09 ms, found 5 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 4432 unused Assets / (0.9 MB). Loaded Objects now: 5381.
+Memory consumption went from 115.9 MB to 114.9 MB.
+Total: 150.361200 ms (FindLiveObjects: 0.928400 ms CreateObjectMapping: 1.202900 ms MarkObjects: 145.546400 ms  DeleteObjects: 2.681800 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Prepare
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  1.424 seconds
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Refreshing native plugins compatible for Editor in 5.32 ms, found 5 plugins.
+Native extension for WindowsStandalone target not found
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  2.739 seconds
+Domain Reload Profiling: 4160ms
+	BeginReloadAssembly (362ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (28ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (86ms)
+	RebuildCommonClasses (71ms)
+	RebuildNativeTypeToScriptingClass (28ms)
+	initialDomainReloadingComplete (61ms)
+	LoadAllAssembliesAndSetupDomain (898ms)
+		LoadAssemblies (696ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (388ms)
+			TypeCache.Refresh (22ms)
+				TypeCache.ScanAssembly (5ms)
+			BuildScriptInfoCaches (349ms)
+			ResolveRequiredComponents (13ms)
+	FinalizeReload (2740ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (1826ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (6ms)
+			SetLoadedEditorAssemblies (12ms)
+			BeforeProcessingInitializeOnLoad (271ms)
+			ProcessInitializeOnLoadAttributes (1314ms)
+			ProcessInitializeOnLoadMethodAttributes (195ms)
+			AfterProcessingInitializeOnLoad (28ms)
+			EditorAssembliesLoaded (1ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (26ms)
+Refreshing native plugins compatible for Editor in 8.36 ms, found 5 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 4446 unused Assets / (1.1 MB). Loaded Objects now: 5383.
+Memory consumption went from 115.7 MB to 114.7 MB.
+Total: 23.237000 ms (FindLiveObjects: 1.384500 ms CreateObjectMapping: 1.814300 ms MarkObjects: 16.643000 ms  DeleteObjects: 3.392800 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Prepare
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  1.544 seconds
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Refreshing native plugins compatible for Editor in 8.20 ms, found 5 plugins.
+Native extension for WindowsStandalone target not found
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  1.900 seconds
+Domain Reload Profiling: 3440ms
+	BeginReloadAssembly (446ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (29ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (92ms)
+	RebuildCommonClasses (80ms)
+	RebuildNativeTypeToScriptingClass (29ms)
+	initialDomainReloadingComplete (69ms)
+	LoadAllAssembliesAndSetupDomain (916ms)
+		LoadAssemblies (760ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (409ms)
+			TypeCache.Refresh (13ms)
+				TypeCache.ScanAssembly (0ms)
+			BuildScriptInfoCaches (378ms)
+			ResolveRequiredComponents (13ms)
+	FinalizeReload (1900ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (1250ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (6ms)
+			SetLoadedEditorAssemblies (15ms)
+			BeforeProcessingInitializeOnLoad (178ms)
+			ProcessInitializeOnLoadAttributes (960ms)
+			ProcessInitializeOnLoadMethodAttributes (77ms)
+			AfterProcessingInitializeOnLoad (13ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (12ms)
+Refreshing native plugins compatible for Editor in 3.90 ms, found 5 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 4446 unused Assets / (1.2 MB). Loaded Objects now: 5385.
+Memory consumption went from 115.7 MB to 114.5 MB.
+Total: 11.124500 ms (FindLiveObjects: 0.944400 ms CreateObjectMapping: 0.823000 ms MarkObjects: 7.606200 ms  DeleteObjects: 1.749400 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Prepare
+Refreshing native plugins compatible for Editor in 4.45 ms, found 5 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 4432 unused Assets / (1.2 MB). Loaded Objects now: 5385.
+Memory consumption went from 115.9 MB to 114.7 MB.
+Total: 13.242200 ms (FindLiveObjects: 0.714300 ms CreateObjectMapping: 0.672900 ms MarkObjects: 10.041900 ms  DeleteObjects: 1.811500 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Prepare
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  1.933 seconds
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Refreshing native plugins compatible for Editor in 13.41 ms, found 5 plugins.
+Native extension for WindowsStandalone target not found
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  1.906 seconds
+Domain Reload Profiling: 3835ms
+	BeginReloadAssembly (501ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (48ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (102ms)
+	RebuildCommonClasses (123ms)
+	RebuildNativeTypeToScriptingClass (40ms)
+	initialDomainReloadingComplete (81ms)
+	LoadAllAssembliesAndSetupDomain (1182ms)
+		LoadAssemblies (864ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (581ms)
+			TypeCache.Refresh (30ms)
+				TypeCache.ScanAssembly (7ms)
+			BuildScriptInfoCaches (520ms)
+			ResolveRequiredComponents (23ms)
+	FinalizeReload (1907ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (1332ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (7ms)
+			SetLoadedEditorAssemblies (16ms)
+			BeforeProcessingInitializeOnLoad (216ms)
+			ProcessInitializeOnLoadAttributes (987ms)
+			ProcessInitializeOnLoadMethodAttributes (89ms)
+			AfterProcessingInitializeOnLoad (17ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (15ms)
+Refreshing native plugins compatible for Editor in 4.14 ms, found 5 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 4446 unused Assets / (1.1 MB). Loaded Objects now: 5387.
+Memory consumption went from 115.7 MB to 114.6 MB.
+Total: 10.970800 ms (FindLiveObjects: 0.863000 ms CreateObjectMapping: 0.957900 ms MarkObjects: 7.416000 ms  DeleteObjects: 1.732200 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Prepare
+Refreshing native plugins compatible for Editor in 4.29 ms, found 5 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 4432 unused Assets / (1.3 MB). Loaded Objects now: 5387.
+Memory consumption went from 115.9 MB to 114.6 MB.
+Total: 15.721100 ms (FindLiveObjects: 0.766800 ms CreateObjectMapping: 0.822600 ms MarkObjects: 11.986800 ms  DeleteObjects: 2.143200 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Prepare
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  2.449 seconds
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Refreshing native plugins compatible for Editor in 6.33 ms, found 5 plugins.
+Native extension for WindowsStandalone target not found
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  1.661 seconds
+Domain Reload Profiling: 4108ms
+	BeginReloadAssembly (623ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (50ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (142ms)
+	RebuildCommonClasses (181ms)
+	RebuildNativeTypeToScriptingClass (52ms)
+	initialDomainReloadingComplete (92ms)
+	LoadAllAssembliesAndSetupDomain (1497ms)
+		LoadAssemblies (1087ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (746ms)
+			TypeCache.Refresh (33ms)
+				TypeCache.ScanAssembly (6ms)
+			BuildScriptInfoCaches (678ms)
+			ResolveRequiredComponents (25ms)
+	FinalizeReload (1662ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (1161ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (4ms)
+			SetLoadedEditorAssemblies (10ms)
+			BeforeProcessingInitializeOnLoad (136ms)
+			ProcessInitializeOnLoadAttributes (900ms)
+			ProcessInitializeOnLoadMethodAttributes (95ms)
+			AfterProcessingInitializeOnLoad (16ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (12ms)
+Refreshing native plugins compatible for Editor in 7.91 ms, found 5 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 4446 unused Assets / (1.2 MB). Loaded Objects now: 5389.
+Memory consumption went from 115.7 MB to 114.6 MB.
+Total: 15.324400 ms (FindLiveObjects: 1.181100 ms CreateObjectMapping: 1.069300 ms MarkObjects: 10.458000 ms  DeleteObjects: 2.614000 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Prepare
+Refreshing native plugins compatible for Editor in 4.49 ms, found 5 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 4432 unused Assets / (1.3 MB). Loaded Objects now: 5389.
+Memory consumption went from 115.9 MB to 114.6 MB.
+Total: 23.175700 ms (FindLiveObjects: 0.989700 ms CreateObjectMapping: 1.089200 ms MarkObjects: 15.957200 ms  DeleteObjects: 5.137500 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Prepare
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  1.339 seconds
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Refreshing native plugins compatible for Editor in 3.41 ms, found 5 plugins.
+Native extension for WindowsStandalone target not found
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  1.647 seconds
+Domain Reload Profiling: 2981ms
+	BeginReloadAssembly (334ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (30ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (72ms)
+	RebuildCommonClasses (62ms)
+	RebuildNativeTypeToScriptingClass (23ms)
+	initialDomainReloadingComplete (61ms)
+	LoadAllAssembliesAndSetupDomain (853ms)
+		LoadAssemblies (586ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (437ms)
+			TypeCache.Refresh (17ms)
+				TypeCache.ScanAssembly (2ms)
+			BuildScriptInfoCaches (398ms)
+			ResolveRequiredComponents (16ms)
+	FinalizeReload (1648ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (1083ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (6ms)
+			SetLoadedEditorAssemblies (11ms)
+			BeforeProcessingInitializeOnLoad (124ms)
+			ProcessInitializeOnLoadAttributes (844ms)
+			ProcessInitializeOnLoadMethodAttributes (77ms)
+			AfterProcessingInitializeOnLoad (21ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (18ms)
+Refreshing native plugins compatible for Editor in 6.00 ms, found 5 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 4446 unused Assets / (1.2 MB). Loaded Objects now: 5391.
+Memory consumption went from 115.7 MB to 114.5 MB.
+Total: 18.746300 ms (FindLiveObjects: 1.003600 ms CreateObjectMapping: 1.808100 ms MarkObjects: 12.377600 ms  DeleteObjects: 3.554300 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Prepare
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  1.858 seconds
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Refreshing native plugins compatible for Editor in 5.65 ms, found 5 plugins.
+Native extension for WindowsStandalone target not found
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  1.700 seconds
+Domain Reload Profiling: 3544ms
+	BeginReloadAssembly (491ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (37ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (104ms)
+	RebuildCommonClasses (92ms)
+	RebuildNativeTypeToScriptingClass (34ms)
+	initialDomainReloadingComplete (101ms)
+	LoadAllAssembliesAndSetupDomain (1126ms)
+		LoadAssemblies (917ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (467ms)
+			TypeCache.Refresh (20ms)
+				TypeCache.ScanAssembly (0ms)
+			BuildScriptInfoCaches (421ms)
+			ResolveRequiredComponents (18ms)
+	FinalizeReload (1701ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (1191ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (5ms)
+			SetLoadedEditorAssemblies (11ms)
+			BeforeProcessingInitializeOnLoad (155ms)
+			ProcessInitializeOnLoadAttributes (911ms)
+			ProcessInitializeOnLoadMethodAttributes (96ms)
+			AfterProcessingInitializeOnLoad (12ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (12ms)
+Refreshing native plugins compatible for Editor in 4.35 ms, found 5 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 4446 unused Assets / (1.1 MB). Loaded Objects now: 5393.
+Memory consumption went from 115.8 MB to 114.6 MB.
+Total: 10.895300 ms (FindLiveObjects: 0.815700 ms CreateObjectMapping: 0.909800 ms MarkObjects: 7.098500 ms  DeleteObjects: 2.069600 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Prepare
+Refreshing native plugins compatible for Editor in 4.46 ms, found 5 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 4432 unused Assets / (1.5 MB). Loaded Objects now: 5393.
+Memory consumption went from 115.9 MB to 114.3 MB.
+Total: 14.638200 ms (FindLiveObjects: 0.981600 ms CreateObjectMapping: 1.186500 ms MarkObjects: 9.219100 ms  DeleteObjects: 3.248500 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Prepare
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  1.237 seconds
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Refreshing native plugins compatible for Editor in 5.44 ms, found 5 plugins.
+Native extension for WindowsStandalone target not found
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  1.628 seconds
+Domain Reload Profiling: 2864ms
+	BeginReloadAssembly (370ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (29ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (95ms)
+	RebuildCommonClasses (61ms)
+	RebuildNativeTypeToScriptingClass (23ms)
+	initialDomainReloadingComplete (59ms)
+	LoadAllAssembliesAndSetupDomain (723ms)
+		LoadAssemblies (589ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (315ms)
+			TypeCache.Refresh (15ms)
+				TypeCache.ScanAssembly (2ms)
+			BuildScriptInfoCaches (287ms)
+			ResolveRequiredComponents (10ms)
+	FinalizeReload (1629ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (1123ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (4ms)
+			SetLoadedEditorAssemblies (7ms)
+			BeforeProcessingInitializeOnLoad (123ms)
+			ProcessInitializeOnLoadAttributes (880ms)
+			ProcessInitializeOnLoadMethodAttributes (92ms)
+			AfterProcessingInitializeOnLoad (17ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (16ms)
+Refreshing native plugins compatible for Editor in 4.39 ms, found 5 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 4446 unused Assets / (1.1 MB). Loaded Objects now: 5395.
+Memory consumption went from 115.8 MB to 114.7 MB.
+Total: 12.561900 ms (FindLiveObjects: 1.012300 ms CreateObjectMapping: 0.925800 ms MarkObjects: 8.229300 ms  DeleteObjects: 2.392700 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Prepare
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  1.536 seconds
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Refreshing native plugins compatible for Editor in 5.21 ms, found 5 plugins.
+Native extension for WindowsStandalone target not found
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  1.733 seconds
+Domain Reload Profiling: 3267ms
+	BeginReloadAssembly (436ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (30ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (83ms)
+	RebuildCommonClasses (77ms)
+	RebuildNativeTypeToScriptingClass (29ms)
+	initialDomainReloadingComplete (70ms)
+	LoadAllAssembliesAndSetupDomain (920ms)
+		LoadAssemblies (751ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (410ms)
+			TypeCache.Refresh (11ms)
+				TypeCache.ScanAssembly (0ms)
+			BuildScriptInfoCaches (381ms)
+			ResolveRequiredComponents (13ms)
+	FinalizeReload (1734ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (1243ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (7ms)
+			SetLoadedEditorAssemblies (10ms)
+			BeforeProcessingInitializeOnLoad (215ms)
+			ProcessInitializeOnLoadAttributes (911ms)
+			ProcessInitializeOnLoadMethodAttributes (85ms)
+			AfterProcessingInitializeOnLoad (14ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (14ms)
+Refreshing native plugins compatible for Editor in 3.63 ms, found 5 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 4446 unused Assets / (1.2 MB). Loaded Objects now: 5397.
+Memory consumption went from 115.8 MB to 114.6 MB.
+Total: 13.025100 ms (FindLiveObjects: 0.998800 ms CreateObjectMapping: 0.908000 ms MarkObjects: 8.813700 ms  DeleteObjects: 2.302700 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Prepare
+Refreshing native plugins compatible for Editor in 3.87 ms, found 5 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 4432 unused Assets / (1.5 MB). Loaded Objects now: 5397.
+Memory consumption went from 115.9 MB to 114.3 MB.
+Total: 11.111500 ms (FindLiveObjects: 0.775200 ms CreateObjectMapping: 0.819900 ms MarkObjects: 7.272300 ms  DeleteObjects: 2.242500 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Prepare
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  1.417 seconds
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Refreshing native plugins compatible for Editor in 4.60 ms, found 5 plugins.
+Native extension for WindowsStandalone target not found
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  1.719 seconds
+Domain Reload Profiling: 3132ms
+	BeginReloadAssembly (357ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (24ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (75ms)
+	RebuildCommonClasses (76ms)
+	RebuildNativeTypeToScriptingClass (30ms)
+	initialDomainReloadingComplete (63ms)
+	LoadAllAssembliesAndSetupDomain (887ms)
+		LoadAssemblies (672ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (412ms)
+			TypeCache.Refresh (22ms)
+				TypeCache.ScanAssembly (5ms)
+			BuildScriptInfoCaches (367ms)
+			ResolveRequiredComponents (18ms)
+	FinalizeReload (1720ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (1243ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (5ms)
+			SetLoadedEditorAssemblies (7ms)
+			BeforeProcessingInitializeOnLoad (124ms)
+			ProcessInitializeOnLoadAttributes (985ms)
+			ProcessInitializeOnLoadMethodAttributes (105ms)
+			AfterProcessingInitializeOnLoad (16ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (15ms)
+Refreshing native plugins compatible for Editor in 3.56 ms, found 5 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 4446 unused Assets / (1.8 MB). Loaded Objects now: 5399.
+Memory consumption went from 115.8 MB to 114.0 MB.
+Total: 17.002000 ms (FindLiveObjects: 0.819000 ms CreateObjectMapping: 0.915500 ms MarkObjects: 12.071700 ms  DeleteObjects: 3.193100 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Prepare
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  1.826 seconds
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Refreshing native plugins compatible for Editor in 5.42 ms, found 5 plugins.
+Native extension for WindowsStandalone target not found
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  1.781 seconds
+Domain Reload Profiling: 3604ms
+	BeginReloadAssembly (478ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (39ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (114ms)
+	RebuildCommonClasses (120ms)
+	RebuildNativeTypeToScriptingClass (37ms)
+	initialDomainReloadingComplete (97ms)
+	LoadAllAssembliesAndSetupDomain (1091ms)
+		LoadAssemblies (859ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (482ms)
+			TypeCache.Refresh (14ms)
+				TypeCache.ScanAssembly (0ms)
+			BuildScriptInfoCaches (449ms)
+			ResolveRequiredComponents (13ms)
+	FinalizeReload (1782ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (1223ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (6ms)
+			SetLoadedEditorAssemblies (12ms)
+			BeforeProcessingInitializeOnLoad (201ms)
+			ProcessInitializeOnLoadAttributes (909ms)
+			ProcessInitializeOnLoadMethodAttributes (82ms)
+			AfterProcessingInitializeOnLoad (13ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (11ms)
+Refreshing native plugins compatible for Editor in 4.52 ms, found 5 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 4446 unused Assets / (1.1 MB). Loaded Objects now: 5401.
+Memory consumption went from 115.8 MB to 114.7 MB.
+Total: 13.735500 ms (FindLiveObjects: 0.812200 ms CreateObjectMapping: 1.015200 ms MarkObjects: 9.706300 ms  DeleteObjects: 2.200100 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Prepare
+Refreshing native plugins compatible for Editor in 11.89 ms, found 5 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 4432 unused Assets / (0.7 MB). Loaded Objects now: 5401.
+Memory consumption went from 115.9 MB to 115.2 MB.
+Total: 38.185900 ms (FindLiveObjects: 2.218700 ms CreateObjectMapping: 5.898800 ms MarkObjects: 22.893300 ms  DeleteObjects: 7.171200 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Prepare
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  1.340 seconds
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Refreshing native plugins compatible for Editor in 5.19 ms, found 5 plugins.
+Native extension for WindowsStandalone target not found
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  1.622 seconds
+Domain Reload Profiling: 2959ms
+	BeginReloadAssembly (384ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (35ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (83ms)
+	RebuildCommonClasses (79ms)
+	RebuildNativeTypeToScriptingClass (23ms)
+	initialDomainReloadingComplete (58ms)
+	LoadAllAssembliesAndSetupDomain (792ms)
+		LoadAssemblies (618ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (372ms)
+			TypeCache.Refresh (24ms)
+				TypeCache.ScanAssembly (4ms)
+			BuildScriptInfoCaches (334ms)
+			ResolveRequiredComponents (11ms)
+	FinalizeReload (1622ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (1163ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (5ms)
+			SetLoadedEditorAssemblies (9ms)
+			BeforeProcessingInitializeOnLoad (107ms)
+			ProcessInitializeOnLoadAttributes (939ms)
+			ProcessInitializeOnLoadMethodAttributes (90ms)
+			AfterProcessingInitializeOnLoad (14ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (12ms)
+Refreshing native plugins compatible for Editor in 3.98 ms, found 5 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 4446 unused Assets / (1.5 MB). Loaded Objects now: 5403.
+Memory consumption went from 115.8 MB to 114.2 MB.
+Total: 12.524400 ms (FindLiveObjects: 0.758700 ms CreateObjectMapping: 0.822300 ms MarkObjects: 7.659100 ms  DeleteObjects: 3.282800 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Prepare
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  1.384 seconds
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Refreshing native plugins compatible for Editor in 4.69 ms, found 5 plugins.
+Native extension for WindowsStandalone target not found
+Assembly with name 'Tests' already exists (Assets/Tests/Tests/Tests.asmdef)
+Assembly with name 'Tests' already exists (Assets/Tests/Tests.asmdef)
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  1.587 seconds
+Domain Reload Profiling: 2968ms
+	BeginReloadAssembly (350ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (23ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (75ms)
+	RebuildCommonClasses (81ms)
+	RebuildNativeTypeToScriptingClass (32ms)
+	initialDomainReloadingComplete (70ms)
+	LoadAllAssembliesAndSetupDomain (847ms)
+		LoadAssemblies (610ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (421ms)
+			TypeCache.Refresh (13ms)
+				TypeCache.ScanAssembly (0ms)
+			BuildScriptInfoCaches (393ms)
+			ResolveRequiredComponents (11ms)
+	FinalizeReload (1588ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (1144ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (6ms)
+			SetLoadedEditorAssemblies (14ms)
+			BeforeProcessingInitializeOnLoad (136ms)
+			ProcessInitializeOnLoadAttributes (891ms)
+			ProcessInitializeOnLoadMethodAttributes (84ms)
+			AfterProcessingInitializeOnLoad (13ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (12ms)
+Refreshing native plugins compatible for Editor in 5.98 ms, found 5 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 4446 unused Assets / (1.2 MB). Loaded Objects now: 5405.
+Memory consumption went from 115.8 MB to 114.6 MB.
+Total: 12.733000 ms (FindLiveObjects: 1.121900 ms CreateObjectMapping: 1.475100 ms MarkObjects: 7.864300 ms  DeleteObjects: 2.269800 ms)
+
+Prepare: number of updated asset objects reloaded= 0

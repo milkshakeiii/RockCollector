@@ -16,10 +16,6 @@ public static class EntityManager
     {
         if (identifier == "feats")
         {
-            foreach (string key in entity.attributes.Keys)
-            {
-                Debug.Log(key + ": " + entity.attributes[key]);
-            }
             feats[entity.attributes["name"]] = (Feat)entity;
         }
         else if (identifier == "type_abilities")
@@ -168,7 +164,6 @@ public static class EntityManager
         Dictionary<string, string> currentItem = new();
         foreach (string line in lines)
         {
-            Debug.Log(line.Length);
             if (line.Length==0 || line.Length==1)
             {
                 StoreEntity(identifier, EntityManager.CreateEntity(identifier, currentItem));
@@ -177,7 +172,7 @@ public static class EntityManager
             else
             {
                 string[] parts = line.Split(':');
-                currentItem[parts[0]] = parts[1];
+                currentItem[parts[0]] = parts[1][..^1];
             }
         }
     }
