@@ -354,6 +354,8 @@ public class OverworldScreen : GameScreen
     public override void AKey(DisplayGrid displayGrid)
     {
         Debug.Log("Overworld A");
+        // SetCurrentScreen to MainWorldScreen
+        Game.Instance.SetCurrentScreen(new MainWorldSCreen());
     }
 
     public override void BKey(DisplayGrid displayGrid)
@@ -372,57 +374,8 @@ public class OverworldScreen : GameScreen
     }
 }
 
-// DivePreparation
-public class DivePreparationScreen : GameScreen
-{
-    public override void Start(DisplayGrid displayGrid)
-    {
-        Debug.Log("DivePreparation Start");
-    }
-
-    public override void UpKey(DisplayGrid displayGrid)
-    {
-        Debug.Log("DivePreparation Up");
-    }
-
-    public override void DownKey(DisplayGrid displayGrid)
-    {
-        Debug.Log("DivePreparation Down");
-    }
-
-    public override void LeftKey(DisplayGrid displayGrid)
-    {
-        Debug.Log("DivePreparation Left");
-    }
-
-    public override void RightKey(DisplayGrid displayGrid)
-    {
-        Debug.Log("DivePreparation Right");
-    }
-
-    public override void AKey(DisplayGrid displayGrid)
-    {
-        Debug.Log("DivePreparation A");
-    }
-
-    public override void BKey(DisplayGrid displayGrid)
-    {
-        Debug.Log("DivePreparation B");
-    }
-
-    public override void XKey(DisplayGrid displayGrid)
-    {
-        Debug.Log("DivePreparation X");
-    }
-
-    public override void YKey(DisplayGrid displayGrid)
-    {
-        Debug.Log("DivePreparation Y");
-    }
-}
-
-// Submarine
-public class SubmarineScreen : GameScreen
+// MainWorldSCreen
+public class MainWorldSCreen : GameScreen
 {
     public override void Start(DisplayGrid displayGrid)
     {
@@ -466,104 +419,6 @@ public class SubmarineScreen : GameScreen
     public override void YKey(DisplayGrid displayGrid)
     {
         Debug.Log("Submarine Y");
-    }
-}
-
-// Battle
-public class BattleScreen : GameScreen
-{
-    public override void Start(DisplayGrid displayGrid)
-    {
-        Debug.Log("Battle Start");
-    }
-
-    public override void UpKey(DisplayGrid displayGrid)
-    {
-        Debug.Log("Battle Up");
-    }
-
-    public override void DownKey(DisplayGrid displayGrid)
-    {
-        Debug.Log("Battle Down");
-    }
-
-    public override void LeftKey(DisplayGrid displayGrid)
-    {
-        Debug.Log("Battle Left");
-    }
-
-    public override void RightKey(DisplayGrid displayGrid)
-    {
-        Debug.Log("Battle Right");
-    }
-
-    public override void AKey(DisplayGrid displayGrid)
-    {
-        Debug.Log("Battle A");
-    }
-
-    public override void BKey(DisplayGrid displayGrid)
-    {
-        Debug.Log("Battle B");
-    }
-
-    public override void XKey(DisplayGrid displayGrid)
-    {
-        Debug.Log("Battle X");
-    }
-
-    public override void YKey(DisplayGrid displayGrid)
-    {
-        Debug.Log("Battle Y");
-    }
-}
-
-// DiveResults
-public class DiveResultsScreen : GameScreen
-{
-    public override void Start(DisplayGrid displayGrid)
-    {
-        Debug.Log("DiveResults Start");
-    }
-
-    public override void UpKey(DisplayGrid displayGrid)
-    {
-        Debug.Log("DiveResults Up");
-    }
-
-    public override void DownKey(DisplayGrid displayGrid)
-    {
-        Debug.Log("DiveResults Down");
-    }
-
-    public override void LeftKey(DisplayGrid displayGrid)
-    {
-        Debug.Log("DiveResults Left");
-    }
-
-    public override void RightKey(DisplayGrid displayGrid)
-    {
-        Debug.Log("DiveResults Right");
-    }
-
-    public override void AKey(DisplayGrid displayGrid)
-    {
-        Debug.Log("DiveResults A");
-    }
-
-    public override void BKey(DisplayGrid displayGrid)
-    {
-        Debug.Log("DiveResults B");
-    }
-
-    public override void XKey(DisplayGrid displayGrid)
-    {
-        Debug.Log("DiveResults X");
-    }
-
-    public override void YKey(DisplayGrid displayGrid)
-    {
-        Debug.Log("DiveResults Y");
     }
 }
 
