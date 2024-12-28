@@ -6,6 +6,7 @@ public class Tester : MonoBehaviour
     void Start()
     {
         AddAndRemovePlaceablesOfVariousSizes();
+        LoadEntities();
         Debug.Log("Tests finished");
     }
 
@@ -46,6 +47,25 @@ public class Tester : MonoBehaviour
         // check that the placeables were removed correctly
         Assert(map.CountAllPlaceables() == 0, "Placeables not removed correctly");
         Assert(map.CountOccupiedSquares() == 0, "Placeables not removed correctly");
+    }
+
+    void LoadEntities()
+    {
+        EntityManager.ReadAllEntities();
+        Assert(EntityManager.feats.ContainsKey("Skill Focus"), "Skill Focus not found");
+        Assert(EntityManager.feats["Skill Focus"].GetSkillBonusName() == "woodcutter", "Skill Focus not found");
+        Assert(EntityManager.conditions.ContainsKey("Weak"), "Weak not found");
+        Assert(EntityManager.conditions["Weak"].GetAttackPenalty() == 2, "Weak not found");
+        Assert(EntityManager.creatureTypes.ContainsKey("Peasant"), "Peasant not found");
+        Assert(EntityManager.creatureTypes["Peasant"].GetStartingHealth() == 4, "Peasant not found");
+        Assert(EntityManager.creatureTypes["Peasant"].GetHealthPerLevel() == 3, "Peasant not found");
+        Assert(EntityManager.creatureTypes["Peasant"].GetWisdomBonus() == 1, "Peasant not found");
+        Assert(EntityManager.creatureTypes["Peasant"].GetAbilities().Count == 1, "Peasant not found");
+        Assert(EntityManager.creatureTypes["Peasant"].GetAbilityLevels().Count == 1, "Peasant not found");
+        Assert(EntityManager.items.Count == 2, "Items not found");
+        Assert(EntityManager.items.ContainsKey("Axe"), "Axe not found");
+        Assert(EntityManager.props.ContainsKey("Tree"), "Tree not found");
+        Assert(EntityManager.typeAbilities.ContainsKey("Woodcutting"), "Woodcutting not found");
     }
 
     void Assert(bool condition, string message)

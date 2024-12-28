@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using Steamworks;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,6 +11,74 @@ public static class EntityManager
     public static Dictionary<string, CreatureType> creatureTypes = new();
     public static Dictionary<string, Prop> props = new();
     public static Dictionary<string, Item> items = new();
+
+    public static void StoreEntity(string identifier, Entity entity)
+    {
+        if (identifier == "feats")
+        {
+            foreach (string key in entity.attributes.Keys)
+            {
+                Debug.Log(key + ": " + entity.attributes[key]);
+            }
+            feats[entity.attributes["name"]] = (Feat)entity;
+        }
+        else if (identifier == "type_abilities")
+        {
+            typeAbilities[entity.attributes["name"]] = (TypeAbility)entity;
+        }
+        else if (identifier == "conditions")
+        {
+            conditions[entity.attributes["name"]] = (Condition)entity;
+        }
+        else if (identifier == "props")
+        {
+            props[entity.attributes["name"]] = (Prop)entity;
+        }
+        else if (identifier == "items")
+        {
+            items[entity.attributes["name"]] = (Item)entity;
+        }
+        else if (identifier == "creature_types")
+        {
+            creatureTypes[entity.attributes["name"]] = (CreatureType)entity;
+        }
+        else
+        {
+            throw new System.Exception("Unrecognized entity identifier");
+        }
+    }
+
+    public static Entity CreateEntity(string identifier, Dictionary<string, string> attributes)
+    {
+        if (identifier == "feats")
+        {
+            return new Feat { attributes = attributes };
+        }
+        else if (identifier == "type_abilities")
+        {
+            return new TypeAbility { attributes = attributes };
+        }
+        else if (identifier == "conditions")
+        {
+            return new Condition { attributes = attributes };
+        }
+        else if (identifier == "props")
+        {
+            return new Prop { attributes = attributes };
+        }
+        else if (identifier == "items")
+        {
+            return new Item { attributes = attributes };
+        }
+        else if (identifier == "creature_types")
+        {
+            return new CreatureType { attributes = attributes };
+        }
+        else
+        {
+            throw new System.Exception("Unrecognized entity identifier");
+        }
+    }
 
     public static string GetStringAttribute(Dictionary<string, string> attributes, string key, string defaultValue = null)
     {
@@ -83,124 +152,26 @@ public static class EntityManager
 
     public static void ReadAllEntities()
     {
-        ReadFeats();
-        ReadTypeAbilities();
-        ReadConditions();
-        ReadCreatureTypes();
-        ReadProps();
-        ReadItems();
+        ReadEntity("feats");
+        ReadEntity("type_abilities");
+        ReadEntity("conditions");
+        ReadEntity("creature_types");
+        ReadEntity("props");
+        ReadEntity("items");
     }
-    public static void ReadFeats()
-    {
-        feats = new();
-        TextAsset textAsset = Resources.Load<TextAsset>("Feats");
-        string[] lines = textAsset.text.Split('\n');
-        Dictionary<string, string> currentFeat = new();
-        foreach (string line in lines)
-        {
-            if (line == "")
-            {
-                feats[currentFeat["name"]] = new Feat { attributes = currentFeat };
-                currentFeat = new();
-            }
-            else
-            {
-                string[] parts = line.Split(':');
-                currentFeat[parts[0]] = parts[1];
-            }
-        }
-    }
-    public static void ReadTypeAbilities()
-    {
-        typeAbilities = new();
-        TextAsset textAsset = Resources.Load<TextAsset>("TypeAbilities");
-        string[] lines = textAsset.text.Split('\n');
-        Dictionary<string, string> currentTypeAbility = new();
-        foreach (string line in lines)
-        {
-            if (line == "")
-            {
-                typeAbilities[currentTypeAbility["name"]] = new TypeAbility { attributes = currentTypeAbility };
-                currentTypeAbility = new();
-            }
-            else
-            {
-                string[] parts = line.Split(':');
-                currentTypeAbility[parts[0]] = parts[1];
-            }
-        }
-    }
-    public static void ReadConditions()
-    {
-        conditions = new();
-        TextAsset textAsset = Resources.Load<TextAsset>("Conditions");
-        string[] lines = textAsset.text.Split('\n');
-        Dictionary<string, string> currentCondition = new();
-        foreach (string line in lines)
-        {
-            if (line == "")
-            {
-                conditions[currentCondition["name"]] = new Condition { attributes = currentCondition };
-                currentCondition = new();
-            }
-            else
-            {
-                string[] parts = line.Split(':');
-                currentCondition[parts[0]] = parts[1];
-            }
-        }
-    }
-    public static void ReadCreatureTypes()
-    {
-        creatureTypes = new();
-        TextAsset textAsset = Resources.Load<TextAsset>("CreatureTypes");
-        string[] lines = textAsset.text.Split('\n');
-        Dictionary<string, string> currentCreatureType = new();
-        foreach (string line in lines)
-        {
-            if (line == "")
-            {
-                creatureTypes[currentCreatureType["name"]] = new CreatureType { attributes = currentCreatureType };
-                currentCreatureType = new();
-            }
-            else
-            {
-                string[] parts = line.Split(':');
-                currentCreatureType[parts[0]] = parts[1];
-            }
-        }
-    }
-    public static void ReadProps()
-    {
-        props = new();
-        TextAsset textAsset = Resources.Load<TextAsset>("Props");
-        string[] lines = textAsset.text.Split('\n');
-        Dictionary<string, string> currentProp = new();
-        foreach (string line in lines)
-        {
-            if (line == "")
-            {
-                props[currentProp["name"]] = new Prop { attributes = currentProp };
-                currentProp = new();
-            }
-            else
-            {
-                string[] parts = line.Split(':');
-                currentProp[parts[0]] = parts[1];
-            }
-        }
-    }
-    public static void ReadItems()
+
+    public static void ReadEntity(string identifier)
     {
         items = new();
-        TextAsset textAsset = Resources.Load<TextAsset>("Items");
+        TextAsset textAsset = Resources.Load<TextAsset>(identifier);
         string[] lines = textAsset.text.Split('\n');
         Dictionary<string, string> currentItem = new();
         foreach (string line in lines)
         {
-            if (line == "")
+            Debug.Log(line.Length);
+            if (line.Length==0 || line.Length==1)
             {
-                items[currentItem["name"]] = new Item { attributes = currentItem };
+                StoreEntity(identifier, EntityManager.CreateEntity(identifier, currentItem));
                 currentItem = new();
             }
             else
@@ -212,10 +183,13 @@ public static class EntityManager
     }
 }
 
-public class Feat
+public class Entity
 {
     public Dictionary<string, string> attributes;
+}
 
+public class Feat : Entity
+{
     public string GetName()
     {
         return EntityManager.GetStringAttribute(attributes, "name");
@@ -230,10 +204,8 @@ public class Feat
     }
 }
 
-public class TypeAbility
+public class TypeAbility : Entity
 {
-    public Dictionary<string, string> attributes;
-
     public string GetName()
     {
         return EntityManager.GetStringAttribute(attributes, "name");
@@ -275,10 +247,8 @@ public class TypeAbility
     }
 }
 
-public class Condition
+public class Condition : Entity
 {
-    public Dictionary<string, string> attributes;
-
     public string GetName()
     {
         return EntityManager.GetStringAttribute(attributes, "name");
@@ -297,9 +267,8 @@ public class Condition
     }
 }
 
-public class CreatureType
+public class CreatureType : Entity
 {
-    public Dictionary<string, string> attributes;
     public string GetName()
     {
         return EntityManager.GetStringAttribute(attributes, "name");
@@ -346,10 +315,8 @@ public class CreatureType
     }
 }
 
-public class Prop
+public class Prop : Entity
 {
-    public Dictionary<string, string> attributes;
-
     public string GetName()
     {
         return EntityManager.GetStringAttribute(attributes, "name");
@@ -372,10 +339,8 @@ public class Prop
     }
 }
 
-public class Item
+public class Item : Entity
 {
-    public Dictionary<string, string> attributes;
-
     public string GetName()
     {
         return EntityManager.GetStringAttribute(attributes, "name");
