@@ -1,0 +1,5 @@
+name:Axe
+harvestingTypes:chopping
+harvestingAmount:1
+
+name:Log

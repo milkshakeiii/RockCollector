@@ -1,0 +1,4 @@
+name:Woodcutting
+cooldown: 100
+harvestingType:chopping
+harvestingAmount:1

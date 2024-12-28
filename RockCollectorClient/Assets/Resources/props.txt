@@ -1,0 +1,5 @@
+name:Tree
+harvestingType:chopping
+harvestingRequired:10
+producedItems:Log
+producedItemProbabilities:1

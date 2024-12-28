@@ -1,0 +1,3 @@
+name:Skill Focus
+skillBonusName:woodcutter
+skillBonusAmount:3
