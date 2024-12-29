@@ -349,12 +349,3 @@ public class Item : Entity
         return EntityManager.GetIntAttribute(attributes, "harvestingAmount", 0);
     }
 }
-
-public class Creature
-{
-    public string name;
-
-    public int currentHealth;
-    public List<Feat> feats = new();
-    public Dictionary<string, int> skillRanks = new();
-}

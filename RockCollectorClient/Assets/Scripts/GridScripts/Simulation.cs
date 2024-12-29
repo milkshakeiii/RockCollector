@@ -14,7 +14,7 @@ public class Simulation
     {
         gamestate.maps.ForEach(map =>
         {
-            
+            map.UpdatePlaceables();
         });
     }
 }
@@ -105,6 +105,14 @@ public class Map
     {
         return cells.Count;
     }
+
+    public void UpdatePlaceables()
+    {
+        foreach (Placeable placeable in placeableToCells.Keys)
+        {
+            placeable.Update(this);
+        }
+    }
 }
 
 public class Placeable
@@ -122,5 +130,29 @@ public class Placeable
     public int SquaresMinimumOne()
     {
         return Mathf.Max(1, sizeCategory);
+    }
+
+    public virtual void Update(Map map)
+    {
+        // do nothing by default
+    }
+}
+
+public class Creature : Placeable
+{
+    public string name;
+
+    public int currentHealth;
+    public List<Feat> feats = new();
+    public Dictionary<string, int> skillRanks = new();
+
+    public Creature(string name, int sizeCategory) : base(sizeCategory)
+    {
+        this.name = name;
+    }
+
+    public override void Update(Map map)
+    {
+        
     }
 }
