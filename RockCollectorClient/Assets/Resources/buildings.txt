@@ -1,0 +1,4 @@
+name:Farm
+supportedCreatureTypes:Peasant
+supportedCreatureCounts:5
+size:6

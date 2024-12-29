@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class Tester : MonoBehaviour
 {
@@ -66,6 +67,8 @@ public class Tester : MonoBehaviour
         Assert(EntityManager.items.ContainsKey("Axe"), "Axe not found");
         Assert(EntityManager.props.ContainsKey("Tree"), "Tree not found");
         Assert(EntityManager.typeAbilities.ContainsKey("Woodcutting"), "Woodcutting not found");
+        Assert(EntityManager.buildings.ContainsKey("Farm"), "Farm not found");
+        Assert(EntityManager.buildings["Farm"].GetSupportedCreatureTypes()[0].GetName() == "Peasant", "Farm GetSupportedCreatureTypes");
     }
 
     void Assert(bool condition, string message)

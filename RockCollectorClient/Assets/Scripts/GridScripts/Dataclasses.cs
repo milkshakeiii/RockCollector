@@ -11,6 +11,7 @@ public static class EntityManager
     public static Dictionary<string, CreatureType> creatureTypes = new();
     public static Dictionary<string, Prop> props = new();
     public static Dictionary<string, Item> items = new();
+    public static Dictionary<string, Building> buildings = new();
 
     public static void StoreEntity(string identifier, Entity entity)
     {
@@ -37,6 +38,10 @@ public static class EntityManager
         else if (identifier == "creature_types")
         {
             creatureTypes[entity.attributes["name"]] = (CreatureType)entity;
+        }
+        else if (identifier == "buildings")
+        {
+            buildings[entity.attributes["name"]] = (Building)entity;
         }
         else
         {
@@ -69,6 +74,10 @@ public static class EntityManager
         else if (identifier == "creature_types")
         {
             return new CreatureType { attributes = attributes };
+        }
+        else if (identifier == "buildings")
+        {
+            return new Building { attributes = attributes };
         }
         else
         {
@@ -146,6 +155,19 @@ public static class EntityManager
         return defaultValue;
     }
 
+    public static List<CreatureType> GetCreatureTypeListAttribute(Dictionary<string, string> attributes, string key, List<CreatureType> defaultValue = null)
+    {
+        if (attributes.ContainsKey(key))
+        {
+            return new List<CreatureType>(System.Array.ConvertAll(attributes[key].Split(','), x => creatureTypes[x]));
+        }
+        if (defaultValue == null)
+        {
+            throw new System.ArgumentNullException("No default value");
+        }
+        return defaultValue;
+    }
+
     public static void ReadAllEntities()
     {
         ReadEntity("feats");
@@ -154,11 +176,11 @@ public static class EntityManager
         ReadEntity("creature_types");
         ReadEntity("props");
         ReadEntity("items");
+        ReadEntity("buildings");
     }
 
     public static void ReadEntity(string identifier)
     {
-        items = new();
         TextAsset textAsset = Resources.Load<TextAsset>(identifier);
         string[] lines = textAsset.text.Split('\n');
         Dictionary<string, string> currentItem = new();
@@ -347,5 +369,25 @@ public class Item : Entity
     public int GetHarvestingAmount()
     {
         return EntityManager.GetIntAttribute(attributes, "harvestingAmount", 0);
+    }
+}
+
+public class Building : Entity
+{
+    public string GetName()
+    {
+        return EntityManager.GetStringAttribute(attributes, "name");
+    }
+    public List<CreatureType> GetSupportedCreatureTypes()
+    {
+        return EntityManager.GetCreatureTypeListAttribute(attributes, "supportedCreatureTypes", new List<CreatureType>());
+    }
+    public List<int> GetSupportedCreatureCounts()
+    {
+        return EntityManager.GetIntListAttribute(attributes, "supportedCreatureCounts", new List<int>());
+    }
+    public int GetSize()
+    {
+        return EntityManager.GetIntAttribute(attributes, "size");
     }
 }
