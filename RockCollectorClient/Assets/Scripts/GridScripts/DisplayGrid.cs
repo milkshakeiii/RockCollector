@@ -16,8 +16,7 @@ public class DisplayGrid : MonoBehaviour
 
     void OnEnable()
     {
-        DisplaySprite("Art/UI/plain_white", 0, 0, WIDTH/3, HEIGHT, 0);
-        DisplayText("Hello, World!", 10, 120);
+
     }
 
     void Update()

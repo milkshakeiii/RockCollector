@@ -14,9 +14,14 @@ public class Simulation
     {
         gamestate.maps.ForEach(map =>
         {
-            map.UpdatePlaceables();
+            List<Action> actions = map.UpdatePlaceables();
         });
     }
+}
+
+public class Action
+{
+
 }
 
 public class Gamestate
@@ -106,12 +111,28 @@ public class Map
         return cells.Count;
     }
 
-    public void UpdatePlaceables()
+    public List<Action> UpdatePlaceables()
     {
+        List<Action> actions = new();
+
         foreach (Placeable placeable in placeableToCells.Keys)
         {
-            placeable.Update(this);
+            placeable.ObserveAndFeel(this);
         }
+
+
+        foreach (Placeable placeable in placeableToCells.Keys)
+        {
+            placeable.ThinkAndPlan(this);
+        }
+
+
+        foreach (Placeable placeable in placeableToCells.Keys)
+        {
+            placeable.Act(this);
+        }
+
+        return actions;
     }
 }
 
@@ -127,14 +148,24 @@ public class Placeable
         this.sizeCategory = sizeCategory;
     }
 
-    public int SquaresMinimumOne()
+    public uint SquaresMinimumOne()
     {
-        return Mathf.Max(1, sizeCategory);
+        return (uint)Mathf.Max(1, sizeCategory);
     }
 
-    public virtual void Update(Map map)
+    public virtual void ObserveAndFeel(Map map)
     {
-        // do nothing by default
+        
+    }
+
+    public virtual void ThinkAndPlan(Map map)
+    {
+        
+    }
+
+    public virtual void Act(Map map)
+    {
+        
     }
 }
 
@@ -144,15 +175,32 @@ public class Creature : Placeable
 
     public int currentHealth;
     public List<Feat> feats = new();
-    public Dictionary<string, int> skillRanks = new();
+    public List<TypeAbility> abilities = new();
+
+    public Goal pursuingGoal;
 
     public Creature(string name, int sizeCategory) : base(sizeCategory)
     {
         this.name = name;
     }
 
-    public override void Update(Map map)
+    public override void ObserveAndFeel(Map map)
     {
         
     }
+
+    public override void ThinkAndPlan(Map map)
+    {
+        
+    }
+
+    public override void Act(Map map)
+    {
+        
+    }
+}
+
+public class Goal
+{
+
 }
