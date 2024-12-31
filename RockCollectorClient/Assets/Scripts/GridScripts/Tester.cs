@@ -4,10 +4,11 @@ using System.Collections.Generic;
 public class Tester : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
         AddAndRemovePlaceablesOfVariousSizes();
         LoadEntities();
+        SetInitialGoal();
         Debug.Log("Tests finished");
     }
 
@@ -70,6 +71,15 @@ public class Tester : MonoBehaviour
         Assert(EntityManager.typeAbilities.ContainsKey("Woodcutting"), "Woodcutting not found");
         Assert(EntityManager.buildings.ContainsKey("Farm"), "Farm not found");
         Assert(EntityManager.buildings["Farm"].GetSupportedCreatureTypes()[0].GetName() == "Peasant", "Farm GetSupportedCreatureTypes");
+    }
+
+    void SetInitialGoal()
+    {
+        Map map = new();
+        Creature testCreature = new("George", EntityManager.creatureTypes["Peasant"]);
+        testCreature.ThinkAndPlan(map);
+        Assert(testCreature.pursuingGoal != null, "Initial goal not set");
+        Assert(testCreature.creatureType.GetGoals()[0].GetType() == testCreature.pursuingGoal.GetType(), "Initial goal not set correctly");
     }
 
     void Assert(bool condition, string message)

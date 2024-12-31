@@ -335,6 +335,10 @@ public class CreatureType : Entity
     {
         return EntityManager.GetIntAttribute(attributes, "charismaBonus");
     }
+    public int GetSizeCategory()
+    {
+        return EntityManager.GetIntAttribute(attributes, "sizeCategory", defaultValue: 1);
+    }
     public List<string> GetAbilities()
     {
         return EntityManager.GetStringListAttribute(attributes, "abilities");

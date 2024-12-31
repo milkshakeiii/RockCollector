@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using UnityEngine;
 
 public class Simulation
@@ -14,7 +15,7 @@ public class Simulation
     {
         gamestate.maps.ForEach(map =>
         {
-            List<Action> actions = map.UpdatePlaceables();
+            map.AdvanceTick();
         });
     }
 }
@@ -33,8 +34,10 @@ public class Map
 {
     // We keep both a dictionary of cells to placeables and a dictionary of placeables to cells
     // We keep them in sync in the Add and Remove methods
-    private Dictionary<Vector2Int, List<Placeable>> cells = new();
-    private Dictionary<Placeable, List<Vector2Int>> placeableToCells = new();
+    private readonly Dictionary<Vector2Int, List<Placeable>> cells = new();
+    private readonly Dictionary<Placeable, List<Vector2Int>> placeableToCells = new();
+
+    private int currentTick = 0;
 
     public Map()
     {
@@ -111,10 +114,13 @@ public class Map
         return cells.Count;
     }
 
-    public List<Action> UpdatePlaceables()
+    public int CurrentTick()
     {
-        List<Action> actions = new();
+        return currentTick;
+    }
 
+    public void AdvanceTick()
+    {
         foreach (Placeable placeable in placeableToCells.Keys)
         {
             placeable.ObserveAndFeel(this);
@@ -132,7 +138,7 @@ public class Map
             placeable.Act(this);
         }
 
-        return actions;
+        currentTick++;
     }
 }
 
@@ -181,9 +187,10 @@ public class Creature : Placeable
     public CreatureType creatureType;
     public Goal pursuingGoal;
 
-    public Creature(string name, int sizeCategory) : base(sizeCategory)
+    public Creature(string name, CreatureType creatureType) : base(creatureType.GetSizeCategory())
     {
         this.name = name;
+        this.creatureType = creatureType;
     }
 
     public override void ObserveAndFeel(Map map)
@@ -193,12 +200,27 @@ public class Creature : Placeable
 
     public override void ThinkAndPlan(Map map)
     {
-        
+        if (ShouldGetNewGoal(map))
+        {
+            pursuingGoal = GetNewGoal(map);
+        }
     }
 
     public override void Act(Map map)
     {
         
+    }
+
+    private bool ShouldGetNewGoal(Map map)
+    {
+        return pursuingGoal == null || pursuingGoal.IsAchieved();
+    }
+
+    private Goal GetNewGoal(Map map)
+    {
+        Goal newGoal = creatureType.GetGoals()[0];
+        newGoal.Initialize(map.CurrentTick());
+        return newGoal;
     }
 }
 
@@ -213,11 +235,32 @@ public abstract class Goal
         throw new System.Exception("Goal not found");
     }
 
+    public abstract bool IsAchieved();
+
     public abstract int EvaluateMap(Map map);
+
+    public abstract void Initialize(int tickBegun);
 }
 
 public class PersonalWealth : Goal
 {
+    private int achievedAmount;
+    private int targetAmount;
+
+    private int tickBegun;
+
+    public override void Initialize(int tickBegun)
+    {
+        this.tickBegun = tickBegun;
+        this.achievedAmount = 0;
+        this.targetAmount = 100;
+    }
+
+    public override bool IsAchieved()
+    {
+        return achievedAmount >= targetAmount;
+    }
+
     public override int EvaluateMap(Map map)
     {
         throw new System.NotImplementedException();
