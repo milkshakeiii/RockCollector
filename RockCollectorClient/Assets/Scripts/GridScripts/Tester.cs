@@ -63,6 +63,7 @@ public class Tester : MonoBehaviour
         Assert(EntityManager.creatureTypes["Peasant"].GetWisdomBonus() == 0, "Peasant GetWisdomBonus");
         Assert(EntityManager.creatureTypes["Peasant"].GetAbilities().Count == 1, "Peasant GetAbilities");
         Assert(EntityManager.creatureTypes["Peasant"].GetAbilityLevels().Count == 1, "Peasant GetAbilityLevels");
+        Assert(EntityManager.creatureTypes["Peasant"].GetGoals().Count == 1, "Peasant GetGoals");
         Assert(EntityManager.items.Count == 2, "Items not found");
         Assert(EntityManager.items.ContainsKey("Axe"), "Axe not found");
         Assert(EntityManager.props.ContainsKey("Tree"), "Tree not found");

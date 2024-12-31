@@ -9,3 +9,4 @@ wisdomBonus:0
 charismaBonus:0
 abilities:Woodcutting
 abilityLevels:1
+goals:PersonalWealth

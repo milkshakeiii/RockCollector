@@ -168,6 +168,19 @@ public static class EntityManager
         return defaultValue;
     }
 
+    public static List<Goal> GetGoalListAttribute(Dictionary<string, string> attributes, string key, List<Goal> defaultValue = null)
+    {
+        if (attributes.ContainsKey(key))
+        {
+            return new List<Goal>(System.Array.ConvertAll(attributes[key].Split(','), x => Goal.NameToGoal(x)));
+        }
+        if (defaultValue == null)
+        {
+            throw new System.ArgumentNullException("No default value");
+        }
+        return defaultValue;
+    }
+
     public static void ReadAllEntities()
     {
         ReadEntity("feats");
@@ -329,6 +342,10 @@ public class CreatureType : Entity
     public List<int> GetAbilityLevels()
     {
         return EntityManager.GetIntListAttribute(attributes, "abilityLevels");
+    }
+    public List<Goal> GetGoals()
+    {
+        return EntityManager.GetGoalListAttribute(attributes, "goals");
     }
 }
 

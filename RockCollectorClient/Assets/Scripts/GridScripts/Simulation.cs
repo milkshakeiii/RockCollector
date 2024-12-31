@@ -173,10 +173,12 @@ public class Creature : Placeable
 {
     public string name;
 
+    public int level;
     public int currentHealth;
     public List<Feat> feats = new();
     public List<TypeAbility> abilities = new();
 
+    public CreatureType creatureType;
     public Goal pursuingGoal;
 
     public Creature(string name, int sizeCategory) : base(sizeCategory)
@@ -200,7 +202,24 @@ public class Creature : Placeable
     }
 }
 
-public class Goal
+public abstract class Goal
 {
+    public static Goal NameToGoal(string name)
+    {
+        if (name == "PersonalWealth")
+        {
+            return new PersonalWealth();
+        }
+        throw new System.Exception("Goal not found");
+    }
 
+    public abstract int EvaluateMap(Map map);
+}
+
+public class PersonalWealth : Goal
+{
+    public override int EvaluateMap(Map map)
+    {
+        throw new System.NotImplementedException();
+    }
 }
