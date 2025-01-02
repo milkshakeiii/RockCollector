@@ -100,6 +100,11 @@ public class Map
         return placeableToCells[placeable][0];
     }
 
+    public Dictionary<Placeable, List<Vector2Int>>.KeyCollection AllPlaceables()
+    {
+        return placeableToCells.Keys;
+    }
+
     public int CountAllPlaceables()
     {
         return placeableToCells.Count;
@@ -150,9 +155,9 @@ public class Placeable
         this.sizeCategory = sizeCategory;
     }
 
-    public uint SquaresMinimumOne()
+    public int SquaresMinimumOne()
     {
-        return (uint)Mathf.Max(1, sizeCategory);
+        return Mathf.Max(1, sizeCategory);
     }
 
     public virtual void ObserveAndFeel(Map map)
@@ -335,6 +340,23 @@ public class Building : Destructable
             // Place the creature
             map.Add(spawningCreature, map.PositionOf(this) - new Vector2Int(1, 1));
         }
+    }
+}
+
+public class Prop : Destructable
+{
+    public PropType propType;
+
+    private int harvestedAmount = 0;
+
+    public Prop(PropType propType) : base(propType.GetSize())
+    {
+        this.propType = propType;
+    }
+
+    public override bool IsDestroyed()
+    {
+        return damageTaken >= 100 || harvestedAmount >= propType.GetHarvestingRequired();
     }
 }
 

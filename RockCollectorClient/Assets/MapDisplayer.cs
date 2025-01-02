@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class MapDisplayer : MonoBehaviour
 {
     public DisplayGrid displayGrid;
-    public uint cellsPerSquare;
+    public int cellsPerSquare;
     public uint widthInSquares;
     public uint heightInSquares;
 
@@ -17,6 +17,8 @@ public class MapDisplayer : MonoBehaviour
         map.Add(testCreature, new Vector2Int(0, 0));
         Building testBuilding = new (EntityManager.buildingTypes["Farm"]);
         map.Add(testBuilding, new Vector2Int(5, 5));
+        Prop testProp = new (EntityManager.propTypes["Tree"]);
+        map.Add(testProp, new Vector2Int(-5, -5));
         DisplayMap(map);
     }
 
@@ -28,21 +30,15 @@ public class MapDisplayer : MonoBehaviour
 
     void DisplayMap(Map map)
     {
-        for (uint x = 0; x < widthInSquares; x++)
+        foreach (Placeable placeable in map.AllPlaceables())
         {
-            for (uint y = 0; y < heightInSquares; y++)
-            {
-                List<Placeable> placeablesHere = map.PlaceablesAt(new Vector2Int((int)x, (int)y));
-                foreach (Placeable placeable in placeablesHere)
-                {
-                    displayGrid.DisplaySprite("Art/UI/button",
-                        x * cellsPerSquare,
-                        y * cellsPerSquare,
-                        cellsPerSquare * placeable.SquaresMinimumOne(),
-                        cellsPerSquare * placeable.SquaresMinimumOne(),
-                        0);
-                }
-            }
+            Vector2Int position = map.PositionOf(placeable);
+            displayGrid.DisplaySprite("Art/UI/button",
+                position.x * cellsPerSquare,
+                position.y * cellsPerSquare,
+                cellsPerSquare * placeable.SquaresMinimumOne(),
+                cellsPerSquare * placeable.SquaresMinimumOne(),
+                0);
         }
     }
 }

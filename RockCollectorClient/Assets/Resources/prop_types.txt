@@ -3,3 +3,4 @@ harvestingType:chopping
 harvestingRequired:10
 producedItems:Log
 producedItemProbabilities:1
+size:1

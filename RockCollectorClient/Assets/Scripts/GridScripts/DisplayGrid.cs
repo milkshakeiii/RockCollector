@@ -33,7 +33,7 @@ public class DisplayGrid : MonoBehaviour
     /// <param name="width"> Width in cells (8 px per cell)</param>
     /// <param name="height"> Height in cells (8 px per cell)</param>
     /// <param name="rotation"> Rotation in 90 degree increments</param>
-    public void DisplaySprite(string spriteName, uint x, uint y, uint width, uint height, int rotation, int overlapLayer = 0)
+    public void DisplaySprite(string spriteName, int x, int y, int width, int height, int rotation, int overlapLayer = 0)
     {
         // create a new GameObject
         GameObject newSquare = GetCachedSprite(spriteName);

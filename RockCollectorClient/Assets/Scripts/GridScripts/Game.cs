@@ -258,23 +258,23 @@ public class OverworldScreen : GameScreen
 
                 if (coralValue > rockValue && coralValue > iceValue && coralValue > caveValue && coralValue > 0.4f)
                 {
-                    displayGrid.DisplaySprite(coralSprite, DisplayGrid.WIDTH / 2 - 15 * 4 + (uint)(x * 4), DisplayGrid.HEIGHT / 2 - 15 * 4 + (uint)(y * 4), 4, 4, 0);
+                    displayGrid.DisplaySprite(coralSprite, DisplayGrid.WIDTH / 2 - 15 * 4 + (x * 4), DisplayGrid.HEIGHT / 2 - 15 * 4 + (y * 4), 4, 4, 0);
                 }
                 else if (rockValue > coralValue && rockValue > iceValue && rockValue > caveValue && rockValue > 0.4f)
                 {
-                    displayGrid.DisplaySprite(rockSprite, DisplayGrid.WIDTH / 2 - 15 * 4 + (uint)(x * 4), DisplayGrid.HEIGHT / 2 - 15 * 4 + (uint)(y * 4), 4, 4, 0);
+                    displayGrid.DisplaySprite(rockSprite, DisplayGrid.WIDTH / 2 - 15 * 4 + (x * 4), DisplayGrid.HEIGHT / 2 - 15 * 4 + (y * 4), 4, 4, 0);
                 }
                 else if (iceValue > coralValue && iceValue > rockValue && iceValue > caveValue && iceValue > 0.4f)
                 {
-                    displayGrid.DisplaySprite(iceSprite, DisplayGrid.WIDTH / 2 - 15 * 4 + (uint)(x * 4), DisplayGrid.HEIGHT / 2 - 15 * 4 + (uint)(y * 4), 4, 4, 0);
+                    displayGrid.DisplaySprite(iceSprite, DisplayGrid.WIDTH / 2 - 15 * 4 + (x * 4), DisplayGrid.HEIGHT / 2 - 15 * 4 + (y * 4), 4, 4, 0);
                 }
                 else if (caveValue > coralValue && caveValue > rockValue && caveValue > iceValue && caveValue > 0.4f)
                 {
-                    displayGrid.DisplaySprite(caveSprite, DisplayGrid.WIDTH / 2 - 15 * 4 + (uint)(x * 4), DisplayGrid.HEIGHT / 2 - 15 * 4 + (uint)(y * 4), 4, 4, 0);
+                    displayGrid.DisplaySprite(caveSprite, DisplayGrid.WIDTH / 2 - 15 * 4 + (x * 4), DisplayGrid.HEIGHT / 2 - 15 * 4 + (y * 4), 4, 4, 0);
                 }
                 else
                 {
-                    displayGrid.DisplaySprite(blankSprite, DisplayGrid.WIDTH / 2 - 15 * 4 + (uint)(x * 4), DisplayGrid.HEIGHT / 2 - 15 * 4 + (uint)(y * 4), 4, 4, 0);
+                    displayGrid.DisplaySprite(blankSprite, DisplayGrid.WIDTH / 2 - 15 * 4 + (x * 4), DisplayGrid.HEIGHT / 2 - 15 * 4 + (y * 4), 4, 4, 0);
                 }
             }
         }
@@ -293,10 +293,10 @@ public class OverworldScreen : GameScreen
         int x = PersistentData.Instance.GetInt(Game.LAST_DIVE_OVERWORLD_X);
         int y = PersistentData.Instance.GetInt(Game.LAST_DIVE_OVERWORLD_Y);
 
-        displayGrid.DisplaySprite("Art/UI/arrow", DisplayGrid.WIDTH / 2 - 15 * 4 + (uint)(x * 4), DisplayGrid.HEIGHT / 2 - 15 * 4 + (uint)(y * 4) + 2, 4, 4, 3, overlapLayer: 1);
+        displayGrid.DisplaySprite("Art/UI/arrow", DisplayGrid.WIDTH / 2 - 15 * 4 + (x * 4), DisplayGrid.HEIGHT / 2 - 15 * 4 + (y * 4) + 2, 4, 4, 3, overlapLayer: 1);
 
         // draw an arrow at the selected position
-        displayGrid.DisplaySprite("Art/UI/arrow", DisplayGrid.WIDTH / 2 - 15 * 4 + (uint)(selected_x * 4), DisplayGrid.HEIGHT / 2 - 15 * 4 + (uint)(selected_y * 4) + 2, 4, 4, 3, overlapLayer: 1);
+        displayGrid.DisplaySprite("Art/UI/arrow", DisplayGrid.WIDTH / 2 - 15 * 4 + (selected_x * 4), DisplayGrid.HEIGHT / 2 - 15 * 4 + (selected_y * 4) + 2, 4, 4, 3, overlapLayer: 1);
     }
 
     public override void UpKey(DisplayGrid displayGrid)
@@ -458,8 +458,8 @@ public static class SharedScreenElements
         {
             Equipment equipmentPiece = allEquipment[i];
             // arrange the equipment in rows of 3, starting at x=2, y=60
-            uint x = 2 + (uint)(i % 3) * 18;
-            uint y = 60 - (uint)(i / 3) * 18;
+            int x = 2 + (i % 3) * 18;
+            int y = 60 - (i / 3) * 18;
             displayGrid.DisplaySprite(equipmentPiece.SpritePath(), x, y, 15, 15, 0, overlapLayer: 1);
         }
     }

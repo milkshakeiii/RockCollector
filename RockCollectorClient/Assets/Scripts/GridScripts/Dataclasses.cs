@@ -359,6 +359,10 @@ public class PropType : Entity
     {
         return EntityManager.GetStringAttribute(attributes, "name");
     }
+    public int GetSize()
+    {
+        return EntityManager.GetIntAttribute(attributes, "size");
+    }
     public string GetHarvestingType()
     {
         return EntityManager.GetStringAttribute(attributes, "harvestingType");
