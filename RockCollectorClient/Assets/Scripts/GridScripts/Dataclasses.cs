@@ -419,4 +419,12 @@ public class BuildingType : Entity
     {
         return EntityManager.GetIntAttribute(attributes, "size");
     }
+    public List<ItemType> GetRequestableItemTypes()
+    {
+        return EntityManager.GetItemListAttribute(attributes, "requestableItemTypes", new List<ItemType>());
+    }
+    public List<int> GetRequestableItemCounts()
+    {
+        return EntityManager.GetIntListAttribute(attributes, "requestableItemCounts", new List<int>());
+    }
 }

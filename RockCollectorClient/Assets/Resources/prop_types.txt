@@ -1,6 +1,7 @@
 name:Tree
 harvestingType:chopping
 harvestingRequired:10
+harvestingDifficulty:10
 producedItems:Log
 producedItemProbabilities:1
 size:1

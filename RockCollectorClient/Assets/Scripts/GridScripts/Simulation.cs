@@ -2,6 +2,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using UnityEngine;
 
 public class Simulation
@@ -32,12 +33,18 @@ public class Map
     // We keep them in sync in the Add and Remove methods
     private readonly Dictionary<Vector2Int, List<Placeable>> cells = new();
     private readonly Dictionary<Placeable, List<Vector2Int>> placeableToCells = new();
+    private readonly List<Activity> activities = new();
 
     private int currentTick = 0;
 
     public Map()
     {
 
+    }
+
+    public void AddActivity(Activity activity)
+    {
+        activities.Add(activity);
     }
 
     public void Add(Placeable placeable, Vector2Int position)
@@ -62,6 +69,8 @@ public class Map
             }
         }
         placeableToCells[placeable] = occupiedCells;
+
+        placeable.OnAdd(this);
     }
 
     public void Remove(Placeable placeable)
@@ -105,6 +114,11 @@ public class Map
         return placeableToCells.Keys;
     }
 
+    public List<Activity> GetActivities()
+    {
+        return activities;
+    }
+
     public int CountAllPlaceables()
     {
         return placeableToCells.Count;
@@ -143,6 +157,48 @@ public class Map
     }
 }
 
+public class Activity
+{
+    public int encounterLevel;
+
+    public List<ItemType> craftingInputItems;
+    public List<ItemType> craftingOutputItems;
+    public List<ItemType> droppedItems;
+
+    // One of sourcePlaceable and position must be non-null
+    public static Vector2Int NULL_POSITION = new (int.MinValue, int.MinValue);
+    private Placeable sourcePlaceable;
+    private Vector2Int position;
+
+    public Activity(int encounterLevel,
+                    List<ItemType> craftingInputItems,
+                    List<ItemType> craftingOutputItems,
+                    List<ItemType> droppedItems,
+                    Placeable sourcePlaceable,
+                    Vector2Int position) // use Activity.NULL_POSITION for null position
+    {
+        this.encounterLevel = encounterLevel;
+        this.craftingInputItems = craftingInputItems;
+        this.craftingOutputItems = craftingOutputItems;
+        this.droppedItems = droppedItems;
+        this.sourcePlaceable = sourcePlaceable;
+        this.position = position;
+    }
+
+    public Vector2Int GetLocation(Map map)
+    {
+        if (sourcePlaceable != null)
+        {
+            return map.PositionOf(sourcePlaceable);
+        }
+        if (position != Vector2Int.zero)
+        {
+            return position;
+        }
+        throw new Exception("Unable to determine location of activity");
+    }
+}
+
 public class Placeable
 {
     // sizeCategory is the width and height in cells if positive
@@ -174,6 +230,11 @@ public class Placeable
     {
         
     }
+
+    public virtual void OnAdd(Map map)
+    {
+        
+    }
 }
 
 public abstract class Destructable : Placeable
@@ -190,7 +251,12 @@ public abstract class Destructable : Placeable
         damageTaken += damage;
     }
 
-    public abstract bool IsDestroyed();
+    public virtual bool IsDestroyed()
+    {
+        return HealthFraction() <= 0;
+    }
+
+    public abstract float HealthFraction();
 }
 
 public class Creature : Destructable
@@ -250,9 +316,9 @@ public class Creature : Destructable
         return creatureType.GetStartingHealth() + level * creatureType.GetHealthPerLevel();
     }
 
-    public override bool IsDestroyed()
+    public override float HealthFraction()
     {
-        return damageTaken >= GetMaxHealth();
+        return (float)(GetMaxHealth() - damageTaken) / GetMaxHealth();
     }
 }
 
@@ -269,9 +335,9 @@ public class Building : Destructable
         this.buildingType = buildingType;
     }
 
-    public override bool IsDestroyed()
+    public override float HealthFraction()
     {
-        return damageTaken >= 100;
+        return (float)(100 - damageTaken) / 100;
     }
 
     public void StartSpawnCreature(CreatureType type)
@@ -354,9 +420,25 @@ public class Prop : Destructable
         this.propType = propType;
     }
 
+    public override float HealthFraction()
+    {
+        return (float)(100 - damageTaken) / 100;
+    }
+
     public override bool IsDestroyed()
     {
         return damageTaken >= 100 || harvestedAmount >= propType.GetHarvestingRequired();
+    }
+
+    public override void OnAdd(Map map)
+    {
+        List<ItemType> droppedItems = propType.GetProducedItems();
+        if (droppedItems.Count == 0)
+        {
+            return;
+        }
+        Activity harvestActivity = new (0, new(), new(), droppedItems, this, Activity.NULL_POSITION);
+        map.AddActivity(harvestActivity);
     }
 }
 

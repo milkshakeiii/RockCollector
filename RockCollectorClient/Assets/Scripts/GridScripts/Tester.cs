@@ -9,6 +9,7 @@ public class Tester : MonoBehaviour
         AddAndRemovePlaceablesOfVariousSizes();
         LoadEntities();
         SetInitialGoal();
+        AddActivity();
         Debug.Log("Tests finished");
     }
 
@@ -81,6 +82,17 @@ public class Tester : MonoBehaviour
         testCreature.ThinkAndPlan(map);
         Assert(testCreature.pursuingGoal != null, "Initial goal not set");
         Assert(testCreature.creatureType.GetGoals()[0].GetType() == testCreature.pursuingGoal.GetType(), "Initial goal not set correctly");
+    }
+
+    void AddActivity()
+    {
+        Map map = new();
+        Prop prop = new(EntityManager.propTypes["Tree"]);
+        map.Add(prop, new Vector2Int(0, 0));
+        Assert(map.GetActivities().Count == 1, "Activities empty");
+        Assert(map.GetActivities()[0].GetLocation(map) == new Vector2Int(0, 0), "Activity location");
+        Assert(map.GetActivities()[0].droppedItems.Count == 1, "Activity dropped items");
+        Assert(map.GetActivities()[0].droppedItems[0].GetName() == "Log", "Activity dropped item");
     }
 
     void Assert(bool condition, string message)

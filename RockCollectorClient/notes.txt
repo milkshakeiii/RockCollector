@@ -1,0 +1,16 @@
+Defend home
+ -> when home building is attacked, return there
+
+Equipment for self
+ -> just pick up the best available items
+
+Equipment for others
+ -> fill in the gaps of items available in own shop for each level requirement
+
+Resources for the kingdom
+ -> harvest up to a certain amount of each building material (player can set maximum?)
+
+Raid a lair
+ -> destroy a lair of an appropriate encounter level and its inhabitants
+
+Build/repair

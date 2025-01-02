@@ -4,3 +4,5 @@ supportedCreatureCounts:5
 supportedCreatureSpawnTimes:500
 size:6
 maxHealth:100
+requestableItemTypes:Log
+requestableItemCounts:5

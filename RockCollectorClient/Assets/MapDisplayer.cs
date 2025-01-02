@@ -16,6 +16,7 @@ public class MapDisplayer : MonoBehaviour
         Creature testCreature = new ("George", EntityManager.creatureTypes["Peasant"]);
         map.Add(testCreature, new Vector2Int(0, 0));
         Building testBuilding = new (EntityManager.buildingTypes["Farm"]);
+        testBuilding.damageTaken = 50;
         map.Add(testBuilding, new Vector2Int(5, 5));
         Prop testProp = new (EntityManager.propTypes["Tree"]);
         map.Add(testProp, new Vector2Int(-5, -5));
@@ -39,6 +40,27 @@ public class MapDisplayer : MonoBehaviour
                 cellsPerSquare * placeable.SquaresMinimumOne(),
                 cellsPerSquare * placeable.SquaresMinimumOne(),
                 0);
+            DisplayBars(placeable, position);
+        }
+    }
+
+    void DisplayBars(Placeable placeable, Vector2Int position)
+    {
+        if (placeable is Destructable destructable)
+        {
+            displayGrid.DisplaySprite("Art/UI/button",
+                position.x * cellsPerSquare,
+                position.y * cellsPerSquare - cellsPerSquare,
+                cellsPerSquare * destructable.SquaresMinimumOne(),
+                1,
+                0);
+            displayGrid.DisplaySprite("Art/UI/plain_white",
+                position.x * cellsPerSquare,
+                position.y * cellsPerSquare - cellsPerSquare,
+                (int)(cellsPerSquare * destructable.SquaresMinimumOne() * destructable.HealthFraction()),
+                1,
+                0,
+                overlapLayer: 1);
         }
     }
 }
