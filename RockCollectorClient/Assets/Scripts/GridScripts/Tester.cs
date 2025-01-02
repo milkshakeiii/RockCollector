@@ -65,12 +65,13 @@ public class Tester : MonoBehaviour
         Assert(EntityManager.creatureTypes["Peasant"].GetAbilities().Count == 1, "Peasant GetAbilities");
         Assert(EntityManager.creatureTypes["Peasant"].GetAbilityLevels().Count == 1, "Peasant GetAbilityLevels");
         Assert(EntityManager.creatureTypes["Peasant"].GetGoals().Count == 1, "Peasant GetGoals");
-        Assert(EntityManager.items.Count == 2, "Items not found");
-        Assert(EntityManager.items.ContainsKey("Axe"), "Axe not found");
-        Assert(EntityManager.props.ContainsKey("Tree"), "Tree not found");
+        Assert(EntityManager.itemTypes.Count == 2, "Items not found");
+        Assert(EntityManager.itemTypes.ContainsKey("Axe"), "Axe not found");
+        Assert(EntityManager.propTypes.ContainsKey("Tree"), "Tree not found");
         Assert(EntityManager.typeAbilities.ContainsKey("Woodcutting"), "Woodcutting not found");
-        Assert(EntityManager.buildings.ContainsKey("Farm"), "Farm not found");
-        Assert(EntityManager.buildings["Farm"].GetSupportedCreatureTypes()[0].GetName() == "Peasant", "Farm GetSupportedCreatureTypes");
+        Assert(EntityManager.buildingTypes.ContainsKey("Farm"), "Farm not found");
+        Assert(EntityManager.buildingTypes["Farm"].GetSupportedCreatureTypes()[0].GetName() == "Peasant", "Farm GetSupportedCreatureTypes");
+        Assert(EntityManager.buildingTypes["Farm"].GetSupportedCreatureSpawnTimes()[0] == 500, "Farm GetSupportedCreatureSpawnTimes");
     }
 
     void SetInitialGoal()

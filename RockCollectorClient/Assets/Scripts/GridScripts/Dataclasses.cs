@@ -9,9 +9,9 @@ public static class EntityManager
     public static Dictionary<string, TypeAbility> typeAbilities = new();
     public static Dictionary<string, Condition> conditions = new();
     public static Dictionary<string, CreatureType> creatureTypes = new();
-    public static Dictionary<string, Prop> props = new();
-    public static Dictionary<string, Item> items = new();
-    public static Dictionary<string, Building> buildings = new();
+    public static Dictionary<string, PropType> propTypes = new();
+    public static Dictionary<string, ItemType> itemTypes = new();
+    public static Dictionary<string, BuildingType> buildingTypes = new();
 
     public static void StoreEntity(string identifier, Entity entity)
     {
@@ -27,21 +27,21 @@ public static class EntityManager
         {
             conditions[entity.attributes["name"]] = (Condition)entity;
         }
-        else if (identifier == "props")
+        else if (identifier == "prop_types")
         {
-            props[entity.attributes["name"]] = (Prop)entity;
+            propTypes[entity.attributes["name"]] = (PropType)entity;
         }
-        else if (identifier == "items")
+        else if (identifier == "item_types")
         {
-            items[entity.attributes["name"]] = (Item)entity;
+            itemTypes[entity.attributes["name"]] = (ItemType)entity;
         }
         else if (identifier == "creature_types")
         {
             creatureTypes[entity.attributes["name"]] = (CreatureType)entity;
         }
-        else if (identifier == "buildings")
+        else if (identifier == "building_types")
         {
-            buildings[entity.attributes["name"]] = (Building)entity;
+            buildingTypes[entity.attributes["name"]] = (BuildingType)entity;
         }
         else
         {
@@ -63,21 +63,21 @@ public static class EntityManager
         {
             return new Condition { attributes = attributes };
         }
-        else if (identifier == "props")
+        else if (identifier == "prop_types")
         {
-            return new Prop { attributes = attributes };
+            return new PropType { attributes = attributes };
         }
-        else if (identifier == "items")
+        else if (identifier == "item_types")
         {
-            return new Item { attributes = attributes };
+            return new ItemType { attributes = attributes };
         }
         else if (identifier == "creature_types")
         {
             return new CreatureType { attributes = attributes };
         }
-        else if (identifier == "buildings")
+        else if (identifier == "building_types")
         {
-            return new Building { attributes = attributes };
+            return new BuildingType { attributes = attributes };
         }
         else
         {
@@ -142,11 +142,11 @@ public static class EntityManager
         return attributes.ContainsKey(key);
     }
 
-    public static List<Item> GetItemListAttribute(Dictionary<string, string> attributes, string key, List<Item> defaultValue = null)
+    public static List<ItemType> GetItemListAttribute(Dictionary<string, string> attributes, string key, List<ItemType> defaultValue = null)
     {
         if (attributes.ContainsKey(key))
         {
-            return new List<Item>(System.Array.ConvertAll(attributes[key].Split(','), x => items[x]));
+            return new List<ItemType>(System.Array.ConvertAll(attributes[key].Split(','), x => itemTypes[x]));
         }
         if (defaultValue == null)
         {
@@ -187,9 +187,9 @@ public static class EntityManager
         ReadEntity("type_abilities");
         ReadEntity("conditions");
         ReadEntity("creature_types");
-        ReadEntity("props");
-        ReadEntity("items");
-        ReadEntity("buildings");
+        ReadEntity("prop_types");
+        ReadEntity("item_types");
+        ReadEntity("building_types");
     }
 
     public static void ReadEntity(string identifier)
@@ -353,7 +353,7 @@ public class CreatureType : Entity
     }
 }
 
-public class Prop : Entity
+public class PropType : Entity
 {
     public string GetName()
     {
@@ -367,9 +367,9 @@ public class Prop : Entity
     {
         return EntityManager.GetIntAttribute(attributes, "harvestingRequired");
     }
-    public List<Item> GetProducedItems()
+    public List<ItemType> GetProducedItems()
     {
-        return EntityManager.GetItemListAttribute(attributes, "producedItems", new List<Item>());
+        return EntityManager.GetItemListAttribute(attributes, "producedItems", new List<ItemType>());
     }
     public List<int> GetProducedItemsProbabilities()
     {
@@ -377,7 +377,7 @@ public class Prop : Entity
     }
 }
 
-public class Item : Entity
+public class ItemType : Entity
 {
     public string GetName()
     {
@@ -393,7 +393,7 @@ public class Item : Entity
     }
 }
 
-public class Building : Entity
+public class BuildingType : Entity
 {
     public string GetName()
     {
@@ -406,6 +406,10 @@ public class Building : Entity
     public List<int> GetSupportedCreatureCounts()
     {
         return EntityManager.GetIntListAttribute(attributes, "supportedCreatureCounts", new List<int>());
+    }
+    public List<int> GetSupportedCreatureSpawnTimes()
+    {
+        return EntityManager.GetIntListAttribute(attributes, "supportedCreatureSpawnTimes", new List<int>());
     }
     public int GetSize()
     {

@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
@@ -18,11 +19,6 @@ public class Simulation
             map.AdvanceTick();
         });
     }
-}
-
-public class Action
-{
-
 }
 
 public class Gamestate
@@ -175,17 +171,38 @@ public class Placeable
     }
 }
 
-public class Creature : Placeable
+public abstract class Destructable : Placeable
+{
+    public int damageTaken;
+
+    public Destructable(int sizeCategory) : base(sizeCategory)
+    {
+        this.damageTaken = 0;
+    }
+
+    public void TakeDamage(int damage)
+    {
+        damageTaken += damage;
+    }
+
+    public abstract bool IsDestroyed();
+}
+
+public class Creature : Destructable
 {
     public string name;
 
     public int level;
-    public int currentHealth;
     public List<Feat> feats = new();
     public List<TypeAbility> abilities = new();
 
     public CreatureType creatureType;
     public Goal pursuingGoal;
+
+    public static Creature NewCreatureOfType(CreatureType type)
+    {
+        return new Creature("Random Name", type);
+    }
 
     public Creature(string name, CreatureType creatureType) : base(creatureType.GetSizeCategory())
     {
@@ -221,6 +238,103 @@ public class Creature : Placeable
         Goal newGoal = creatureType.GetGoals()[0];
         newGoal.Initialize(map.CurrentTick());
         return newGoal;
+    }
+
+    public int GetMaxHealth()
+    {
+        return creatureType.GetStartingHealth() + level * creatureType.GetHealthPerLevel();
+    }
+
+    public override bool IsDestroyed()
+    {
+        return damageTaken >= GetMaxHealth();
+    }
+}
+
+public class Building : Destructable
+{
+    public BuildingType buildingType;
+    
+    private Dictionary<string, List<Creature>> creaturesByType = new();
+    private int spawnTicksRemaining = 0;
+    private Creature spawningCreature; // Null if not spawning
+
+    public Building(BuildingType buildingType) : base(buildingType.GetSize())
+    {
+        this.buildingType = buildingType;
+    }
+
+    public override bool IsDestroyed()
+    {
+        return damageTaken >= 100;
+    }
+
+    public void StartSpawnCreature(CreatureType type)
+    {
+        if (spawningCreature != null)
+        {
+            return; // Already spawning
+        }
+        if (!creaturesByType.ContainsKey(type.GetName()))
+        {
+            throw new System.Exception("Creature type not supported");
+        }
+        if (GetCurrentCreaturesSupported(type) >= GetMaxCreaturesSupported(type))
+        {
+            return; // Max creatures already supported
+        }
+
+        spawningCreature = Creature.NewCreatureOfType(type);
+        creaturesByType[type.GetName()].Add(spawningCreature);
+        spawnTicksRemaining = GetSpawnTime(type);
+    }
+
+    public List<CreatureType> GetCreatureTypesAvailable()
+    {
+        return buildingType.GetSupportedCreatureTypes();
+    }
+
+    public int GetCurrentCreaturesSupported(CreatureType type)
+    {
+        if (!creaturesByType.ContainsKey(type.GetName()))
+        {
+            throw new System.Exception("Creature type not supported");
+        }
+        return creaturesByType[type.GetName()].Count;
+    }
+
+    public int GetMaxCreaturesSupported(CreatureType type)
+    {
+        int index = IndexOfCreatureType(type);
+        return buildingType.GetSupportedCreatureCounts()[index];
+    }
+
+    public int GetSpawnTime(CreatureType type)
+    {
+        int index = IndexOfCreatureType(type);
+        return buildingType.GetSupportedCreatureSpawnTimes()[index];
+    }
+
+    private int IndexOfCreatureType(CreatureType type)
+    {
+        List<CreatureType> supportedTypes = GetCreatureTypesAvailable();
+        int index = supportedTypes.IndexOf(type);
+        if (index == -1)
+        {
+            throw new System.Exception("Creature type not supported");
+        }
+        return index;
+    }
+
+    public override void ObserveAndFeel(Map map)
+    {
+        spawnTicksRemaining--;
+        if (spawnTicksRemaining == 0)
+        {
+            spawningCreature = null;
+            // Place the creature
+            map.Add(spawningCreature, map.PositionOf(this) - new Vector2Int(1, 1));
+        }
     }
 }
 

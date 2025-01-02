@@ -13,8 +13,10 @@ public class MapDisplayer : MonoBehaviour
     void Start()
     {
         Map map = new Map();
-        Creature testCreature = new Creature("George", EntityManager.creatureTypes["Peasant"]);
+        Creature testCreature = new ("George", EntityManager.creatureTypes["Peasant"]);
         map.Add(testCreature, new Vector2Int(0, 0));
+        Building testBuilding = new (EntityManager.buildingTypes["Farm"]);
+        map.Add(testBuilding, new Vector2Int(5, 5));
         DisplayMap(map);
     }
 
