@@ -50,15 +50,31 @@ public class MapDisplayer : MonoBehaviour
         {
             displayGrid.DisplaySprite("Art/UI/button",
                 position.x * cellsPerSquare,
-                position.y * cellsPerSquare - cellsPerSquare,
+                position.y * cellsPerSquare - 1,
                 cellsPerSquare * destructable.SquaresMinimumOne(),
                 1,
                 0);
             displayGrid.DisplaySprite("Art/UI/plain_white",
                 position.x * cellsPerSquare,
-                position.y * cellsPerSquare - cellsPerSquare,
+                position.y * cellsPerSquare - 1,
                 (int)(cellsPerSquare * destructable.SquaresMinimumOne() * destructable.HealthFraction()),
                 1,
+                0,
+                overlapLayer: 1);
+        }
+        if (placeable is Prop prop)
+        {
+            displayGrid.DisplaySprite("Art/UI/button",
+                position.x * cellsPerSquare,
+                position.y * cellsPerSquare - 2,
+                cellsPerSquare * prop.SquaresMinimumOne(),
+                2,
+                0);
+            displayGrid.DisplaySprite("Art/UI/plain_white",
+                position.x * cellsPerSquare,
+                position.y * cellsPerSquare - 2,
+                (int)(cellsPerSquare * prop.SquaresMinimumOne() * prop.HarvestedFraction()),
+                2,
                 0,
                 overlapLayer: 1);
         }

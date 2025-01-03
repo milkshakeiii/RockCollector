@@ -425,9 +425,14 @@ public class Prop : Destructable
         return (float)(100 - damageTaken) / 100;
     }
 
+    public float HarvestedFraction()
+    {
+        return (float)harvestedAmount / propType.GetHarvestingRequired();
+    }
+
     public override bool IsDestroyed()
     {
-        return damageTaken >= 100 || harvestedAmount >= propType.GetHarvestingRequired();
+        return damageTaken >= 100 || HarvestedFraction() <= 0;
     }
 
     public override void OnAdd(Map map)
