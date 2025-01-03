@@ -249,6 +249,35 @@ public class HarvestActivity : Activity
     }
 }
 
+public class HuntActivity : Activity
+{
+    public HuntActivity(Creature target) : base(target.EncounterLevel(),
+        new(), new(), target.GetCreatureType().GetDroppedItems(), target.GetCreatureType().GetDroppedItemsProbabilities(), target, Activity.NULL_POSITION)
+    {
+
+    }
+
+    private Creature SourceCreature()
+    {
+        return (Creature)sourcePlaceable;
+    }
+
+    public override bool IsCompleted(Map map)
+    {
+        return SourceCreature().IsDestroyed();
+    }
+
+    public override void Perform(Creature performer, Map map)
+    {
+        // TODO: Implement
+    }
+}
+
+public class CraftActivity : Activity
+{
+
+}
+
 public class Placeable 
 {
     // sizeCategory is the width and height in cells if positive
@@ -339,6 +368,11 @@ public class Creature : Destructable
         this.name = name;
         this.creatureType = creatureType;
         LevelUp();
+    }
+
+    public int EncounterLevel()
+    {
+        return level;
     }
 
     public void LevelUp()
@@ -609,6 +643,16 @@ public class Prop : Destructable
     public void TakeHarvest(int amount)
     {
         harvestedAmount += amount;
+    }
+}
+
+public class Item : Placeable
+{
+    public ItemType itemType;
+
+    public Item(ItemType itemType) : base(itemType.GetSize())
+    {
+        this.itemType = itemType;
     }
 }
 

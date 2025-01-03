@@ -412,6 +412,10 @@ public class ItemType : Entity
     {
         return EntityManager.GetIntAttribute(attributes, "harvestingAmount", 0);
     }
+    public int GetSize()
+    {
+        return EntityManager.GetIntAttribute(attributes, "size", 1);
+    }
 }
 
 public class BuildingType : Entity
