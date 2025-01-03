@@ -9,14 +9,19 @@ public class MapDisplayer : MonoBehaviour
     public uint widthInSquares;
     public uint heightInSquares;
 
+    public float secondsPerTurn = 0.1f;
+    public float lastTurnTime = 0;
+
+    private Map map;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        Map map = new Map();
+        map = new ();
         Creature testCreature = new ("George", EntityManager.creatureTypes["Peasant"]);
         map.Add(testCreature, new Vector2Int(0, 0));
         Building testBuilding = new (EntityManager.buildingTypes["Farm"]);
-        testBuilding.damageTaken = 50;
+        testBuilding.TakeDamage(50);
         map.Add(testBuilding, new Vector2Int(5, 5));
         Prop testProp = new (EntityManager.propTypes["Tree"]);
         map.Add(testProp, new Vector2Int(-5, -5));
@@ -26,11 +31,17 @@ public class MapDisplayer : MonoBehaviour
     // Update is called once per framex
     void Update()
     {
-        
+        if (Time.time - lastTurnTime > secondsPerTurn)
+        {
+            lastTurnTime = Time.time;
+            map.AdvanceTick();
+            DisplayMap(map);
+        }
     }
 
     void DisplayMap(Map map)
     {
+        displayGrid.Clear();
         foreach (Placeable placeable in map.AllPlaceables())
         {
             Vector2Int position = map.PositionOf(placeable);

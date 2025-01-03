@@ -181,6 +181,19 @@ public static class EntityManager
         return defaultValue;
     }
 
+    public static List<TypeAbility> GetTypeAbilityListAttribute(Dictionary<string, string> attributes, string key, List<TypeAbility> defaultValue = null)
+    {
+        if (attributes.ContainsKey(key))
+        {
+            return new List<TypeAbility>(System.Array.ConvertAll(attributes[key].Split(','), x => typeAbilities[x]));
+        }
+        if (defaultValue == null)
+        {
+            throw new System.ArgumentNullException("No default value");
+        }
+        return defaultValue;
+    }
+
     public static void ReadAllEntities()
     {
         ReadEntity("feats");
@@ -275,6 +288,10 @@ public class TypeAbility : Entity
         // in ticks
         return EntityManager.GetIntAttribute(attributes, "harvestingAmount");
     }
+    public string GetHarvestingType()
+    {
+        return EntityManager.GetStringAttribute(attributes, "harvestingType");
+    }
 }
 
 public class Condition : Entity
@@ -339,9 +356,9 @@ public class CreatureType : Entity
     {
         return EntityManager.GetIntAttribute(attributes, "sizeCategory", defaultValue: 1);
     }
-    public List<string> GetAbilities()
+    public List<TypeAbility> GetAbilities()
     {
-        return EntityManager.GetStringListAttribute(attributes, "abilities");
+        return EntityManager.GetTypeAbilityListAttribute(attributes, "abilities");
     }
     public List<int> GetAbilityLevels()
     {

@@ -296,6 +296,8 @@ MonoBehaviour:
   cellsPerSquare: 4
   widthInSquares: 50
   heightInSquares: 25
+  secondsPerTurn: 0.1
+  lastTurnTime: 0
 --- !u!1001 &1259671500
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -33,7 +33,7 @@ public class Map
     // We keep them in sync in the Add and Remove methods
     private readonly Dictionary<Vector2Int, List<Placeable>> cells = new();
     private readonly Dictionary<Placeable, List<Vector2Int>> placeableToCells = new();
-    private readonly List<Activity> activities = new();
+    private readonly HashSet<Activity> activities = new();
 
     private int currentTick = 0;
 
@@ -45,6 +45,16 @@ public class Map
     public void AddActivity(Activity activity)
     {
         activities.Add(activity);
+    }
+
+    public void RemoveActivity(Activity activity)
+    {
+        activities.Remove(activity);
+    }
+
+    public bool ActivityExists(Activity activity)
+    {
+        return activities.Contains(activity);
     }
 
     public void Add(Placeable placeable, Vector2Int position)
@@ -114,7 +124,7 @@ public class Map
         return placeableToCells.Keys;
     }
 
-    public List<Activity> GetActivities()
+    public HashSet<Activity> GetActivities()
     {
         return activities;
     }
@@ -136,44 +146,55 @@ public class Map
 
     public void AdvanceTick()
     {
-        foreach (Placeable placeable in placeableToCells.Keys)
+        List<Placeable> placeables = new(placeableToCells.Keys);
+
+        foreach (Placeable placeable in placeables)
         {
             placeable.ObserveAndFeel(this);
         }
 
-
-        foreach (Placeable placeable in placeableToCells.Keys)
+        foreach (Placeable placeable in placeables)
         {
             placeable.ThinkAndPlan(this);
         }
 
-
-        foreach (Placeable placeable in placeableToCells.Keys)
+        foreach (Placeable placeable in placeables)
         {
             placeable.Act(this);
+        }
+
+        foreach (Placeable placeable in placeables)
+        {
+            if (placeable is Destructable destructable && destructable.IsDestroyed())
+            {
+                destructable.OnDestroyed(this);
+                Remove(destructable);
+            }
         }
 
         currentTick++;
     }
 }
 
-public class Activity
+public abstract class Activity
 {
     public int encounterLevel;
 
     public List<ItemType> craftingInputItems;
     public List<ItemType> craftingOutputItems;
     public List<ItemType> droppedItems;
+    public List<int> droppedItemsProbabilities;
 
     // One of sourcePlaceable and position must be non-null
     public static Vector2Int NULL_POSITION = new (int.MinValue, int.MinValue);
-    private Placeable sourcePlaceable;
-    private Vector2Int position;
+    protected Placeable sourcePlaceable;
+    protected Vector2Int position;
 
     public Activity(int encounterLevel,
                     List<ItemType> craftingInputItems,
                     List<ItemType> craftingOutputItems,
                     List<ItemType> droppedItems,
+                    List<int> droppedItemsProbabilities,
                     Placeable sourcePlaceable,
                     Vector2Int position) // use Activity.NULL_POSITION for null position
     {
@@ -181,6 +202,7 @@ public class Activity
         this.craftingInputItems = craftingInputItems;
         this.craftingOutputItems = craftingOutputItems;
         this.droppedItems = droppedItems;
+        this.droppedItemsProbabilities = droppedItemsProbabilities;
         this.sourcePlaceable = sourcePlaceable;
         this.position = position;
     }
@@ -196,6 +218,34 @@ public class Activity
             return position;
         }
         throw new Exception("Unable to determine location of activity");
+    }
+
+    public abstract bool IsCompleted(Map map);
+
+    public abstract void Perform(Creature performer, Map map);
+}
+
+public class HarvestActivity : Activity
+{
+    public HarvestActivity(Prop prop) : base(0,
+        new(), new(), prop.propType.GetProducedItems(), prop.propType.GetProducedItemsProbabilities(), prop, Activity.NULL_POSITION)
+    {
+
+    }
+
+    private Prop SourceProp()
+    {
+        return (Prop)sourcePlaceable;
+    }
+
+    public override bool IsCompleted(Map map)
+    {
+        return SourceProp().IsDestroyed();
+    }
+
+    public override void Perform(Creature performer, Map map)
+    {
+        performer.HarvestProp(SourceProp(), map);
     }
 }
 
@@ -239,7 +289,7 @@ public class Placeable
 
 public abstract class Destructable : Placeable
 {
-    public int damageTaken;
+    protected int damageTaken;
 
     public Destructable(int sizeCategory) : base(sizeCategory)
     {
@@ -256,19 +306,28 @@ public abstract class Destructable : Placeable
         return HealthFraction() <= 0;
     }
 
+    public virtual void OnDestroyed(Map map)
+    {
+        
+    }
+
     public abstract float HealthFraction();
 }
 
 public class Creature : Destructable
 {
-    public string name;
+    private string name;
 
-    public int level;
-    public List<Feat> feats = new();
-    public List<TypeAbility> abilities = new();
+    private int level = 0;
+    private List<Feat> feats = new();
+    private List<TypeAbility> abilities = new();
 
-    public CreatureType creatureType;
-    public Goal pursuingGoal;
+    private CreatureType creatureType;
+
+    private Goal pursuingGoal;
+    private Activity nextActivity;
+
+    private int cooldownTicksRemaining = 0;
 
     public static Creature NewCreatureOfType(CreatureType type)
     {
@@ -279,6 +338,56 @@ public class Creature : Destructable
     {
         this.name = name;
         this.creatureType = creatureType;
+        LevelUp();
+    }
+
+    public void LevelUp()
+    {
+        level++;
+        if (level == 1 || level % 3 == 0)
+        {
+            // Add a feat
+        }
+        if (level == 1 || level % 5 == 0)
+        {
+            // Add an ability
+            TypeAbility ability = creatureType.GetAbilities()[0];
+            abilities.Add(ability); 
+        }
+    }
+
+    public void HarvestProp(Prop prop, Map map)
+    {
+        string neededSkill = prop.propType.GetHarvestingType();
+        TypeAbility bestAbility = null;
+        int bestAmount = 0;
+        foreach (TypeAbility ability in abilities)
+        {
+            if (ability.GetHarvestingType() == neededSkill)
+            {
+                if (ability.GetHarvestingAmount() > bestAmount)
+                {
+                    bestAbility = ability;
+                    bestAmount = ability.GetHarvestingAmount();
+                }
+            }
+        }
+        if (bestAbility == null)
+        {
+            throw new System.Exception("No ability found to harvest prop");
+        }
+        prop.TakeHarvest(bestAmount);
+        cooldownTicksRemaining = bestAbility.GetCooldown();
+    }
+
+    public CreatureType GetCreatureType()
+    {
+        return creatureType;
+    }
+
+    public Goal GetGoal()
+    {
+        return pursuingGoal;
     }
 
     public override void ObserveAndFeel(Map map)
@@ -292,11 +401,56 @@ public class Creature : Destructable
         {
             pursuingGoal = GetNewGoal(map);
         }
+        nextActivity ??= pursuingGoal.GetNextActivity(map, this);
+    }
+
+    public int MoveSpeed()
+    {
+        return 10;
     }
 
     public override void Act(Map map)
     {
-        
+        if (cooldownTicksRemaining > 0)
+        {
+            cooldownTicksRemaining--;
+            return;
+        }
+        else if (!map.ActivityExists(nextActivity))
+        {
+            nextActivity = null;
+        }
+        else if (nextActivity != null && DistanceToNextActivity(map) > 1)
+        {
+            Vector2Int difference = DirectionToNextActivity(map);
+            Vector2Int direction = new (Math.Sign(difference.x), Math.Sign(difference.y));
+            Vector2Int newPosition = map.PositionOf(this) + direction;
+            Simulation.MovePlaceable(this, map, newPosition);
+            cooldownTicksRemaining = MoveSpeed();
+        }
+        else if (nextActivity != null && !nextActivity.IsCompleted(map))
+        {
+            nextActivity.Perform(this, map);
+            if (nextActivity.IsCompleted(map))
+            {
+                Debug.Log("Activity completed");
+                nextActivity = null;
+            }
+        }
+    }
+
+    private int DistanceToNextActivity(Map map)
+    {
+        Vector2Int location = nextActivity.GetLocation(map);
+        Vector2Int currentPosition = map.PositionOf(this);
+        return Math.Min(Math.Abs(location.x - currentPosition.x), Math.Abs(location.y - currentPosition.y));
+    }
+
+    private Vector2Int DirectionToNextActivity(Map map)
+    {
+        Vector2Int location = nextActivity.GetLocation(map);
+        Vector2Int currentPosition = map.PositionOf(this);
+        return location - currentPosition;
     }
 
     private bool ShouldGetNewGoal(Map map)
@@ -414,6 +568,7 @@ public class Prop : Destructable
     public PropType propType;
 
     private int harvestedAmount = 0;
+    private HarvestActivity harvestActivity;
 
     public Prop(PropType propType) : base(propType.GetSize())
     {
@@ -432,7 +587,7 @@ public class Prop : Destructable
 
     public override bool IsDestroyed()
     {
-        return damageTaken >= 100 || HarvestedFraction() <= 0;
+        return damageTaken >= 100 || HarvestedFraction() >= 1;
     }
 
     public override void OnAdd(Map map)
@@ -442,8 +597,18 @@ public class Prop : Destructable
         {
             return;
         }
-        Activity harvestActivity = new (0, new(), new(), droppedItems, this, Activity.NULL_POSITION);
+        harvestActivity = new(this);
         map.AddActivity(harvestActivity);
+    }
+
+    public override void OnDestroyed(Map map)
+    {
+        map.RemoveActivity(harvestActivity);
+    }
+
+    public void TakeHarvest(int amount)
+    {
+        harvestedAmount += amount;
     }
 }
 
@@ -451,9 +616,9 @@ public abstract class Goal
 {
     public static Goal NameToGoal(string name)
     {
-        if (name == "PersonalWealth")
+        if (name == "Craft")
         {
-            return new PersonalWealth();
+            return new Craft();
         }
         throw new System.Exception("Goal not found");
     }
@@ -463,9 +628,11 @@ public abstract class Goal
     public abstract int EvaluateMap(Map map);
 
     public abstract void Initialize(int tickBegun);
+
+    public abstract Activity GetNextActivity(Map map, Creature creature);
 }
 
-public class PersonalWealth : Goal
+public class Craft : Goal
 {
     private int achievedAmount;
     private int targetAmount;
@@ -486,6 +653,23 @@ public class PersonalWealth : Goal
 
     public override int EvaluateMap(Map map)
     {
-        throw new System.NotImplementedException();
+       foreach (Placeable placeable in map.AllPlaceables())
+       {
+           
+       }
+       return 0;
+    }
+
+    public override Activity GetNextActivity(Map map, Creature creature)
+    {
+        if (map.GetActivities().Count == 0)
+        {
+            return null;
+        }
+        foreach (Activity activity in map.GetActivities())
+        {
+            return activity;
+        }
+        return null;
     }
 }

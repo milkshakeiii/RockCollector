@@ -79,9 +79,12 @@ public class Tester : MonoBehaviour
     {
         Map map = new();
         Creature testCreature = new("George", EntityManager.creatureTypes["Peasant"]);
+        Prop prop = new(EntityManager.propTypes["Tree"]);
+        map.Add(testCreature, new Vector2Int(0, 0));
+        map.Add(prop, new Vector2Int(5, 5));
         testCreature.ThinkAndPlan(map);
-        Assert(testCreature.pursuingGoal != null, "Initial goal not set");
-        Assert(testCreature.creatureType.GetGoals()[0].GetType() == testCreature.pursuingGoal.GetType(), "Initial goal not set correctly");
+        Assert(testCreature.GetGoal() != null, "Initial goal not set");
+        Assert(testCreature.GetCreatureType().GetGoals()[0].GetType() == testCreature.GetGoal().GetType(), "Initial goal not set correctly");
     }
 
     void AddActivity()
@@ -90,9 +93,19 @@ public class Tester : MonoBehaviour
         Prop prop = new(EntityManager.propTypes["Tree"]);
         map.Add(prop, new Vector2Int(0, 0));
         Assert(map.GetActivities().Count == 1, "Activities empty");
-        Assert(map.GetActivities()[0].GetLocation(map) == new Vector2Int(0, 0), "Activity location");
-        Assert(map.GetActivities()[0].droppedItems.Count == 1, "Activity dropped items");
-        Assert(map.GetActivities()[0].droppedItems[0].GetName() == "Log", "Activity dropped item");
+        Activity activity = null;
+        foreach (Activity a in map.GetActivities())
+        {
+            activity = a;
+        }
+        if (activity == null)
+        {
+            Debug.LogError("Activity not found");
+            return;
+        }
+        Assert(activity.GetLocation(map) == new Vector2Int(0, 0), "Activity location");
+        Assert(activity.droppedItems.Count == 1, "Activity dropped items");
+        Assert(activity.droppedItems[0].GetName() == "Log", "Activity dropped item");
     }
 
     void Assert(bool condition, string message)
