@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using UnityEngine;
 
-public class Simulation
+public class Simulation 
 {
     public static void MovePlaceable(Placeable placeable, Map map, Vector2Int destination)
     {
@@ -22,12 +22,12 @@ public class Simulation
     }
 }
 
-public class Gamestate
+public class Gamestate 
 {
     public List<Map> maps = new();
 }
 
-public class Map
+public class Map 
 {
     // We keep both a dictionary of cells to placeables and a dictionary of placeables to cells
     // We keep them in sync in the Add and Remove methods
@@ -176,7 +176,7 @@ public class Map
     }
 }
 
-public abstract class Activity
+public abstract class Activity 
 {
     public int encounterLevel;
 
@@ -249,7 +249,7 @@ public class HarvestActivity : Activity
     }
 }
 
-public class Placeable
+public class Placeable 
 {
     // sizeCategory is the width and height in cells if positive
     // if negative, the placeable takes up (1/sizeCategory) of a cell
@@ -612,7 +612,7 @@ public class Prop : Destructable
     }
 }
 
-public abstract class Goal
+public abstract class Goal 
 {
     public static Goal NameToGoal(string name)
     {
@@ -666,10 +666,6 @@ public class Craft : Goal
         {
             return null;
         }
-        foreach (Activity activity in map.GetActivities())
-        {
-            return activity;
-        }
-        return null;
+        return Search.CraftSearch(map, creature);
     }
 }

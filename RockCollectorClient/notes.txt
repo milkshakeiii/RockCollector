@@ -1,12 +1,12 @@
-Defend
+Defend (return home and attack nearby monsters)
 
-Restock
+Restock (get items for self)
 
-Craft
+Craft (attempt to fill in requested items for buildings)
 
-Raid
+Raid (go toward lair with acceptable risk rating and attack things)
 
-Hunt
+Hunt (go toward any area with acceptable risk rating and attack things)
 
-Build
+Build (construct/repair buildings)
 
