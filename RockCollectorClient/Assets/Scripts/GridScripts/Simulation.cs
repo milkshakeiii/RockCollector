@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using UnityEngine;
+using static UnityEditor.MaterialProperty;
 
 public class Simulation 
 {
@@ -30,8 +31,6 @@ public class Map
     
     private readonly Dictionary<Placeable, Placeable> heldToHolder = new();
     private readonly Dictionary<Placeable, List<Placeable>> holderToHeld = new();
-    
-    private readonly HashSet<Activity> activities = new();
 
     private int currentTick = 0;
 
@@ -61,21 +60,6 @@ public class Map
             holderToHeld[holder] = new();
         }
         holderToHeld[holder].Add(held);
-    }
-
-    public void AddActivity(Activity activity)
-    {
-        activities.Add(activity);
-    }
-
-    public void RemoveActivity(Activity activity)
-    {
-        activities.Remove(activity);
-    }
-
-    public bool ActivityExists(Activity activity)
-    {
-        return activities.Contains(activity);
     }
 
     public void Add(Placeable placeable, Vector2Int position)
@@ -199,8 +183,32 @@ public class Map
         return heldToHolder.Keys;
     }
 
-    public HashSet<Activity> GetActivities()
+    public HashSet<Activity> GetActivities(Creature forCreature)
     {
+        HashSet<Activity> activities = new ();
+        
+        foreach (Placeable placeable in UnheldPlaceables())
+        {
+            if (placeable is Creature creature && creature.teamNumber != forCreature.teamNumber)
+            {
+                activities.Add(new HuntActivity(creature));
+            }
+            if (placeable is Building building)
+            {
+                
+            }
+            if (placeable is Prop prop)
+            {
+                List<ItemType> droppedItems = prop.propType.GetProducedItems();
+                if (droppedItems.Count == 0)
+                {
+                    continue;
+                }
+                HarvestActivity harvestActivity = new(prop);
+                activities.Add(harvestActivity);
+            }
+        }
+        
         return activities;
     }
 
@@ -447,6 +455,7 @@ public abstract class Destructable : Placeable
 public class Creature : Destructable
 {
     private string name;
+    public int teamNumber = 0;
 
     private int level = 0;
     private List<Feat> feats = new();
@@ -461,12 +470,13 @@ public class Creature : Destructable
 
     public static Creature NewCreatureOfType(CreatureType type)
     {
-        return new Creature("Random Name", type);
+        return new Creature("Random Name", 0, type);
     }
 
-    public Creature(string name, CreatureType creatureType) : base(creatureType.GetSizeCategory())
+    public Creature(string name, int teamNumber, CreatureType creatureType) : base(creatureType.GetSizeCategory())
     {
         this.name = name;
+        this.teamNumber = teamNumber;
         this.creatureType = creatureType;
         LevelUp();
     }
@@ -551,26 +561,35 @@ public class Creature : Destructable
             cooldownTicksRemaining--;
             return;
         }
-        else if (!map.ActivityExists(nextActivity))
+        else if (nextActivity == null)
         {
-            nextActivity = null;
+            return;
         }
-        else if (nextActivity != null && DistanceToNextActivity(map) > 1)
+        else if (nextActivity.IsCompleted(map))
+        {
+            // Something else completed the activity this frame
+            // or there is no activity assigned
+            nextActivity = null;
+            return;
+        }
+        else if (DistanceToNextActivity(map) > 1)
         {
             Vector2Int difference = DirectionToNextActivity(map);
             Vector2Int direction = new (Math.Sign(difference.x), Math.Sign(difference.y));
             Vector2Int newPosition = map.PositionOf(this) + direction;
             map.MovePlaceable(this, newPosition);
             cooldownTicksRemaining = MoveSpeed();
+            return;
         }
-        else if (nextActivity != null && !nextActivity.IsCompleted(map))
+        else // Perform the activity
         {
             nextActivity.Perform(this, map);
             if (nextActivity.IsCompleted(map))
             {
                 Debug.Log("Activity completed");
-                nextActivity = null;
+                nextActivity = null; // Otherwise, there would be a "stunned" frame
             }
+            return;
         }
     }
 
@@ -703,7 +722,6 @@ public class Prop : Destructable
     public PropType propType;
 
     private int harvestedAmount = 0;
-    private HarvestActivity harvestActivity;
 
     public Prop(PropType propType) : base(propType.GetSize())
     {
@@ -727,18 +745,12 @@ public class Prop : Destructable
 
     public override void OnAdd(Map map)
     {
-        List<ItemType> droppedItems = propType.GetProducedItems();
-        if (droppedItems.Count == 0)
-        {
-            return;
-        }
-        harvestActivity = new(this);
-        map.AddActivity(harvestActivity);
+        
     }
 
     public override void OnDestroyed(Map map)
     {
-        map.RemoveActivity(harvestActivity);
+        
     }
 
     public void TakeHarvest(int amount)
@@ -818,7 +830,7 @@ public class Craft : Goal
 
     public override Activity GetNextActivity(Map map, Creature creature)
     {
-        if (map.GetActivities().Count == 0)
+        if (map.GetActivities(creature).Count == 0)
         {
             return null;
         }

@@ -56,7 +56,7 @@ public class Tester : MonoBehaviour
     void HoldAndDropItems()
     {
         Map map = new();
-        Creature testCreature = new("George", EntityManager.creatureTypes["Peasant"]);
+        Creature testCreature = new("George", 0, EntityManager.creatureTypes["Peasant"]);
         map.Add(testCreature, new Vector2Int(0, 0));
         Item item = new Item(EntityManager.itemTypes["Axe"]);
         map.Add(item, new Vector2Int(0, 0));
@@ -109,7 +109,7 @@ public class Tester : MonoBehaviour
     void SetInitialGoal()
     {
         Map map = new();
-        Creature testCreature = new("George", EntityManager.creatureTypes["Peasant"]);
+        Creature testCreature = new("George", 0, EntityManager.creatureTypes["Peasant"]);
         Prop prop = new(EntityManager.propTypes["Tree"]);
         map.Add(testCreature, new Vector2Int(0, 0));
         map.Add(prop, new Vector2Int(5, 5));
@@ -123,9 +123,11 @@ public class Tester : MonoBehaviour
         Map map = new();
         Prop prop = new(EntityManager.propTypes["Tree"]);
         map.Add(prop, new Vector2Int(0, 0));
-        Assert(map.GetActivities().Count == 1, "Activities empty");
+        Creature testCreature = new("George", 0, EntityManager.creatureTypes["Peasant"]);
+        map.Add(testCreature, new Vector2Int(5, 5));
+        Assert(map.GetActivities(testCreature).Count == 1, "Activities empty");
         Activity activity = null;
-        foreach (Activity a in map.GetActivities())
+        foreach (Activity a in map.GetActivities(testCreature))
         {
             activity = a;
         }
