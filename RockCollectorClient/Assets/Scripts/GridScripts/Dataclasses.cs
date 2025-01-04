@@ -368,6 +368,14 @@ public class CreatureType : Entity
     {
         return EntityManager.GetGoalListAttribute(attributes, "goals");
     }
+    public List<ItemType> GetDroppedItems()
+    {
+        return EntityManager.GetItemListAttribute(attributes, "droppedItems", new List<ItemType>());
+    }
+    public List<int> GetDroppedItemsProbabilities()
+    {
+        return EntityManager.GetIntListAttribute(attributes, "droppedItemsProbabilities", new List<int>());
+    }
 }
 
 public class PropType : Entity
@@ -415,6 +423,10 @@ public class ItemType : Entity
     public int GetSize()
     {
         return EntityManager.GetIntAttribute(attributes, "size", 1);
+    }
+    public List<ItemType> GetCraftingInputs()
+    {
+        return EntityManager.GetItemListAttribute(attributes, "craftingInputs", new List<ItemType>());
     }
 }
 

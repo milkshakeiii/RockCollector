@@ -170,6 +170,10 @@ public class Map
                 destructable.OnDestroyed(this);
                 Remove(destructable);
             }
+            if (placeable is Item item && item.IsConsumed())
+            {
+                Remove(item);
+            }
         }
 
         currentTick++;
@@ -275,7 +279,28 @@ public class HuntActivity : Activity
 
 public class CraftActivity : Activity
 {
+    private bool completed = false;
 
+    public CraftActivity(ItemType producedItemType, Building workshop) : base(0,
+        producedItemType.GetCraftingInputs(), new() { producedItemType }, new(), new(), workshop, Activity.NULL_POSITION)
+    {
+
+    }
+
+    private Building Workshop()
+    {
+        return (Building)sourcePlaceable;
+    }
+
+    public override bool IsCompleted(Map map)
+    {
+        return completed || Workshop().IsDestroyed();
+    }
+
+    public override void Perform(Creature performer, Map map)
+    {
+        // consume the input items
+    }
 }
 
 public class Placeable 
@@ -649,10 +674,21 @@ public class Prop : Destructable
 public class Item : Placeable
 {
     public ItemType itemType;
+    private bool consumed = false;
 
     public Item(ItemType itemType) : base(itemType.GetSize())
     {
         this.itemType = itemType;
+    }
+
+    public void Consume()
+    {
+        consumed = true;
+    }
+
+    public bool IsConsumed()
+    {
+        return consumed;
     }
 }
 

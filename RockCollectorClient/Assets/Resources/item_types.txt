@@ -1,6 +1,7 @@
 name:Axe
 harvestingTypes:chopping
 harvestingAmount:1
+craftingInputs:Log
 size:-6
 
 name:Log
