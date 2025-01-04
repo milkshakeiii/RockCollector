@@ -417,8 +417,6 @@ public class HuntActivity : Activity
 
 public class CraftActivity : Activity
 {
-    private bool completed = false;
-
     public CraftActivity(ItemType producedItemType, Building workshop) : base(0,
         producedItemType.GetCraftingInputs(), new() { producedItemType }, new(), new(), workshop, Activity.NULL_POSITION)
     {
@@ -432,13 +430,92 @@ public class CraftActivity : Activity
 
     public override bool IsCompleted(Map map)
     {
-        return completed || Workshop().IsDestroyed();
+        if (Workshop().IsDestroyed())
+        {
+            return true;
+        }
+
+        foreach (ItemType outputItem in craftingOutputItems)
+        {
+            foreach (ItemType inputItem in outputItem.GetCraftingInputs())
+            {
+                bool itemFound = false;
+
+                // check if the workshop is holding the input item
+                List<Placeable> heldItemsWorkshop = new(map.HeldPlaceablesOf(Workshop()));
+                foreach (Placeable heldItem in heldItemsWorkshop)
+                {
+                    if (heldItem is Item item && item.itemType.GetName() == inputItem.GetName())
+                    {
+                        itemFound = true;
+                        break;
+                    }
+                }
+
+                // check if the performer is holding the input item
+                if (!itemFound)
+                {
+                    List<Placeable> heldItems = new(map.HeldPlaceablesOf(Workshop()));
+                    foreach (Placeable heldItem in heldItems)
+                    {
+                        if (heldItem is Item item && item.itemType.GetName() == inputItem.GetName())
+                        {
+                            itemFound = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!itemFound)
+                {
+                    // if an input item is missing, the crafting activity is completed (cannot continue)
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     public override void Perform(Creature performer, Map map)
     {
         // consume the input items
+        foreach (ItemType inputItem in craftingInputItems)
+        {
+            bool itemFound = false;
 
+            // consume the first item of this type that the performer is holding
+            List<Placeable> heldItems = new(map.HeldPlaceablesOf(performer));
+            foreach (Placeable heldItem in heldItems)
+            {
+                if (heldItem is Item item && item.itemType.GetName() == inputItem.GetName())
+                {
+                    item.Consume();
+                    itemFound = true;
+                    break;
+                }
+            }
+
+            // if the performer doesn't have the item, consume the first item of this type that the workshop is holding
+            if (!itemFound)
+            {
+                List<Placeable> heldItemsWorkshop = new(map.HeldPlaceablesOf(Workshop()));
+                foreach (Placeable heldItem in heldItemsWorkshop)
+                {
+                    if (heldItem is Item item && item.itemType.GetName() == inputItem.GetName())
+                    {
+                        item.Consume();
+                        itemFound = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!itemFound)
+            {
+                throw new System.Exception("Crafting input item not found");
+            }
+        }
     }
 }
 
