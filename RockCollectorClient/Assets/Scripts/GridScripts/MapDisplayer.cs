@@ -42,7 +42,7 @@ public class MapDisplayer : MonoBehaviour
     void DisplayMap(Map map)
     {
         displayGrid.Clear();
-        foreach (Placeable placeable in map.AllPlaceables())
+        foreach (Placeable placeable in map.UnheldPlaceables())
         {
             Vector2Int position = map.PositionOf(placeable);
             displayGrid.DisplaySprite("Art/UI/button",

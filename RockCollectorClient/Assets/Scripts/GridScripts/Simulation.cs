@@ -7,12 +7,6 @@ using UnityEngine;
 
 public class Simulation 
 {
-    public static void MovePlaceable(Placeable placeable, Map map, Vector2Int destination)
-    {
-        map.Remove(placeable);
-        map.Add(placeable, destination);
-    }
-
     public static void AdvanceTick(Gamestate gamestate)
     {
         gamestate.maps.ForEach(map =>
@@ -33,6 +27,10 @@ public class Map
     // We keep them in sync in the Add and Remove methods
     private readonly Dictionary<Vector2Int, List<Placeable>> cells = new();
     private readonly Dictionary<Placeable, List<Vector2Int>> placeableToCells = new();
+    
+    private readonly Dictionary<Placeable, Placeable> heldToHolder = new();
+    private readonly Dictionary<Placeable, List<Placeable>> holderToHeld = new();
+    
     private readonly HashSet<Activity> activities = new();
 
     private int currentTick = 0;
@@ -40,6 +38,29 @@ public class Map
     public Map()
     {
 
+    }
+
+    public void PickUp(Placeable holder, Placeable held)
+    {
+        if (heldToHolder.ContainsKey(held))
+        {
+            throw new System.Exception("Placeable is already held");
+        }
+        if (PositionOf(holder) != PositionOf(held))
+        {
+            throw new System.Exception("Placeable is not at the same position as holder");
+        }
+
+        // Remove from cells dicts
+        Remove(held);
+
+        // Add to held dicts
+        heldToHolder[held] = holder;
+        if (!holderToHeld.ContainsKey(holder))
+        {
+            holderToHeld[holder] = new();
+        }
+        holderToHeld[holder].Add(held);
     }
 
     public void AddActivity(Activity activity)
@@ -83,13 +104,27 @@ public class Map
         placeable.OnAdd(this);
     }
 
-    public void Remove(Placeable placeable)
+    public void Remove(Placeable placeable, bool removeHeldItems = true)
     {
-        if (!placeableToCells.ContainsKey(placeable))
+        if (!placeableToCells.ContainsKey(placeable) && !heldToHolder.ContainsKey(placeable))
         {
             throw new System.Exception("Placeable does not exist in map");
         }
 
+        // If this is a held item, remove it from held dicts
+        if (heldToHolder.ContainsKey(placeable))
+        {
+            Placeable holder = heldToHolder[placeable];
+            holderToHeld[holder].Remove(placeable);
+            if (holderToHeld[holder].Count == 0)
+            {
+                holderToHeld.Remove(holder);
+            }
+            heldToHolder.Remove(placeable);
+            return;
+        }
+
+        // Remove unheld placeable
         foreach (Vector2Int cell in placeableToCells[placeable])
         {
             cells[cell].Remove(placeable);
@@ -99,6 +134,32 @@ public class Map
             }
         }
         placeableToCells.Remove(placeable);
+
+        // Remove unheld placeable's held placeables if removeHeldItems is true
+        if (removeHeldItems && holderToHeld.ContainsKey(placeable))
+        {
+            foreach (Placeable held in holderToHeld[placeable])
+            {
+                if (holderToHeld.ContainsKey(held))
+                {
+                    throw new System.Exception("Placeable is holding a placeable that is also holding");
+                }
+                // remove from heldToHolder
+                heldToHolder.Remove(held);
+            }
+            holderToHeld.Remove(placeable);
+        }
+    }
+
+    public void MovePlaceable(Placeable placeable, Vector2Int newPosition)
+    {
+        if (!placeableToCells.ContainsKey(placeable))
+        {
+            throw new System.Exception("Placeable does not exist in any cell (is it being held?)");
+        }
+
+        Remove(placeable, removeHeldItems: false);
+        Add(placeable, newPosition);
     }
 
     public List<Placeable> PlaceablesAt(Vector2Int position)
@@ -112,6 +173,15 @@ public class Map
 
     public Vector2Int PositionOf(Placeable placeable)
     {
+        if (heldToHolder.ContainsKey(placeable))
+        {
+            Placeable holder = heldToHolder[placeable];
+            if (heldToHolder.ContainsKey(holder))
+            {
+                throw new System.Exception("Placeable is held by a placeable that is also held");
+            }
+            return PositionOf(holder);
+        }
         if (!placeableToCells.ContainsKey(placeable))
         {
             throw new System.Exception("Placeable does not exist in map");
@@ -119,9 +189,14 @@ public class Map
         return placeableToCells[placeable][0];
     }
 
-    public Dictionary<Placeable, List<Vector2Int>>.KeyCollection AllPlaceables()
+    public Dictionary<Placeable, List<Vector2Int>>.KeyCollection UnheldPlaceables()
     {
         return placeableToCells.Keys;
+    }
+
+    public Dictionary<Placeable, Placeable>.KeyCollection HeldPlaceables()
+    {
+        return heldToHolder.Keys;
     }
 
     public HashSet<Activity> GetActivities()
@@ -300,6 +375,7 @@ public class CraftActivity : Activity
     public override void Perform(Creature performer, Map map)
     {
         // consume the input items
+
     }
 }
 
@@ -484,7 +560,7 @@ public class Creature : Destructable
             Vector2Int difference = DirectionToNextActivity(map);
             Vector2Int direction = new (Math.Sign(difference.x), Math.Sign(difference.y));
             Vector2Int newPosition = map.PositionOf(this) + direction;
-            Simulation.MovePlaceable(this, map, newPosition);
+            map.MovePlaceable(this, newPosition);
             cooldownTicksRemaining = MoveSpeed();
         }
         else if (nextActivity != null && !nextActivity.IsCompleted(map))
@@ -733,7 +809,7 @@ public class Craft : Goal
 
     public override int EvaluateMap(Map map)
     {
-       foreach (Placeable placeable in map.AllPlaceables())
+       foreach (Placeable placeable in map.UnheldPlaceables())
        {
            
        }

@@ -8,6 +8,7 @@ public class Tester : MonoBehaviour
     {
         AddAndRemovePlaceablesOfVariousSizes();
         LoadEntities();
+        HoldAndDropItems();
         SetInitialGoal();
         AddActivity();
         Debug.Log("Tests finished");
@@ -50,6 +51,36 @@ public class Tester : MonoBehaviour
         // check that the placeables were removed correctly
         Assert(map.CountAllPlaceables() == 0, "Placeables not removed correctly");
         Assert(map.CountOccupiedSquares() == 0, "Placeables not removed correctly");
+    }
+
+    void HoldAndDropItems()
+    {
+        Map map = new();
+        Creature testCreature = new("George", EntityManager.creatureTypes["Peasant"]);
+        map.Add(testCreature, new Vector2Int(0, 0));
+        Item item = new Item(EntityManager.itemTypes["Axe"]);
+        map.Add(item, new Vector2Int(0, 0));
+        Assert(map.UnheldPlaceables().Count == 2, "Items not added correctly");
+        Assert(map.HeldPlaceables().Count == 0, "Item not picked up correctly");
+        map.PickUp(testCreature, item);
+        Assert(map.UnheldPlaceables().Count == 1, "Item not picked up correctly");
+        Assert(map.HeldPlaceables().Count == 1, "Item not picked up correctly");
+        map.MovePlaceable(testCreature, new Vector2Int(5, 5));
+        Assert(map.PositionOf(testCreature) == new Vector2Int(5, 5), "Creature not moved correctly");
+        Assert(map.PositionOf(item) == new Vector2Int(5, 5), "Item not moved correctly");
+        Assert(map.UnheldPlaceables().Count == 1, "Item not picked up correctly");
+        Assert(map.HeldPlaceables().Count == 1, "Item not picked up correctly");
+        map.Remove(item);
+        Assert(map.HeldPlaceables().Count == 0, "Item not removed correctly");
+        Assert(map.UnheldPlaceables().Count == 1, "Item not removed correctly");
+        Item secondItem = new Item(EntityManager.itemTypes["Axe"]);
+        map.Add(secondItem, new Vector2Int(5, 5));
+        map.PickUp(testCreature, secondItem);
+        Assert(map.UnheldPlaceables().Count == 1, "Item not picked up correctly");
+        Assert(map.HeldPlaceables().Count == 1, "Item not picked up correctly");
+        map.Remove(testCreature);
+        Assert(map.UnheldPlaceables().Count == 0, "Item not removed correctly");
+        Assert(map.HeldPlaceables().Count == 0, "Item not removed correctly");
     }
 
     void LoadEntities()

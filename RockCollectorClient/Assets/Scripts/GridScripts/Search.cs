@@ -28,7 +28,7 @@ public static class Search
     {
         CraftModelMap model = new();
         // populate model with expectedItems, itemWeights, and demandedItems
-        foreach (Placeable placeable in map.AllPlaceables())
+        foreach (Placeable placeable in map.UnheldPlaceables())
         {
             // if this is an item, add it to expectedItems with a weight of 1
             if (placeable is Item item)
