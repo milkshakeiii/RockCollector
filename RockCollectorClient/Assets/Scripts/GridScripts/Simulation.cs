@@ -61,6 +61,35 @@ public class Map
         holderToHeld[holder].Add(held);
     }
 
+    public void Transfer(Placeable placeable, Placeable newHolder)
+    {
+        if (!heldToHolder.ContainsKey(placeable))
+        {
+            throw new System.Exception("Placeable is not held");
+        }
+        if (heldToHolder[placeable] == newHolder)
+        {
+            throw new System.Exception("Placeable is already held by new holder");
+        }
+
+        // Remove from held dicts
+        Placeable holder = heldToHolder[placeable];
+        heldToHolder.Remove(placeable);
+        holderToHeld[holder].Remove(placeable);
+        if (holderToHeld[holder].Count == 0)
+        {
+            holderToHeld.Remove(holder);
+        }
+
+        // Add to held dicts
+        heldToHolder[placeable] = newHolder;
+        if (!holderToHeld.ContainsKey(newHolder))
+        {
+            holderToHeld[newHolder] = new();
+        }
+        holderToHeld[newHolder].Add(placeable);
+    }
+
     public void Add(Placeable placeable, Vector2Int position)
     {
         if (placeableToCells.ContainsKey(placeable))
@@ -180,6 +209,20 @@ public class Map
     public Dictionary<Placeable, Placeable>.KeyCollection HeldPlaceables()
     {
         return heldToHolder.Keys;
+    }
+
+    public bool IsHeld(Placeable placeable)
+    {
+        return heldToHolder.ContainsKey(placeable);
+    }
+
+    public List<Placeable> HeldPlaceablesOf(Placeable holder)
+    {
+        if (!holderToHeld.ContainsKey(holder))
+        {
+            return new();
+        }
+        return holderToHeld[holder];
     }
 
     public HashSet<Activity> GetActivities(Creature forCreature)
@@ -386,24 +429,55 @@ public class CraftActivity : Activity
     }
 }
 
-public class FetchActivity : Activity
+public class PickUpActivity : Activity
 {
-    private bool completed = false;
-
-    public FetchActivity(ItemType itemType, Vector2Int position) : base(0,
-        new(), new(), new(), new(), null, position)
+    public PickUpActivity(Item item) : base(0,
+        new(), new(), new(), new(), item, Activity.NULL_POSITION)
     {
 
+    }
+
+    private Item Item()
+    {
+        return (Item)sourcePlaceable;
     }
 
     public override bool IsCompleted(Map map)
     {
-        return completed;
+        return Item().IsConsumed() || map.IsHeld(Item());
     }
 
     public override void Perform(Creature performer, Map map)
     {
+        map.PickUp(performer, Item());
+    }
+}
 
+public class DropOffActivity : Activity
+{
+    public DropOffActivity(Building building) : base(0,
+        new(), new(), new(), new(), building, Activity.NULL_POSITION)
+    {
+
+    }
+
+    private Building Building()
+    {
+        return (Building)sourcePlaceable;
+    }
+
+    public override bool IsCompleted(Map map)
+    {
+        return Building().IsDestroyed();
+    }
+
+    public override void Perform(Creature performer, Map map)
+    {
+        List<Placeable> heldItems = new(map.HeldPlaceablesOf(performer));
+        foreach (Placeable heldItem in heldItems)
+        {
+            map.Transfer(heldItem, Building());
+        }
     }
 }
 
