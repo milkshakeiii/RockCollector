@@ -9,7 +9,7 @@ public static class Search
 {
     public class CraftModelMap
     {
-        public int dangerRating = 0;
+        public int encounterLevel = 0;
         public int estimatedTicks = 0;
 
         public Dictionary<Vector2Int, List<ItemType>> expectedItems = new();

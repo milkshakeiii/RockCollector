@@ -1,5 +1,5 @@
 name:Tree
-harvestingType:chopping
+harvestingSkill:chopping
 harvestingRequired:10
 harvestingDifficulty:10
 producedItems:Log

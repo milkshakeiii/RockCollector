@@ -1,4 +1,4 @@
 name:Woodcutting
 cooldown: 10
-harvestingType:chopping
+harvestingSkill:chopping
 harvestingAmount:1

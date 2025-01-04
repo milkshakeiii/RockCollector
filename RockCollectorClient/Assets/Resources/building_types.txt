@@ -6,3 +6,4 @@ size:6
 maxHealth:100
 requestableItemTypes:Log
 requestableItemCounts:5
+craftedItemTypes:Axe

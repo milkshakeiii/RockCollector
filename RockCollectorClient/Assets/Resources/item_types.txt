@@ -1,7 +1,8 @@
 name:Axe
-harvestingTypes:chopping
+harvestingSkill:chopping
 harvestingAmount:1
 craftingInputs:Log
+craftingSkill:woodcutting
 size:-6
 
 name:Log

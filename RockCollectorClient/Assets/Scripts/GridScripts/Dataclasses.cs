@@ -288,9 +288,9 @@ public class TypeAbility : Entity
         // in ticks
         return EntityManager.GetIntAttribute(attributes, "harvestingAmount");
     }
-    public string GetHarvestingType()
+    public string GetHarvestingSkill()
     {
-        return EntityManager.GetStringAttribute(attributes, "harvestingType");
+        return EntityManager.GetStringAttribute(attributes, "harvestingSkill");
     }
 }
 
@@ -388,9 +388,9 @@ public class PropType : Entity
     {
         return EntityManager.GetIntAttribute(attributes, "size");
     }
-    public string GetHarvestingType()
+    public string GetHarvestingSkill()
     {
-        return EntityManager.GetStringAttribute(attributes, "harvestingType");
+        return EntityManager.GetStringAttribute(attributes, "harvestingSkill");
     }
     public int GetHarvestingRequired()
     {
@@ -414,7 +414,7 @@ public class ItemType : Entity
     }
     public List<string> GetHarvestingTypes()
     {
-        return EntityManager.GetStringListAttribute(attributes, "harvestingTypes", new List<string>());
+        return EntityManager.GetStringListAttribute(attributes, "harvestingSkill", new List<string>());
     }
     public int GetHarvestingAmount()
     {
@@ -459,5 +459,9 @@ public class BuildingType : Entity
     public List<int> GetRequestableItemCounts()
     {
         return EntityManager.GetIntListAttribute(attributes, "requestableItemCounts", new List<int>());
+    }
+    public List<ItemType> GetCraftedItemTypes()
+    {
+        return EntityManager.GetItemListAttribute(attributes, "craftedItemTypes", new List<ItemType>());
     }
 }

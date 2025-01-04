@@ -233,14 +233,22 @@ public class Map
         {
             if (placeable is Creature creature && creature.teamNumber != forCreature.teamNumber)
             {
+                // creatures can be hunted
                 activities.Add(new HuntActivity(creature));
             }
             if (placeable is Building building)
             {
-                
+                // buildings can be dropped off at
+                activities.Add(new DropOffActivity(building));
+                // and also crafted at
+                foreach (ItemType itemType in building.buildingType.GetCraftedItemTypes())
+                {
+                    activities.Add(new CraftActivity(itemType, building));
+                }
             }
             if (placeable is Prop prop)
             {
+                // props can be harvested
                 List<ItemType> droppedItems = prop.propType.GetProducedItems();
                 if (droppedItems.Count == 0)
                 {
@@ -248,6 +256,11 @@ public class Map
                 }
                 HarvestActivity harvestActivity = new(prop);
                 activities.Add(harvestActivity);
+            }
+            if (placeable is Item item)
+            {
+                // items can be picked up
+                activities.Add(new PickUpActivity(item));
             }
         }
         
@@ -597,12 +610,12 @@ public class Creature : Destructable
 
     public void HarvestProp(Prop prop, Map map)
     {
-        string neededSkill = prop.propType.GetHarvestingType();
+        string neededSkill = prop.propType.GetHarvestingSkill();
         TypeAbility bestAbility = null;
         int bestAmount = 0;
         foreach (TypeAbility ability in abilities)
         {
-            if (ability.GetHarvestingType() == neededSkill)
+            if (ability.GetHarvestingSkill() == neededSkill)
             {
                 if (ability.GetHarvestingAmount() > bestAmount)
                 {
