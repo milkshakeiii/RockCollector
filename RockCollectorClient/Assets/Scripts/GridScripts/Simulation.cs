@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using UnityEngine;
-using static UnityEditor.MaterialProperty;
 
 public class Simulation 
 {
@@ -383,6 +382,27 @@ public class CraftActivity : Activity
     public override void Perform(Creature performer, Map map)
     {
         // consume the input items
+
+    }
+}
+
+public class FetchActivity : Activity
+{
+    private bool completed = false;
+
+    public FetchActivity(ItemType itemType, Vector2Int position) : base(0,
+        new(), new(), new(), new(), null, position)
+    {
+
+    }
+
+    public override bool IsCompleted(Map map)
+    {
+        return completed;
+    }
+
+    public override void Perform(Creature performer, Map map)
+    {
 
     }
 }
