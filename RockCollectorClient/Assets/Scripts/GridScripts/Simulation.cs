@@ -368,7 +368,9 @@ public abstract class Activity
 
     public abstract void Perform(Creature performer, Map map);
 
-    // mutatea the model according to the activity performed on it
+    public abstract bool ValidOnModel(Search.CraftModelMap model, Creature performer, Map map);
+
+    // mutate the model according to the activity performed on it
     public abstract Search.CraftModelMap PerformOnModel(Search.CraftModelMap model, Creature performer, Map map);
 }
 
@@ -393,6 +395,16 @@ public class HarvestActivity : Activity
     public override void Perform(Creature performer, Map map)
     {
         performer.HarvestProp(SourceProp(), map);
+    }
+
+    public override bool ValidOnModel(Search.CraftModelMap model, Creature performer, Map map)
+    {
+        (TypeAbility bestAbility, int bestAmount) = performer.BestHarvestingAmountAndAbility(SourceProp().propType.GetHarvestingSkill());
+        if (bestAbility == null)
+        {
+            return false;
+        }
+        return true;
     }
 
     public override Search.CraftModelMap PerformOnModel(Search.CraftModelMap model, Creature performer, Map map)
