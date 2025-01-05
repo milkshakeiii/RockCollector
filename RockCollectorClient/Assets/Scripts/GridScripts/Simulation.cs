@@ -650,6 +650,7 @@ public class Creature : Destructable
         int ticksPerSquare = MoveSpeed();
         int estimatedTicks = distance * ticksPerSquare;
         map.MovePlaceable(this, activity.GetLocation(map) - (Vector2Int.one * activity.ProximityRequirement()));
+        return estimatedTicks;
     }
 }
 

@@ -61,5 +61,3 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
-RockCollectorClient/Logs/AssetImportWorker0.log
-RockCollectorClient/Logs/AssetImportWorker1.log
