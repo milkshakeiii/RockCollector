@@ -306,7 +306,8 @@ public class Map
 
     public void AdvanceTick()
     {
-        List<Placeable> placeables = new(placeableToCells.Keys);
+        List<Placeable> placeables = new(HeldPlaceables());
+        placeables.AddRange(UnheldPlaceables());
 
         foreach (Placeable placeable in placeables)
         {

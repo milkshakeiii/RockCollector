@@ -191,6 +191,7 @@ public class CraftActivity : Activity
                 {
                     if (heldItem is Item item && item.itemType.GetName() == inputItem.GetName())
                     {
+                        Debug.Log("Consuming item " + item.itemType.GetName());
                         item.Consume();
                         itemFound = true;
                         break;
