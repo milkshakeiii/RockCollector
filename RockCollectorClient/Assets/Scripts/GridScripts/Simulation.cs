@@ -566,6 +566,10 @@ public class Creature : Destructable
         nextActivity ??= pursuingGoal.GetNextActivity(map, this);
     }
 
+    /// <summary>
+    /// Ticks per square
+    /// </summary>
+    /// <returns></returns>
     public int MoveSpeed()
     {
         return 10;
@@ -642,8 +646,10 @@ public class Creature : Destructable
 
     public int MoveAndEstimate(Activity activity, Map map)
     {
-        // we will move to a square that meets the proximity requirement of the activity
-        return 0;
+        int distance = activity.DistanceTo(this, map);
+        int ticksPerSquare = MoveSpeed();
+        int estimatedTicks = distance * ticksPerSquare;
+        map.MovePlaceable(this, activity.GetLocation(map) - (Vector2Int.one * activity.ProximityRequirement()));
     }
 }
 
