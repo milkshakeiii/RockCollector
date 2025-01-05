@@ -12,6 +12,8 @@ public static class Search
         public int encounterLevel = 0;
         public int estimatedTicks = 0;
 
+        public List<ItemType> heldItems = new();
+
         public Dictionary<Vector2Int, List<ItemType>> expectedItems = new();
         // because items dropped from props and monsters are not guaranteed, and crafting is not guaranteed to succeed,
         // itemWeights contains the probability that each expectedItem will actually exist at the location.
@@ -22,6 +24,26 @@ public static class Search
         public Dictionary<Vector2Int, List<ItemType>> demandedItems = new();
 
         public List<Activity> availableActions = new();
+
+        public void UpdateAvailableActions(Creature actor, Map sourceMap)
+        {
+
+        }
+
+        public CraftModelMap Copy()
+        {
+            CraftModelMap copy = new()
+            {
+                encounterLevel = encounterLevel,
+                estimatedTicks = estimatedTicks,
+                heldItems = new List<ItemType>(heldItems),
+                expectedItems = new Dictionary<Vector2Int, List<ItemType>>(expectedItems),
+                itemWeights = new Dictionary<Vector2Int, List<float>>(itemWeights),
+                demandedItems = new Dictionary<Vector2Int, List<ItemType>>(demandedItems),
+                availableActions = new List<Activity>(availableActions)
+            };
+            return copy;
+        }
     }
 
     public static Activity CraftSearch(Map map, Creature creature)
@@ -64,8 +86,55 @@ public static class Search
             }
         }
 
+        List<Activity> firstPossibleActivities = map.GetActivities(creature);
 
 
+        return CraftBFS(map, creature, model, firstPossibleActivities, 10);
+    }
+
+    public class CraftBFSNode
+    {
+        public CraftModelMap model;
+        public List<Activity> possibleActivities;
+        public List<Activity> activitiesTaken = new();
+        
+        public int depth = 0;
+
+        // the value of a node is satisfiedDemandsValue over ticksTaken
+        public int satisfiedDemandsValue = 0;
+        public int ticksTaken = 1;
+
+        public CraftBFSNode Copy()
+        {
+            CraftBFSNode copy = new()
+            {
+                model = model,
+                possibleActivities = new List<Activity>(possibleActivities),
+                activitiesTaken = new List<Activity>(activitiesTaken),
+                depth = depth,
+                satisfiedDemandsValue = satisfiedDemandsValue,
+                ticksTaken = ticksTaken
+            };
+            return copy;
+        }
+    }
+
+    public static Activity CraftBFS(Map map, Creature creature, CraftModelMap model, List<Activity> firstPossibleActivities, int maxDepth)
+    {
+        Queue<CraftBFSNode> queue = new();
+        CraftBFSNode firstNode = new CraftBFSNode();
+        firstNode.model = model;
+        firstNode.possibleActivities = firstPossibleActivities;
+        queue.Enqueue(firstNode);
+
+        CraftBFSNode bestNode = null;
+        CraftBFSNode currentNode = null;
+        while ((currentNode == null || currentNode.depth < maxDepth) && queue.Count > 0)
+        {
+            currentNode = queue.Dequeue();
+
+        }
+        
         return null;
     }
 }

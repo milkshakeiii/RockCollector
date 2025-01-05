@@ -225,9 +225,9 @@ public class Map
         return holderToHeld[holder];
     }
 
-    public HashSet<Activity> GetActivities(Creature forCreature)
+    public List<Activity> GetActivities(Creature forCreature)
     {
-        HashSet<Activity> activities = new ();
+        List<Activity> activities = new ();
         
         foreach (Placeable placeable in UnheldPlaceables())
         {
@@ -263,6 +263,8 @@ public class Map
                 activities.Add(new PickUpActivity(item));
             }
         }
+
+        // TODO: Filter activities. Only possible activities and no redundant activities should be returned.
         
         return activities;
     }
@@ -365,6 +367,9 @@ public abstract class Activity
     public abstract bool IsCompleted(Map map);
 
     public abstract void Perform(Creature performer, Map map);
+
+    // mutatea the model according to the activity performed on it
+    public abstract Search.CraftModelMap PerformOnModel(Search.CraftModelMap model, Creature performer, Map map);
 }
 
 public class HarvestActivity : Activity
@@ -389,6 +394,40 @@ public class HarvestActivity : Activity
     {
         performer.HarvestProp(SourceProp(), map);
     }
+
+    public override Search.CraftModelMap PerformOnModel(Search.CraftModelMap model, Creature performer, Map map)
+    {
+        (TypeAbility bestAbility, int bestAmount) = performer.BestHarvestingAmountAndAbility(SourceProp().propType.GetHarvestingSkill());
+        if (bestAbility == null)
+        {
+            throw new System.Exception("No ability found to harvest prop");
+        }
+        int ticksTaken = bestAbility.GetCooldown() * (int)Math.Ceiling((float)SourceProp().propType.GetHarvestingRequired() / bestAmount);
+        model.estimatedTicks += ticksTaken;
+        
+        List<ItemType> producedItems = SourceProp().propType.GetProducedItems();
+        List<int> producedItemsProbabilities = SourceProp().propType.GetProducedItemsProbabilities();
+        int producedItemsProbabilitiesSum = 0;
+        foreach (int probability in producedItemsProbabilities)
+        {
+            producedItemsProbabilitiesSum += probability;
+        }
+        Vector2Int propLocation = GetLocation(map);
+        for (int i = 0; i < producedItems.Count; i++)
+        {
+            ItemType producedItem = producedItems[i];
+            int probability = producedItemsProbabilities[i];
+            if (!model.expectedItems.ContainsKey(propLocation))
+            {
+                model.expectedItems[propLocation] = new List<ItemType>();
+                model.itemWeights[propLocation] = new List<float>();
+            }
+            model.expectedItems[propLocation].Add(producedItem);
+            model.itemWeights[propLocation].Add((float)probability / producedItemsProbabilitiesSum);
+        }
+
+        return model;
+    }
 }
 
 public class HuntActivity : Activity
@@ -412,6 +451,35 @@ public class HuntActivity : Activity
     public override void Perform(Creature performer, Map map)
     {
         // TODO: Implement
+    }
+
+    public override Search.CraftModelMap PerformOnModel(Search.CraftModelMap model, Creature performer, Map map)
+    {
+        model.encounterLevel = Math.Max(encounterLevel, model.encounterLevel);
+        model.estimatedTicks += 100; // TODO: Come up with a more sophisticated estimate?
+
+        List<ItemType> droppedItems = SourceCreature().GetCreatureType().GetDroppedItems();
+        List<int> droppedItemsProbabilities = SourceCreature().GetCreatureType().GetDroppedItemsProbabilities();
+        int droppedItemsProbabilitiesSum = 0;
+        foreach (int probability in droppedItemsProbabilities)
+        {
+            droppedItemsProbabilitiesSum += probability;
+        }
+        Vector2Int creatureLocation = GetLocation(map);
+        for (int i = 0; i < droppedItems.Count; i++)
+        {
+            ItemType droppedItem = droppedItems[i];
+            int probability = droppedItemsProbabilities[i];
+            if (!model.expectedItems.ContainsKey(creatureLocation))
+            {
+                model.expectedItems[creatureLocation] = new List<ItemType>();
+                model.itemWeights[creatureLocation] = new List<float>();
+            }
+            model.expectedItems[creatureLocation].Add(droppedItem);
+            model.itemWeights[creatureLocation].Add((float)probability / droppedItemsProbabilitiesSum);
+        }
+
+        return model;
     }
 }
 
@@ -516,6 +584,47 @@ public class CraftActivity : Activity
                 throw new System.Exception("Crafting input item not found");
             }
         }
+    }
+
+    public override bool ValidOnModel(Search.CraftModelMap model, Creature performer, Map map)
+    {
+        ItemType producedItemType = craftingOutputItems[0];
+        List<ItemType> craftingInputs = producedItemType.GetCraftingInputs();
+        foreach (ItemType inputItem in craftingInputs)
+        {
+            bool itemFound = false;
+            foreach (ItemType heldItem in model.heldItems)
+            {
+                if (heldItem.GetName() == inputItem.GetName())
+                {
+                    itemFound = true;
+                    model.heldItems.Remove(heldItem);
+                    break;
+                }
+            }
+            if (!itemFound)
+            {
+                foreach (ItemType expectedItem in model.expectedItems[GetLocation(map)])
+                {
+                    if (expectedItem.GetName() == inputItem.GetName())
+                    {
+                        itemFound = true;
+                        model.expectedItems[GetLocation(map)].Remove(expectedItem);
+                        break;
+                    }
+                }
+            }
+            if (!itemFound)
+            {
+                return false; // Crafting cannot be performed
+            }
+        }
+        return true;
+    }
+
+    public override Search.CraftModelMap PerformOnModel(Search.CraftModelMap model, Creature performer, Map map)
+    {
+
     }
 }
 
@@ -688,11 +797,22 @@ public class Creature : Destructable
     public void HarvestProp(Prop prop, Map map)
     {
         string neededSkill = prop.propType.GetHarvestingSkill();
+        (TypeAbility bestAbility, int bestAmount) = BestHarvestingAmountAndAbility(neededSkill);
+        if (bestAbility == null)
+        {
+            throw new System.Exception("No ability found to harvest prop");
+        }
+        prop.TakeHarvest(bestAmount);
+        cooldownTicksRemaining = bestAbility.GetCooldown();
+    }
+
+    public (TypeAbility, int) BestHarvestingAmountAndAbility(string skill)
+    {
         TypeAbility bestAbility = null;
         int bestAmount = 0;
         foreach (TypeAbility ability in abilities)
         {
-            if (ability.GetHarvestingSkill() == neededSkill)
+            if (ability.GetHarvestingSkill() == skill)
             {
                 if (ability.GetHarvestingAmount() > bestAmount)
                 {
@@ -701,12 +821,7 @@ public class Creature : Destructable
                 }
             }
         }
-        if (bestAbility == null)
-        {
-            throw new System.Exception("No ability found to harvest prop");
-        }
-        prop.TakeHarvest(bestAmount);
-        cooldownTicksRemaining = bestAbility.GetCooldown();
+        return (bestAbility, bestAmount);
     }
 
     public CreatureType GetCreatureType()
