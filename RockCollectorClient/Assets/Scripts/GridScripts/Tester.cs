@@ -7,6 +7,7 @@ public class Tester : MonoBehaviour
     void Awake()
     {
         AddAndRemovePlaceablesOfVariousSizes();
+        DistancesBetweenPlaceablesOfVariousSizes();
         LoadEntities();
         HoldAndDropItems();
         SetInitialGoal();
@@ -51,6 +52,33 @@ public class Tester : MonoBehaviour
         // check that the placeables were removed correctly
         Assert(map.CountAllPlaceables() == 0, "Placeables not removed correctly");
         Assert(map.CountOccupiedSquares() == 0, "Placeables not removed correctly");
+    }
+
+    void DistancesBetweenPlaceablesOfVariousSizes()
+    {
+        Map map = new();
+        Placeable placeable1 = new (1);
+        Placeable placeable2 = new (0);
+        Placeable placeable3 = new (2);
+        Placeable placeable4 = new (-2);
+        Placeable placeable5 = new (3);
+        Placeable placeable6 = new (1);
+        map.Add(placeable1, new Vector2Int(10, 10));
+        map.Add(placeable2, new Vector2Int(5, 5));
+        map.Add(placeable3, new Vector2Int(10, 10));
+        map.Add(placeable4, new Vector2Int(12, 12));
+        map.Add(placeable5, new Vector2Int(10, 15));
+        map.Add(placeable6, new Vector2Int(11, 18));
+        Assert(map.DistanceBetween(placeable1, placeable2) == 5, "Distance between placeables 1 and 2");
+        Assert(map.DistanceBetween(placeable1, placeable3) == 0, "Distance between placeables 1 and 3");
+        Assert(map.DistanceBetween(placeable2, placeable3) == 5, "Distance between placeables 2 and 3");
+        Assert(map.DistanceBetween(placeable3, placeable4) == 1, "Distance between placeables 1 and 4");
+        Assert(map.DistanceBetween(placeable3, placeable5) == 4, "Distance between placeables 3 and 5");
+        Assert(map.DistanceBetween(placeable4, placeable5) == 3, "Distance between placeables 4 and 5");
+        Assert(map.DistanceBetween(placeable5, placeable6) == 1, "Distance between placeables 5 and 6");
+        
+        Assert(map.DistanceTo(new Vector2Int(10, 10), placeable1) == 0, "Distance to placeable 1");
+        Assert(map.DistanceTo(new Vector2Int(15, 15), placeable3) == 4, "Distance to placeable 2");
     }
 
     void HoldAndDropItems()

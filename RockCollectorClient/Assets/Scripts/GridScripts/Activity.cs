@@ -49,9 +49,29 @@ public abstract class Activity
         throw new Exception("Unable to determine location of activity");
     }
 
+    public virtual int ProximityRequirement()
+    {
+        return 1;
+    }
+
     public abstract bool IsCompletedOrImpossible(Map map, Creature performer);
 
     public abstract void Perform(Creature performer, Map map);
+
+    internal int DistanceTo(Creature creature, Map map)
+    {
+        if (sourcePlaceable != null)
+        {
+            return map.DistanceBetween(creature, sourcePlaceable);
+        }
+        if (position != NULL_POSITION)
+        {
+            return map.DistanceTo(position, creature);
+        }
+        throw new Exception("Unable to determine location of activity");
+    }
+
+    //internal abstract int EffectAndEstimate(Creature creature, Map map);
 }
 
 public class HarvestActivity : Activity
@@ -113,6 +133,11 @@ public class CraftActivity : Activity
     private Building Workshop()
     {
         return (Building)sourcePlaceable;
+    }
+
+    public override int ProximityRequirement()
+    {
+        return 0;
     }
 
     public override bool IsCompletedOrImpossible(Map map, Creature performer)

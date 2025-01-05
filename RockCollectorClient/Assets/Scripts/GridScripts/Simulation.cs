@@ -56,9 +56,8 @@ public class Map
         {
             throw new System.Exception("Placeable is already held");
         }
-        int xDiff = PositionOf(holder).x - PositionOf(held).x;
-        int yDiff = PositionOf(holder).y - PositionOf(held).y;
-        if (Math.Abs(xDiff) > 1 || Math.Abs(yDiff) > 1)
+        int distance = DistanceBetween(holder, held);
+        if (distance > 1)
         {
             throw new System.Exception("Placeable is not adjacent to holder");
         }
@@ -197,6 +196,7 @@ public class Map
         return cells[position];
     }
 
+    // Returns the position of the minimum (bottom-leftmost) cell occupied by the placeable
     public Vector2Int PositionOf(Placeable placeable)
     {
         if (heldToHolder.ContainsKey(placeable))
@@ -213,6 +213,63 @@ public class Map
             throw new System.Exception("Placeable does not exist in map");
         }
         return placeableToCells[placeable][0];
+    }
+
+    public RectInt ExtentsOf(Placeable placeable)
+    {
+        Vector2Int position = PositionOf(placeable);
+        return new RectInt(position.x, position.y, placeable.SquaresMinimumOne()-1, placeable.SquaresMinimumOne()-1);
+    }
+
+    public int DistanceBetween(Placeable placeable1, Placeable placeable2)
+    {
+        RectInt extents1 = ExtentsOf(placeable1);
+        RectInt extents2 = ExtentsOf(placeable2);
+        // find the closest x distance by subtracting the rightmost left edge from the leftmost right
+        int xDistance = 0;
+        if (extents1.xMax < extents2.xMin)
+        {
+            xDistance = extents2.xMin - extents1.xMax;
+        }
+        else if (extents2.xMax < extents1.xMin)
+        {
+            xDistance = extents1.xMin - extents2.xMax;
+        }
+        // find the closest y distance by subtracting the topmost bottom edge from the bottommost top
+        int yDistance = 0;
+        if (extents1.yMax < extents2.yMin)
+        {
+            yDistance = extents2.yMin - extents1.yMax;
+        }
+        else if (extents2.yMax < extents1.yMin)
+        {
+            yDistance = extents1.yMin - extents2.yMax;
+        }
+        return Math.Max(xDistance, yDistance);
+    }
+
+    public int DistanceTo(Vector2Int position, Placeable forPlaceable)
+    {
+        RectInt placeableRect = ExtentsOf(forPlaceable);
+        int xDistance = 0;
+        if (position.x < placeableRect.xMin)
+        {
+            xDistance = placeableRect.xMin - position.x;
+        }
+        else if (position.x > placeableRect.xMax)
+        {
+            xDistance = position.x - placeableRect.xMax;
+        }
+        int yDistance = 0;
+        if (position.y < placeableRect.yMin)
+        {
+            yDistance = placeableRect.yMin - position.y;
+        }
+        else if (position.y > placeableRect.yMax)
+        {
+            yDistance = position.y - placeableRect.yMax;
+        }
+        return Math.Max(xDistance, yDistance);
     }
 
     public Dictionary<Placeable, List<Vector2Int>>.KeyCollection UnheldPlaceables()
@@ -532,7 +589,7 @@ public class Creature : Destructable
             nextActivity = null;
             return;
         }
-        else if (DistanceToNextActivity(map) > 1)
+        else if (nextActivity.DistanceTo(this, map) > nextActivity.ProximityRequirement())
         {
             Vector2Int difference = DirectionToNextActivity(map);
             Vector2Int direction = new (Math.Sign(difference.x), Math.Sign(difference.y));
@@ -552,13 +609,6 @@ public class Creature : Destructable
             }
             return;
         }
-    }
-
-    private int DistanceToNextActivity(Map map)
-    {
-        Vector2Int location = nextActivity.GetLocation(map);
-        Vector2Int currentPosition = map.PositionOf(this);
-        return Math.Min(Math.Abs(location.x - currentPosition.x), Math.Abs(location.y - currentPosition.y));
     }
 
     private Vector2Int DirectionToNextActivity(Map map)
@@ -588,6 +638,12 @@ public class Creature : Destructable
     public override float HealthFraction()
     {
         return (float)(GetMaxHealth() - damageTaken) / GetMaxHealth();
+    }
+
+    public int MoveAndEstimate(Activity activity, Map map)
+    {
+        // we will move to a square that meets the proximity requirement of the activity
+        return 0;
     }
 }
 
@@ -800,6 +856,6 @@ public class Craft : Goal
         {
             return null;
         }
-        return Search.CraftSearch(map, creature);
+        return Search.GoalSearch(map, creature);
     }
 }
