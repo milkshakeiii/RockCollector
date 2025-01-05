@@ -241,23 +241,23 @@ public class Map
 
     public List<Activity> GetActivities(Creature forCreature)
     {
-        List<Activity> activities = new ();
-        
+        List<Activity> candidateActivities = new();
+
         foreach (Placeable placeable in UnheldPlaceables())
         {
             if (placeable is Creature creature && creature.teamNumber != forCreature.teamNumber)
             {
                 // creatures can be hunted
-                activities.Add(new HuntActivity(creature));
+                candidateActivities.Add(new HuntActivity(creature));
             }
             if (placeable is Building building)
             {
                 // buildings can be dropped off at
-                activities.Add(new DropOffActivity(building));
+                candidateActivities.Add(new DropOffActivity(building));
                 // and also crafted at
                 foreach (ItemType itemType in building.buildingType.GetCraftedItemTypes())
                 {
-                    activities.Add(new CraftActivity(itemType, building));
+                    candidateActivities.Add(new CraftActivity(itemType, building));
                 }
             }
             if (placeable is Prop prop)
@@ -269,17 +269,23 @@ public class Map
                     continue;
                 }
                 HarvestActivity harvestActivity = new(prop);
-                activities.Add(harvestActivity);
+                candidateActivities.Add(harvestActivity);
             }
             if (placeable is Item item)
             {
                 // items can be picked up
-                activities.Add(new PickUpActivity(item));
+                candidateActivities.Add(new PickUpActivity(item));
             }
         }
 
-        // TODO: Filter activities. Only possible activities and no redundant activities should be returned.
-        
+        List<Activity> activities = new();
+        foreach (Activity activity in candidateActivities)
+        {
+            if (!activity.IsCompletedOrImpossible(this, forCreature))
+            {
+                activities.Add(activity);
+            }
+        }
         return activities;
     }
 
@@ -378,7 +384,7 @@ public abstract class Activity
         throw new Exception("Unable to determine location of activity");
     }
 
-    public abstract bool IsCompleted(Map map);
+    public abstract bool IsCompletedOrImpossible(Map map, Creature performer);
 
     public abstract void Perform(Creature performer, Map map);
 }
@@ -396,7 +402,7 @@ public class HarvestActivity : Activity
         return (Prop)sourcePlaceable;
     }
 
-    public override bool IsCompleted(Map map)
+    public override bool IsCompletedOrImpossible(Map map, Creature performer)
     {
         return SourceProp().IsDestroyed();
     }
@@ -420,7 +426,7 @@ public class HuntActivity : Activity
         return (Creature)sourcePlaceable;
     }
 
-    public override bool IsCompleted(Map map)
+    public override bool IsCompletedOrImpossible(Map map, Creature performer)
     {
         return SourceCreature().IsDestroyed();
     }
@@ -444,7 +450,7 @@ public class CraftActivity : Activity
         return (Building)sourcePlaceable;
     }
 
-    public override bool IsCompleted(Map map)
+    public override bool IsCompletedOrImpossible(Map map, Creature performer)
     {
         if (Workshop().IsDestroyed())
         {
@@ -548,7 +554,7 @@ public class PickUpActivity : Activity
         return (Item)sourcePlaceable;
     }
 
-    public override bool IsCompleted(Map map)
+    public override bool IsCompletedOrImpossible(Map map, Creature performer)
     {
         return Item().IsConsumed() || map.IsHeld(Item());
     }
@@ -572,9 +578,9 @@ public class DropOffActivity : Activity
         return (Building)sourcePlaceable;
     }
 
-    public override bool IsCompleted(Map map)
+    public override bool IsCompletedOrImpossible(Map map, Creature performer)
     {
-        return Building().IsDestroyed();
+        return Building().IsDestroyed() || map.HeldPlaceablesOf(performer).Count == 0;
     }
 
     public override void Perform(Creature performer, Map map)
@@ -771,7 +777,7 @@ public class Creature : Destructable
         {
             return;
         }
-        else if (nextActivity.IsCompleted(map))
+        else if (nextActivity.IsCompletedOrImpossible(map, this))
         {
             // Something else completed the activity this frame
             // or there is no activity assigned
@@ -791,7 +797,7 @@ public class Creature : Destructable
         {
             Debug.Log(nextActivity);
             nextActivity.Perform(this, map);
-            if (nextActivity.IsCompleted(map))
+            if (nextActivity.IsCompletedOrImpossible(map, this))
             {
                 Debug.Log("Activity completed");
                 nextActivity = null; // Otherwise, there would be a "stunned" frame
