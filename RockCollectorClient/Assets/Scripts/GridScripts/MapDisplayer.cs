@@ -22,9 +22,9 @@ public class MapDisplayer : MonoBehaviour
         map.Add(testCreature, new Vector2Int(0, 0));
         Building testBuilding = new (EntityManager.buildingTypes["Farm"]);
         testBuilding.TakeDamage(50);
-        map.Add(testBuilding, new Vector2Int(5, 5));
+        map.Add(testBuilding, new Vector2Int(-10, -10));
         Prop testProp = new (EntityManager.propTypes["Tree"]);
-        map.Add(testProp, new Vector2Int(-5, -5));
+        map.Add(testProp, new Vector2Int(5, 5));
         DisplayMap(map);
     }
 

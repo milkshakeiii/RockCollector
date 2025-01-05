@@ -3,7 +3,7 @@
 /RockCollectorClient/[Oo]bj/
 /RockCollectorClient/[Bb]uild/
 /RockCollectorClient/[Bb]uilds/
-/RockCollectorClient/Logs/AssetImportWorker*
+/RockCollectorClient/[Ll]ogs/
 /RockCollectorClient/Assets/AssetStoreTools*
 
 # Visual Studio 2015 cache directory
