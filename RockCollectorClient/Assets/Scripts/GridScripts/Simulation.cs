@@ -25,11 +25,11 @@ public class Map
 {
     // We keep both a dictionary of cells to placeables and a dictionary of placeables to cells
     // We keep them in sync in the Add and Remove methods
-    private readonly Dictionary<Vector2Int, List<Placeable>> cells = new();
-    private readonly Dictionary<Placeable, List<Vector2Int>> placeableToCells = new();
+    private Dictionary<Vector2Int, List<Placeable>> cells = new();
+    private Dictionary<Placeable, List<Vector2Int>> placeableToCells = new();
     
-    private readonly Dictionary<Placeable, Placeable> heldToHolder = new();
-    private readonly Dictionary<Placeable, List<Placeable>> holderToHeld = new();
+    private Dictionary<Placeable, Placeable> heldToHolder = new();
+    private Dictionary<Placeable, List<Placeable>> holderToHeld = new();
 
     private int currentTick = 0;
 
@@ -38,15 +38,29 @@ public class Map
 
     }
 
+    public Map ShallowCopy()
+    {
+        return new()
+        {
+            cells = new Dictionary<Vector2Int, List<Placeable>>(cells),
+            placeableToCells = new Dictionary<Placeable, List<Vector2Int>>(placeableToCells),
+            heldToHolder = new Dictionary<Placeable, Placeable>(heldToHolder),
+            holderToHeld = new Dictionary<Placeable, List<Placeable>>(holderToHeld),
+            currentTick = currentTick
+        };
+    }
+
     public void PickUp(Placeable holder, Placeable held)
     {
         if (heldToHolder.ContainsKey(held))
         {
             throw new System.Exception("Placeable is already held");
         }
-        if (PositionOf(holder) != PositionOf(held))
+        int xDiff = PositionOf(holder).x - PositionOf(held).x;
+        int yDiff = PositionOf(holder).y - PositionOf(held).y;
+        if (Math.Abs(xDiff) > 1 || Math.Abs(yDiff) > 1)
         {
-            throw new System.Exception("Placeable is not at the same position as holder");
+            throw new System.Exception("Placeable is not adjacent to holder");
         }
 
         // Remove from cells dicts
@@ -775,6 +789,7 @@ public class Creature : Destructable
         }
         else // Perform the activity
         {
+            Debug.Log(nextActivity);
             nextActivity.Perform(this, map);
             if (nextActivity.IsCompleted(map))
             {
@@ -942,7 +957,12 @@ public class Prop : Destructable
 
     public override void OnDestroyed(Map map)
     {
-        
+        if (HarvestedFraction() >= 1)
+        {
+            List<ItemType> droppedItems = propType.GetProducedItems();
+            ItemType droppedItem = droppedItems[0]; // TODO: Factor in difficulty and possibly limit to one produced item type
+            map.Add(new Item(droppedItem), map.PositionOf(this));
+        }
     }
 
     public void TakeHarvest(int amount)
