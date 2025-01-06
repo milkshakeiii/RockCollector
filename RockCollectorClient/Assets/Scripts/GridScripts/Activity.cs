@@ -49,7 +49,7 @@ public abstract class Activity
         throw new Exception("Unable to determine location of activity");
     }
 
-    public virtual int ProximityRequirement()
+    public virtual int ProximityRequirement(Creature forCreature)
     {
         return 1;
     }
@@ -71,7 +71,13 @@ public abstract class Activity
         throw new Exception("Unable to determine location of activity");
     }
 
-    //internal abstract int EffectAndEstimate(Creature creature, Map map);
+    /// <summary>
+    /// Mutate map (probabilistic version). Return the estimate for the number of ticks.
+    /// </summary>
+    /// <param name="creature"></param>
+    /// <param name="map"></param>
+    /// <returns></returns>
+    public abstract int EffectAndEstimate(Creature creature, Map map);
 }
 
 public class HarvestActivity : Activity
@@ -95,6 +101,20 @@ public class HarvestActivity : Activity
     public override void Perform(Creature performer, Map map)
     {
         performer.HarvestProp(SourceProp(), map);
+    }
+
+    public override int EffectAndEstimate(Creature creature, Map map)
+    {
+        // estimate the number of ticks required to harvest the prop
+        (int harvestCooldown, int harvestAmount) = creature.HarvestingCooldownAndAmount(SourceProp());
+        int propHarvestRequired = SourceProp().propType.GetHarvestingRequired();   
+        int estimatedTicks = Mathf.CeilToInt((float)harvestAmount / (float)propHarvestRequired) * harvestCooldown;
+
+        // mutate the map
+        map.Remove(SourceProp());
+        SourceProp().MakeImaginaryDrops(map);
+
+        return estimatedTicks;
     }
 }
 
@@ -120,6 +140,11 @@ public class HuntActivity : Activity
     {
         // TODO: Implement
     }
+
+    public override int EffectAndEstimate(Creature creature, Map map)
+    {
+        return 0; // TODO: Implement
+    }
 }
 
 public class CraftActivity : Activity
@@ -135,7 +160,7 @@ public class CraftActivity : Activity
         return (Building)sourcePlaceable;
     }
 
-    public override int ProximityRequirement()
+    public override int ProximityRequirement(Creature forCreature)
     {
         return 0;
     }
@@ -230,6 +255,11 @@ public class CraftActivity : Activity
             }
         }
     }
+
+    public override int EffectAndEstimate(Creature creature, Map map)
+    {
+        return 0; // TODO: Implement
+    }
 }
 
 public class PickUpActivity : Activity
@@ -253,6 +283,11 @@ public class PickUpActivity : Activity
     public override void Perform(Creature performer, Map map)
     {
         map.PickUp(performer, Item());
+    }
+
+    public override int EffectAndEstimate(Creature creature, Map map)
+    {
+        return 0; // TODO: Implement
     }
 }
 

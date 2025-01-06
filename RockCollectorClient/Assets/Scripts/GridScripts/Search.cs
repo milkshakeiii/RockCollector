@@ -90,7 +90,7 @@ public static class Search
             {
                 SearchNode next = current.Copy();
                 next.estimatedTicks += creature.MoveAndEstimate(activity, next.map);
-                //next.estimatedTicks += activity.EffectAndEstimate(creature, next.map);
+                next.estimatedTicks += activity.EffectAndEstimate(creature, next.map);
                 next.activitiesCompleted.Add(activity);
                 next.depth++;
                 queue.Enqueue(next);

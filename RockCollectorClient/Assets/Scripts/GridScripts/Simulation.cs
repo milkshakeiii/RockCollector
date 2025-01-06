@@ -514,17 +514,29 @@ public class Creature : Destructable
 
     public void HarvestProp(Prop prop, Map map)
     {
-        string neededSkill = prop.propType.GetHarvestingSkill();
-        (TypeAbility bestAbility, int bestAmount) = BestHarvestingAmountAndAbility(neededSkill);
-        if (bestAbility == null)
+        (int cooldown, int bestAmount) = HarvestingCooldownAndAmount(prop);
+        if (bestAmount == 0)
         {
-            throw new System.Exception("No ability found to harvest prop");
+            throw new System.Exception("Creature " + name + " cannot harvest prop " + prop.propType.GetName());
         }
         prop.TakeHarvest(bestAmount);
-        cooldownTicksRemaining = bestAbility.GetCooldown();
+        cooldownTicksRemaining = cooldown;
     }
 
-    public (TypeAbility, int) BestHarvestingAmountAndAbility(string skill)
+    public (int, int) HarvestingCooldownAndAmount(Prop prop)
+    {
+        string neededSkill = prop.propType.GetHarvestingSkill();
+        TypeAbility bestAbility = BestHarvestingAbility(neededSkill);
+        if (bestAbility == null)
+        {
+            return (0, 0);
+        }
+        int bestAmount = bestAbility.GetHarvestingAmount();
+        int cooldown = bestAbility.GetCooldown();
+        return (cooldown, bestAmount);
+    }
+
+    private TypeAbility BestHarvestingAbility(string skill)
     {
         TypeAbility bestAbility = null;
         int bestAmount = 0;
@@ -539,7 +551,7 @@ public class Creature : Destructable
                 }
             }
         }
-        return (bestAbility, bestAmount);
+        return bestAbility;
     }
 
     public CreatureType GetCreatureType()
@@ -593,7 +605,7 @@ public class Creature : Destructable
             nextActivity = null;
             return;
         }
-        else if (nextActivity.DistanceTo(this, map) > nextActivity.ProximityRequirement())
+        else if (nextActivity.DistanceTo(this, map) > nextActivity.ProximityRequirement(this))
         {
             Vector2Int difference = DirectionToNextActivity(map);
             Vector2Int direction = new (Math.Sign(difference.x), Math.Sign(difference.y));
@@ -649,7 +661,7 @@ public class Creature : Destructable
         int distance = activity.DistanceTo(this, map);
         int ticksPerSquare = MoveSpeed();
         int estimatedTicks = distance * ticksPerSquare;
-        map.MovePlaceable(this, activity.GetLocation(map) - (Vector2Int.one * activity.ProximityRequirement()));
+        map.MovePlaceable(this, activity.GetLocation(map) - (Vector2Int.one * activity.ProximityRequirement(this)));
         return estimatedTicks;
     }
 }
@@ -777,8 +789,56 @@ public class Prop : Destructable
         if (HarvestedFraction() >= 1)
         {
             List<ItemType> droppedItems = propType.GetProducedItems();
-            ItemType droppedItem = droppedItems[0]; // TODO: Factor in difficulty and possibly limit to one produced item type
+            
+            List<ItemType> droppedItemsMultipliedByProbability = new();
+            List<int> probabilities = propType.GetProducedItemsProbabilities();
+            for (int i = 0; i < droppedItems.Count; i++)
+            {
+                for (int j = 0; j < probabilities[i]; j++)
+                {
+                    droppedItemsMultipliedByProbability.Add(droppedItems[i]);
+                }
+            }
+
+            ItemType droppedItem = droppedItemsMultipliedByProbability[UnityEngine.Random.Range(0, droppedItemsMultipliedByProbability.Count)];
             map.Add(new Item(droppedItem), map.PositionOf(this));
+        }
+    }
+
+    public float ChanceOfItemDrop(ItemType itemType)
+    {
+        List<ItemType> droppedItems = propType.GetProducedItems();
+        List<int> probabilities = propType.GetProducedItemsProbabilities();
+        int index = droppedItems.IndexOf(itemType);
+        if (index == -1)
+        {
+            return 0;
+        }
+        return (float)probabilities[index] / (float)DroppedItemsProbabilitiesSum();
+    }
+
+    private int DroppedItemsProbabilitiesSum()
+    {
+        List<int> probabilities = propType.GetProducedItemsProbabilities();
+        int sum = 0;
+        foreach (int probability in probabilities)
+        {
+            sum += probability;
+        }
+        return sum;
+    }
+
+    public void MakeImaginaryDrops(Map map)
+    {
+        List<ItemType> droppedItems = propType.GetProducedItems();
+        List<int> probabilities = propType.GetProducedItemsProbabilities();
+        int probabilitySum = DroppedItemsProbabilitiesSum();
+        for (int i = 0; i < droppedItems.Count; i++)
+        {
+            ItemType droppedItem = droppedItems[i];
+            int probability = probabilities[i];
+            Item item = new(droppedItem, (float)probability / (float)probabilitySum);
+            map.Add(item, map.PositionOf(this));
         }
     }
 
@@ -792,10 +852,17 @@ public class Item : Placeable
 {
     public ItemType itemType;
     private bool consumed = false;
+    private float probability;
 
-    public Item(ItemType itemType) : base(itemType.GetSize())
+    public Item(ItemType itemType, float probability) : base(itemType.GetSize())
     {
         this.itemType = itemType;
+        this.probability = probability;
+    }
+
+    public float GetProbability()
+    {
+        return probability;
     }
 
     public void Consume()
