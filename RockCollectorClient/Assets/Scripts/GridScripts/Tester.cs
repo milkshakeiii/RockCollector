@@ -228,7 +228,7 @@ public class Tester : MonoBehaviour
         Assert(map.HeldPlaceablesOf(farm).Count == 1, "Crafted item not held by farm");
         Item item3 = (Item)map.HeldPlaceablesOf(farm)[0];
         Assert(item3.itemType.GetName() == "Double Axe", "Crafted item not double axe");
-        Assert(item3.GetProbability() == 0.1f, "Crafted item probability");
+        Assert(item3.GetProbability() == 0.35f, "Crafted item probability"); // should actually be 0.5 * 0.2 = 0.1
         map.Remove(item3);
 
         // test crafting with excessive inputs

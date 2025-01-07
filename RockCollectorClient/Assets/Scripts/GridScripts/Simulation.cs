@@ -412,7 +412,6 @@ public class Map
             }
             if (placeable is Item item && item.IsConsumed())
             {
-                Debug.Log("Item consumed");
                 Remove(item);
             }
         }
