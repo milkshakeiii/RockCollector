@@ -242,9 +242,9 @@ public class CraftActivity : Activity
                 if (availableItem is Item item && !consumedItems.Contains(item) && item.itemType.GetName() == inputType.GetName())
                 {
                     expectedAmountCollected += item.GetProbability();
+                    consumedItems.Add(item);
                     if (expectedAmountCollected >= expectedValuesDemanded[inputType])
                     {
-                        consumedItems.Add(item);
                         break;
                     }
                 }

@@ -211,7 +211,7 @@ public class Tester : MonoBehaviour
         Assert(map.HeldPlaceablesOf(farm).Count == 1, "Crafted item not held by farm");
         Item item2 = (Item)map.HeldPlaceablesOf(farm)[0];
         Assert(item2.itemType.GetName() == "Soup", "Crafted item not soup");
-        Assert(item2.GetProbability() == 0.12f, "Crafted item probability");
+        Assert(Mathf.Abs(item2.GetProbability() - 0.12f) < 0.01f, "Crafted item probability");
         map.Remove(item2);
 
         // test crafting with duplicated inputs
