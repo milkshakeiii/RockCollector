@@ -6,6 +6,14 @@ craftingSkill:woodcutting
 craftingTime:10
 size:-6
 
+name:Double Axe
+harvestingSkill:chopping
+harvestingAmount:2
+craftingInputs:Log,Log
+craftingSkill:woodcutting
+craftingTime:10
+size:-6
+
 name:Log
 size:1
 

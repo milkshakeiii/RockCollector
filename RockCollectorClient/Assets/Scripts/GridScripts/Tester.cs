@@ -182,7 +182,7 @@ public class Tester : MonoBehaviour
         Building farm = new(EntityManager.buildingTypes["Farm"]);
         map.Add(farm, new Vector2Int(5, 5));
         Item log = new (EntityManager.itemTypes["Log"]);
-        map.AddHeld(farm, log);
+        map.AddHeld(testCreature, log);
         Activity craftActivity = new CraftActivity(EntityManager.itemTypes["Axe"], farm);
         craftActivity.Perform(testCreature, map);
         Assert(log.IsConsumed(), "Input item not consumed");
@@ -190,6 +190,67 @@ public class Tester : MonoBehaviour
         Assert(map.HeldPlaceablesOf(farm).Count == 1, "Crafted item not held by farm");
         Item item = (Item)map.HeldPlaceablesOf(farm)[0];
         Assert(item.itemType.GetName() == "Axe", "Crafted item not axe");
+        map.Remove(item);
+        Assert(map.HeldPlaceablesOf(farm).Count == 0, "Crafted item not removed from farm");
+
+        // test crafting with probabilities
+        Item log2 = new (EntityManager.itemTypes["Log"], 0.6f);
+        Item acorn = new (EntityManager.itemTypes["Acorn"], 0.2f);
+        Item water = new (EntityManager.itemTypes["Water"]);
+        map.AddHeld(farm, log2);
+        map.AddHeld(farm, acorn);
+        map.AddHeld(farm, water);
+        Activity craftActivity2 = new CraftActivity(EntityManager.itemTypes["Soup"], farm);
+        craftActivity2.Perform(testCreature, map);
+        Assert(log2.IsConsumed(), "Input item not consumed");
+        Assert(acorn.IsConsumed(), "Input item not consumed");
+        Assert(water.IsConsumed(), "Input item not consumed");
+        map.Remove(log2);
+        map.Remove(acorn);
+        map.Remove(water);
+        Assert(map.HeldPlaceablesOf(farm).Count == 1, "Crafted item not held by farm");
+        Item item2 = (Item)map.HeldPlaceablesOf(farm)[0];
+        Assert(item2.itemType.GetName() == "Soup", "Crafted item not soup");
+        Assert(item2.GetProbability() == 0.12f, "Crafted item probability");
+        map.Remove(item2);
+
+        // test crafting with duplicated inputs
+        Item log3 = new (EntityManager.itemTypes["Log"], 0.5f);
+        map.AddHeld(farm, log3);
+        Item log4 = new (EntityManager.itemTypes["Log"], 0.2f);
+        map.AddHeld(farm, log4);
+        Activity craftActivity3 = new CraftActivity(EntityManager.itemTypes["Double Axe"], farm);
+        craftActivity3.Perform(testCreature, map);
+        Assert(log3.IsConsumed(), "Input item not consumed");
+        Assert(log4.IsConsumed(), "Input item not consumed");
+        map.Remove(log3);
+        map.Remove(log4);
+        Assert(map.HeldPlaceablesOf(farm).Count == 1, "Crafted item not held by farm");
+        Item item3 = (Item)map.HeldPlaceablesOf(farm)[0];
+        Assert(item3.itemType.GetName() == "Double Axe", "Crafted item not double axe");
+        Assert(item3.GetProbability() == 0.1f, "Crafted item probability");
+        map.Remove(item3);
+
+        // test crafting with excessive inputs
+        Item log5 = new (EntityManager.itemTypes["Log"], 0.7f);
+        map.AddHeld(farm, log5);
+        Item log6 = new (EntityManager.itemTypes["Log"], 0.7f);
+        map.AddHeld(farm, log6);
+        Item log7 = new(EntityManager.itemTypes["Log"], 0.7f);
+        map.AddHeld(farm, log7);
+        Activity craftActivity4 = new CraftActivity(EntityManager.itemTypes["Axe"], farm);
+        craftActivity4.Perform(testCreature, map);
+        Assert(log5.IsConsumed(), "Input item not consumed");
+        Assert(log6.IsConsumed(), "Input item not consumed");
+        Assert(!log7.IsConsumed(), "Item consumed");
+        map.Remove(log5);
+        map.Remove(log6);
+        Assert(map.HeldPlaceablesOf(farm).Count == 2, "Crafted item not held by farm");
+        Item item4 = (Item)map.HeldPlaceablesOf(farm)[0];
+        Assert(item4.itemType.GetName() == "Log", "Remainder log not found");
+        Item item5 = (Item)map.HeldPlaceablesOf(farm)[1];
+        Assert(item5.itemType.GetName() == "Axe", "Crafted item not axe");
+        Assert(item5.GetProbability() == 1f, "Crafted item probability");
     }
 
     void Assert(bool condition, string message)
