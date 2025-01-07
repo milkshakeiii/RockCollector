@@ -789,9 +789,11 @@ public class Prop : Destructable
         if (HarvestedFraction() >= 1)
         {
             List<ItemType> droppedItems = propType.GetProducedItems();
+            Debug.Log(droppedItems.Count);
             
             List<ItemType> droppedItemsMultipliedByProbability = new();
             List<int> probabilities = propType.GetProducedItemsProbabilities();
+            Debug.Log(probabilities.Count);
             for (int i = 0; i < droppedItems.Count; i++)
             {
                 for (int j = 0; j < probabilities[i]; j++)
@@ -854,7 +856,7 @@ public class Item : Placeable
     private bool consumed = false;
     private float probability;
 
-    public Item(ItemType itemType, float probability) : base(itemType.GetSize())
+    public Item(ItemType itemType, float probability = 1) : base(itemType.GetSize())
     {
         this.itemType = itemType;
         this.probability = probability;

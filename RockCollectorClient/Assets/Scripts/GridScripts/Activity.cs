@@ -317,4 +317,9 @@ public class DropOffActivity : Activity
             map.Transfer(heldItem, Building());
         }
     }
+
+    public override int EffectAndEstimate(Creature creature, Map map)
+    {
+        return 0; // TODO: Implement
+    }
 }

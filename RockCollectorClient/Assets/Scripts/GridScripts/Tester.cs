@@ -128,6 +128,8 @@ public class Tester : MonoBehaviour
         Assert(EntityManager.itemTypes.Count == 2, "Items not found");
         Assert(EntityManager.itemTypes.ContainsKey("Axe"), "Axe not found");
         Assert(EntityManager.propTypes.ContainsKey("Tree"), "Tree not found");
+        Assert(EntityManager.propTypes["Tree"].GetProducedItems().Count == 1, "Tree GetDroppedItems");
+        Assert(EntityManager.propTypes["Tree"].GetProducedItemsProbabilities().Count == 1, "Tree GetProducedItemsProbabilities");
         Assert(EntityManager.typeAbilities.ContainsKey("Woodcutting"), "Woodcutting not found");
         Assert(EntityManager.buildingTypes.ContainsKey("Farm"), "Farm not found");
         Assert(EntityManager.buildingTypes["Farm"].GetSupportedCreatureTypes()[0].GetName() == "Peasant", "Farm GetSupportedCreatureTypes");
