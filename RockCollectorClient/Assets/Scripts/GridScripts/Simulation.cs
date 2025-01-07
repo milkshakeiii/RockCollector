@@ -109,6 +109,10 @@ public class Map
         {
             throw new System.Exception("Placeable already exists in map");
         }
+        if (heldToHolder.ContainsKey(placeable))
+        {
+            throw new System.Exception("Placeable already exists (being held)");
+        }
 
         List<Vector2Int> occupiedCells = new();
         for (int x = 0; x < placeable.SquaresMinimumOne(); x++)
@@ -127,6 +131,24 @@ public class Map
         placeableToCells[placeable] = occupiedCells;
 
         placeable.OnAdd(this);
+    }
+
+    public void AddHeld(Placeable holder, Placeable held)
+    {
+        if (placeableToCells.ContainsKey(held))
+        {
+            throw new System.Exception("Placeable already exists in map");
+        }
+        if (heldToHolder.ContainsKey(held))
+        {
+            throw new System.Exception("Placeable already exists (being held)");
+        }
+        if (!holderToHeld.ContainsKey(holder))
+        {
+            holderToHeld[holder] = new();
+        }
+        holderToHeld[holder].Add(held);
+        heldToHolder[held] = holder;
     }
 
     public void Remove(Placeable placeable, bool removeHeldItems = true)
@@ -390,6 +412,7 @@ public class Map
             }
             if (placeable is Item item && item.IsConsumed())
             {
+                Debug.Log("Item consumed");
                 Remove(item);
             }
         }
@@ -789,11 +812,9 @@ public class Prop : Destructable
         if (HarvestedFraction() >= 1)
         {
             List<ItemType> droppedItems = propType.GetProducedItems();
-            Debug.Log(droppedItems.Count);
             
             List<ItemType> droppedItemsMultipliedByProbability = new();
             List<int> probabilities = propType.GetProducedItemsProbabilities();
-            Debug.Log(probabilities.Count);
             for (int i = 0; i < droppedItems.Count; i++)
             {
                 for (int j = 0; j < probabilities[i]; j++)

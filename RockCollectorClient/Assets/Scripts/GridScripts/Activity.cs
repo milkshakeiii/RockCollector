@@ -10,7 +10,7 @@ public abstract class Activity
     public int encounterLevel;
 
     public List<ItemType> craftingInputItems;
-    public List<ItemType> craftingOutputItems;
+    public ItemType craftingOutputItem;
     public List<ItemType> droppedItems;
     public List<int> droppedItemsProbabilities;
 
@@ -21,7 +21,7 @@ public abstract class Activity
 
     public Activity(int encounterLevel,
                     List<ItemType> craftingInputItems,
-                    List<ItemType> craftingOutputItems,
+                    ItemType craftingOutputItem,
                     List<ItemType> droppedItems,
                     List<int> droppedItemsProbabilities,
                     Placeable sourcePlaceable,
@@ -29,7 +29,7 @@ public abstract class Activity
     {
         this.encounterLevel = encounterLevel;
         this.craftingInputItems = craftingInputItems;
-        this.craftingOutputItems = craftingOutputItems;
+        this.craftingOutputItem = craftingOutputItem;
         this.droppedItems = droppedItems;
         this.droppedItemsProbabilities = droppedItemsProbabilities;
         this.sourcePlaceable = sourcePlaceable;
@@ -83,7 +83,7 @@ public abstract class Activity
 public class HarvestActivity : Activity
 {
     public HarvestActivity(Prop prop) : base(0,
-        new(), new(), prop.propType.GetProducedItems(), prop.propType.GetProducedItemsProbabilities(), prop, Activity.NULL_POSITION)
+        new(), null, prop.propType.GetProducedItems(), prop.propType.GetProducedItemsProbabilities(), prop, Activity.NULL_POSITION)
     {
 
     }
@@ -121,7 +121,7 @@ public class HarvestActivity : Activity
 public class HuntActivity : Activity
 {
     public HuntActivity(Creature target) : base(target.EncounterLevel(),
-        new(), new(), target.GetCreatureType().GetDroppedItems(), target.GetCreatureType().GetDroppedItemsProbabilities(), target, Activity.NULL_POSITION)
+        new(), null, target.GetCreatureType().GetDroppedItems(), target.GetCreatureType().GetDroppedItemsProbabilities(), target, Activity.NULL_POSITION)
     {
 
     }
@@ -150,7 +150,7 @@ public class HuntActivity : Activity
 public class CraftActivity : Activity
 {
     public CraftActivity(ItemType producedItemType, Building workshop) : base(0,
-        producedItemType.GetCraftingInputs(), new() { producedItemType }, new(), new(), workshop, Activity.NULL_POSITION)
+        producedItemType.GetCraftingInputs(), producedItemType, new(), new(), workshop, Activity.NULL_POSITION)
     {
 
     }
@@ -172,15 +172,26 @@ public class CraftActivity : Activity
             return true;
         }
 
-        foreach (ItemType outputItem in craftingOutputItems)
+        foreach (ItemType inputItem in craftingOutputItem.GetCraftingInputs())
         {
-            foreach (ItemType inputItem in outputItem.GetCraftingInputs())
-            {
-                bool itemFound = false;
+            bool itemFound = false;
 
-                // check if the workshop is holding the input item
-                List<Placeable> heldItemsWorkshop = new(map.HeldPlaceablesOf(Workshop()));
-                foreach (Placeable heldItem in heldItemsWorkshop)
+            // check if the workshop is holding the input item
+            List<Placeable> heldItemsWorkshop = new(map.HeldPlaceablesOf(Workshop()));
+            foreach (Placeable heldItem in heldItemsWorkshop)
+            {
+                if (heldItem is Item item && item.itemType.GetName() == inputItem.GetName())
+                {
+                    itemFound = true;
+                    break;
+                }
+            }
+
+            // check if the performer is holding the input item
+            if (!itemFound)
+            {
+                List<Placeable> heldItems = new(map.HeldPlaceablesOf(Workshop()));
+                foreach (Placeable heldItem in heldItems)
                 {
                     if (heldItem is Item item && item.itemType.GetName() == inputItem.GetName())
                     {
@@ -188,26 +199,12 @@ public class CraftActivity : Activity
                         break;
                     }
                 }
+            }
 
-                // check if the performer is holding the input item
-                if (!itemFound)
-                {
-                    List<Placeable> heldItems = new(map.HeldPlaceablesOf(Workshop()));
-                    foreach (Placeable heldItem in heldItems)
-                    {
-                        if (heldItem is Item item && item.itemType.GetName() == inputItem.GetName())
-                        {
-                            itemFound = true;
-                            break;
-                        }
-                    }
-                }
-
-                if (!itemFound)
-                {
-                    // if an input item is missing, the crafting activity is completed (cannot continue)
-                    return true;
-                }
+            if (!itemFound)
+            {
+                // if an input item is missing, the crafting activity is completed (cannot continue)
+                return true;
             }
         }
 
@@ -216,49 +213,67 @@ public class CraftActivity : Activity
 
     public override void Perform(Creature performer, Map map)
     {
-        // consume the input items
+        // how many of each input item are demanded
+        Dictionary<ItemType, float> expectedValuesDemanded = new();
         foreach (ItemType inputItem in craftingInputItems)
         {
-            bool itemFound = false;
-
-            // consume the first item of this type that the performer is holding
-            List<Placeable> heldItems = new(map.HeldPlaceablesOf(performer));
-            foreach (Placeable heldItem in heldItems)
+            if (expectedValuesDemanded.ContainsKey(inputItem))
             {
-                if (heldItem is Item item && item.itemType.GetName() == inputItem.GetName())
-                {
-                    item.Consume();
-                    itemFound = true;
-                    break;
-                }
+                expectedValuesDemanded[inputItem] += 1;
             }
-
-            // if the performer doesn't have the item, consume the first item of this type that the workshop is holding
-            if (!itemFound)
+            else
             {
-                List<Placeable> heldItemsWorkshop = new(map.HeldPlaceablesOf(Workshop()));
-                foreach (Placeable heldItem in heldItemsWorkshop)
+                expectedValuesDemanded[inputItem] = 1;
+            }
+        }
+
+        // consume held items first before consuming workshop items
+        List<Placeable> availableItems = new(map.HeldPlaceablesOf(performer));
+        availableItems.AddRange(map.HeldPlaceablesOf(Workshop()));
+
+        Dictionary<ItemType, float> expectedValuesAvailable = new();
+        HashSet<Item> consumedItems = new();
+        foreach (ItemType inputType in expectedValuesDemanded.Keys)
+        {
+            // consume input items until we run out of items or we reach the expected values demanded
+            float expectedAmountCollected = 0;
+            foreach (Placeable availableItem in availableItems)
+            {
+                if (availableItem is Item item && !consumedItems.Contains(item) && item.itemType.GetName() == inputType.GetName())
                 {
-                    if (heldItem is Item item && item.itemType.GetName() == inputItem.GetName())
+                    expectedAmountCollected += item.GetProbability();
+                    if (expectedAmountCollected >= expectedValuesDemanded[inputType])
                     {
-                        Debug.Log("Consuming item " + item.itemType.GetName());
-                        item.Consume();
-                        itemFound = true;
+                        consumedItems.Add(item);
                         break;
                     }
                 }
             }
-
-            if (!itemFound)
-            {
-                throw new System.Exception("Crafting input item not found");
-            }
+            expectedValuesAvailable[inputType] = expectedAmountCollected;
         }
+
+        // consume the items
+        foreach (Item consumedItem in consumedItems)
+        {
+            consumedItem.Consume();
+        }
+
+        // create the output item
+        float outputProbability = 1;
+        foreach (ItemType inputType in craftingInputItems)
+        {
+            outputProbability *= Mathf.Min(1, expectedValuesAvailable[inputType], expectedValuesDemanded[inputType]);
+        }
+        Item outputItem = new(craftingOutputItem, outputProbability);
+        map.AddHeld(Workshop(), outputItem);
+        Debug.Log(Workshop() + " holds " + outputItem.itemType.GetName() + " with probability " + outputItem.GetProbability());
     }
 
     public override int EffectAndEstimate(Creature creature, Map map)
     {
-        return 0; // TODO: Implement
+        Perform(creature, map);
+
+        return craftingOutputItem.GetCraftingTime();
     }
 }
 
@@ -287,7 +302,9 @@ public class PickUpActivity : Activity
 
     public override int EffectAndEstimate(Creature creature, Map map)
     {
-        return 0; // TODO: Implement
+        Perform(creature, map);
+
+        return 1; // Picking up an item takes 1 tick
     }
 }
 
@@ -320,6 +337,8 @@ public class DropOffActivity : Activity
 
     public override int EffectAndEstimate(Creature creature, Map map)
     {
-        return 0; // TODO: Implement
+        Perform(creature, map);
+
+        return 1; // Dropping off an item takes 1 tick
     }
 }

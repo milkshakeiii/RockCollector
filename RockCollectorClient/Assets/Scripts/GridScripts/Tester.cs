@@ -12,6 +12,7 @@ public class Tester : MonoBehaviour
         HoldAndDropItems();
         SetInitialGoal();
         AddActivity();
+        CraftThings();
         Debug.Log("Tests finished");
     }
 
@@ -109,6 +110,8 @@ public class Tester : MonoBehaviour
         map.Remove(testCreature);
         Assert(map.UnheldPlaceables().Count == 0, "Item not removed correctly");
         Assert(map.HeldPlaceables().Count == 0, "Item not removed correctly");
+        map.AddHeld(testCreature, secondItem);
+        Assert(map.HeldPlaceablesOf(testCreature).Count == 1, "Item not added to held correctly");
     }
 
     void LoadEntities()
@@ -125,7 +128,7 @@ public class Tester : MonoBehaviour
         Assert(EntityManager.creatureTypes["Peasant"].GetAbilities().Count == 1, "Peasant GetAbilities");
         Assert(EntityManager.creatureTypes["Peasant"].GetAbilityLevels().Count == 1, "Peasant GetAbilityLevels");
         Assert(EntityManager.creatureTypes["Peasant"].GetGoals().Count == 1, "Peasant GetGoals");
-        Assert(EntityManager.itemTypes.Count == 2, "Items not found");
+        Assert(EntityManager.itemTypes.Count > 2, "Items not found");
         Assert(EntityManager.itemTypes.ContainsKey("Axe"), "Axe not found");
         Assert(EntityManager.propTypes.ContainsKey("Tree"), "Tree not found");
         Assert(EntityManager.propTypes["Tree"].GetProducedItems().Count == 1, "Tree GetDroppedItems");
@@ -169,6 +172,24 @@ public class Tester : MonoBehaviour
         Assert(activity.GetLocation(map) == new Vector2Int(0, 0), "Activity location");
         Assert(activity.droppedItems.Count == 1, "Activity dropped items");
         Assert(activity.droppedItems[0].GetName() == "Log", "Activity dropped item");
+    }
+
+    void CraftThings()
+    {
+        Map map = new();
+        Creature testCreature = new("George", 0, EntityManager.creatureTypes["Peasant"]);
+        map.Add(testCreature, new Vector2Int(5, 5));
+        Building farm = new(EntityManager.buildingTypes["Farm"]);
+        map.Add(farm, new Vector2Int(5, 5));
+        Item log = new (EntityManager.itemTypes["Log"]);
+        map.AddHeld(farm, log);
+        Activity craftActivity = new CraftActivity(EntityManager.itemTypes["Axe"], farm);
+        craftActivity.Perform(testCreature, map);
+        Assert(log.IsConsumed(), "Input item not consumed");
+        map.Remove(log);
+        Assert(map.HeldPlaceablesOf(farm).Count == 1, "Crafted item not held by farm");
+        Item item = (Item)map.HeldPlaceablesOf(farm)[0];
+        Assert(item.itemType.GetName() == "Axe", "Crafted item not axe");
     }
 
     void Assert(bool condition, string message)

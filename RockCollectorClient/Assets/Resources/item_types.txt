@@ -3,7 +3,20 @@ harvestingSkill:chopping
 harvestingAmount:1
 craftingInputs:Log
 craftingSkill:woodcutting
+craftingTime:10
 size:-6
 
 name:Log
 size:1
+
+name:Soup
+craftingInputs:Log,Acorn,Water
+craftingSkill:cooking
+craftingTime:10
+size:-2
+
+name:Acorn
+size:-15
+
+name:Water
+size:-2

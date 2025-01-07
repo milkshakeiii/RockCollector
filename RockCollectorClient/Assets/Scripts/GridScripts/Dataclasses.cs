@@ -428,6 +428,10 @@ public class ItemType : Entity
     {
         return EntityManager.GetItemListAttribute(attributes, "craftingInputs", new List<ItemType>());
     }
+    public int GetCraftingTime()
+    {
+        return EntityManager.GetIntAttribute(attributes, "craftingTime", 0);
+    }
 }
 
 public class BuildingType : Entity
