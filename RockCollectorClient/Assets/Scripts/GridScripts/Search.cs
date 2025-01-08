@@ -28,41 +28,7 @@ public static class Search
 
     public static Activity GoalSearch(Map map, Creature creature)
     {
-        List<Activity> activities = map.GetActivities(creature);
-        // testing. return harvest activity, pick up activity, drop off activity, craft activity in that order of priority
-        foreach (Activity activity in activities)
-        {
-            if (activity is HarvestActivity)
-            {
-                return activity;
-            }
-        }
-        foreach (Activity activity in activities)
-        {
-            if (activity is PickUpActivity)
-            {
-                return activity;
-            }
-        }
-        foreach (Activity activity in activities)
-        {
-            if (activity is DropOffActivity)
-            {
-                return activity;
-            }
-        }
-        foreach (Activity activity in activities)
-        {
-            if (activity is CraftActivity)
-            {
-                return activity;
-            }
-        }
-        return null;
-
-        //List<Activity> activities = map.GetActivities(creature);
-        //
-        //return null;
+        return BFSGoalSearch(map, creature, 10);
     }
 
     public static Activity BFSGoalSearch(Map startingMap, Creature creature, int maxDepth)
@@ -79,7 +45,7 @@ public static class Search
 
         SearchNode current = start;
         SearchNode best = start;
-        int bestEvaluation = int.MaxValue;
+        float bestEvaluation = float.MaxValue;
 
         while (queue.Count > 0 && current.depth < maxDepth)
         {
@@ -95,7 +61,7 @@ public static class Search
                 next.depth++;
                 queue.Enqueue(next);
 
-                int evaluation = creature.GetGoal().EvaluateMap(next.map);
+                float evaluation = creature.GetGoal().EvaluateMap(next.map);
                 if (evaluation < bestEvaluation)
                 {
                     best = next;

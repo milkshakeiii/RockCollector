@@ -752,6 +752,16 @@ public class Building : Destructable
         return buildingType.GetSupportedCreatureSpawnTimes()[index];
     }
 
+    public List<ItemType> GetRequestedItemTypes()
+    {
+        return buildingType.GetRequestableItemTypes();
+    }
+
+    public List<int> GetRequestedItemAmounts()
+    {
+        return buildingType.GetRequestableItemCounts();
+    }
+
     private int IndexOfCreatureType(CreatureType type)
     {
         List<CreatureType> supportedTypes = GetCreatureTypesAvailable();
@@ -896,6 +906,11 @@ public class Item : Placeable
     {
         return consumed;
     }
+
+    public float Value()
+    {
+        return 10 * GetProbability();
+    }
 }
 
 public abstract class Goal 
@@ -911,7 +926,7 @@ public abstract class Goal
 
     public abstract bool IsAchieved();
 
-    public abstract int EvaluateMap(Map map);
+    public abstract float EvaluateMap(Map map);
 
     public abstract void Initialize(int tickBegun);
 
@@ -937,13 +952,44 @@ public class Craft : Goal
         return achievedAmount >= targetAmount;
     }
 
-    public override int EvaluateMap(Map map)
+    public override float EvaluateMap(Map map)
     {
-       foreach (Placeable placeable in map.UnheldPlaceables())
-       {
-           
-       }
-       return 0;
+        float evaluation = 0;
+        // for each building, add the value of the satisfied item requests
+        foreach (Placeable placeable in map.UnheldPlaceables())
+        {
+            if (placeable is Building building)
+            {
+                List<ItemType> requestedItemTypes = building.GetRequestedItemTypes();
+                List<int> requestedItemAmounts = building.GetRequestedItemAmounts();
+                Dictionary<ItemType, int> itemsRequestedByType = new();
+                for (int i = 0; i < requestedItemTypes.Count; i++)
+                {
+                    itemsRequestedByType[requestedItemTypes[i]] = requestedItemAmounts[i];
+                }
+
+                List<Placeable> itemsPresent = map.HeldPlaceablesOf(building);
+                Dictionary<ItemType, int> itemsPresentByType = new();
+                foreach (Placeable heldPlaceable in itemsPresent)
+                {
+                    if (heldPlaceable is Item item)
+                    {
+                        if (!itemsPresentByType.ContainsKey(item.itemType))
+                        {
+                            itemsPresentByType[item.itemType] = 0;
+                        }
+                        if (itemsPresentByType[item.itemType] >= itemsRequestedByType[item.itemType])
+                        {
+                            // only score the first items of the requested type
+                            continue;
+                        }
+                        itemsPresentByType[item.itemType]++;
+                        evaluation += item.Value();
+                    }
+                }
+            }
+        }
+        return evaluation;
     }
 
     public override Activity GetNextActivity(Map map, Creature creature)
