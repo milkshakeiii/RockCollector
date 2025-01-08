@@ -60,7 +60,6 @@ public static class Search
                     Debug.Log("Pick up " + pickup.Item().itemType.GetName());
                 }
             }
-            throw new Exception("Queue too long, bailing out.");
         }
 
         startingMap.VerifyIntegrity();
@@ -100,6 +99,7 @@ public static class Search
                 {
                     Debug.Log("Next path length: " + next.activitiesCompleted.Count);
                     PrintBestInfo(best, bestEvaluation);
+                    throw new Exception("Queue too long, bailing out.");
                 }
 
                 float evaluation = creature.GetGoal().EvaluateMap(next.map) / next.estimatedTicks;
