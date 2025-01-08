@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using Steamworks;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -693,6 +694,7 @@ public class Creature : Destructable
         }
         else if (nextActivity.IsCompletedOrImpossible(map, this))
         {
+            Debug.Log("Activity impossible");
             // Something else completed the activity this frame
             // or there is no activity assigned
             nextActivity = null;
@@ -1070,10 +1072,7 @@ public class Craft : Goal
 
     public override Activity GetNextActivity(Map map, Creature creature)
     {
-        if (map.GetActivities(creature).Count == 0)
-        {
-            return null;
-        }
-        return Search.GoalSearch(map, creature);
+        Activity result = Search.GoalSearch(map, creature);
+        return result;
     }
 }

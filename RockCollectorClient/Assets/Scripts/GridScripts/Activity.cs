@@ -180,7 +180,7 @@ public class CraftActivity : Activity
             List<Placeable> heldItemsWorkshop = new(map.HeldPlaceablesOf(Workshop()));
             foreach (Placeable heldItem in heldItemsWorkshop)
             {
-                if (heldItem is Item item && item.itemType.GetName() == inputItem.GetName())
+                if (heldItem is Item item && item.itemType.GetName() == inputItem.GetName() && !item.IsConsumed())
                 {
                     itemFound = true;
                     break;
@@ -193,7 +193,7 @@ public class CraftActivity : Activity
                 List<Placeable> heldItems = new(map.HeldPlaceablesOf(Workshop()));
                 foreach (Placeable heldItem in heldItems)
                 {
-                    if (heldItem is Item item && item.itemType.GetName() == inputItem.GetName())
+                    if (heldItem is Item item && item.itemType.GetName() == inputItem.GetName() && !item.IsConsumed())
                     {
                         itemFound = true;
                         break;
@@ -211,7 +211,7 @@ public class CraftActivity : Activity
         return false;
     }
 
-    public override void Perform(Creature performer, Map map)
+    private void PerformWithOptions(Creature performer, Map map, bool successRoll, bool immediateConsume)
     {
         // how many of each input item are demanded
         Dictionary<ItemType, int> countsRequired = new();
@@ -262,10 +262,21 @@ public class CraftActivity : Activity
             }
         }
 
-        // consume the items
-        foreach (Item consumedItem in consumedItems)
+        if (!immediateConsume)
         {
-            consumedItem.Consume();
+            // consume the items
+            foreach (Item consumedItem in consumedItems)
+            {
+                consumedItem.Consume();
+            }
+        }
+        else
+        {
+            // directly remove the items from the map
+            foreach (Item consumedItem in consumedItems)
+            {
+                map.Remove(consumedItem);
+            }
         }
 
         // create the output item
@@ -306,9 +317,14 @@ public class CraftActivity : Activity
         //Debug.Log(Workshop() + " holds " + outputItem.itemType.GetName() + " with probability " + outputItem.GetProbability());
     }
 
+    public override void Perform(Creature performer, Map map)
+    {
+        PerformWithOptions(performer, map, true, false);
+    }
+
     public override int EffectAndEstimate(Creature creature, Map map)
     {
-        Perform(creature, map);
+        PerformWithOptions(creature, map, false, true);
 
         return craftingOutputItem.GetCraftingTime();
     }

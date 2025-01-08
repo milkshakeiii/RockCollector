@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 
 public class MapDisplayer : MonoBehaviour
 {
@@ -15,8 +16,9 @@ public class MapDisplayer : MonoBehaviour
     private Map map;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    IEnumerator Start()
     {
+        yield return new WaitForSeconds(1);
         map = new ();
         Creature testCreature = new ("George", 0, EntityManager.creatureTypes["Peasant"]);
         map.Add(testCreature, new Vector2Int(0, 0));
@@ -37,6 +39,10 @@ public class MapDisplayer : MonoBehaviour
     // Update is called once per framex
     void Update()
     {
+        if (map == null)
+        {
+            return;
+        }
         if (Time.time - lastTurnTime > secondsPerTurn)
         {
             lastTurnTime = Time.time;

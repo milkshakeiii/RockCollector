@@ -33,9 +33,10 @@ public static class Search
 
     public static Activity BFSGoalSearch(Map startingMap, Creature creature, int maxDepth)
     {
-        void PrintBestInfo(SearchNode best, float bestEvaluation)
+        static void PrintBestInfo(SearchNode best, float bestEvaluation)
         {
             Debug.Log("Best evaluation: " + bestEvaluation);
+            Debug.Log("Ticks: " + best.estimatedTicks);
             Debug.Log("Best path:");
             foreach (Activity a in best.activitiesCompleted)
             {
@@ -66,7 +67,7 @@ public static class Search
         Queue<SearchNode> queue = new ();
         SearchNode start = new ()
         {
-            map = startingMap,
+            map = startingMap.ShallowCopy(),
             activitiesCompleted = new List<Activity>(),
             estimatedTicks = 0,
             depth = 0
@@ -75,7 +76,7 @@ public static class Search
 
         SearchNode current = start;
         SearchNode best = start;
-        float bestEvaluation = float.MinValue;
+        float bestEvaluation = creature.GetGoal().EvaluateMap(start.map);
 
         while (queue.Count > 0 && current.depth < maxDepth)
         {
@@ -102,7 +103,7 @@ public static class Search
                     throw new Exception("Queue too long, bailing out.");
                 }
 
-                float evaluation = creature.GetGoal().EvaluateMap(next.map) / next.estimatedTicks;
+                float evaluation = creature.GetGoal().EvaluateMap(next.map);// / next.estimatedTicks;
                 if (evaluation > bestEvaluation)
                 {
                     best = next;
@@ -111,7 +112,7 @@ public static class Search
             }
         }
 
-        PrintBestInfo(best, bestEvaluation);
+        //PrintBestInfo(best, bestEvaluation);
         return best.activitiesCompleted.Count > 0 ? best.activitiesCompleted[0] : null;
     }
 }
