@@ -63,7 +63,6 @@ public static class Search
             }
         }
 
-        startingMap.VerifyIntegrity();
         Queue<SearchNode> queue = new ();
         SearchNode start = new ()
         {
@@ -81,19 +80,14 @@ public static class Search
         while (queue.Count > 0 && current.depth < maxDepth)
         {
             current = queue.Dequeue();
-            current.map.VerifyIntegrity();
             
             List<Activity> activities = current.map.GetActivities(creature);
             foreach (Activity activity in activities)
             {
                 SearchNode next = current.Copy();
-                next.map.VerifyIntegrity();
                 next.estimatedTicks += creature.MoveAndEstimate(activity, next.map);
-                next.map.VerifyIntegrity();
                 next.estimatedTicks += activity.EffectAndEstimate(creature, next.map);
-                next.map.VerifyIntegrity();
                 next.activitiesCompleted.Add(activity);
-                next.map.VerifyIntegrity();
                 next.depth++;
                 queue.Enqueue(next);
                 if (queue.Count > 100000)

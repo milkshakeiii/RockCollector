@@ -91,7 +91,6 @@ public class Map
             holderToHeld[holder] = new();
         }
         holderToHeld[holder].Add(held);
-        VerifyIntegrity();
     }
 
     public void Transfer(Placeable placeable, Placeable newHolder)
@@ -121,7 +120,6 @@ public class Map
             holderToHeld[newHolder] = new();
         }
         holderToHeld[newHolder].Add(placeable);
-        VerifyIntegrity();
     }
 
     public void Add(Placeable placeable, Vector2Int position)
@@ -152,7 +150,6 @@ public class Map
         placeableToCells[placeable] = occupiedCells;
 
         placeable.OnAdd(this);
-        VerifyIntegrity();
     }
 
     public void AddHeld(Placeable holder, Placeable held)
@@ -171,12 +168,10 @@ public class Map
         }
         holderToHeld[holder].Add(held);
         heldToHolder[held] = holder;
-        VerifyIntegrity();
     }
 
     public void Remove(Placeable placeable, bool removeHeldItems = true)
     {
-        VerifyIntegrity();
         if (!placeableToCells.ContainsKey(placeable) && !heldToHolder.ContainsKey(placeable))
         {
             throw new System.Exception("Placeable does not exist in map");
@@ -192,7 +187,6 @@ public class Map
                 holderToHeld.Remove(holder);
             }
             heldToHolder.Remove(placeable);
-            VerifyIntegrity();
             return;
         }
 
@@ -221,7 +215,6 @@ public class Map
             }
             holderToHeld.Remove(placeable);
         }
-        VerifyIntegrity();
     }
 
     public void MovePlaceable(Placeable placeable, Vector2Int newPosition)
@@ -333,28 +326,6 @@ public class Map
     public bool IsHeld(Placeable placeable)
     {
         return heldToHolder.ContainsKey(placeable);
-    }
-
-    public void VerifyIntegrity()
-    {
-        foreach (Placeable placeable in heldToHolder.Keys)
-        {
-            Placeable holder = heldToHolder[placeable];
-            if (!holderToHeld[holder].Contains(placeable))
-            {
-                throw new System.Exception("Placeable is held but not in holderToHeld");
-            }
-        }
-        foreach (Placeable holder in holderToHeld.Keys)
-        {
-            foreach (Placeable held in holderToHeld[holder])
-            {
-                if (heldToHolder[held] != holder)
-                {
-                    throw new System.Exception("Placeable is in holderToHeld but not held");
-                }
-            }
-        }
     }
 
     public List<Placeable> HeldPlaceablesOf(Placeable holder)
@@ -753,7 +724,6 @@ public class Creature : Destructable
 
     public int MoveAndEstimate(Activity activity, Map map)
     {
-        map.VerifyIntegrity();
         int distance = activity.DistanceTo(this, map);
         int ticksPerSquare = MoveSpeed();
         int estimatedTicks = distance * ticksPerSquare;
