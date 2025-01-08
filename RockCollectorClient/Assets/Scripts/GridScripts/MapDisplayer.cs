@@ -23,8 +23,14 @@ public class MapDisplayer : MonoBehaviour
         Building testBuilding = new (EntityManager.buildingTypes["Farm"]);
         testBuilding.TakeDamage(50);
         map.Add(testBuilding, new Vector2Int(-10, -10));
-        Prop testProp = new (EntityManager.propTypes["Tree"]);
-        map.Add(testProp, new Vector2Int(5, 5));
+        for (int i = 1; i <= 3; i++)
+        {
+            for (int j = 1; j <= 3; j++)
+            {
+                Prop testProp = new (EntityManager.propTypes["Tree"]);
+                map.Add(testProp, new Vector2Int(i*3, j*3));
+            }
+        }
         DisplayMap(map);
     }
 

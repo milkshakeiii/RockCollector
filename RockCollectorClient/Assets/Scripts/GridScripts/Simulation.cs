@@ -40,14 +40,32 @@ public class Map
 
     public Map ShallowCopy()
     {
-        return new()
+        Map copy = new Map();
+
+        // This is a shallow copy, but not so shallow that we can just use the same lists
+        copy.cells = new Dictionary<Vector2Int, List<Placeable>>();
+        foreach (Vector2Int cell in cells.Keys)
         {
-            cells = new Dictionary<Vector2Int, List<Placeable>>(cells),
-            placeableToCells = new Dictionary<Placeable, List<Vector2Int>>(placeableToCells),
-            heldToHolder = new Dictionary<Placeable, Placeable>(heldToHolder),
-            holderToHeld = new Dictionary<Placeable, List<Placeable>>(holderToHeld),
-            currentTick = currentTick
-        };
+            copy.cells[cell] = new List<Placeable>(cells[cell]);
+        }
+
+        copy.placeableToCells = new Dictionary<Placeable, List<Vector2Int>>();
+        foreach (Placeable placeable in placeableToCells.Keys)
+        {
+            copy.placeableToCells[placeable] = new List<Vector2Int>(placeableToCells[placeable]);
+        }
+
+        copy.heldToHolder = new Dictionary<Placeable, Placeable>(heldToHolder);
+
+        copy.holderToHeld = new Dictionary<Placeable, List<Placeable>>();
+        foreach (Placeable holder in holderToHeld.Keys)
+        {
+            copy.holderToHeld[holder] = new List<Placeable>(holderToHeld[holder]);
+        }
+
+        copy.currentTick = currentTick;
+
+        return copy;
     }
 
     public void PickUp(Placeable holder, Placeable held)
@@ -72,6 +90,7 @@ public class Map
             holderToHeld[holder] = new();
         }
         holderToHeld[holder].Add(held);
+        VerifyIntegrity();
     }
 
     public void Transfer(Placeable placeable, Placeable newHolder)
@@ -101,6 +120,7 @@ public class Map
             holderToHeld[newHolder] = new();
         }
         holderToHeld[newHolder].Add(placeable);
+        VerifyIntegrity();
     }
 
     public void Add(Placeable placeable, Vector2Int position)
@@ -131,6 +151,7 @@ public class Map
         placeableToCells[placeable] = occupiedCells;
 
         placeable.OnAdd(this);
+        VerifyIntegrity();
     }
 
     public void AddHeld(Placeable holder, Placeable held)
@@ -149,10 +170,12 @@ public class Map
         }
         holderToHeld[holder].Add(held);
         heldToHolder[held] = holder;
+        VerifyIntegrity();
     }
 
     public void Remove(Placeable placeable, bool removeHeldItems = true)
     {
+        VerifyIntegrity();
         if (!placeableToCells.ContainsKey(placeable) && !heldToHolder.ContainsKey(placeable))
         {
             throw new System.Exception("Placeable does not exist in map");
@@ -168,6 +191,7 @@ public class Map
                 holderToHeld.Remove(holder);
             }
             heldToHolder.Remove(placeable);
+            VerifyIntegrity();
             return;
         }
 
@@ -196,6 +220,7 @@ public class Map
             }
             holderToHeld.Remove(placeable);
         }
+        VerifyIntegrity();
     }
 
     public void MovePlaceable(Placeable placeable, Vector2Int newPosition)
@@ -309,6 +334,28 @@ public class Map
         return heldToHolder.ContainsKey(placeable);
     }
 
+    public void VerifyIntegrity()
+    {
+        foreach (Placeable placeable in heldToHolder.Keys)
+        {
+            Placeable holder = heldToHolder[placeable];
+            if (!holderToHeld[holder].Contains(placeable))
+            {
+                throw new System.Exception("Placeable is held but not in holderToHeld");
+            }
+        }
+        foreach (Placeable holder in holderToHeld.Keys)
+        {
+            foreach (Placeable held in holderToHeld[holder])
+            {
+                if (heldToHolder[held] != holder)
+                {
+                    throw new System.Exception("Placeable is in holderToHeld but not held");
+                }
+            }
+        }
+    }
+
     public List<Placeable> HeldPlaceablesOf(Placeable holder)
     {
         if (!holderToHeld.ContainsKey(holder))
@@ -321,6 +368,10 @@ public class Map
     public List<Activity> GetActivities(Creature forCreature)
     {
         List<Activity> candidateActivities = new();
+        Dictionary<PropType, int> bestPropDistances = new();
+        Dictionary<PropType, Prop> bestProps = new();
+        Dictionary<ItemType, int> bestItemDistances = new();
+        Dictionary<ItemType, Item> bestItems = new();
 
         foreach (Placeable placeable in UnheldPlaceables())
         {
@@ -341,6 +392,16 @@ public class Map
             }
             if (placeable is Prop prop)
             {
+                // only the best prop of each type is considered
+                if (!bestPropDistances.ContainsKey(prop.propType) || DistanceBetween(forCreature, prop) < bestPropDistances[prop.propType])
+                {
+                    bestPropDistances[prop.propType] = DistanceBetween(forCreature, prop);
+                    bestProps[prop.propType] = prop;
+                }
+                else
+                {
+                    continue;
+                }
                 // props can be harvested
                 List<ItemType> droppedItems = prop.propType.GetProducedItems();
                 if (droppedItems.Count == 0)
@@ -352,6 +413,16 @@ public class Map
             }
             if (placeable is Item item)
             {
+                // only the best item of each type is considered
+                if (!bestItemDistances.ContainsKey(item.itemType) || DistanceBetween(forCreature, item) < bestItemDistances[item.itemType])
+                {
+                    bestItemDistances[item.itemType] = DistanceBetween(forCreature, item);
+                    bestItems[item.itemType] = item;
+                }
+                else
+                {
+                    continue;
+                }
                 // items can be picked up
                 candidateActivities.Add(new PickUpActivity(item));
             }
@@ -680,6 +751,7 @@ public class Creature : Destructable
 
     public int MoveAndEstimate(Activity activity, Map map)
     {
+        map.VerifyIntegrity();
         int distance = activity.DistanceTo(this, map);
         int ticksPerSquare = MoveSpeed();
         int estimatedTicks = distance * ticksPerSquare;
@@ -977,6 +1049,10 @@ public class Craft : Goal
                         if (!itemsPresentByType.ContainsKey(item.itemType))
                         {
                             itemsPresentByType[item.itemType] = 0;
+                        }
+                        if (!itemsRequestedByType.ContainsKey(item.itemType))
+                        {
+                            continue;
                         }
                         if (itemsPresentByType[item.itemType] >= itemsRequestedByType[item.itemType])
                         {

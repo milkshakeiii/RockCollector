@@ -296,7 +296,7 @@ MonoBehaviour:
   cellsPerSquare: 4
   widthInSquares: 50
   heightInSquares: 25
-  secondsPerTurn: 0.1
+  secondsPerTurn: 0.02
   lastTurnTime: 0
 --- !u!1001 &1259671500
 PrefabInstance:

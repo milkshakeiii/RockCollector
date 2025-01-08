@@ -88,7 +88,7 @@ public class HarvestActivity : Activity
 
     }
 
-    private Prop SourceProp()
+    public Prop SourceProp()
     {
         return (Prop)sourcePlaceable;
     }
@@ -111,8 +111,8 @@ public class HarvestActivity : Activity
         int estimatedTicks = Mathf.CeilToInt((float)harvestAmount / (float)propHarvestRequired) * harvestCooldown;
 
         // mutate the map
-        map.Remove(SourceProp());
         SourceProp().MakeImaginaryDrops(map);
+        map.Remove(SourceProp());
 
         return estimatedTicks;
     }
@@ -303,7 +303,7 @@ public class CraftActivity : Activity
         }
         Item outputItem = new(craftingOutputItem, finalSuccessProbability);
         map.AddHeld(Workshop(), outputItem);
-        Debug.Log(Workshop() + " holds " + outputItem.itemType.GetName() + " with probability " + outputItem.GetProbability());
+        //Debug.Log(Workshop() + " holds " + outputItem.itemType.GetName() + " with probability " + outputItem.GetProbability());
     }
 
     public override int EffectAndEstimate(Creature creature, Map map)
@@ -322,7 +322,7 @@ public class PickUpActivity : Activity
 
     }
 
-    private Item Item()
+    public Item Item()
     {
         return (Item)sourcePlaceable;
     }
@@ -353,7 +353,7 @@ public class DropOffActivity : Activity
 
     }
 
-    private Building Building()
+    public Building Building()
     {
         return (Building)sourcePlaceable;
     }

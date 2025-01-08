@@ -28,11 +28,42 @@ public static class Search
 
     public static Activity GoalSearch(Map map, Creature creature)
     {
-        return BFSGoalSearch(map, creature, 10);
+        return BFSGoalSearch(map, creature, 8);
     }
 
     public static Activity BFSGoalSearch(Map startingMap, Creature creature, int maxDepth)
     {
+        void PrintBestInfo(SearchNode best, float bestEvaluation)
+        {
+            Debug.Log("Best evaluation: " + bestEvaluation);
+            Debug.Log("Best path:");
+            foreach (Activity a in best.activitiesCompleted)
+            {
+                if (a is CraftActivity craft)
+                {
+                    Debug.Log("Craft " + craft.craftingOutputItem.GetName());
+                }
+                else if (a is DropOffActivity dropoff)
+                {
+                    Debug.Log("Drop off " + dropoff.Building().buildingType.GetName());
+                }
+                else if (a is HarvestActivity harvest)
+                {
+                    Debug.Log("Harvest " + harvest.SourceProp().propType.GetName());
+                }
+                else if (a is HuntActivity hunt)
+                {
+                    Debug.Log("Hunt ");
+                }
+                else if (a is PickUpActivity pickup)
+                {
+                    Debug.Log("Pick up " + pickup.Item().itemType.GetName());
+                }
+            }
+            throw new Exception("Queue too long, bailing out.");
+        }
+
+        startingMap.VerifyIntegrity();
         Queue<SearchNode> queue = new ();
         SearchNode start = new ()
         {
@@ -45,24 +76,34 @@ public static class Search
 
         SearchNode current = start;
         SearchNode best = start;
-        float bestEvaluation = float.MaxValue;
+        float bestEvaluation = float.MinValue;
 
         while (queue.Count > 0 && current.depth < maxDepth)
         {
             current = queue.Dequeue();
+            current.map.VerifyIntegrity();
             
             List<Activity> activities = current.map.GetActivities(creature);
             foreach (Activity activity in activities)
             {
                 SearchNode next = current.Copy();
+                next.map.VerifyIntegrity();
                 next.estimatedTicks += creature.MoveAndEstimate(activity, next.map);
+                next.map.VerifyIntegrity();
                 next.estimatedTicks += activity.EffectAndEstimate(creature, next.map);
+                next.map.VerifyIntegrity();
                 next.activitiesCompleted.Add(activity);
+                next.map.VerifyIntegrity();
                 next.depth++;
                 queue.Enqueue(next);
+                if (queue.Count > 100000)
+                {
+                    Debug.Log("Next path length: " + next.activitiesCompleted.Count);
+                    PrintBestInfo(best, bestEvaluation);
+                }
 
-                float evaluation = creature.GetGoal().EvaluateMap(next.map);
-                if (evaluation < bestEvaluation)
+                float evaluation = creature.GetGoal().EvaluateMap(next.map) / next.estimatedTicks;
+                if (evaluation > bestEvaluation)
                 {
                     best = next;
                     bestEvaluation = evaluation;
@@ -70,6 +111,7 @@ public static class Search
             }
         }
 
+        PrintBestInfo(best, bestEvaluation);
         return best.activitiesCompleted.Count > 0 ? best.activitiesCompleted[0] : null;
     }
 }
