@@ -10,7 +10,7 @@ public class Tester : MonoBehaviour
         DistancesBetweenPlaceablesOfVariousSizes();
         LoadEntities();
         HoldAndDropItems();
-        SetInitialGoal();
+        // SetInitialGoal(); // TODO: delete or replace
         AddActivity();
         CraftThings();
         Debug.Log("Tests finished");

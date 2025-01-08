@@ -1,6 +1,8 @@
 using NUnit.Framework;
 using Steamworks;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public static class EntityManager
@@ -53,31 +55,31 @@ public static class EntityManager
     {
         if (identifier == "feats")
         {
-            return new Feat { attributes = attributes };
+            return new Feat (attributes);
         }
         else if (identifier == "type_abilities")
         {
-            return new TypeAbility { attributes = attributes };
+            return new TypeAbility (attributes);
         }
         else if (identifier == "conditions")
         {
-            return new Condition { attributes = attributes };
+            return new Condition (attributes);
         }
         else if (identifier == "prop_types")
         {
-            return new PropType { attributes = attributes };
+            return new PropType (attributes);
         }
         else if (identifier == "item_types")
         {
-            return new ItemType { attributes = attributes };
+            return new ItemType (attributes);
         }
         else if (identifier == "creature_types")
         {
-            return new CreatureType { attributes = attributes };
+            return new CreatureType (attributes);
         }
         else if (identifier == "building_types")
         {
-            return new BuildingType { attributes = attributes };
+            return new BuildingType (attributes);
         }
         else
         {
@@ -85,7 +87,7 @@ public static class EntityManager
         }
     }
 
-    public static string GetStringAttribute(Dictionary<string, string> attributes, string key, string defaultValue = null)
+    public static string GetStringAttribute(ReadOnlyDictionary<string, string> attributes, string key, string defaultValue = null)
     {
         if (attributes.ContainsKey(key))
         {
@@ -98,7 +100,7 @@ public static class EntityManager
         return defaultValue;
     }
 
-    public static int GetIntAttribute(Dictionary<string, string> attributes, string key, int defaultValue = -1)
+    public static int GetIntAttribute(ReadOnlyDictionary<string, string> attributes, string key, int defaultValue = -1)
     {
         if (attributes.ContainsKey(key))
         {
@@ -111,7 +113,7 @@ public static class EntityManager
         return defaultValue;
     }
 
-    public static List<int> GetIntListAttribute(Dictionary<string, string> attributes, string key, List<int> defaultValue = null)
+    public static List<int> GetIntListAttribute(ReadOnlyDictionary<string, string> attributes, string key, List<int> defaultValue = null)
     {
         if (attributes.ContainsKey(key))
         {
@@ -124,7 +126,7 @@ public static class EntityManager
         return defaultValue;
     }
 
-    public static List<string> GetStringListAttribute(Dictionary<string, string> attributes, string key, List<string> defaultValue = null)
+    public static List<string> GetStringListAttribute(ReadOnlyDictionary<string, string> attributes, string key, List<string> defaultValue = null)
     {
         if (attributes.ContainsKey(key))
         {
@@ -137,12 +139,12 @@ public static class EntityManager
         return defaultValue;
     }
 
-    public static bool HasAttribute(Dictionary<string, string> attributes, string key)
+    public static bool HasAttribute(ReadOnlyDictionary<string, string> attributes, string key)
     {
         return attributes.ContainsKey(key);
     }
 
-    public static List<ItemType> GetItemListAttribute(Dictionary<string, string> attributes, string key, List<ItemType> defaultValue = null)
+    public static List<ItemType> GetItemListAttribute(ReadOnlyDictionary<string, string> attributes, string key, List<ItemType> defaultValue = null)
     {
         if (attributes.ContainsKey(key))
         {
@@ -155,7 +157,7 @@ public static class EntityManager
         return defaultValue;
     }
 
-    public static List<CreatureType> GetCreatureTypeListAttribute(Dictionary<string, string> attributes, string key, List<CreatureType> defaultValue = null)
+    public static List<CreatureType> GetCreatureTypeListAttribute(ReadOnlyDictionary<string, string> attributes, string key, List<CreatureType> defaultValue = null)
     {
         if (attributes.ContainsKey(key))
         {
@@ -168,7 +170,7 @@ public static class EntityManager
         return defaultValue;
     }
 
-    public static List<Goal> GetGoalListAttribute(Dictionary<string, string> attributes, string key, List<Goal> defaultValue = null)
+    public static List<Goal> GetGoalListAttribute(ReadOnlyDictionary<string, string> attributes, string key, List<Goal> defaultValue = null)
     {
         if (attributes.ContainsKey(key))
         {
@@ -181,7 +183,7 @@ public static class EntityManager
         return defaultValue;
     }
 
-    public static List<TypeAbility> GetTypeAbilityListAttribute(Dictionary<string, string> attributes, string key, List<TypeAbility> defaultValue = null)
+    public static List<TypeAbility> GetTypeAbilityListAttribute(ReadOnlyDictionary<string, string> attributes, string key, List<TypeAbility> defaultValue = null)
     {
         if (attributes.ContainsKey(key))
         {
@@ -228,11 +230,18 @@ public static class EntityManager
 
 public class Entity
 {
-    public Dictionary<string, string> attributes;
+    public readonly ReadOnlyDictionary<string, string> attributes;
+
+    public Entity(Dictionary<string, string> attributes)
+    {
+        this.attributes = new(attributes);
+    }
 }
 
 public class Feat : Entity
 {
+    public Feat(Dictionary<string, string> attributes) : base(attributes) {}
+
     public string GetName()
     {
         return EntityManager.GetStringAttribute(attributes, "name");
@@ -249,6 +258,8 @@ public class Feat : Entity
 
 public class TypeAbility : Entity
 {
+    public TypeAbility(Dictionary<string, string> attributes) : base(attributes) {}
+
     public string GetName()
     {
         return EntityManager.GetStringAttribute(attributes, "name");
@@ -296,6 +307,8 @@ public class TypeAbility : Entity
 
 public class Condition : Entity
 {
+    public Condition(Dictionary<string, string> attributes) : base(attributes) {}
+
     public string GetName()
     {
         return EntityManager.GetStringAttribute(attributes, "name");
@@ -316,6 +329,8 @@ public class Condition : Entity
 
 public class CreatureType : Entity
 {
+    public CreatureType(Dictionary<string, string> attributes) : base(attributes) {}
+
     public string GetName()
     {
         return EntityManager.GetStringAttribute(attributes, "name");
@@ -380,6 +395,8 @@ public class CreatureType : Entity
 
 public class PropType : Entity
 {
+    public PropType(Dictionary<string, string> attributes) : base(attributes) {}
+
     public string GetName()
     {
         return EntityManager.GetStringAttribute(attributes, "name");
@@ -408,6 +425,8 @@ public class PropType : Entity
 
 public class ItemType : Entity
 {
+    public ItemType(Dictionary<string, string> attributes) : base(attributes) {}
+
     public string GetName()
     {
         return EntityManager.GetStringAttribute(attributes, "name");
@@ -436,6 +455,8 @@ public class ItemType : Entity
 
 public class BuildingType : Entity
 {
+    public BuildingType(Dictionary<string, string> attributes) : base(attributes) {}
+
     public string GetName()
     {
         return EntityManager.GetStringAttribute(attributes, "name");

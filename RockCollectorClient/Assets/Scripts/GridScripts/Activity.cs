@@ -19,6 +19,8 @@ public abstract class Activity
     protected Placeable sourcePlaceable;
     protected Vector2Int position;
 
+    private Dictionary<Placeable, Placeable> backDictionary = null;
+
     public Activity(int encounterLevel,
                     List<ItemType> craftingInputItems,
                     ItemType craftingOutputItem,
@@ -78,6 +80,26 @@ public abstract class Activity
     /// <param name="map"></param>
     /// <returns></returns>
     public abstract int EffectAndEstimate(Creature creature, Map map);
+
+    public void MarkForBackConversion(Dictionary<Placeable, Placeable> backDictionary)
+    {
+        this.backDictionary = backDictionary;
+    }
+
+    public bool SuccessfulBackConversion(Map map)
+    {
+        if (backDictionary == null)
+        {
+            throw new Exception("Not marked for back conversion");
+        }
+        if (sourcePlaceable == null)
+        {
+            return true;
+        }
+        Placeable originalPlaceable = backDictionary[sourcePlaceable];
+        sourcePlaceable = originalPlaceable;
+        return map.PlaceableExists(originalPlaceable);
+    }
 }
 
 public class HarvestActivity : Activity
@@ -333,7 +355,7 @@ public class CraftActivity : Activity
 public class PickUpActivity : Activity
 {
     public PickUpActivity(Item item) : base(0,
-        new(), new(), new(), new(), item, Activity.NULL_POSITION)
+        new(), null, new(), new(), item, Activity.NULL_POSITION)
     {
 
     }
@@ -364,7 +386,7 @@ public class PickUpActivity : Activity
 public class DropOffActivity : Activity
 {
     public DropOffActivity(Building building) : base(0,
-        new(), new(), new(), new(), building, Activity.NULL_POSITION)
+        new(), null, new(), new(), building, Activity.NULL_POSITION)
     {
 
     }

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Threading;
 using UnityEngine;
 
 public class Simulation 
@@ -67,6 +68,60 @@ public class Map
         copy.currentTick = currentTick;
 
         return copy;
+    }
+
+    public (Map, Dictionary<Placeable, Placeable>, Creature) DeepCopy(Creature caller)
+    {
+        Map deepCopy = new Map();
+
+        // This is a deep copy. We need to create new instances of all the placeables.
+        Dictionary<Placeable, Placeable> placeableCopies = new();
+        foreach (Placeable placeable in AllPlaceables())
+        {
+            Placeable placeableCopy = placeable.DeepCopy();
+            placeableCopies[placeable] = placeableCopy;
+        }
+
+        deepCopy.cells = new Dictionary<Vector2Int, List<Placeable>>();
+        foreach (Vector2Int cell in cells.Keys)
+        {
+            deepCopy.cells[cell] = new List<Placeable>();
+            foreach (Placeable placeable in cells[cell])
+            {
+                deepCopy.cells[cell].Add(placeableCopies[placeable]);
+            }
+        }
+
+        deepCopy.placeableToCells = new Dictionary<Placeable, List<Vector2Int>>();
+        foreach (Placeable placeable in placeableToCells.Keys)
+        {
+            deepCopy.placeableToCells[placeableCopies[placeable]] = new List<Vector2Int>(placeableToCells[placeable]);
+        }
+
+        deepCopy.heldToHolder = new Dictionary<Placeable, Placeable>();
+        foreach (Placeable held in heldToHolder.Keys)
+        {
+            deepCopy.heldToHolder[placeableCopies[held]] = placeableCopies[heldToHolder[held]];
+        }
+
+        deepCopy.holderToHeld = new Dictionary<Placeable, List<Placeable>>();
+        foreach (Placeable holder in holderToHeld.Keys)
+        {
+            deepCopy.holderToHeld[placeableCopies[holder]] = new List<Placeable>();
+            foreach (Placeable held in holderToHeld[holder])
+            {
+                deepCopy.holderToHeld[placeableCopies[holder]].Add(placeableCopies[held]);
+            }
+        }
+
+        deepCopy.currentTick = currentTick;
+
+        Dictionary<Placeable, Placeable> backDictionary = new();
+        foreach (Placeable key in placeableCopies.Keys)
+        {
+            backDictionary[placeableCopies[key]] = key;
+        }
+        return (deepCopy, backDictionary, (Creature)placeableCopies[caller]);
     }
 
     public void PickUp(Placeable holder, Placeable held)
@@ -323,6 +378,19 @@ public class Map
         return heldToHolder.Keys;
     }
 
+    public List<Placeable> AllPlaceables()
+    {
+        List<Placeable> placeables = new();
+        placeables.AddRange(UnheldPlaceables());
+        placeables.AddRange(HeldPlaceables());
+        return placeables;
+    }
+
+    public bool PlaceableExists(Placeable placeable)
+    {
+        return placeableToCells.ContainsKey(placeable) || heldToHolder.ContainsKey(placeable);
+    }
+
     public bool IsHeld(Placeable placeable)
     {
         return heldToHolder.ContainsKey(placeable);
@@ -428,8 +496,7 @@ public class Map
 
     public void AdvanceTick()
     {
-        List<Placeable> placeables = new(HeldPlaceables());
-        placeables.AddRange(UnheldPlaceables());
+        List<Placeable> placeables = AllPlaceables();
 
         foreach (Placeable placeable in placeables)
         {
@@ -468,7 +535,7 @@ public class Placeable
     // sizeCategory is the width and height in cells if positive
     // if negative, the placeable takes up (1/sizeCategory) of a cell
     // sizeCategory 0 placeables take up no space
-    private int sizeCategory;
+    protected int sizeCategory;
 
     public Placeable(int sizeCategory)
     {
@@ -498,6 +565,11 @@ public class Placeable
     public virtual void OnAdd(Map map)
     {
         
+    }
+
+    public virtual Placeable DeepCopy()
+    {
+        return new Placeable(sizeCategory);
     }
 }
 
@@ -540,7 +612,9 @@ public class Creature : Destructable
     private CreatureType creatureType;
 
     private Goal pursuingGoal;
-    private Activity nextActivity;
+    private Activity currentActivity;
+    private Activity stagedActivity;
+    private Thread newActivityComputation;
 
     private int cooldownTicksRemaining = 0;
 
@@ -555,6 +629,20 @@ public class Creature : Destructable
         this.teamNumber = teamNumber;
         this.creatureType = creatureType;
         LevelUp();
+    }
+
+    public override Placeable DeepCopy()
+    {
+        Creature copy = new(name, teamNumber, creatureType);
+        copy.damageTaken = damageTaken; // from parent
+        copy.level = level;
+        copy.feats = new List<Feat>(feats);
+        copy.abilities = new List<TypeAbility>(abilities);
+        copy.pursuingGoal = pursuingGoal; // This is OK because goals are stateless
+        copy.currentActivity = null;
+        copy.newActivityComputation = null;
+        copy.cooldownTicksRemaining = cooldownTicksRemaining;
+        return copy;
     }
 
     public int EncounterLevel()
@@ -636,11 +724,44 @@ public class Creature : Destructable
 
     public override void ThinkAndPlan(Map map)
     {
-        if (ShouldGetNewGoal(map))
+        if (currentActivity == null && stagedActivity != null)
+        {
+            currentActivity = stagedActivity;
+            if (!currentActivity.SuccessfulBackConversion(map))
+            {
+                Debug.Log("Activity back conversion failed");
+                currentActivity = null;
+            }
+            stagedActivity = null;
+        }
+        else if (ShouldGetNewGoal(map))
         {
             pursuingGoal = GetNewGoal(map);
+            LaunchNewActivityComputation(map);
         }
-        nextActivity ??= pursuingGoal.GetNextActivity(map, this);
+        else if (currentActivity == null && (newActivityComputation == null || !newActivityComputation.IsAlive))
+        {
+            LaunchNewActivityComputation(map);
+        }
+    }
+
+    private void LaunchNewActivityComputation(Map map)
+    {
+        if (newActivityComputation != null && newActivityComputation.IsAlive)
+        {
+            newActivityComputation.Abort();
+        }
+        (Map mapCopy, Dictionary<Placeable, Placeable> backDictionary, Creature newMe) = map.DeepCopy(this);
+        newActivityComputation = new Thread(() =>
+        {
+            Activity bestActivity = Search.GoalSearch(mapCopy, newMe);
+            if (bestActivity != null)
+            {
+                bestActivity.MarkForBackConversion(backDictionary);
+                this.stagedActivity = bestActivity;
+            }
+        });
+        newActivityComputation.Start();
     }
 
     /// <summary>
@@ -659,19 +780,19 @@ public class Creature : Destructable
             cooldownTicksRemaining--;
             return;
         }
-        else if (nextActivity == null)
+        else if (currentActivity == null)
         {
             return;
         }
-        else if (nextActivity.IsCompletedOrImpossible(map, this))
+        else if (currentActivity.IsCompletedOrImpossible(map, this))
         {
             Debug.Log("Activity impossible");
             // Something else completed the activity this frame
             // or there is no activity assigned
-            nextActivity = null;
+            currentActivity = null;
             return;
         }
-        else if (nextActivity.DistanceTo(this, map) > nextActivity.ProximityRequirement(this))
+        else if (currentActivity.DistanceTo(this, map) > currentActivity.ProximityRequirement(this))
         {
             Vector2Int difference = DirectionToNextActivity(map);
             Vector2Int direction = new (Math.Sign(difference.x), Math.Sign(difference.y));
@@ -682,12 +803,12 @@ public class Creature : Destructable
         }
         else // Perform the activity
         {
-            Debug.Log(nextActivity);
-            nextActivity.Perform(this, map);
-            if (nextActivity.IsCompletedOrImpossible(map, this))
+            Debug.Log(currentActivity);
+            currentActivity.Perform(this, map);
+            if (currentActivity.IsCompletedOrImpossible(map, this))
             {
                 Debug.Log("Activity completed");
-                nextActivity = null; // Otherwise, there would be a "stunned" frame
+                currentActivity = null; // Otherwise, there would be a "stunned" frame
             }
             return;
         }
@@ -695,7 +816,7 @@ public class Creature : Destructable
 
     private Vector2Int DirectionToNextActivity(Map map)
     {
-        Vector2Int location = nextActivity.GetLocation(map);
+        Vector2Int location = currentActivity.GetLocation(map);
         Vector2Int currentPosition = map.PositionOf(this);
         return location - currentPosition;
     }
@@ -743,6 +864,16 @@ public class Building : Destructable
     public Building(BuildingType buildingType) : base(buildingType.GetSize())
     {
         this.buildingType = buildingType;
+    }
+
+    public override Placeable DeepCopy()
+    {
+        Building copy = new (buildingType);
+        copy.damageTaken = damageTaken; // from parent
+        copy.creaturesByType = null;
+        copy.spawnTicksRemaining = spawnTicksRemaining;
+        copy.spawningCreature = null;
+        return copy;
     }
 
     public override float HealthFraction()
@@ -838,6 +969,15 @@ public class Prop : Destructable
     public Prop(PropType propType) : base(propType.GetSize())
     {
         this.propType = propType;
+    }
+
+    public override Placeable DeepCopy()
+    {
+        Prop copy = new (propType);
+        copy.damageTaken = damageTaken; // from parent
+        copy.propType = propType;
+        copy.harvestedAmount = harvestedAmount;
+        return copy;
     }
 
     public override float HealthFraction()
@@ -936,6 +1076,15 @@ public class Item : Placeable
         this.probability = probability;
     }
 
+    public override Placeable DeepCopy()
+    {
+        Item copy = new(itemType);
+        copy.itemType = itemType;
+        copy.consumed = consumed;
+        copy.probability = probability;
+        return copy;
+    }
+
     public float GetProbability()
     {
         return probability;
@@ -973,8 +1122,6 @@ public abstract class Goal
     public abstract float EvaluateMap(Map map);
 
     public abstract void Initialize(int tickBegun);
-
-    public abstract Activity GetNextActivity(Map map, Creature creature);
 }
 
 public class Craft : Goal
@@ -1038,11 +1185,5 @@ public class Craft : Goal
             }
         }
         return evaluation;
-    }
-
-    public override Activity GetNextActivity(Map map, Creature creature)
-    {
-        Activity result = Search.GoalSearch(map, creature);
-        return result;
     }
 }
