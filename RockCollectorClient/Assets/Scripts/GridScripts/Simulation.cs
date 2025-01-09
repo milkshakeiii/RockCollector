@@ -415,6 +415,10 @@ public class Map
 
         foreach (Placeable placeable in UnheldPlaceables())
         {
+            if (placeable.IsClaimed())
+            {
+                continue;
+            }
             if (placeable is Creature creature && creature.teamNumber != forCreature.teamNumber)
             {
                 // creatures can be hunted
@@ -537,9 +541,12 @@ public class Placeable
     // sizeCategory 0 placeables take up no space
     protected int sizeCategory;
 
-    public Placeable(int sizeCategory)
+    protected bool claimed = false;
+
+    public Placeable(int sizeCategory, bool claimed = false)
     {
         this.sizeCategory = sizeCategory;
+        this.claimed = claimed;
     }
 
     public int SquaresMinimumOne()
@@ -567,9 +574,24 @@ public class Placeable
         
     }
 
+    public void Claim()
+    {
+        claimed = true;
+    }
+
+    public void Unclaim()
+    {
+        claimed = false;
+    }
+
+    public bool IsClaimed()
+    {
+        return claimed;
+    }
+
     public virtual Placeable DeepCopy()
     {
-        return new Placeable(sizeCategory);
+        throw new System.NotImplementedException("Deep copy on placeable parent class not implemented");
     }
 }
 
@@ -634,6 +656,7 @@ public class Creature : Destructable
     public override Placeable DeepCopy()
     {
         Creature copy = new(name, teamNumber, creatureType);
+        copy.claimed = claimed; // from parent
         copy.damageTaken = damageTaken; // from parent
         copy.level = level;
         copy.feats = new List<Feat>(feats);
@@ -724,24 +747,46 @@ public class Creature : Destructable
 
     public override void ThinkAndPlan(Map map)
     {
-        if (currentActivity == null && stagedActivity != null)
+        if (currentActivity == null && stagedActivity != null) // first check if a staged activity is ready
         {
-            currentActivity = stagedActivity;
-            if (!currentActivity.SuccessfulBackConversion(map))
-            {
-                Debug.Log("Activity back conversion failed");
-                currentActivity = null;
-            }
-            stagedActivity = null;
+            TryPromoteStagedActivity(map);
         }
-        else if (ShouldGetNewGoal(map))
+        else if (ShouldGetNewGoal(map)) // if not, check for circumstances to get a new goal
         {
             pursuingGoal = GetNewGoal(map);
-            LaunchNewActivityComputation(map);
+            LaunchNewActivityComputation(map); // we will also need an activity
         }
-        else if (currentActivity == null && (newActivityComputation == null || !newActivityComputation.IsAlive))
+        // if not, we might need to launch a new activity computation
+        else if (currentActivity == null && (newActivityComputation == null || !newActivityComputation.IsAlive)) 
         {
             LaunchNewActivityComputation(map);
+        }
+        // otherwise, continue with the current activity
+    }
+
+    private void TryPromoteStagedActivity(Map map)
+    {
+        currentActivity = stagedActivity;
+        if (currentActivity.SuccessfulBackConversion(map) && !currentActivity.IsSourcePlaceableClaimed())
+        {
+            stagedActivity = null;
+            // when we have a new activity, we need to mark the target placeable as claimed
+            // new activities always are assigned here
+            Debug.Log("Activity promoted: " + currentActivity + " " + currentActivity.GetLocation(map));
+            currentActivity.MarkSourcePlaceableClaimed();
+        }
+        else
+        {
+            try
+            {
+                Debug.Log("Activity not promoted: " + currentActivity + " " + currentActivity.GetLocation(map));
+            }
+            catch (System.Exception e)
+            {
+                Debug.Log("Activity not promoted: " + e.Message);
+            }
+            currentActivity = null;
+            stagedActivity = null;
         }
     }
 
@@ -789,7 +834,7 @@ public class Creature : Destructable
             Debug.Log("Activity impossible");
             // Something else completed the activity this frame
             // or there is no activity assigned
-            currentActivity = null;
+            AbandonCurrentActivity();
             return;
         }
         else if (currentActivity.DistanceTo(this, map) > currentActivity.ProximityRequirement(this))
@@ -803,12 +848,11 @@ public class Creature : Destructable
         }
         else // Perform the activity
         {
-            Debug.Log(currentActivity);
             currentActivity.Perform(this, map);
             if (currentActivity.IsCompletedOrImpossible(map, this))
             {
                 Debug.Log("Activity completed");
-                currentActivity = null; // Otherwise, there would be a "stunned" frame
+                AbandonCurrentActivity(); // Otherwise, there would be a "stunned" frame
             }
             return;
         }
@@ -819,6 +863,16 @@ public class Creature : Destructable
         Vector2Int location = currentActivity.GetLocation(map);
         Vector2Int currentPosition = map.PositionOf(this);
         return location - currentPosition;
+    }
+
+    private void AbandonCurrentActivity()
+    {
+        if (currentActivity != null)
+        {
+            currentActivity.MarkSourcePlaceableUnclaimed();
+            currentActivity = null;
+            stagedActivity = null;
+        }
     }
 
     private bool ShouldGetNewGoal(Map map)
@@ -869,6 +923,7 @@ public class Building : Destructable
     public override Placeable DeepCopy()
     {
         Building copy = new (buildingType);
+        copy.claimed = claimed; // from parent
         copy.damageTaken = damageTaken; // from parent
         copy.creaturesByType = null;
         copy.spawnTicksRemaining = spawnTicksRemaining;
@@ -974,6 +1029,7 @@ public class Prop : Destructable
     public override Placeable DeepCopy()
     {
         Prop copy = new (propType);
+        copy.claimed = claimed; // from parent
         copy.damageTaken = damageTaken; // from parent
         copy.propType = propType;
         copy.harvestedAmount = harvestedAmount;
@@ -1079,6 +1135,7 @@ public class Item : Placeable
     public override Placeable DeepCopy()
     {
         Item copy = new(itemType);
+        copy.claimed = claimed; // from parent
         copy.itemType = itemType;
         copy.consumed = consumed;
         copy.probability = probability;

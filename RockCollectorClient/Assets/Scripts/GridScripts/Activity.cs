@@ -81,9 +81,13 @@ public abstract class Activity
     /// <returns></returns>
     public abstract int EffectAndEstimate(Creature creature, Map map);
 
-    public void MarkForBackConversion(Dictionary<Placeable, Placeable> backDictionary)
+    public void MarkForBackConversion(Dictionary<Placeable, Placeable> newBackDictionary)
     {
-        this.backDictionary = backDictionary;
+        if (this.backDictionary != null)
+        {
+            throw new Exception("Already marked for back conversion");
+        }
+        this.backDictionary = newBackDictionary;
     }
 
     public bool SuccessfulBackConversion(Map map)
@@ -99,6 +103,21 @@ public abstract class Activity
         Placeable originalPlaceable = backDictionary[sourcePlaceable];
         sourcePlaceable = originalPlaceable;
         return map.PlaceableExists(originalPlaceable);
+    }
+
+    public bool IsSourcePlaceableClaimed()
+    {
+        return sourcePlaceable?.IsClaimed() ?? false;
+    }
+
+    public void MarkSourcePlaceableClaimed()
+    {
+        sourcePlaceable?.Claim();
+    }
+
+    public void MarkSourcePlaceableUnclaimed()
+    {
+        sourcePlaceable?.Unclaim();
     }
 }
 

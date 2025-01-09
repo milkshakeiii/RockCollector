@@ -22,6 +22,8 @@ public class MapDisplayer : MonoBehaviour
         map = new ();
         Creature testCreature = new ("George", 0, EntityManager.creatureTypes["Peasant"]);
         map.Add(testCreature, new Vector2Int(0, 0));
+        Creature testCreature2 = new("George2", 0, EntityManager.creatureTypes["Peasant"]);
+        map.Add(testCreature2, new Vector2Int(10, 0));
         Building testBuilding = new (EntityManager.buildingTypes["Farm"]);
         testBuilding.TakeDamage(50);
         map.Add(testBuilding, new Vector2Int(-10, -10));
