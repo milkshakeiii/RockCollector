@@ -13,6 +13,7 @@ public static class Search
         public List<Activity> activitiesCompleted;
         public int estimatedTicks;
         public int depth;
+        public SearchNode predecessor;
 
         public SearchNode Copy()
         {
@@ -33,7 +34,7 @@ public static class Search
 
     public static Activity BFSGoalSearch(Map startingMap, Creature creature, int maxDepth)
     {
-        static void PrintBestInfo(SearchNode best, float bestEvaluation)
+        void PrintBestInfo(SearchNode best, float bestEvaluation)
         {
             Debug.Log("Best evaluation: " + bestEvaluation);
             Debug.Log("Ticks: " + best.estimatedTicks);
@@ -61,6 +62,17 @@ public static class Search
                     Debug.Log("Pick up " + pickup.Item().itemType.GetName());
                 }
             }
+            Debug.Log("Creature held items sequence:");
+            SearchNode node = best;
+            while (node != null)
+            {
+                Debug.Log("Tick " + node.estimatedTicks);
+                foreach (Item item in node.map.HeldPlaceablesOf(creature))
+                {
+                    Debug.Log("Held " + item.itemType.GetName());
+                }
+                node = node.predecessor;
+            }
         }
 
         Queue<SearchNode> queue = new ();
@@ -85,6 +97,7 @@ public static class Search
             foreach (Activity activity in activities)
             {
                 SearchNode next = current.Copy();
+                next.predecessor = current;
                 next.estimatedTicks += creature.MoveAndEstimate(activity, next.map);
                 next.estimatedTicks += activity.EffectAndEstimate(creature, next.map);
                 next.activitiesCompleted.Add(activity);
@@ -97,7 +110,7 @@ public static class Search
                     throw new Exception("Queue too long, bailing out.");
                 }
 
-                float evaluation = creature.GetGoal().EvaluateMap(next.map);// / next.estimatedTicks;
+                float evaluation = creature.GetGoal().EvaluateMap(next.map) - (float)next.estimatedTicks / 1000f;
                 if (evaluation > bestEvaluation)
                 {
                     best = next;
@@ -106,7 +119,7 @@ public static class Search
             }
         }
 
-        //PrintBestInfo(best, bestEvaluation);
+        PrintBestInfo(best, bestEvaluation);
         return best.activitiesCompleted.Count > 0 ? best.activitiesCompleted[0] : null;
     }
 }
