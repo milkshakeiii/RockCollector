@@ -462,13 +462,9 @@ public class Map
                 {
                     bestItemDistances[item.itemType] = DistanceBetween(forCreature, item);
                     bestItems[item.itemType] = item;
+                    // items can be picked up
+                    candidateActivities.Add(new PickUpActivity(item));
                 }
-                else
-                {
-                    continue;
-                }
-                // items can be picked up
-                candidateActivities.Add(new PickUpActivity(item));
             }
         }
 

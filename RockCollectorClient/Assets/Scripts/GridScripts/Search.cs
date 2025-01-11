@@ -29,7 +29,7 @@ public static class Search
 
     public static Activity GoalSearch(Map map, Creature creature)
     {
-        return BFSGoalSearch(map, creature, 8);
+        return BFSGoalSearch(map, creature, 7);
     }
 
     public static Activity BFSGoalSearch(Map startingMap, Creature creature, int maxDepth)
@@ -107,7 +107,7 @@ public static class Search
                 next.depth++;
                 queue.Enqueue(next);
                 nodesEvaluated++;
-                if (queue.Count > 100000)
+                if (queue.Count > 200000)
                 {
                     Debug.Log("Next path length: " + next.activitiesCompleted.Count);
                     PrintBestInfo(best, bestEvaluation);
