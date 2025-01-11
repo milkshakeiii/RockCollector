@@ -427,7 +427,7 @@ public class Map
             if (placeable is Building building)
             {
                 // buildings can be dropped off at
-                // candidateActivities.Add(new DropOffActivity(building));
+                candidateActivities.Add(new DropOffActivity(building));
                 // and also crafted at
                 foreach (ItemType itemType in building.buildingType.GetCraftedItemTypes())
                 {
@@ -797,16 +797,16 @@ public class Creature : Destructable
             newActivityComputation.Abort();
         }
         (Map mapCopy, Dictionary<Placeable, Placeable> backDictionary, Creature newMe) = map.DeepCopy(this);
-        //newActivityComputation = new Thread(() =>
-        //{
-        Activity bestActivity = Search.GoalSearch(mapCopy, newMe);
-        if (bestActivity != null)
+        newActivityComputation = new Thread(() =>
         {
-            bestActivity.MarkForBackConversion(backDictionary);
-            this.stagedActivity = bestActivity;
-        }
-        //});
-        //newActivityComputation.Start();
+            Activity bestActivity = Search.GoalSearch(mapCopy, newMe);
+            if (bestActivity != null)
+            {
+                bestActivity.MarkForBackConversion(backDictionary);
+                this.stagedActivity = bestActivity;
+            }
+        });
+        newActivityComputation.Start();
     }
 
     /// <summary>

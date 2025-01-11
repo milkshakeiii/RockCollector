@@ -231,7 +231,7 @@ public class CraftActivity : Activity
             // check if the performer is holding the input item
             if (!itemFound)
             {
-                List<Placeable> heldItems = new(map.HeldPlaceablesOf(Workshop()));
+                List<Placeable> heldItems = new(map.HeldPlaceablesOf(performer));
                 foreach (Placeable heldItem in heldItems)
                 {
                     if (heldItem is Item item && item.itemType.GetName() == inputItem.GetName() && !item.IsConsumed())

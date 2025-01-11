@@ -34,7 +34,9 @@ public static class Search
 
     public static Activity BFSGoalSearch(Map startingMap, Creature creature, int maxDepth)
     {
-        void PrintBestInfo(SearchNode best, float bestEvaluation)
+        float startTime = Time.realtimeSinceStartup;
+
+        static void PrintBestInfo(SearchNode best, float bestEvaluation)
         {
             Debug.Log("Best evaluation: " + bestEvaluation);
             Debug.Log("Ticks: " + best.estimatedTicks);
@@ -62,17 +64,17 @@ public static class Search
                     Debug.Log("Pick up " + pickup.Item().itemType.GetName());
                 }
             }
-            Debug.Log("Creature held items sequence:");
-            SearchNode node = best;
-            while (node != null)
-            {
-                Debug.Log("Tick " + node.estimatedTicks);
-                foreach (Item item in node.map.HeldPlaceablesOf(creature))
-                {
-                    Debug.Log("Held " + item.itemType.GetName());
-                }
-                node = node.predecessor;
-            }
+            //Debug.Log("Creature held items sequence:");
+            //SearchNode node = best;
+            //while (node != null)
+            //{
+            //    Debug.Log("Tick " + node.estimatedTicks);
+            //    foreach (Item item in node.map.HeldPlaceablesOf(creature))
+            //    {
+            //        Debug.Log("Held " + item.itemType.GetName());
+            //    }
+            //    node = node.predecessor;
+            //}
         }
 
         Queue<SearchNode> queue = new ();
@@ -88,6 +90,7 @@ public static class Search
         SearchNode current = start;
         SearchNode best = start;
         float bestEvaluation = creature.GetGoal().EvaluateMap(start.map);
+        int nodesEvaluated = 0;
 
         while (queue.Count > 0 && current.depth < maxDepth)
         {
@@ -103,10 +106,14 @@ public static class Search
                 next.activitiesCompleted.Add(activity);
                 next.depth++;
                 queue.Enqueue(next);
+                nodesEvaluated++;
                 if (queue.Count > 100000)
                 {
                     Debug.Log("Next path length: " + next.activitiesCompleted.Count);
                     PrintBestInfo(best, bestEvaluation);
+                    Debug.Log("Nodes evaluated: " + nodesEvaluated + " at depth " + current.depth);
+                    Debug.Log("Branching factor: " + (float)nodesEvaluated / queue.Count);
+                    Debug.Log("Time: " + (Time.realtimeSinceStartup - startTime));
                     throw new Exception("Queue too long, bailing out.");
                 }
 
@@ -119,7 +126,7 @@ public static class Search
             }
         }
 
-        PrintBestInfo(best, bestEvaluation);
+        // PrintBestInfo(best, bestEvaluation);
         return best.activitiesCompleted.Count > 0 ? best.activitiesCompleted[0] : null;
     }
 }
