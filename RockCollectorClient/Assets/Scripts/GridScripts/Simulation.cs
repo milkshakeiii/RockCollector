@@ -624,6 +624,7 @@ public class Creature : Destructable
     public int teamNumber = 0;
 
     private int level = 0;
+    private int experience = 0; // reset to 0 on level up
     private List<Feat> feats = new();
     private List<TypeAbility> abilities = new();
 
@@ -674,6 +675,11 @@ public class Creature : Destructable
         return level;
     }
 
+    public int ExperienceForNextLevel()
+    {
+        return level * level;
+    }
+
     public int EncounterLevel()
     {
         return level;
@@ -696,13 +702,23 @@ public class Creature : Destructable
 
     public void HarvestProp(Prop prop, Map map)
     {
+        // use the best ability to harvest the prop
         (int cooldown, int bestAmount) = HarvestingCooldownAndAmount(prop);
+
+        // creatures should not be instructed to harvest props they cannot harvest
+        // (activity impossibility should be checked before this)
         if (bestAmount == 0)
         {
             throw new System.Exception("Creature " + name + " cannot harvest prop " + prop.propType.GetName());
         }
-        prop.TakeHarvest(bestAmount);
+
+        // set cooldown
         cooldownTicksRemaining = cooldown;
+
+        // roll for success or failure
+
+        // apply the harvest and if this was the last hit, gain experience
+        prop.TakeHarvest(bestAmount);
     }
 
     public (int, int) HarvestingCooldownAndAmount(Prop prop)
@@ -748,7 +764,11 @@ public class Creature : Destructable
 
     public override void ObserveAndFeel(Map map)
     {
-        
+        if (experience >= ExperienceForNextLevel())
+        {
+            LevelUp();
+            experience = 0;
+        }
     }
 
     public override void ThinkAndPlan(Map map)
@@ -1066,6 +1086,7 @@ public class Prop : Destructable
     {
         if (HarvestedFraction() >= 1)
         {
+            // Drop items
             List<ItemType> droppedItems = propType.GetProducedItems();
             
             List<ItemType> droppedItemsMultipliedByProbability = new();
