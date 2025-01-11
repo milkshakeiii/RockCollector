@@ -34,7 +34,7 @@ public static class Search
 
     public static Activity BFSGoalSearch(Map startingMap, Creature creature, int maxDepth)
     {
-        float startTime = Time.realtimeSinceStartup;
+        System.DateTime startTime = System.DateTime.Now;
 
         static void PrintBestInfo(SearchNode best, float bestEvaluation)
         {
@@ -113,7 +113,7 @@ public static class Search
                     PrintBestInfo(best, bestEvaluation);
                     Debug.Log("Nodes evaluated: " + nodesEvaluated + " at depth " + current.depth);
                     Debug.Log("Branching factor: " + (float)nodesEvaluated / queue.Count);
-                    Debug.Log("Time: " + (Time.realtimeSinceStartup - startTime));
+                    Debug.Log("Time: " + (System.DateTime.Now - startTime).TotalSeconds);
                     throw new Exception("Queue too long, bailing out.");
                 }
 
