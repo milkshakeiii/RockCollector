@@ -35,6 +35,14 @@ public class MapDisplayer : MonoBehaviour
                 map.Add(testProp, new Vector2Int(i*3, j*3));
             }
         }
+        for (int i = 1; i <= 3; i++)
+        {
+            for (int j = 1; j <= 3; j++)
+            {
+                Prop testProp = new(EntityManager.propTypes["Rock"]);
+                map.Add(testProp, new Vector2Int(i * 3 - 15, j * 3));
+            }
+        }
         DisplayMap(map);
     }
 

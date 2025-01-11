@@ -14,7 +14,18 @@ craftingSkill:woodcutting
 craftingTime:10
 size:-6
 
+name:Real Axe
+harvestingSkill:chopping
+harvestingAmount:2
+craftingInputs:Log,Flint
+craftingSkill:woodcutting
+craftingTime:10
+size:-6
+
 name:Log
+size:1
+
+name:Flint
 size:1
 
 name:Soup
@@ -27,4 +38,7 @@ name:Acorn
 size:-15
 
 name:Water
+size:-2
+
+name:Dirt
 size:-2

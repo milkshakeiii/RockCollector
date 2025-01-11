@@ -5,3 +5,11 @@ harvestingDifficulty:10
 producedItems:Log
 producedItemsProbabilities:1
 size:1
+
+name:Rock
+harvestingSkill:chopping
+harvestingRequired:10
+harvestingDifficulty:10
+producedItems:Flint,Dirt
+producedItemsProbabilities:1,1
+size:1
