@@ -439,8 +439,8 @@ public static class SharedScreenElements
         int infoRowCount = 0;
         foreach (KeyValuePair<string, string> infoRow in infoRows)
         {
-            displayGrid.DisplayText(infoRow.Key, 2, (uint)(90 - 10 * infoRowCount));
-            displayGrid.DisplayText(infoRow.Value, (uint)(DisplayGrid.WIDTH / 5 - infoRow.Value.Length - 2), (uint)(90 - 10*infoRowCount));
+            displayGrid.DisplayText(infoRow.Key, 2, (90 - 10 * infoRowCount));
+            displayGrid.DisplayText(infoRow.Value, (DisplayGrid.WIDTH / 5 - infoRow.Value.Length - 2), (90 - 10*infoRowCount));
 
             infoRowCount++;
         }

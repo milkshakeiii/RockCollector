@@ -81,15 +81,15 @@ public class DisplayGrid : MonoBehaviour
         newSquare.GetComponent<SpriteRenderer>().sortingOrder = overlapLayer;
     }
 
-    public void DisplayText(string text, uint x, uint y)
+    public void DisplayText(string text, int x, int y)
     {
         for (int i = 0; i < text.Length; i++)
         {
-            DisplayLetter(text[i], (uint)(x + i), y);
+            DisplayLetter(text[i], (x + i), y);
         }
     }
 
-    private void DisplayLetter(char letter, uint x, uint y)
+    private void DisplayLetter(char letter, int x, int y)
     {
         GameObject newLetter = GetCachedLetter();
 

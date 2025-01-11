@@ -664,6 +664,16 @@ public class Creature : Destructable
         return copy;
     }
 
+    public string GetName()
+    {
+        return name;
+    }
+
+    public int GetLevel()
+    {
+        return level;
+    }
+
     public int EncounterLevel()
     {
         return level;

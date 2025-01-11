@@ -74,6 +74,7 @@ public class MapDisplayer : MonoBehaviour
                 cellsPerSquare * placeable.SquaresMinimumOne(),
                 0);
             DisplayBars(placeable, position);
+            DisplayLabels(placeable, position);
         }
     }
 
@@ -111,5 +112,16 @@ public class MapDisplayer : MonoBehaviour
                 0,
                 overlapLayer: 1);
         }
+    }
+
+    void DisplayLabels(Placeable placeable, Vector2Int position)
+    {
+        if (placeable is Creature creature)
+        {
+            displayGrid.DisplayText(creature.GetName() + " (" + creature.GetLevel() + ")",
+                position.x * cellsPerSquare,
+                position.y * cellsPerSquare + creature.SquaresMinimumOne() * cellsPerSquare + 1);
+        }
+       
     }
 }
