@@ -2,7 +2,7 @@ name:Axe
 harvestingSkill:chopping
 harvestingAmount:1
 craftingInputs:Log
-craftingSkill:woodcutting
+craftingSkill:woodcrafting
 craftingTime:10
 size:-6
 
@@ -10,7 +10,7 @@ name:Double Axe
 harvestingSkill:chopping
 harvestingAmount:2
 craftingInputs:Log,Log
-craftingSkill:woodcutting
+craftingSkill:woodcrafting
 craftingTime:10
 size:-6
 
@@ -18,7 +18,7 @@ name:Real Axe
 harvestingSkill:chopping
 harvestingAmount:2
 craftingInputs:Log,Flint
-craftingSkill:woodcutting
+craftingSkill:woodcrafting
 craftingTime:10
 size:-6
 

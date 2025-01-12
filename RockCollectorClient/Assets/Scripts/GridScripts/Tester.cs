@@ -117,8 +117,8 @@ public class Tester : MonoBehaviour
     void LoadEntities()
     {
         EntityManager.ReadAllEntities();
-        Assert(EntityManager.feats.ContainsKey("Skill Focus"), "Skill Focus not found");
-        Assert(EntityManager.feats["Skill Focus"].GetSkillBonusName() == "woodcutter", "Skill Focus GetSkillBonusName");
+        Assert(EntityManager.feats.ContainsKey("Skill Focus (woodcrafting)"), "Skill Focus not found");
+        Assert(EntityManager.feats["Skill Focus (woodcrafting)"].GetSkillBonusName() == "woodcrafting", "Skill Focus GetSkillBonusName");
         Assert(EntityManager.conditions.ContainsKey("Weak"), "Weak not found");
         Assert(EntityManager.conditions["Weak"].GetAttackPenalty() == 2, "Weak GetAttackPenalty");
         Assert(EntityManager.creatureTypes.ContainsKey("Peasant"), "Peasant not found");

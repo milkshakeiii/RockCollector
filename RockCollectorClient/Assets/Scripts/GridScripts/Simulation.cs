@@ -680,6 +680,11 @@ public class Creature : Destructable
         return level * level;
     }
 
+    public void GainExperience(int encounterLevel)
+    {
+        experience += (encounterLevel - 9) * (encounterLevel - 9);
+    }
+
     public int EncounterLevel()
     {
         return level;
@@ -700,6 +705,31 @@ public class Creature : Destructable
         }
     }
 
+    public int SkillModifier(string skillName)
+    {
+        int modifier = GetLevel();
+        foreach (Feat feat in feats)
+        {
+            if (feat.GetSkillBonusName().Equals(skillName))
+            {
+                modifier += feat.GetSkillBonus();
+            }
+        }
+        return modifier;
+    }
+
+    public int d20Roll()
+    {
+        return UnityEngine.Random.Range(1, 21);
+    }
+
+    public bool RollForSuccess(int difficulty, string skillName)
+    {
+        int roll = d20Roll();
+        int modifier = SkillModifier(skillName);
+        return roll + modifier >= difficulty || roll == 20;
+    }
+
     public void HarvestProp(Prop prop, Map map)
     {
         // use the best ability to harvest the prop
@@ -716,9 +746,18 @@ public class Creature : Destructable
         cooldownTicksRemaining = cooldown;
 
         // roll for success or failure
-
-        // apply the harvest and if this was the last hit, gain experience
-        prop.TakeHarvest(bestAmount);
+        bool success = RollForSuccess(prop.propType.GetHarvestingDifficulty(), prop.propType.GetHarvestingSkill());
+        
+        if (success)
+        {
+            // apply the harvest and if this was the last hit, gain experience
+            prop.TakeHarvest(bestAmount);
+            int encounterLevel = prop.propType.GetHarvestingDifficulty();
+            if (prop.IsDestroyed())
+            {
+                GainExperience(encounterLevel);
+            }
+        }
     }
 
     public (int, int) HarvestingCooldownAndAmount(Prop prop)

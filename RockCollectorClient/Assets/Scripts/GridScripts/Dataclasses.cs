@@ -248,11 +248,11 @@ public class Feat : Entity
     }
     public string GetSkillBonusName()
     {
-        return EntityManager.GetStringAttribute(attributes, "skillBonusName");
+        return EntityManager.GetStringAttribute(attributes, "skillBonusName", "");
     }
     public int GetSkillBonus()
     {
-        return EntityManager.GetIntAttribute(attributes, "skillBonus");
+        return EntityManager.GetIntAttribute(attributes, "skillBonus", 0);
     }
 }
 
@@ -408,6 +408,10 @@ public class PropType : Entity
     public string GetHarvestingSkill()
     {
         return EntityManager.GetStringAttribute(attributes, "harvestingSkill");
+    }
+    public int GetHarvestingDifficulty()
+    {
+        return EntityManager.GetIntAttribute(attributes, "harvestingDifficulty");
     }
     public int GetHarvestingRequired()
     {

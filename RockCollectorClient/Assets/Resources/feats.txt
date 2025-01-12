@@ -1,3 +1,7 @@
-name:Skill Focus
-skillBonusName:woodcutter
+name:Skill Focus (woodcrafting)
+skillBonusName:woodcrafting
+skillBonusAmount:3
+
+name:Skill Focus (chopping)
+skillBonusName:chopping
 skillBonusAmount:3
