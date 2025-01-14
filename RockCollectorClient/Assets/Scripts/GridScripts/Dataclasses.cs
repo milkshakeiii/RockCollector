@@ -279,6 +279,10 @@ public class TypeAbility : Entity
         // in ticks
         return EntityManager.GetIntAttribute(attributes, "cooldown", 0);
     }
+    public int GetRechargeTicks()
+    {
+        return EntityManager.GetIntAttribute(attributes, "rechargeTicks", 0);
+    }
     public int GetDuration()
     {
         // in ticks

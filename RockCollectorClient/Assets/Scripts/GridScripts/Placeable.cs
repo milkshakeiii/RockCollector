@@ -154,9 +154,33 @@ public class Creature : Destructable
         return level;
     }
 
-    public void UseAllAbilities(Map map)
+    /// <summary>
+    /// Uses the first ability that is ready.
+    /// </summary>
+    /// <param name="map"></param>
+    public void UseAnyAbility(Map map)
     {
+        foreach (TypeAbility ability in abilities)
+        {
+            if (TicksSinceLastUse(ability, map) >= ability.GetRechargeTicks())
+            {
+                UseAbility(ability, map);
+                return;
+            }
+        }
+    }
+
+    public void UseAbility(TypeAbility ability, Map map)
+    {
+        if (TicksSinceLastUse(ability, map) < ability.GetRechargeTicks())
+        {
+            throw new System.Exception("Ability not ready");
+        }
+        ticksLastUsed[ability] = map.CurrentTick();
+        cooldownTicksRemaining = ability.GetCooldown();
         
+        // Perform the ability
+
     }
 
     public int TicksSinceLastUse(TypeAbility ability, Map map)

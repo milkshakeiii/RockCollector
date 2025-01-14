@@ -5,4 +5,5 @@ harvestingAmount:1
 
 name:Basic Attack
 cooldown:10
+rechargeTicks:20
 weaponSkills:axes,swords
