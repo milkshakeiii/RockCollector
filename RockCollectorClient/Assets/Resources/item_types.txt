@@ -1,4 +1,6 @@
 name:Axe
+weaponDamage:1d8
+weaponSkill:chopping
 harvestingSkill:chopping
 harvestingAmount:1
 craftingInputs:Log
@@ -15,6 +17,7 @@ craftingTime:10
 size:-6
 
 name:Real Axe
+baseDamage:
 harvestingSkill:chopping
 harvestingAmount:2
 craftingInputs:Log,Flint

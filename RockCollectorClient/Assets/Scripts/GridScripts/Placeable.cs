@@ -102,8 +102,10 @@ public class Creature : Destructable
 
     private int level = 0;
     private int experience = 0; // reset to 0 on level up
+    private Dictionary<string, float> skillIncreases = new();
     private List<Feat> feats = new();
     private List<TypeAbility> abilities = new();
+    private Dictionary<TypeAbility, int> ticksLastUsed = new();
 
     private CreatureType creatureType;
 
@@ -152,14 +154,34 @@ public class Creature : Destructable
         return level;
     }
 
+    public void UseAllAbilities(Map map)
+    {
+        
+    }
+
+    public int TicksSinceLastUse(TypeAbility ability, Map map)
+    {
+        if (!ticksLastUsed.ContainsKey(ability))
+        {
+            return int.MaxValue;
+        }
+        return map.CurrentTick() - ticksLastUsed[ability];
+    }
+
     public int ExperienceForNextLevel()
     {
         return level * level;
     }
 
-    public void GainExperience(int encounterLevel)
+    public void GainExperience(int encounterLevel, string skillUsed)
     {
         experience += (encounterLevel - 9) * (encounterLevel - 9);
+        if (!skillIncreases.ContainsKey(skillUsed))
+        {
+            skillIncreases[skillUsed] = 0;
+        }
+        skillIncreases[skillUsed] += Mathf.Max(0, Mathf.Log(encounterLevel - 8)) / (skillIncreases[skillUsed]+1);
+        Debug.Log(skillIncreases[skillUsed]);
     }
 
     public int EncounterLevel()
@@ -207,6 +229,26 @@ public class Creature : Destructable
         return roll + modifier >= difficulty || roll == 20;
     }
 
+    public int RollForMultiplier(int difficulty, string skillName)
+    {
+        int roll = d20Roll();
+        int modifier = SkillModifier(skillName);
+        int multiplier = 0;
+        if (roll + modifier >= difficulty)
+        {
+            multiplier += 1;
+        }
+        if (roll + modifier >= difficulty + 10)
+        {
+            multiplier += 1;
+        }
+        if (roll == 20)
+        {
+            multiplier += 1;
+        }
+        return multiplier;
+    }
+
     public void HarvestProp(Prop prop, Map map)
     {
         // use the best ability to harvest the prop
@@ -232,7 +274,7 @@ public class Creature : Destructable
             int encounterLevel = prop.propType.GetHarvestingDifficulty();
             if (prop.IsDestroyed())
             {
-                GainExperience(encounterLevel);
+                GainExperience(encounterLevel, prop.propType.GetHarvestingSkill());
             }
         }
     }
@@ -306,6 +348,46 @@ public class Creature : Destructable
         // otherwise, continue with the current activity
     }
 
+    public override void Act(Map map)
+    {
+        if (cooldownTicksRemaining > 0)
+        {
+            cooldownTicksRemaining--;
+            return;
+        }
+        else if (currentActivity == null)
+        {
+            return;
+        }
+        else if (currentActivity.IsCompletedOrImpossible(map, this))
+        {
+            Debug.Log("Activity impossible");
+            // Something else completed the activity this frame
+            // or there is no activity assigned
+            AbandonCurrentActivity();
+            return;
+        }
+        else if (currentActivity.DistanceTo(this, map) > currentActivity.ProximityRequirement(this))
+        {
+            Vector2Int difference = DirectionToNextActivity(map);
+            Vector2Int direction = new(Math.Sign(difference.x), Math.Sign(difference.y));
+            Vector2Int newPosition = map.PositionOf(this) + direction;
+            map.MovePlaceable(this, newPosition);
+            cooldownTicksRemaining = MoveSpeed();
+            return;
+        }
+        else // Perform the activity
+        {
+            currentActivity.Perform(this, map);
+            if (currentActivity.IsCompletedOrImpossible(map, this))
+            {
+                Debug.Log("Activity completed");
+                AbandonCurrentActivity(); // Otherwise, there would be a "stunned" frame
+            }
+            return;
+        }
+    }
+
     private void TryPromoteStagedActivity(Map map)
     {
         currentActivity = stagedActivity;
@@ -358,46 +440,6 @@ public class Creature : Destructable
     public int MoveSpeed()
     {
         return 10;
-    }
-
-    public override void Act(Map map)
-    {
-        if (cooldownTicksRemaining > 0)
-        {
-            cooldownTicksRemaining--;
-            return;
-        }
-        else if (currentActivity == null)
-        {
-            return;
-        }
-        else if (currentActivity.IsCompletedOrImpossible(map, this))
-        {
-            Debug.Log("Activity impossible");
-            // Something else completed the activity this frame
-            // or there is no activity assigned
-            AbandonCurrentActivity();
-            return;
-        }
-        else if (currentActivity.DistanceTo(this, map) > currentActivity.ProximityRequirement(this))
-        {
-            Vector2Int difference = DirectionToNextActivity(map);
-            Vector2Int direction = new (Math.Sign(difference.x), Math.Sign(difference.y));
-            Vector2Int newPosition = map.PositionOf(this) + direction;
-            map.MovePlaceable(this, newPosition);
-            cooldownTicksRemaining = MoveSpeed();
-            return;
-        }
-        else // Perform the activity
-        {
-            currentActivity.Perform(this, map);
-            if (currentActivity.IsCompletedOrImpossible(map, this))
-            {
-                Debug.Log("Activity completed");
-                AbandonCurrentActivity(); // Otherwise, there would be a "stunned" frame
-            }
-            return;
-        }
     }
 
     private Vector2Int DirectionToNextActivity(Map map)

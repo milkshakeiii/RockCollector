@@ -1,4 +1,8 @@
 name:Woodcutting
-cooldown: 10
+cooldown:10
 harvestingSkill:chopping
 harvestingAmount:1
+
+name:Basic Attack
+cooldown:10
+weaponSkills:axes,swords
