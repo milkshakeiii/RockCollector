@@ -13,6 +13,7 @@ public class Tester : MonoBehaviour
         // SetInitialGoal(); // TODO: delete or replace
         AddActivity();
         CraftThings();
+        WeaponAttack();
         Debug.Log("Tests finished");
     }
 
@@ -301,6 +302,31 @@ public class Tester : MonoBehaviour
             map.Remove(log9);
             Assert(map.HeldPlaceablesOf(farm).Count == 2, "Crafted item not held by farm");
             Assert(map.HeldPlaceablesOf(testCreature).Count == 1, "left over item not held by creature");
+        }
+    }
+
+    void WeaponAttack()
+    {
+        Map map = new();
+        Creature testCreature = new("Skele1", 0, EntityManager.creatureTypes["Skeleton"]);
+        testCreature.teamNumber = 0;
+        map.Add(testCreature, new Vector2Int(5, 5));
+        Creature targetCreature = new("Skele2", 0, EntityManager.creatureTypes["Skeleton"]);
+        targetCreature.teamNumber = 1;
+        map.Add(targetCreature, new Vector2Int(5, 6));
+        Item axe = new (EntityManager.itemTypes["Axe"]);
+        map.AddHeld(testCreature, axe);
+        testCreature.UseAnyAbility(map);
+        if (testCreature.GetExperience() > 0)
+        {
+            // hit
+            Assert(targetCreature.GetDamageTaken() > 0, "Target not damaged");
+            Assert(targetCreature.GetExperience() == 0, "Experience granted to target");
+        }
+        else
+        {
+            // miss
+            Assert(targetCreature.GetDamageTaken() == 0, "Target damaged");
         }
     }
 

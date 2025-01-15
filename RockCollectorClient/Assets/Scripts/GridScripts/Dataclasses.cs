@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using Steamworks;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Unity.VisualScripting;
@@ -196,6 +197,12 @@ public static class EntityManager
         return defaultValue;
     }
 
+    public static DieRoll GetDieRollAttribute(ReadOnlyDictionary<string, string> attributes, string key)
+    {
+        string[] parts = attributes[key].Split('d');
+        return new DieRoll { rolls = int.Parse(parts[0]), sides = int.Parse(parts[1]) };
+    }
+
     public static void ReadAllEntities()
     {
         ReadEntity("feats");
@@ -306,6 +313,14 @@ public class TypeAbility : Entity
     public string GetHarvestingSkill()
     {
         return EntityManager.GetStringAttribute(attributes, "harvestingSkill");
+    }
+    public int GetEnemyTargets()
+    {
+        return EntityManager.GetIntAttribute(attributes, "enemyTargets", 1);
+    }
+    public List<string> GetWeaponSkills()
+    {
+        return EntityManager.GetStringListAttribute(attributes, "weaponSkills", new List<string>());
     }
 }
 
@@ -459,6 +474,18 @@ public class ItemType : Entity
     {
         return EntityManager.GetIntAttribute(attributes, "craftingTime", 0);
     }
+    public DieRoll GetWeaponDamage()
+    {
+        return EntityManager.GetDieRollAttribute(attributes, "weaponDamage");
+    }
+    public int GetWeaponRange()
+    {
+        return EntityManager.GetIntAttribute(attributes, "weaponRange", 1);
+    }
+    public string GetWeaponSkill()
+    {
+        return EntityManager.GetStringAttribute(attributes, "weaponSkill", "");
+    }
 }
 
 public class BuildingType : Entity
@@ -496,5 +523,21 @@ public class BuildingType : Entity
     public List<ItemType> GetCraftedItemTypes()
     {
         return EntityManager.GetItemListAttribute(attributes, "craftedItemTypes", new List<ItemType>());
+    }
+}
+
+public class DieRoll
+{
+    public int sides;
+    public int rolls;
+
+    public float ExpectedValue()
+    {
+        return (sides + 1) * rolls / 2;
+    }
+
+    public int Roll()
+    {
+        return UnityEngine.Random.Range(rolls, sides * rolls + 1);
     }
 }

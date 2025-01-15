@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class Placeable 
 {
@@ -82,6 +83,11 @@ public abstract class Destructable : Placeable
         damageTaken += damage;
     }
 
+    public int GetDamageTaken()
+    {
+        return damageTaken;
+    }
+
     public virtual bool IsDestroyed()
     {
         return HealthFraction() <= 0;
@@ -154,6 +160,11 @@ public class Creature : Destructable
         return level;
     }
 
+    public int GetExperience()
+    {
+        return experience;
+    }
+
     /// <summary>
     /// Uses the first ability that is ready.
     /// </summary>
@@ -180,7 +191,7 @@ public class Creature : Destructable
         cooldownTicksRemaining = ability.GetCooldown();
         
         // Perform the ability
-
+        Simulation.AbilityEffect(ability, this, map);
     }
 
     public int TicksSinceLastUse(TypeAbility ability, Map map)
@@ -204,13 +215,13 @@ public class Creature : Destructable
         {
             skillIncreases[skillUsed] = 0;
         }
-        skillIncreases[skillUsed] += Mathf.Max(0, Mathf.Log(encounterLevel - 8)) / (skillIncreases[skillUsed]+1);
-        Debug.Log(skillIncreases[skillUsed]);
+        skillIncreases[skillUsed] += Mathf.Max(0, Mathf.Log(Mathf.Max(encounterLevel - 8, 1)) / (skillIncreases[skillUsed] + 1));
+        Debug.Log(GetName() + " " + skillUsed + ": " + skillIncreases[skillUsed]);
     }
 
     public int EncounterLevel()
     {
-        return level;
+        return 10 + level;
     }
 
     public void LevelUp()
@@ -303,6 +314,28 @@ public class Creature : Destructable
         }
     }
 
+    public void Strike(Creature target, DieRoll damage, int toHit, string weaponSkill, Map map)
+    {
+        int toHitResult = d20Roll() + toHit;
+        if (!target.Defend(toHitResult))
+        {
+            int damageAmount = damage.Roll();
+            target.TakeDamage(damageAmount);
+            GainExperience(target.EncounterLevel(), weaponSkill);
+        }
+    }
+
+    public bool Defend(int toHitResult)
+    {
+        int defenseSkill = SkillModifier("defense");
+        bool defended = toHitResult <= 10 + defenseSkill;
+        if (defended)
+        {
+            GainExperience(toHitResult, "defense");
+        }
+        return defended;
+    }
+
     public (int, int) HarvestingCooldownAndAmount(Prop prop)
     {
         string neededSkill = prop.propType.GetHarvestingSkill();
@@ -314,6 +347,33 @@ public class Creature : Destructable
         int bestAmount = bestAbility.GetHarvestingAmount();
         int cooldown = bestAbility.GetCooldown();
         return (cooldown, bestAmount);
+    }
+
+    public (DieRoll, int) WeaponDamangeAndRange(string weaponSkill, Map map)
+    {
+        DieRoll damage = new() { rolls = 0, sides = 0 };
+        int range = 0;
+
+        List<Placeable> heldItems = map.HeldPlaceablesOf(this);
+
+        foreach (Placeable placeable in heldItems)
+        {
+            if (placeable is Item item)
+            {
+                if (item.itemType.GetWeaponSkill() == weaponSkill)
+                {
+                    DieRoll thisDamage = item.itemType.GetWeaponDamage();
+                    int thisRange = item.itemType.GetWeaponRange();
+                    if (thisDamage.ExpectedValue() > damage.ExpectedValue())
+                    {
+                        damage = thisDamage;
+                        range = thisRange;
+                    }
+                }
+            }
+        }
+
+        return (damage, range);
     }
 
     private TypeAbility BestHarvestingAbility(string skill)

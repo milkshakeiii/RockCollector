@@ -1,6 +1,7 @@
 name:Axe
 weaponDamage:1d8
-weaponSkill:chopping
+weaponRange:1
+weaponSkill:axes
 harvestingSkill:chopping
 harvestingAmount:1
 craftingInputs:Log
