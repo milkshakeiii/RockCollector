@@ -89,7 +89,7 @@ public static class Search
 
         SearchNode current = start;
         SearchNode best = start;
-        float bestEvaluation = creature.GetGoal().EvaluateMap(start.map);
+        float bestEvaluation = Search.EvaluateMap(start.map);
         int nodesEvaluated = 0;
 
         while (queue.Count > 0 && current.depth < maxDepth)
@@ -117,7 +117,7 @@ public static class Search
                     throw new Exception("Queue too long, bailing out.");
                 }
 
-                float evaluation = creature.GetGoal().EvaluateMap(next.map) - (float)next.estimatedTicks / 1000f;
+                float evaluation = Search.EvaluateMap(next.map) - (float)next.estimatedTicks / 1000f;
                 if (evaluation > bestEvaluation)
                 {
                     best = next;
@@ -128,5 +128,49 @@ public static class Search
 
         // PrintBestInfo(best, bestEvaluation);
         return best.activitiesCompleted.Count > 0 ? best.activitiesCompleted[0] : null;
+    }
+
+    public static float EvaluateMap(Map map)
+    {
+        float evaluation = 0;
+        // for each building, add the value of the satisfied item requests
+        foreach (Placeable placeable in map.UnheldPlaceables())
+        {
+            if (placeable is Building building)
+            {
+                List<ItemType> requestedItemTypes = building.GetRequestedItemTypes();
+                List<int> requestedItemAmounts = building.GetRequestedItemAmounts();
+                Dictionary<ItemType, int> itemsRequestedByType = new();
+                for (int i = 0; i < requestedItemTypes.Count; i++)
+                {
+                    itemsRequestedByType[requestedItemTypes[i]] = requestedItemAmounts[i];
+                }
+
+                List<Placeable> itemsPresent = map.HeldPlaceablesOf(building);
+                Dictionary<ItemType, int> itemsPresentByType = new();
+                foreach (Placeable heldPlaceable in itemsPresent)
+                {
+                    if (heldPlaceable is Item item)
+                    {
+                        if (!itemsPresentByType.ContainsKey(item.itemType))
+                        {
+                            itemsPresentByType[item.itemType] = 0;
+                        }
+                        if (!itemsRequestedByType.ContainsKey(item.itemType))
+                        {
+                            continue;
+                        }
+                        if (itemsPresentByType[item.itemType] >= itemsRequestedByType[item.itemType])
+                        {
+                            // only score the first items of the requested type
+                            continue;
+                        }
+                        itemsPresentByType[item.itemType]++;
+                        evaluation += item.Value();
+                    }
+                }
+            }
+        }
+        return evaluation;
     }
 }

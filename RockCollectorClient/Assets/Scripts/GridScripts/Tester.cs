@@ -10,7 +10,6 @@ public class Tester : MonoBehaviour
         DistancesBetweenPlaceablesOfVariousSizes();
         LoadEntities();
         HoldAndDropItems();
-        // SetInitialGoal(); // TODO: delete or replace
         AddActivity();
         CraftThings();
         WeaponAttack();
@@ -128,7 +127,6 @@ public class Tester : MonoBehaviour
         Assert(EntityManager.creatureTypes["Peasant"].GetWisdomBonus() == 0, "Peasant GetWisdomBonus");
         Assert(EntityManager.creatureTypes["Peasant"].GetAbilities().Count == 1, "Peasant GetAbilities");
         Assert(EntityManager.creatureTypes["Peasant"].GetAbilityLevels().Count == 1, "Peasant GetAbilityLevels");
-        Assert(EntityManager.creatureTypes["Peasant"].GetGoals().Count == 1, "Peasant GetGoals");
         Assert(EntityManager.itemTypes.Count > 2, "Items not found");
         Assert(EntityManager.itemTypes.ContainsKey("Axe"), "Axe not found");
         Assert(EntityManager.propTypes.ContainsKey("Tree"), "Tree not found");
@@ -138,18 +136,6 @@ public class Tester : MonoBehaviour
         Assert(EntityManager.buildingTypes.ContainsKey("Farm"), "Farm not found");
         Assert(EntityManager.buildingTypes["Farm"].GetSupportedCreatureTypes()[0].GetName() == "Peasant", "Farm GetSupportedCreatureTypes");
         Assert(EntityManager.buildingTypes["Farm"].GetSupportedCreatureSpawnTimes()[0] == 500, "Farm GetSupportedCreatureSpawnTimes");
-    }
-
-    void SetInitialGoal()
-    {
-        Map map = new();
-        Creature testCreature = new("George", 0, EntityManager.creatureTypes["Peasant"]);
-        Prop prop = new(EntityManager.propTypes["Tree"]);
-        map.Add(testCreature, new Vector2Int(0, 0));
-        map.Add(prop, new Vector2Int(5, 5));
-        testCreature.ThinkAndPlan(map);
-        Assert(testCreature.GetGoal() != null, "Initial goal not set");
-        Assert(testCreature.GetCreatureType().GetGoals()[0].GetType() == testCreature.GetGoal().GetType(), "Initial goal not set correctly");
     }
 
     void AddActivity()

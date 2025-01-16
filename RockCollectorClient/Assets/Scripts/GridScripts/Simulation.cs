@@ -593,3 +593,8 @@ public class Map
         currentTick++;
     }
 }
+
+public class MapView
+{
+
+}

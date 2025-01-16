@@ -171,19 +171,6 @@ public static class EntityManager
         return defaultValue;
     }
 
-    public static List<Goal> GetGoalListAttribute(ReadOnlyDictionary<string, string> attributes, string key, List<Goal> defaultValue = null)
-    {
-        if (attributes.ContainsKey(key))
-        {
-            return new List<Goal>(System.Array.ConvertAll(attributes[key].Split(','), x => Goal.NameToGoal(x)));
-        }
-        if (defaultValue == null)
-        {
-            throw new System.ArgumentNullException("No default value");
-        }
-        return defaultValue;
-    }
-
     public static List<TypeAbility> GetTypeAbilityListAttribute(ReadOnlyDictionary<string, string> attributes, string key, List<TypeAbility> defaultValue = null)
     {
         if (attributes.ContainsKey(key))
@@ -398,10 +385,7 @@ public class CreatureType : Entity
     {
         return EntityManager.GetIntListAttribute(attributes, "abilityLevels");
     }
-    public List<Goal> GetGoals()
-    {
-        return EntityManager.GetGoalListAttribute(attributes, "goals");
-    }
+
     public List<ItemType> GetDroppedItems()
     {
         return EntityManager.GetItemListAttribute(attributes, "droppedItems", new List<ItemType>());

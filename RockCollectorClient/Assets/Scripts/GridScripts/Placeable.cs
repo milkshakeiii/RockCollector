@@ -115,7 +115,7 @@ public class Creature : Destructable
 
     private CreatureType creatureType;
 
-    private Goal pursuingGoal;
+    private CreatureBehavior behavior;
     private Activity currentActivity;
     private Activity stagedActivity;
     private Thread newActivityComputation;
@@ -133,6 +133,8 @@ public class Creature : Destructable
         this.teamNumber = teamNumber;
         this.creatureType = creatureType;
         LevelUp();
+
+        this.behavior = new PeasantBehavior();
     }
 
     public override Placeable DeepCopy()
@@ -143,7 +145,7 @@ public class Creature : Destructable
         copy.level = level;
         copy.feats = new List<Feat>(feats);
         copy.abilities = new List<TypeAbility>(abilities);
-        copy.pursuingGoal = pursuingGoal; // This is OK because goals are stateless
+        copy.behavior = null;
         copy.currentActivity = null;
         copy.newActivityComputation = null;
         copy.cooldownTicksRemaining = cooldownTicksRemaining;
@@ -399,9 +401,9 @@ public class Creature : Destructable
         return creatureType;
     }
 
-    public Goal GetGoal()
+    public CreatureBehavior GetCreatureBehavior()
     {
-        return pursuingGoal;
+        return behavior;
     }
 
     public override void ObserveAndFeel(Map map)
@@ -418,11 +420,6 @@ public class Creature : Destructable
         if (currentActivity == null && stagedActivity != null) // first check if a staged activity is ready
         {
             TryPromoteStagedActivity(map);
-        }
-        else if (ShouldGetNewGoal(map)) // if not, check for circumstances to get a new goal
-        {
-            pursuingGoal = GetNewGoal(map);
-            LaunchNewActivityComputation(map); // we will also need an activity
         }
         // if not, we might need to launch a new activity computation
         else if (currentActivity == null && (newActivityComputation == null || !newActivityComputation.IsAlive)) 
@@ -507,7 +504,7 @@ public class Creature : Destructable
         (Map mapCopy, Dictionary<Placeable, Placeable> backDictionary, Creature newMe) = map.DeepCopy(this);
         newActivityComputation = new Thread(() =>
         {
-            Activity bestActivity = Search.GoalSearch(mapCopy, newMe);
+            Activity bestActivity = behavior.NextActivity(mapCopy, newMe);
             if (bestActivity != null)
             {
                 bestActivity.MarkForBackConversion(backDictionary);
@@ -541,18 +538,6 @@ public class Creature : Destructable
             currentActivity = null;
             stagedActivity = null;
         }
-    }
-
-    private bool ShouldGetNewGoal(Map map)
-    {
-        return pursuingGoal == null || pursuingGoal.IsAchieved();
-    }
-
-    private Goal GetNewGoal(Map map)
-    {
-        Goal newGoal = creatureType.GetGoals()[0];
-        newGoal.Initialize(map.CurrentTick());
-        return newGoal;
     }
 
     public int GetMaxHealth()

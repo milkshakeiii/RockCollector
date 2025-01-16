@@ -11,7 +11,7 @@ public class Timefish : MonoBehaviour
 
     public TimefishSpecies species;
     
-    private Behavior currentBehavior;
+    private FishBehavior currentBehavior;
 
     private float size; //Size(volume) in cubic meters
     private float damageTaken; //Damage taken in power units
@@ -139,7 +139,7 @@ public class Timefish : MonoBehaviour
         }
     }
 
-    public void SetBehavior(Behavior newBehavior)
+    public void SetBehavior(FishBehavior newBehavior)
     {
         currentBehavior = newBehavior;
     }
@@ -192,12 +192,12 @@ public class Timefish : MonoBehaviour
     }
 }
 
-public abstract class Behavior
+public abstract class FishBehavior
 {
     public abstract void Update(Timefish fish);
 }
 
-public class RoamBehavior : Behavior
+public class RoamBehavior : FishBehavior
 {
     private float maximumSwimForwardTime = 5f;
     private float maximumReangleArc = 90f;
@@ -271,7 +271,7 @@ public class RoamBehavior : Behavior
     }
 }
 
-public class StillBehavior : Behavior
+public class StillBehavior : FishBehavior
 {
     public override void Update(Timefish fish)
     {
@@ -283,7 +283,7 @@ public class StillBehavior : Behavior
     }
 }
 
-public class AggressiveBehavior : Behavior
+public class AggressiveBehavior : FishBehavior
 {
     private float chaseTime;
     private float timeChasing;
