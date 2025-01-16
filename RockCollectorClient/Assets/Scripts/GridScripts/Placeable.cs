@@ -585,6 +585,20 @@ public class Creature : Destructable
         map.MovePlaceable(this, activity.GetLocation(map) - (Vector2Int.one * activity.ProximityRequirement(this)));
         return estimatedTicks;
     }
+
+    public void PickUp(Item item, Map map)
+    {
+        map.PickUp(this, item);
+    }
+
+    public void TransferItem(Item item, Placeable target, Map map)
+    {
+        if (!map.HeldPlaceablesOf(this).Contains(item))
+        {
+            throw new System.Exception("Creature does not hold item");
+        }
+        map.Transfer(item, target);
+    }
 }
 
 public class SelfView 
@@ -709,6 +723,15 @@ public class SelfView
         return self.HealthFraction();
     }
 
+    public void PickUp(Item item)
+    {
+        self.PickUp(item, map);
+    }
+
+    public void TransferItem(Item item, Placeable target)
+    {
+        self.TransferItem(item, target, map);
+    }
 }
 
 public class Building : Destructable
