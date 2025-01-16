@@ -70,6 +70,64 @@ public class Placeable
     }
 }
 
+public class PlaceableView 
+{
+    public static Dictionary<Placeable, PlaceableView> placeableViews = new();
+    public static Dictionary<PlaceableView, Placeable> placeables = new();
+
+    public static PlaceableView GetPlaceableView(Placeable placeable, Map map)
+    {
+        if (!placeableViews.ContainsKey(placeable))
+        {
+            if (placeable is Creature creature)
+            {
+                placeableViews[placeable] = new CreatureView(creature, map);
+            }
+            else if (placeable is Building building)
+            {
+                placeableViews[placeable] = new BuildingView(building, map);
+            }
+            else if (placeable is Prop prop)
+            {
+                placeableViews[placeable] = new PropView(prop, map);
+            }
+            else if (placeable is Item item)
+            {
+                placeableViews[placeable] = new ItemView(item, map);
+            }
+            else
+            {
+                throw new System.Exception("Placeable type not supported");
+            }
+            placeables[placeableViews[placeable]] = placeable;
+        }
+        return placeableViews[placeable];
+    }
+
+    public static Placeable GetPlaceable(PlaceableView placeableView)
+    {
+        if (!placeables.ContainsKey(placeableView))
+        {
+            throw new System.Exception("Placeable view not found");
+        }
+        return placeables[placeableView];
+    }
+
+    protected PlaceableView(Placeable placeable, Map map)
+    {
+        this.placeable = placeable;
+        this.map = map;
+    }
+
+    protected readonly Placeable placeable;
+    protected readonly Map map;
+
+    public int SquaresMinimumOne()
+    {
+        return placeable.SquaresMinimumOne();
+    }
+}
+
 public abstract class Destructable : Placeable
 {
     protected int damageTaken;
@@ -100,6 +158,29 @@ public abstract class Destructable : Placeable
     }
 
     public abstract float HealthFraction();
+}
+
+public abstract class DestructableView : PlaceableView
+{
+    public DestructableView(Destructable destructable, Map map) : base(destructable, map)
+    {
+
+    }
+
+    public int GetDamageTaken()
+    {
+        return (placeable as Destructable).GetDamageTaken();
+    }
+
+    public bool IsDestroyed()
+    {
+        return (placeable as Destructable).IsDestroyed();
+    }
+
+    public float HealthFraction()
+    {
+        return (placeable as Destructable).HealthFraction();
+    }
 }
 
 public class Creature : Destructable
@@ -158,9 +239,9 @@ public class Creature : Destructable
         return name;
     }
 
-    public SelfView GetSelfView(Map map)
+    public CreatureSelf GetSelfView(Map map)
     {
-        return SelfView.GetSelfView(this, map);
+        return CreatureSelf.GetSelfView(this, map);
     }
 
     public int GetLevel()
@@ -599,22 +680,101 @@ public class Creature : Destructable
         }
         map.Transfer(item, target);
     }
+
+    public List<TypeAbility> ListAbilities()
+    {
+        return new (abilities);
+    }
 }
 
-public class SelfView 
+public class CreatureView : DestructableView
 {
-    public static Dictionary<Creature, SelfView> selfViews = new();
+    public CreatureView(Creature creature, Map map) : base(creature, map)
+    {
+        
+    }
 
-    public static SelfView GetSelfView(Creature creature, Map map)
+    public int GetLevel()
+    {
+        return (placeable as Creature).GetLevel();
+    }
+
+    public int GetExperience()
+    {
+        return (placeable as Creature).GetExperience();
+    }
+
+    public int TicksSinceLastUse(TypeAbility ability)
+    {
+        return (placeable as Creature).TicksSinceLastUse(ability, map);
+    }
+
+    public int ExperienceForNextLevel()
+    {
+        return (placeable as Creature).ExperienceForNextLevel();
+    }
+
+    public int EncounterLevel()
+    {
+        return (placeable as Creature).EncounterLevel();
+    }
+
+    public int SkillModifier(string skillName)
+    {
+        return (placeable as Creature).SkillModifier(skillName);
+    }
+
+    public (int, int) HarvestingCooldownAndAmount(Prop prop)
+    {
+        return (placeable as Creature).HarvestingCooldownAndAmount(prop);
+    }
+
+    public (DieRoll, int) WeaponDamangeAndRange(string weaponSkill)
+    {
+        return (placeable as Creature).WeaponDamangeAndRange(weaponSkill, map);
+    }
+
+    public CreatureType GetCreatureType()
+    {
+        return (placeable as Creature).GetCreatureType();
+    }
+
+    public int MoveSpeed()
+    {
+        return (placeable as Creature).MoveSpeed();
+    }
+
+    public Vector2Int DirectionToCurrentActivity()
+    {
+        return (placeable as Creature).DirectionToNextActivity(map);
+    }
+
+    public int GetMaxHealth()
+    {
+        return (placeable as Creature).GetMaxHealth();
+    }
+
+    public List<TypeAbility> ListAbilities()
+    {
+        return (placeable as Creature).ListAbilities();
+    
+    }
+}
+
+public class CreatureSelf 
+{
+    public static Dictionary<Creature, CreatureSelf> selfViews = new();
+
+    public static CreatureSelf GetSelfView(Creature creature, Map map)
     {
         if (!selfViews.ContainsKey(creature))
         {
-            selfViews[creature] = new SelfView(creature, map);
+            selfViews[creature] = new CreatureSelf(creature, map);
         }
         return selfViews[creature];
     }
 
-    private SelfView(Creature creature, Map map)
+    private CreatureSelf(Creature creature, Map map)
     {
         self = creature;
         this.map = map;
@@ -688,11 +848,6 @@ public class SelfView
         return self.WeaponDamangeAndRange(weaponSkill, map);
     }
 
-    private TypeAbility BestHarvestingAbility(string skill)
-    {
-        return self.BestHarvestingAbility(skill);
-    }
-
     public CreatureType GetCreatureType()
     {
         return self.GetCreatureType();
@@ -731,6 +886,11 @@ public class SelfView
     public void TransferItem(Item item, Placeable target)
     {
         self.TransferItem(item, target, map);
+    }
+
+    public List<TypeAbility> ListAbilities()
+    {
+        return self.ListAbilities();
     }
 }
 
@@ -773,7 +933,7 @@ public class Building : Destructable
         {
             throw new System.Exception("Creature type not supported");
         }
-        if (GetCurrentCreaturesSupported(type) >= GetMaxCreaturesSupported(type))
+        if (CountCurrentCreaturesSupported(type) >= GetMaxCreaturesSupported(type))
         {
             return; // Max creatures already supported
         }
@@ -788,7 +948,7 @@ public class Building : Destructable
         return buildingType.GetSupportedCreatureTypes();
     }
 
-    public int GetCurrentCreaturesSupported(CreatureType type)
+    public int CountCurrentCreaturesSupported(CreatureType type)
     {
         if (!creaturesByType.ContainsKey(type.GetName()))
         {
@@ -809,7 +969,7 @@ public class Building : Destructable
         return buildingType.GetSupportedCreatureSpawnTimes()[index];
     }
 
-    public List<ItemType> GetRequestedItemTypes()
+    public List<ItemType> GetRequestableItemTypes()
     {
         return buildingType.GetRequestableItemTypes();
     }
@@ -839,6 +999,49 @@ public class Building : Destructable
             // Place the creature
             map.Add(spawningCreature, map.PositionOf(this) - new Vector2Int(1, 1));
         }
+    }
+}
+
+public class BuildingView : DestructableView
+{
+    public BuildingView(Building building, Map map) : base(building, map)
+    {
+        
+    }
+
+    public List<CreatureType> GetCreatureTypesAvailable()
+    {
+        return (placeable as Building).GetCreatureTypesAvailable();
+    }
+
+    public int CountCurrentCreaturesSupported(CreatureType type)
+    {
+        return (placeable as Building).CountCurrentCreaturesSupported(type);
+    }
+
+    public int GetMaxCreaturesSupported(CreatureType type)
+    {
+        return (placeable as Building).GetMaxCreaturesSupported(type);
+    }
+
+    public int GetSpawnTime(CreatureType type)
+    {
+        return (placeable as Building).GetSpawnTime(type);
+    }
+
+    public List<ItemType> GetRequestableItemTypes()
+    {
+        return (placeable as Building).GetRequestableItemTypes();
+    }
+
+    public List<int> GetRequestedItemAmounts()
+    {
+        return (placeable as Building).GetRequestedItemAmounts();
+    }
+
+    public BuildingType GetBuildingType()
+    {
+        return (placeable as Building).buildingType;
     }
 }
 
@@ -948,6 +1151,29 @@ public class Prop : Destructable
     }
 }
 
+public class PropView : DestructableView
+{
+    public PropView(Prop prop, Map map) : base(prop, map)
+    {
+        
+    }
+
+    public float HarvestedFraction()
+    {
+        return (placeable as Prop).HarvestedFraction();
+    }
+
+    public float ChanceOfItemDrop(ItemType itemType)
+    {
+        return (placeable as Prop).ChanceOfItemDrop(itemType);
+    }
+
+    public PropType GetPropType()
+    {
+        return (placeable as Prop).propType;
+    }
+}
+
 public class Item : Placeable
 {
     public ItemType itemType;
@@ -988,5 +1214,23 @@ public class Item : Placeable
     public float Value()
     {
         return 10 * GetProbability();
+    }
+}
+
+public class ItemView : PlaceableView
+{
+    public ItemView(Item item, Map map) : base(item, map)
+    {
+        
+    }
+
+    public bool IsConsumed()
+    {
+        return (placeable as Item).IsConsumed();
+    }
+
+    public float Value()
+    {
+        return (placeable as Item).Value();
     }
 }

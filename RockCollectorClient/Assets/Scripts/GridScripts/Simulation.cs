@@ -599,7 +599,7 @@ public class Map
     }
 }
 
-public class MapView
+public class MapView 
 {
     public static Dictionary<Map, MapView> mapViews = new();
 
@@ -612,10 +612,96 @@ public class MapView
         return mapViews[map];
     }
 
-    private Map map;
+    private readonly Map map;
 
     public MapView(Map map)
     {
         this.map = map;
+    }
+
+    public List<PlaceableView> PlaceablesAt(Vector2Int position) 
+    {
+        List<Placeable> placeables = map.PlaceablesAt(position);
+        List<PlaceableView> placeableViews = new();
+        foreach (Placeable placeable in placeables)
+        {
+            placeableViews.Add(PlaceableView.GetPlaceableView(placeable, map));
+        }
+        return placeableViews;
+    }
+
+    public Vector2Int PositionOf(PlaceableView placeable)
+    {
+        return map.PositionOf(PlaceableView.GetPlaceable(placeable));
+    }
+
+    public RectInt ExtentsOf(PlaceableView placeable)
+    {
+        return map.ExtentsOf(PlaceableView.GetPlaceable(placeable));
+    }
+
+    public int DistanceBetween(PlaceableView placeable1, PlaceableView placeable2)
+    {
+        return map.DistanceBetween(PlaceableView.GetPlaceable(placeable1), PlaceableView.GetPlaceable(placeable2));
+    }
+
+    public int DistanceTo(Vector2Int position, PlaceableView forPlaceable)
+    {
+        return map.DistanceTo(position, PlaceableView.GetPlaceable(forPlaceable));
+    }
+
+    public List<PlaceableView> UnheldPlaceables()
+    {
+        List<PlaceableView> placeableViews = new();
+        foreach (Placeable placeable in map.UnheldPlaceables())
+        {
+            placeableViews.Add(PlaceableView.GetPlaceableView(placeable, map));
+        }
+        return placeableViews;
+    }
+
+    public List<PlaceableView> HeldPlaceables()
+    {
+        List<PlaceableView> placeableViews = new();
+        foreach (Placeable placeable in map.HeldPlaceables())
+        {
+            placeableViews.Add(PlaceableView.GetPlaceableView(placeable, map));
+        }
+        return placeableViews;
+    }
+
+    public List<PlaceableView> AllPlaceables()
+    {
+        List<PlaceableView> placeableViews = new();
+        foreach (Placeable placeable in map.AllPlaceables())
+        {
+            placeableViews.Add(PlaceableView.GetPlaceableView(placeable, map));
+        }
+        return placeableViews;
+    }
+
+    public bool PlaceableExists(PlaceableView placeable)
+    {
+        return map.PlaceableExists(PlaceableView.GetPlaceable(placeable));
+    }
+
+    public bool IsHeld(PlaceableView placeable)
+    {
+        return map.IsHeld(PlaceableView.GetPlaceable(placeable));
+    }
+
+    public List<PlaceableView> HeldPlaceablesOf(PlaceableView holder)
+    {
+        List<PlaceableView> placeableViews = new();
+        foreach (Placeable placeable in map.HeldPlaceablesOf(PlaceableView.GetPlaceable(holder)))
+        {
+            placeableViews.Add(PlaceableView.GetPlaceableView(placeable, map));
+        }
+        return placeableViews;
+    }
+
+    public int CurrentTick()
+    {
+        return map.CurrentTick();
     }
 }

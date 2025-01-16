@@ -138,7 +138,7 @@ public static class Search
         {
             if (placeable is Building building)
             {
-                List<ItemType> requestedItemTypes = building.GetRequestedItemTypes();
+                List<ItemType> requestedItemTypes = building.GetRequestableItemTypes();
                 List<int> requestedItemAmounts = building.GetRequestedItemAmounts();
                 Dictionary<ItemType, int> itemsRequestedByType = new();
                 for (int i = 0; i < requestedItemTypes.Count; i++)

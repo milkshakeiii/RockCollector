@@ -5,7 +5,7 @@ public abstract class CreatureBehavior
 {
     public abstract Activity NextActivity(Map map, Creature actor);
 
-    public abstract void CheckInterrupts(MapView map, SelfView creature);
+    public abstract void CheckInterrupts(MapView map, CreatureSelf creature);
 }
 
 public class PeasantBehavior : CreatureBehavior
@@ -15,7 +15,7 @@ public class PeasantBehavior : CreatureBehavior
         return Search.GoalSearch(map, actor);
     }
 
-    public override void CheckInterrupts(MapView map, SelfView creature)
+    public override void CheckInterrupts(MapView map, CreatureSelf creature)
     {
         
     }
