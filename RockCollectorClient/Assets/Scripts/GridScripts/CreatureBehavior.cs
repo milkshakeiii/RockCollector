@@ -3,13 +3,20 @@ using UnityEngine;
 
 public abstract class CreatureBehavior
 {
-    public abstract Activity NextActivity(Map mapCopy, Creature newMe);
+    public abstract Activity NextActivity(Map map, Creature actor);
+
+    public abstract void CheckInterrupts(MapView map, SelfView creature);
 }
 
 public class PeasantBehavior : CreatureBehavior
 {
-    public override Activity NextActivity(Map mapCopy, Creature newMe)
+    public override Activity NextActivity(Map map, Creature actor)
     {
-        return Search.GoalSearch(mapCopy, newMe);
+        return Search.GoalSearch(map, actor);
+    }
+
+    public override void CheckInterrupts(MapView map, SelfView creature)
+    {
+        
     }
 }

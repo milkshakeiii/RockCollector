@@ -21,13 +21,13 @@ public abstract class Activity
 
     private Dictionary<Placeable, Placeable> backDictionary = null;
 
-    public Activity(int encounterLevel,
-                    List<ItemType> craftingInputItems,
-                    ItemType craftingOutputItem,
-                    List<ItemType> droppedItems,
-                    List<int> droppedItemsProbabilities,
-                    Placeable sourcePlaceable,
-                    Vector2Int position) // use Activity.NULL_POSITION for null position
+    protected Activity(int encounterLevel,
+                       List<ItemType> craftingInputItems,
+                       ItemType craftingOutputItem,
+                       List<ItemType> droppedItems,
+                       List<int> droppedItemsProbabilities,
+                       Placeable sourcePlaceable,
+                       Vector2Int position) // use Activity.NULL_POSITION for null position
     {
         this.encounterLevel = encounterLevel;
         this.craftingInputItems = craftingInputItems;

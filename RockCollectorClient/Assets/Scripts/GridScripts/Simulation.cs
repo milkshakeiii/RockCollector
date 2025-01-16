@@ -592,9 +592,30 @@ public class Map
 
         currentTick++;
     }
+
+    public MapView GetView()
+    {
+        return MapView.GetMapView(this);
+    }
 }
 
 public class MapView
 {
+    public static Dictionary<Map, MapView> mapViews = new();
 
+    public static MapView GetMapView(Map map)
+    {
+        if (!mapViews.ContainsKey(map))
+        {
+            mapViews[map] = new MapView(map);
+        }
+        return mapViews[map];
+    }
+
+    private Map map;
+
+    public MapView(Map map)
+    {
+        this.map = map;
+    }
 }

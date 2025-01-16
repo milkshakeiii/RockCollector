@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading;
+using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
@@ -157,6 +158,11 @@ public class Creature : Destructable
         return name;
     }
 
+    public SelfView GetSelfView(Map map)
+    {
+        return SelfView.GetSelfView(this, map);
+    }
+
     public int GetLevel()
     {
         return level;
@@ -254,21 +260,21 @@ public class Creature : Destructable
         return modifier;
     }
 
-    public int d20Roll()
+    public static int Roll20()
     {
         return UnityEngine.Random.Range(1, 21);
     }
 
     public bool RollForSuccess(int difficulty, string skillName)
     {
-        int roll = d20Roll();
+        int roll = Roll20();
         int modifier = SkillModifier(skillName);
         return roll + modifier >= difficulty || roll == 20;
     }
 
     public int RollForMultiplier(int difficulty, string skillName)
     {
-        int roll = d20Roll();
+        int roll = Roll20();
         int modifier = SkillModifier(skillName);
         int multiplier = 0;
         if (roll + modifier >= difficulty)
@@ -318,7 +324,7 @@ public class Creature : Destructable
 
     public void Strike(Creature target, DieRoll damage, int toHit, string weaponSkill, Map map)
     {
-        int toHitResult = d20Roll() + toHit;
+        int toHitResult = Roll20() + toHit;
         if (!target.Defend(toHitResult))
         {
             int damageAmount = damage.Roll();
@@ -378,7 +384,7 @@ public class Creature : Destructable
         return (damage, range);
     }
 
-    private TypeAbility BestHarvestingAbility(string skill)
+    public TypeAbility BestHarvestingAbility(string skill)
     {
         TypeAbility bestAbility = null;
         int bestAmount = 0;
@@ -433,10 +439,20 @@ public class Creature : Destructable
     {
         if (cooldownTicksRemaining > 0)
         {
+            // Nothing can be done while on cooldown
             cooldownTicksRemaining--;
             return;
         }
-        else if (currentActivity == null)
+        // If off cooldown, check for short-term interrupts to perform instead of the current activity
+        behavior.CheckInterrupts(map.GetView(), GetSelfView(map));
+        // If an action was performed during the interrupt check, we may be on cooldown again
+        if (cooldownTicksRemaining > 0)
+        {
+            return;
+        }
+
+        // Continue on to current activity
+        if (currentActivity == null)
         {
             return;
         }
@@ -450,11 +466,7 @@ public class Creature : Destructable
         }
         else if (currentActivity.DistanceTo(this, map) > currentActivity.ProximityRequirement(this))
         {
-            Vector2Int difference = DirectionToNextActivity(map);
-            Vector2Int direction = new(Math.Sign(difference.x), Math.Sign(difference.y));
-            Vector2Int newPosition = map.PositionOf(this) + direction;
-            map.MovePlaceable(this, newPosition);
-            cooldownTicksRemaining = MoveSpeed();
+            MoveInDirection(DirectionToNextActivity(map), map);
             return;
         }
         else // Perform the activity
@@ -523,14 +535,29 @@ public class Creature : Destructable
         return 10;
     }
 
-    private Vector2Int DirectionToNextActivity(Map map)
+    public void MoveInDirection(Vector2Int direction, Map map)
+    {
+        Vector2Int step = new(Math.Sign(direction.x), Math.Sign(direction.y));
+        Vector2Int newPosition = map.PositionOf(this) + step;
+        map.MovePlaceable(this, newPosition);
+        cooldownTicksRemaining = MoveSpeed();
+    }
+
+    public void MoveTowards(Vector2Int target, Map map)
+    {
+        Vector2Int currentPosition = map.PositionOf(this);
+        Vector2Int direction = target - currentPosition;
+        MoveInDirection(direction, map);
+    }
+
+    public Vector2Int DirectionToNextActivity(Map map)
     {
         Vector2Int location = currentActivity.GetLocation(map);
         Vector2Int currentPosition = map.PositionOf(this);
         return location - currentPosition;
     }
 
-    private void AbandonCurrentActivity()
+    public void AbandonCurrentActivity()
     {
         if (currentActivity != null)
         {
@@ -558,6 +585,130 @@ public class Creature : Destructable
         map.MovePlaceable(this, activity.GetLocation(map) - (Vector2Int.one * activity.ProximityRequirement(this)));
         return estimatedTicks;
     }
+}
+
+public class SelfView 
+{
+    public static Dictionary<Creature, SelfView> selfViews = new();
+
+    public static SelfView GetSelfView(Creature creature, Map map)
+    {
+        if (!selfViews.ContainsKey(creature))
+        {
+            selfViews[creature] = new SelfView(creature, map);
+        }
+        return selfViews[creature];
+    }
+
+    private SelfView(Creature creature, Map map)
+    {
+        self = creature;
+        this.map = map;
+    }
+
+    private readonly Creature self;
+    private readonly Map map;
+
+    public void MoveInDirection(Vector2Int direction)
+    {
+        self.MoveInDirection(direction, map);
+    }
+
+    public void MoveTowards(Vector2Int target)
+    {
+        self.MoveTowards(target, map);
+    }
+
+    public int GetLevel()
+    {
+        return self.GetLevel();
+    }
+
+    public int GetExperience()
+    {
+        return self.GetExperience();
+    }
+
+    public void UseAnyAbility()
+    {
+        self.UseAnyAbility(map);
+    }
+
+    public void UseAbility(TypeAbility ability)
+    {
+        self.UseAbility(ability, map);
+    }
+
+    public int TicksSinceLastUse(TypeAbility ability)
+    {
+        return self.TicksSinceLastUse(ability, map);
+    }
+
+    public int ExperienceForNextLevel()
+    {
+        return self.ExperienceForNextLevel();
+    }
+
+    public int EncounterLevel()
+    {
+        return self.EncounterLevel();
+    }
+
+    public int SkillModifier(string skillName)
+    {
+        return self.SkillModifier(skillName);
+    }
+
+    public void HarvestProp(Prop prop)
+    {
+        self.HarvestProp(prop, map);
+    }
+
+    public (int, int) HarvestingCooldownAndAmount(Prop prop)
+    {
+        return self.HarvestingCooldownAndAmount(prop);
+    }
+
+    public (DieRoll, int) WeaponDamangeAndRange(string weaponSkill)
+    {
+        return self.WeaponDamangeAndRange(weaponSkill, map);
+    }
+
+    private TypeAbility BestHarvestingAbility(string skill)
+    {
+        return self.BestHarvestingAbility(skill);
+    }
+
+    public CreatureType GetCreatureType()
+    {
+        return self.GetCreatureType();
+    }
+
+    public int MoveSpeed()
+    {
+        return self.MoveSpeed();
+    }
+
+    public Vector2Int DirectionToCurrentActivity()
+    {
+        return self.DirectionToNextActivity(map);
+    }
+
+    public void AbandonCurrentActivity()
+    {
+        self.AbandonCurrentActivity();
+    }
+
+    public int GetMaxHealth()
+    {
+        return self.GetMaxHealth();
+    }
+
+    public float HealthFraction()
+    {
+        return self.HealthFraction();
+    }
+
 }
 
 public class Building : Destructable
