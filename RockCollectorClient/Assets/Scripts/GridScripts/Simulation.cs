@@ -67,7 +67,6 @@ public class Simulation
                         {
                             if (placeable is Creature target && target.teamNumber != actor.teamNumber)
                             {
-                                Debug.Log("Striking " + target);
                                 actor.Strike(target, damage, chosenWeaponModifier, chosenWeaponSkill, map);
                                 targetsStruck++;
                                 if (targetsStruck >= ability.GetEnemyTargets())
