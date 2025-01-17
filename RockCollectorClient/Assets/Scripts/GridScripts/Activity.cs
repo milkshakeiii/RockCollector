@@ -51,7 +51,7 @@ public abstract class Activity
         throw new Exception("Unable to determine location of activity");
     }
 
-    public virtual int ProximityRequirement(Creature forCreature)
+    public virtual int ProximityRequirement(Creature forCreature, Map map)
     {
         return 1;
     }
@@ -167,6 +167,28 @@ public class HuntActivity : Activity
 
     }
 
+    public override int ProximityRequirement(Creature forCreature, Map map)
+    {
+        int myMaxRangeUp = -1;
+        int myMaxRangeEver = 1;
+        foreach (TypeAbility ability in forCreature.ListAbilities())
+        {
+            if (ability.GetEnemyTargets() > 0 && forCreature.AbilityIsUp(ability, map))
+            {
+                myMaxRangeUp = Math.Max(myMaxRangeUp, ability.GetRange());
+            }
+            if (ability.GetEnemyTargets() > 0)
+            {
+                myMaxRangeEver = Math.Max(myMaxRangeEver, ability.GetRange());
+            }
+        }
+        if (myMaxRangeUp == -1)
+        {
+            return myMaxRangeEver;
+        }
+        return myMaxRangeUp;
+    }
+
     private Creature SourceCreature()
     {
         return (Creature)sourcePlaceable;
@@ -179,7 +201,7 @@ public class HuntActivity : Activity
 
     public override void Perform(Creature performer, Map map)
     {
-        // TODO: Implement
+        performer.UseAnyAbility(map);
     }
 
     public override int EffectAndEstimate(Creature creature, Map map)
@@ -201,7 +223,7 @@ public class CraftActivity : Activity
         return (Building)sourcePlaceable;
     }
 
-    public override int ProximityRequirement(Creature forCreature)
+    public override int ProximityRequirement(Creature forCreature, Map map)
     {
         return 0;
     }

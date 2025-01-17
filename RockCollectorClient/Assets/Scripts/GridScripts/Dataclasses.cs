@@ -385,7 +385,6 @@ public class CreatureType : Entity
     {
         return EntityManager.GetIntListAttribute(attributes, "abilityLevels");
     }
-
     public List<ItemType> GetDroppedItems()
     {
         return EntityManager.GetItemListAttribute(attributes, "droppedItems", new List<ItemType>());
@@ -393,6 +392,10 @@ public class CreatureType : Entity
     public List<int> GetDroppedItemsProbabilities()
     {
         return EntityManager.GetIntListAttribute(attributes, "droppedItemsProbabilities", new List<int>());
+    }
+    public string GetBehavior()
+    {
+        return EntityManager.GetStringAttribute(attributes, "behavior");
     }
 }
 
@@ -514,6 +517,11 @@ public class DieRoll
 {
     public int sides;
     public int rolls;
+
+    public override string ToString()
+    {
+        return rolls + "d" + sides;
+    }
 
     public float ExpectedValue()
     {

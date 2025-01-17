@@ -9,7 +9,7 @@ wisdomBonus:0
 charismaBonus:0
 abilities:Woodcutting
 abilityLevels:1
-goals:Craft
+behavior:PeasantBehavior
 
 name:Skeleton
 startingHealth:4
@@ -22,4 +22,4 @@ wisdomBonus:0
 charismaBonus:0
 abilities:Basic Attack
 abilityLevels:1
-goals:Craft
+behavior:SkeletonBehavior

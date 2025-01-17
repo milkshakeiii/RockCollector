@@ -214,9 +214,9 @@ public class Creature : Destructable
         this.name = name;
         this.teamNumber = teamNumber;
         this.creatureType = creatureType;
-        LevelUp();
 
-        this.behavior = new PeasantBehavior();
+        this.behavior = CreatureBehavior.FromName(creatureType.GetBehavior());
+        LevelUp();
     }
 
     public override Placeable DeepCopy()
@@ -262,7 +262,7 @@ public class Creature : Destructable
     {
         foreach (TypeAbility ability in abilities)
         {
-            if (TicksSinceLastUse(ability, map) >= ability.GetRechargeTicks())
+            if (AbilityIsUp(ability, map))
             {
                 UseAbility(ability, map);
                 return;
@@ -270,11 +270,28 @@ public class Creature : Destructable
         }
     }
 
+    public bool AbilityIsUp(TypeAbility ability, Map map)
+    {
+        bool recharched = TicksSinceLastUse(ability, map) >= ability.GetRechargeTicks();
+        List<string> weaponSkills = ability.GetWeaponSkills();
+        bool weaponRequirementsMet = weaponSkills.Count == 0;
+        foreach (string weaponSkill in weaponSkills)
+        {
+            (DieRoll damage, int range) = WeaponDamangeAndRange(weaponSkill, map);
+            if (damage != null)
+            {
+                weaponRequirementsMet = true;
+                break;
+            }
+        }
+        return recharched && weaponRequirementsMet;
+    }
+
     public void UseAbility(TypeAbility ability, Map map)
     {
-        if (TicksSinceLastUse(ability, map) < ability.GetRechargeTicks())
+        if (!AbilityIsUp(ability, map))
         {
-            throw new System.Exception("Ability not ready");
+            throw new System.Exception("Ability not useable. Check AbilityIsUp first.");
         }
         ticksLastUsed[ability] = map.CurrentTick();
         cooldownTicksRemaining = ability.GetCooldown();
@@ -305,7 +322,7 @@ public class Creature : Destructable
             skillIncreases[skillUsed] = 0;
         }
         skillIncreases[skillUsed] += Mathf.Max(0, Mathf.Log(Mathf.Max(encounterLevel - 8, 1)) / (skillIncreases[skillUsed] + 1));
-        Debug.Log(GetName() + " " + skillUsed + ": " + skillIncreases[skillUsed]);
+        // Debug.Log(GetName() + " " + skillUsed + ": " + skillIncreases[skillUsed]);
     }
 
     public int EncounterLevel()
@@ -330,6 +347,10 @@ public class Creature : Destructable
 
     public int SkillModifier(string skillName)
     {
+        if (skillName == null)
+        {
+            throw new System.Exception("Skill name cannot be null");
+        }
         int modifier = GetLevel();
         foreach (Feat feat in feats)
         {
@@ -438,9 +459,15 @@ public class Creature : Destructable
         return (cooldown, bestAmount);
     }
 
+    /// <summary>
+    /// Returns null damage and 0 range if no weapon is held with the given skill.
+    /// </summary>
+    /// <param name="weaponSkill"></param>
+    /// <param name="map"></param>
+    /// <returns></returns>
     public (DieRoll, int) WeaponDamangeAndRange(string weaponSkill, Map map)
     {
-        DieRoll damage = new() { rolls = 0, sides = 0 };
+        DieRoll damage = null;
         int range = 0;
 
         List<Placeable> heldItems = map.HeldPlaceablesOf(this);
@@ -453,7 +480,7 @@ public class Creature : Destructable
                 {
                     DieRoll thisDamage = item.itemType.GetWeaponDamage();
                     int thisRange = item.itemType.GetWeaponRange();
-                    if (thisDamage.ExpectedValue() > damage.ExpectedValue())
+                    if (damage == null || thisDamage.ExpectedValue() > damage.ExpectedValue())
                     {
                         damage = thisDamage;
                         range = thisRange;
@@ -463,6 +490,16 @@ public class Creature : Destructable
         }
 
         return (damage, range);
+    }
+
+    public List<string> GetPreferredWeaponSkills()
+    {
+        List<string> preferredSkills = new();
+        foreach (TypeAbility ability in abilities)
+        {
+            preferredSkills.AddRange(ability.GetWeaponSkills());
+        }
+        return preferredSkills;
     }
 
     public TypeAbility BestHarvestingAbility(string skill)
@@ -545,7 +582,7 @@ public class Creature : Destructable
             AbandonCurrentActivity();
             return;
         }
-        else if (currentActivity.DistanceTo(this, map) > currentActivity.ProximityRequirement(this))
+        else if (currentActivity.DistanceTo(this, map) > currentActivity.ProximityRequirement(this, map))
         {
             MoveInDirection(DirectionToNextActivity(map), map);
             return;
@@ -555,7 +592,7 @@ public class Creature : Destructable
             currentActivity.Perform(this, map);
             if (currentActivity.IsCompletedOrImpossible(map, this))
             {
-                Debug.Log("Activity completed");
+                // Debug.Log("Activity completed");
                 AbandonCurrentActivity(); // Otherwise, there would be a "stunned" frame
             }
             return;
@@ -570,7 +607,7 @@ public class Creature : Destructable
             stagedActivity = null;
             // when we have a new activity, we need to mark the target placeable as claimed
             // new activities always are assigned here
-            Debug.Log("Activity promoted: " + currentActivity + " " + currentActivity.GetLocation(map));
+            // Debug.Log("Activity promoted: " + currentActivity + " " + currentActivity.GetLocation(map));
             currentActivity.MarkSourcePlaceableClaimed();
         }
         else
@@ -663,7 +700,7 @@ public class Creature : Destructable
         int distance = activity.DistanceTo(this, map);
         int ticksPerSquare = MoveSpeed();
         int estimatedTicks = distance * ticksPerSquare;
-        map.MovePlaceable(this, activity.GetLocation(map) - (Vector2Int.one * activity.ProximityRequirement(this)));
+        map.MovePlaceable(this, activity.GetLocation(map) - (Vector2Int.one * activity.ProximityRequirement(this, map)));
         return estimatedTicks;
     }
 
@@ -684,6 +721,11 @@ public class Creature : Destructable
     public List<TypeAbility> ListAbilities()
     {
         return new (abilities);
+    }
+
+    public bool HasCurrentActivity()
+    {
+        return currentActivity != null;
     }
 }
 
@@ -707,6 +749,11 @@ public class CreatureView : DestructableView
     public int TicksSinceLastUse(TypeAbility ability)
     {
         return (placeable as Creature).TicksSinceLastUse(ability, map);
+    }
+
+    public bool AbilityIsUp(TypeAbility ability)
+    {
+        return (placeable as Creature).AbilityIsUp(ability, map);
     }
 
     public int ExperienceForNextLevel()
@@ -818,6 +865,11 @@ public class CreatureSelf
         return self.TicksSinceLastUse(ability, map);
     }
 
+    public bool AbilityIsUp(TypeAbility ability)
+    {
+        return self.AbilityIsUp(ability, map);
+    }
+
     public int ExperienceForNextLevel()
     {
         return self.ExperienceForNextLevel();
@@ -891,6 +943,11 @@ public class CreatureSelf
     public List<TypeAbility> ListAbilities()
     {
         return self.ListAbilities();
+    }
+
+    public bool HasCurrentActivity()
+    {
+        return self.HasCurrentActivity();
     }
 }
 

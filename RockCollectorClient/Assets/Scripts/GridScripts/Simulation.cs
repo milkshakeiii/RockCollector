@@ -21,61 +21,66 @@ public class Simulation
     {
         if (ability.GetEnemyTargets() > 0)
         {
-            // get weapon skills
             List<string> weaponSkills = ability.GetWeaponSkills();
-            List<int> weaponModifiers = new();
-            foreach (string weaponSkill in weaponSkills)
+            if (weaponSkills.Count > 0) // if the ability uses weapon skills
             {
-                weaponModifiers.Add(actor.SkillModifier(weaponSkill));
-            }
-
-            // choose the best weapon skill based on the modifiers
-            string chosenWeaponSkill = weaponSkills[0];
-            int chosenWeaponModifier = weaponModifiers[0];
-            for (int i = 1; i < weaponSkills.Count; i++)
-            {
-                if (weaponModifiers[i] > chosenWeaponModifier)
+                DieRoll damage = null;
+                int range = 0;
+                string chosenWeaponSkill = null;
+                // get the damage and range based on the actor's preferred weapon skills
+                foreach (string preferredWeaponSkill in actor.GetPreferredWeaponSkills())
                 {
-                    chosenWeaponSkill = weaponSkills[i];
-                    chosenWeaponModifier = weaponModifiers[i];
-                }
-            }
-
-            // get the best damage and range based on the chosen weapon skill
-            (DieRoll damage, int range) = actor.WeaponDamangeAndRange(chosenWeaponSkill, map);
-            
-            // get the range of possible targets
-            RectInt actorRect = map.ExtentsOf(actor);
-            int xMin = actorRect.xMin - range;
-            int xMax = actorRect.xMax + range;
-            int yMin = actorRect.yMin - range;
-            int yMax = actorRect.yMax + range;
-
-            // strike up to the maximum number of targets
-            int targetsStruck = 0;
-            int maxTargets = ability.GetEnemyTargets();
-            for (int x = xMin; x <= xMax; x++)
-            {
-                for (int y = yMin; y <= yMax; y++)
-                {
-                    Vector2Int position = new(x, y);
-                    List<Placeable> placeables = map.PlaceablesAt(position);
-                    foreach (Placeable placeable in placeables)
+                    if (weaponSkills.Contains(preferredWeaponSkill))
                     {
-                        if (placeable is Creature target && target.teamNumber != actor.teamNumber)
+                        (damage, range) = actor.WeaponDamangeAndRange(preferredWeaponSkill, map);
+                        if (damage != null)
                         {
-                            actor.Strike(target, damage, chosenWeaponModifier, chosenWeaponSkill, map);
-                            targetsStruck++;
-                            if (targetsStruck >= ability.GetEnemyTargets())
-                            {
-                                break;
-                            }
+                            chosenWeaponSkill = preferredWeaponSkill;
+                            break;
                         }
                     }
                 }
-                if (targetsStruck >= ability.GetEnemyTargets())
+                if (damage == null)
                 {
-                    break;
+                    throw new System.Exception("No weapon to use with ability.");
+                }
+                int chosenWeaponModifier = actor.SkillModifier(chosenWeaponSkill);
+                // we have also now set the chosenWeaponSkill and chosenWeaponModifier
+
+                // get the range of possible targets
+                RectInt actorRect = map.ExtentsOf(actor);
+                int xMin = actorRect.xMin - range;
+                int xMax = actorRect.xMax + range;
+                int yMin = actorRect.yMin - range;
+                int yMax = actorRect.yMax + range;
+
+                // strike up to the maximum number of targets
+                int targetsStruck = 0;
+                int maxTargets = ability.GetEnemyTargets();
+                for (int x = xMin; x <= xMax; x++)
+                {
+                    for (int y = yMin; y <= yMax; y++)
+                    {
+                        Vector2Int position = new(x, y);
+                        List<Placeable> placeables = map.PlaceablesAt(position);
+                        foreach (Placeable placeable in placeables)
+                        {
+                            if (placeable is Creature target && target.teamNumber != actor.teamNumber)
+                            {
+                                Debug.Log("Striking " + target);
+                                actor.Strike(target, damage, chosenWeaponModifier, chosenWeaponSkill, map);
+                                targetsStruck++;
+                                if (targetsStruck >= ability.GetEnemyTargets())
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    if (targetsStruck >= ability.GetEnemyTargets())
+                    {
+                        break;
+                    }
                 }
             }
         }
