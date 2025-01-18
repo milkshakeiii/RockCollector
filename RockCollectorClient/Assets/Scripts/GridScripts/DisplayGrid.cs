@@ -39,7 +39,7 @@ public class DisplayGrid : MonoBehaviour
         if (mouseButton != -1)
         {
             Vector3 mousePos = Input.mousePosition;
-            mousePos.z = -gridCamera.transform.localPosition.z;
+            mousePos.z = HEIGHT/2f;
             Vector3 worldPos = gridCamera.GetComponent<Camera>().ScreenToWorldPoint(mousePos);
             int x = Mathf.FloorToInt(worldPos.x / 4f);
             int y = Mathf.FloorToInt(worldPos.y / 4f);
