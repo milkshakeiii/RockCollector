@@ -67,27 +67,43 @@ public class MapDisplayer : MonoBehaviour
     void OnSelect(Vector2Int position, int mouseButton)
     {
         Selection selection;
-        if (mouseButton == 0) {
+        if (mouseButton == 0)
+        {
             selection = leftMouseSelection;
-        } else {
+        } 
+        else
+        {
             selection = rightMouseSelection;
         }
+
         List<Placeable> placeables = map.PlaceablesAt(position);
+        // if there is no placeable at the position, clear the selection
         if (placeables.Count == 0)
         {
             selection.placeable = null;
         }
         else if (position == selection.position)
         {
+            // if the position is the same, cycle through the placeables
             selection.placeableIndex++;
             selection.placeableIndex %= placeables.Count;
             selection.placeable = placeables[selection.placeableIndex];
         }
         else
         {
+            // if the position is different, select the first placeable
             selection.position = position;
             selection.placeableIndex = 0;
             selection.placeable = placeables[0];
+        }
+
+        if (mouseButton == 0)
+        {
+            leftMouseSelection = selection;
+        }
+        else
+        {
+            rightMouseSelection = selection;
         }
     }
 
@@ -175,6 +191,11 @@ public class MapDisplayer : MonoBehaviour
 
     void DisplayInfoPanel(Placeable placeable, Vector2Int root)
     {
+        if (placeable == null)
+        {
+            return;
+        }
+
         displayGrid.DisplaySprite("Art/UI/button",
             root.x,
             root.y,
