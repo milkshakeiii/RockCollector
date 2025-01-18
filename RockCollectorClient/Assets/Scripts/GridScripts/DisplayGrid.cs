@@ -39,6 +39,7 @@ public class DisplayGrid : MonoBehaviour
         if (mouseButton != -1)
         {
             Vector3 mousePos = Input.mousePosition;
+            mousePos.z = -gridCamera.transform.localPosition.z;
             Vector3 worldPos = gridCamera.GetComponent<Camera>().ScreenToWorldPoint(mousePos);
             int x = Mathf.FloorToInt(worldPos.x / 4f);
             int y = Mathf.FloorToInt(worldPos.y / 4f);
@@ -62,7 +63,7 @@ public class DisplayGrid : MonoBehaviour
         if (parentToCamera)
         {
             newSquare.transform.SetParent(gridCamera.transform);
-            newSquare.transform.localPosition = new Vector3(x, y, 10);
+            newSquare.transform.localPosition = new Vector3(x, y, -gridCamera.transform.localPosition.z);
         }
         else
         {
