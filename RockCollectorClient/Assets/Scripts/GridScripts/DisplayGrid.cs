@@ -7,6 +7,11 @@ public class DisplayGrid : MonoBehaviour
     public const int WIDTH = 240;
     public const int HEIGHT = 135;
 
+    public delegate void OnMouseUp(Vector2Int position, int mouseButton);
+    public static event OnMouseUp MouseUp;
+
+    public GameObject gridCamera;
+
     public GameObject baseSquarePrefab;
     public GameObject letterPrefab;
     public GameObject letterCanvas;
@@ -21,7 +26,24 @@ public class DisplayGrid : MonoBehaviour
 
     void Update()
     {
-        
+        // check for mouse up
+        int mouseButton = -1;
+        if (Input.GetMouseButtonUp(0))
+        {
+            mouseButton = 0;
+        }
+        else if (Input.GetMouseButtonUp(1))
+        {
+            mouseButton = 1;
+        }
+        if (mouseButton != -1)
+        {
+            Vector3 mousePos = Input.mousePosition;
+            Vector3 worldPos = gridCamera.GetComponent<Camera>().ScreenToWorldPoint(mousePos);
+            int x = Mathf.FloorToInt(worldPos.x / 4f);
+            int y = Mathf.FloorToInt(worldPos.y / 4f);
+            MouseUp?.Invoke(new Vector2Int(x, y), mouseButton);
+        }
     }
 
     /// <summary>
@@ -33,11 +55,21 @@ public class DisplayGrid : MonoBehaviour
     /// <param name="width"> Width in cells (8 px per cell)</param>
     /// <param name="height"> Height in cells (8 px per cell)</param>
     /// <param name="rotation"> Rotation in 90 degree increments</param>
-    public void DisplaySprite(string spriteName, int x, int y, int width, int height, int rotation, int overlapLayer = 0)
+    public void DisplaySprite(string spriteName, int x, int y, int width, int height, int rotation, int overlapLayer = 0, bool parentToCamera = false)
     {
         // create a new GameObject
         GameObject newSquare = GetCachedSprite(spriteName);
-        newSquare.transform.localPosition = new Vector3(x, y, 0);
+        if (parentToCamera)
+        {
+            newSquare.transform.SetParent(gridCamera.transform);
+            newSquare.transform.localPosition = new Vector3(x, y, 10);
+        }
+        else
+        {
+            newSquare.transform.SetParent(transform);
+            newSquare.transform.localPosition = new Vector3(x, y, 0);
+        }
+
         newSquare.transform.localRotation = Quaternion.Euler(0, 0, rotation * 90);
         // since the sprites' pivots are in the bottom left corner, we need to adjust the position
         if (rotation == 1)

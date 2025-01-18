@@ -15,9 +15,21 @@ public class MapDisplayer : MonoBehaviour
 
     private Map map;
 
+    private struct Selection
+    {
+        public Vector2Int position;
+        public Placeable placeable;
+        public int placeableIndex;
+    }
+
+    private Selection leftMouseSelection;
+    private Selection rightMouseSelection;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     IEnumerator Start()
     {
+        DisplayGrid.MouseUp += OnSelect;
+
         yield return new WaitForSeconds(1);
         map = new ();
         Creature testCreature = new ("George", 1, EntityManager.creatureTypes["Peasant"]);
@@ -52,6 +64,33 @@ public class MapDisplayer : MonoBehaviour
         DisplayMap(map);
     }
 
+    void OnSelect(Vector2Int position, int mouseButton)
+    {
+        Selection selection;
+        if (mouseButton == 0) {
+            selection = leftMouseSelection;
+        } else {
+            selection = rightMouseSelection;
+        }
+        List<Placeable> placeables = map.PlaceablesAt(position);
+        if (placeables.Count == 0)
+        {
+            selection.placeable = null;
+        }
+        else if (position == selection.position)
+        {
+            selection.placeableIndex++;
+            selection.placeableIndex %= placeables.Count;
+            selection.placeable = placeables[selection.placeableIndex];
+        }
+        else
+        {
+            selection.position = position;
+            selection.placeableIndex = 0;
+            selection.placeable = placeables[0];
+        }
+    }
+
     // Update is called once per framex
     void Update()
     {
@@ -82,6 +121,9 @@ public class MapDisplayer : MonoBehaviour
             DisplayBars(placeable, position);
             DisplayLabels(placeable, position);
         }
+
+        DisplayInfoPanel(leftMouseSelection.placeable, new Vector2Int(-DisplayGrid.WIDTH/2, -DisplayGrid.HEIGHT/2));
+        DisplayInfoPanel(rightMouseSelection.placeable, new Vector2Int(3*DisplayGrid.WIDTH/8, -DisplayGrid.HEIGHT/2));
     }
 
     void DisplayBars(Placeable placeable, Vector2Int position)
@@ -129,5 +171,17 @@ public class MapDisplayer : MonoBehaviour
                 position.y * cellsPerSquare + creature.SquaresMinimumOne() * cellsPerSquare + 1);
         }
        
+    }
+
+    void DisplayInfoPanel(Placeable placeable, Vector2Int root)
+    {
+        displayGrid.DisplaySprite("Art/UI/button",
+            root.x,
+            root.y,
+            DisplayGrid.WIDTH/8,
+            DisplayGrid.HEIGHT,
+            0,
+            0,
+            true);
     }
 }
