@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using Unity.Jobs;
+using Unity.Collections;
 
 public class Placeable 
 {
@@ -194,7 +196,7 @@ public class Creature : Destructable
     private CreatureBehavior behavior;
     private Activity currentActivity;
     private Activity stagedActivity;
-    private Thread newActivityComputation;
+    private JobHandle newActivityComputation;
 
     private int cooldownTicksRemaining = 0;
 
@@ -223,7 +225,6 @@ public class Creature : Destructable
         copy.abilities = new List<TypeAbility>(abilities);
         copy.behavior = null;
         copy.currentActivity = null;
-        copy.newActivityComputation = null;
         copy.cooldownTicksRemaining = cooldownTicksRemaining;
         return copy;
     }
@@ -540,7 +541,7 @@ public class Creature : Destructable
             TryPromoteStagedActivity(map);
         }
         // if not, we might need to launch a new activity computation
-        else if (currentActivity == null && (newActivityComputation == null || !newActivityComputation.IsAlive)) 
+        else if (currentActivity == null && (newActivityComputation.IsCompleted))
         {
             LaunchNewActivityComputation(map);
         }
@@ -619,23 +620,36 @@ public class Creature : Destructable
         }
     }
 
-    private void LaunchNewActivityComputation(Map map)
+    private struct ActivityComputation : IJob
     {
-        if (newActivityComputation != null && newActivityComputation.IsAlive)
-        {
-            newActivityComputation.Abort();
-        }
-        (Map mapCopy, Dictionary<Placeable, Placeable> backDictionary, Creature newMe) = map.DeepCopy(this);
-        newActivityComputation = new Thread(() =>
+        public Map mapCopy;
+        public Dictionary<Placeable, Placeable> backDictionary;
+        public Creature newMe;
+        public CreatureBehavior behavior;
+        public Creature creature;
+
+        public void Execute()
         {
             Activity bestActivity = behavior.NextActivity(mapCopy, newMe);
             if (bestActivity != null)
             {
                 bestActivity.MarkForBackConversion(backDictionary);
-                this.stagedActivity = bestActivity;
+                creature.stagedActivity = bestActivity;
             }
-        });
-        newActivityComputation.Start();
+        }
+    }
+
+    private void LaunchNewActivityComputation(Map map)
+    {
+        (Map mapCopy, Dictionary<Placeable, Placeable> backDictionary, Creature newMe) = map.DeepCopy(this);
+        newActivityComputation = new ActivityComputation
+        {
+            mapCopy = mapCopy,
+            backDictionary = backDictionary,
+            newMe = newMe,
+            behavior = behavior,
+            creature = this
+        }.Schedule();
     }
 
     /// <summary>

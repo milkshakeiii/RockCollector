@@ -29,7 +29,7 @@ public static class Search
 
     public static Activity GoalSearch(Map map, Creature creature)
     {
-        return BFSGoalSearch(map, creature, 5);
+        return BFSGoalSearch(map, creature, 8);
     }
 
     public static Activity BFSGoalSearch(Map startingMap, Creature creature, int maxDepth)
