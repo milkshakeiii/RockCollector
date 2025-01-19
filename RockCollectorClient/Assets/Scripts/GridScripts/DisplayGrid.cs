@@ -7,7 +7,7 @@ public class DisplayGrid : MonoBehaviour
     public const int WIDTH = 240;
     public const int HEIGHT = 135;
 
-    public delegate void OnMouseUp(Vector2Int position, int mouseButton);
+    public delegate void OnMouseUp(Vector3 position, int mouseButton);
     public static event OnMouseUp MouseUp;
 
     public GameObject gridCamera;
@@ -41,9 +41,7 @@ public class DisplayGrid : MonoBehaviour
             Vector3 mousePos = Input.mousePosition;
             mousePos.z = HEIGHT/2f;
             Vector3 worldPos = gridCamera.GetComponent<Camera>().ScreenToWorldPoint(mousePos);
-            int x = Mathf.FloorToInt(worldPos.x / 4f);
-            int y = Mathf.FloorToInt(worldPos.y / 4f);
-            MouseUp?.Invoke(new Vector2Int(x, y), mouseButton);
+            MouseUp?.Invoke(worldPos, mouseButton);
         }
     }
 
@@ -56,7 +54,7 @@ public class DisplayGrid : MonoBehaviour
     /// <param name="width"> Width in cells (8 px per cell)</param>
     /// <param name="height"> Height in cells (8 px per cell)</param>
     /// <param name="rotation"> Rotation in 90 degree increments</param>
-    public void DisplaySprite(string spriteName, int x, int y, int width, int height, int rotation, int overlapLayer = 0, bool parentToCamera = false)
+    public void DisplaySprite(string spriteName, float x, float y, int width, int height, int rotation, int overlapLayer = 0, bool parentToCamera = false)
     {
         // create a new GameObject
         GameObject newSquare = GetCachedSprite(spriteName);

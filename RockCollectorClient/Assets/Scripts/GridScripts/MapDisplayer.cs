@@ -64,8 +64,12 @@ public class MapDisplayer : MonoBehaviour
         DisplayMap(map);
     }
 
-    void OnSelect(Vector2Int position, int mouseButton)
+    void OnSelect(Vector3 worldPos, int mouseButton)
     {
+        int x = Mathf.FloorToInt(worldPos.x / (float)cellsPerSquare);
+        int y = Mathf.FloorToInt(worldPos.y / (float)cellsPerSquare);
+        Vector2Int gamePosition = new (x, y);
+
         Selection selection;
         if (mouseButton == 0)
         {
@@ -76,13 +80,13 @@ public class MapDisplayer : MonoBehaviour
             selection = rightMouseSelection;
         }
 
-        List<Placeable> placeables = map.PlaceablesAt(position);
+        List<Placeable> placeables = map.PlaceablesAt(gamePosition);
         // if there is no placeable at the position, clear the selection
         if (placeables.Count == 0)
         {
             selection.placeable = null;
         }
-        else if (position == selection.position)
+        else if (gamePosition == selection.position)
         {
             // if the position is the same, cycle through the placeables
             selection.placeableIndex++;
@@ -92,7 +96,7 @@ public class MapDisplayer : MonoBehaviour
         else
         {
             // if the position is different, select the first placeable
-            selection.position = position;
+            selection.position = gamePosition;
             selection.placeableIndex = 0;
             selection.placeable = placeables[0];
         }
@@ -138,8 +142,8 @@ public class MapDisplayer : MonoBehaviour
             DisplayLabels(placeable, position);
         }
 
-        DisplayInfoPanel(leftMouseSelection.placeable, new Vector2Int(-DisplayGrid.WIDTH/2, -DisplayGrid.HEIGHT/2));
-        DisplayInfoPanel(rightMouseSelection.placeable, new Vector2Int(3*DisplayGrid.WIDTH/8, -DisplayGrid.HEIGHT/2));
+        DisplayInfoPanel(leftMouseSelection.placeable, new Vector2(-DisplayGrid.WIDTH/2, -DisplayGrid.HEIGHT/2f));
+        DisplayInfoPanel(rightMouseSelection.placeable, new Vector2(3*DisplayGrid.WIDTH/8,-DisplayGrid.HEIGHT/2f));
     }
 
     void DisplayBars(Placeable placeable, Vector2Int position)
@@ -189,13 +193,12 @@ public class MapDisplayer : MonoBehaviour
        
     }
 
-    void DisplayInfoPanel(Placeable placeable, Vector2Int root)
+    void DisplayInfoPanel(Placeable placeable, Vector2 root)
     {
         if (placeable == null)
         {
             return;
         }
-
         displayGrid.DisplaySprite("Art/UI/button",
             root.x,
             root.y,
