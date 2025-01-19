@@ -7,7 +7,7 @@ public class DisplayGrid : MonoBehaviour
     public const int WIDTH = 240;
     public const int HEIGHT = 135;
 
-    public delegate void OnMouseUp(Vector3 position, int mouseButton);
+    public delegate void OnMouseUp(Vector3 worldPosition, Vector2Int screenPosition, int mouseButton);
     public static event OnMouseUp MouseUp;
 
     public GameObject gridCamera;
@@ -41,7 +41,8 @@ public class DisplayGrid : MonoBehaviour
             Vector3 mousePos = Input.mousePosition;
             mousePos.z = HEIGHT/2f;
             Vector3 worldPos = gridCamera.GetComponent<Camera>().ScreenToWorldPoint(mousePos);
-            MouseUp?.Invoke(worldPos, mouseButton);
+            Vector2Int screenPosition = new(Mathf.RoundToInt(mousePos.x/8f) - WIDTH/2, Mathf.RoundToInt(mousePos.y/8f) - HEIGHT/2 - 1);
+            MouseUp?.Invoke(worldPos, screenPosition, mouseButton);
         }
     }
 

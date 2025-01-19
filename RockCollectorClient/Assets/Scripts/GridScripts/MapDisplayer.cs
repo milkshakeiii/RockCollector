@@ -2,6 +2,7 @@ using NUnit.Framework;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
+using Unity.VisualScripting;
 
 public class MapDisplayer : MonoBehaviour
 {
@@ -24,6 +25,9 @@ public class MapDisplayer : MonoBehaviour
 
     private Selection leftMouseSelection;
     private Selection rightMouseSelection;
+
+    public delegate void OnButtonClick();
+    private Dictionary<RectInt, OnButtonClick> buttonRectsToCallbacks = new ();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     IEnumerator Start()
@@ -64,10 +68,23 @@ public class MapDisplayer : MonoBehaviour
         DisplayMap(map);
     }
 
-    void OnSelect(Vector3 worldPos, int mouseButton)
+    void OnSelect(Vector3 worldPosition, Vector2Int screenPosition, int mouseButton)
     {
-        int x = Mathf.FloorToInt(worldPos.x / (float)cellsPerSquare);
-        int y = Mathf.FloorToInt(worldPos.y / (float)cellsPerSquare);
+        // check if this is a button press
+        Debug.Log(screenPosition);
+        foreach (RectInt rectInt in buttonRectsToCallbacks.Keys)
+        {
+            if (rectInt.Contains(screenPosition))
+            {
+                OnButtonClick callback = buttonRectsToCallbacks[rectInt];
+                callback.Invoke();
+                return;
+            }
+        }
+
+        // otherwise check for clicked placeables
+        int x = Mathf.FloorToInt(worldPosition.x / (float)cellsPerSquare);
+        int y = Mathf.FloorToInt(worldPosition.y / (float)cellsPerSquare);
         Vector2Int gamePosition = new (x, y);
 
         Selection selection;
