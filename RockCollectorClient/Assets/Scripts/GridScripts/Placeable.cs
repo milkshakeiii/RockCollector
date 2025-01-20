@@ -1059,6 +1059,23 @@ public class Building : Destructable
             map.Add(spawningCreature, map.PositionOf(this) - new Vector2Int(1, 1));
             spawningCreature = null;
         }
+
+        // Check for dead creatures
+        foreach (List<Creature> creatures in creaturesByType.Values)
+        {
+            List<Creature> deadCreatures = new();
+            foreach (Creature creature in creatures)
+            {
+                if (creature.IsDestroyed())
+                {
+                    deadCreatures.Add(creature);
+                }
+            }
+            foreach (Creature deadCreature in deadCreatures)
+            {
+                creatures.Remove(deadCreature);
+            }
+        }
     }
 
     public bool IsSpawning()
