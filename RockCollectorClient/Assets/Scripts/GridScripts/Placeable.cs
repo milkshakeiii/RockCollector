@@ -952,6 +952,7 @@ public class Building : Destructable
     public BuildingType buildingType;
     
     private Dictionary<string, List<Creature>> creaturesByType = new();
+    private Dictionary<ItemType, int> requestedItemAmounts = new();
     private int spawnTicksRemaining = 0;
     private Creature spawningCreature; // Null if not spawning
 
@@ -966,6 +967,7 @@ public class Building : Destructable
         copy.claimed = claimed; // from parent
         copy.damageTaken = damageTaken; // from parent
         copy.creaturesByType = null;
+        copy.requestedItemAmounts = new Dictionary<ItemType, int>(requestedItemAmounts);
         copy.spawnTicksRemaining = spawnTicksRemaining;
         copy.spawningCreature = null;
         return copy;
@@ -1036,7 +1038,43 @@ public class Building : Destructable
 
     public List<int> GetRequestedItemAmounts()
     {
+        List<int> requestedItemAmounts = new();
+        foreach (ItemType itemType in GetRequestableItemTypes())
+        {
+            requestedItemAmounts.Add(GetRequestedItemAmount(itemType));
+        }
+        return requestedItemAmounts;
+    }
+
+    public int GetRequestedItemAmount(ItemType itemType)
+    {
+        if (!requestedItemAmounts.ContainsKey(itemType))
+        {
+            return 0;
+        }
+        return requestedItemAmounts[itemType];
+    }
+
+    public List<int> GetRequestableItemAmounts()
+    {
         return buildingType.GetRequestableItemCounts();
+    }
+
+    public int GetRequestableItemAmount(ItemType itemType)
+    {
+        if (!GetRequestableItemTypes().Contains(itemType))
+        {
+            throw new System.Exception("Item type not requestable");
+        }
+        int index = GetRequestableItemTypes().IndexOf(itemType);
+        return GetRequestableItemAmounts()[index];
+    }
+
+    public void ChangeRequestedItemAmount(ItemType itemType, int amount)
+    {
+        amount = Mathf.Max(0, amount);
+        amount = Mathf.Min(amount, GetRequestableItemAmount(itemType));
+        requestedItemAmounts[itemType] = amount;
     }
 
     private int IndexOfCreatureType(CreatureType type)
@@ -1088,6 +1126,11 @@ public class Building : Destructable
         int spawnTime = GetSpawnTime(spawningCreature.GetCreatureType());
         float result = (float)(spawnTime - spawnTicksRemaining) / spawnTime;
         return Mathf.Clamp01(result);
+    }
+
+    public int GetItemCount(ItemType itemType, Map map)
+    {
+        return map.HeldPlaceablesOf(this).FindAll(item => (item as Item).itemType == itemType).Count;
     }
 }
 

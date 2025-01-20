@@ -241,10 +241,40 @@ public class MapDisplayer : MonoBehaviour
 
     private void DrawBuildingInfoPanel(Building building, Vector2 rootPosition, Map map, DisplayGrid displayGrid)
     {
-        Button spawnCreatureButton = new SpawnCreatureButton("Spawn Peasant", "Peasant", map.PositionOf(building));
-        RectInt rectInt = new ((int)rootPosition.x + 1, (int)rootPosition.y + 1, DisplayGrid.WIDTH / 8 - 2, 6);
-        spawnCreatureButton.Draw(displayGrid, rectInt, map);
-        buttonRectsToButtons[rectInt] = spawnCreatureButton;
+        List<CreatureType> creatureTypes = building.GetCreatureTypesAvailable();
+        for (int i = 0; i < creatureTypes.Count; i++)
+        {
+            CreatureType creatureType = creatureTypes[i];
+            Button spawnCreatureButton = new SpawnCreatureButton("Spawn " + creatureType.GetName(), creatureType.GetName(), map.PositionOf(building));
+            RectInt rectInt = new ((int)rootPosition.x + 1, (int)rootPosition.y + 1 + 7*i, DisplayGrid.WIDTH / 8 - 2, 6);
+            spawnCreatureButton.Draw(displayGrid, rectInt, map);
+            buttonRectsToButtons[rectInt] = spawnCreatureButton;
+        }
+
+        List<ItemType> requestableItemTypes = building.GetRequestableItemTypes();
+        for (int i = 0; i < requestableItemTypes.Count; i++)
+        {
+            ItemType itemType = requestableItemTypes[i];
+            int currentlyRequested = building.GetRequestedItemAmount(itemType);
+            
+            // display the + button to increase the requested amount
+            Button increaseRequestButton = new ChangeItemRequestsButton("+", itemType.GetName(), currentlyRequested + 1, map.PositionOf(building));
+            RectInt rectInt = new((int)rootPosition.x + 1, (int)rootPosition.y + DisplayGrid.HEIGHT - 1 - 7 * (i + 1), 6, 6);
+            increaseRequestButton.Draw(displayGrid, rectInt, map);
+            buttonRectsToButtons[rectInt] = increaseRequestButton;
+
+            // display the - button to decrease the requested amount
+            Button decreaseRequestButton = new ChangeItemRequestsButton("-", itemType.GetName(), currentlyRequested - 1, map.PositionOf(building));
+            rectInt = new((int)rootPosition.x + DisplayGrid.WIDTH / 8 - 7, (int)rootPosition.y + DisplayGrid.HEIGHT - 1 - 7 * (i + 1), 6, 6);
+            decreaseRequestButton.Draw(displayGrid, rectInt, map);
+            buttonRectsToButtons[rectInt] = decreaseRequestButton;
+
+            // display the item name and (amount present/amount requested)
+            displayGrid.DisplayText(itemType.GetName() + " (" + building.GetItemCount(itemType, map) + "/" + currentlyRequested + ")",
+                (int)rootPosition.x + 8,
+                (int)rootPosition.y + DisplayGrid.HEIGHT - 1 - 7 * (i + 1),
+                Color.black);
+        }
     }
 }
 
@@ -326,5 +356,24 @@ public class SpawnCreatureButton : Button
     public override void OnClick(MapDisplayer mapDisplayer)
     {
         mapDisplayer.AddInputCommand(new SpawnCreature(creatureTypeName, buildingPosition));
+    }
+}
+
+public class ChangeItemRequestsButton : Button
+{
+    private string itemName;
+    private int amount;
+    private Vector2Int buildingPosition;
+
+    public ChangeItemRequestsButton(string text, string itemName, int amount, Vector2Int buildingPosition) : base(text)
+    {
+        this.itemName = itemName;
+        this.amount = amount;
+        this.buildingPosition = buildingPosition;
+    }
+
+    public override void OnClick(MapDisplayer mapDisplayer)
+    {
+        mapDisplayer.AddInputCommand(new ChangeRequestedItemAmount(itemName, amount, buildingPosition));
     }
 }
