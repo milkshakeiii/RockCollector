@@ -13,7 +13,7 @@ public class Simulation
     {
         gamestate.maps.ForEach(map =>
         {
-            map.AdvanceTick();
+            map.AdvanceTick(new());
         });
     }
 
@@ -562,8 +562,20 @@ public class Map
         return currentTick;
     }
 
-    public void AdvanceTick()
+    public void AdvanceTick(List<MapCommand> inputCommands)
     {
+        foreach (MapCommand command in inputCommands)
+        {
+            if (command.CheckStillValid(this))
+            {
+                command.Execute(this);
+            }
+            else 
+            {
+                Debug.Log("Command " + command + " is no longer valid.");
+            }
+        }
+
         List<Placeable> placeables = AllPlaceables();
 
         foreach (Placeable placeable in placeables)

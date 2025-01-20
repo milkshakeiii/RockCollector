@@ -15,6 +15,7 @@ public class MapDisplayer : MonoBehaviour
     public float lastTurnTime = 0;
 
     private Map map;
+    private List<MapCommand> inputCommands = new();
 
     private struct Selection
     {
@@ -26,8 +27,7 @@ public class MapDisplayer : MonoBehaviour
     private Selection leftMouseSelection;
     private Selection rightMouseSelection;
 
-    public delegate void OnButtonClick();
-    private Dictionary<RectInt, OnButtonClick> buttonRectsToCallbacks = new ();
+    private Dictionary<RectInt, Button> buttonRectsToButtons = new ();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     IEnumerator Start()
@@ -72,12 +72,14 @@ public class MapDisplayer : MonoBehaviour
     {
         // check if this is a button press
         Debug.Log(screenPosition);
-        foreach (RectInt rectInt in buttonRectsToCallbacks.Keys)
+        foreach (RectInt rectInt in buttonRectsToButtons.Keys)
         {
+            Debug.Log("Checking button rect " + rectInt);
             if (rectInt.Contains(screenPosition))
             {
-                OnButtonClick callback = buttonRectsToCallbacks[rectInt];
-                callback.Invoke();
+                Debug.Log("Button clicked");
+                Button callback = buttonRectsToButtons[rectInt];
+                callback.OnClick(this);
                 return;
             }
         }
@@ -138,9 +140,15 @@ public class MapDisplayer : MonoBehaviour
         if (Time.time - lastTurnTime > secondsPerTurn)
         {
             lastTurnTime = Time.time;
-            map.AdvanceTick();
+            map.AdvanceTick(inputCommands);
+            inputCommands.Clear();
             DisplayMap(map);
         }
+    }
+
+    public void AddInputCommand(MapCommand command)
+    {
+        inputCommands.Add(command);
     }
 
     void DisplayMap(Map map)
@@ -159,6 +167,7 @@ public class MapDisplayer : MonoBehaviour
             DisplayLabels(placeable, position);
         }
 
+        buttonRectsToButtons.Clear();
         DisplayInfoPanel(leftMouseSelection.placeable, new Vector2(-DisplayGrid.WIDTH/2, -DisplayGrid.HEIGHT/2f));
         DisplayInfoPanel(rightMouseSelection.placeable, new Vector2(3*DisplayGrid.WIDTH/8,-DisplayGrid.HEIGHT/2f));
     }
@@ -216,7 +225,7 @@ public class MapDisplayer : MonoBehaviour
         {
             return;
         }
-        displayGrid.DisplaySprite("Art/UI/button",
+        displayGrid.DisplaySprite("Art/UI/button", // the panel background
             root.x,
             root.y,
             DisplayGrid.WIDTH/8,
@@ -224,5 +233,58 @@ public class MapDisplayer : MonoBehaviour
             0,
             0,
             true);
+        if (placeable is Building building)
+        {
+            DrawBuildingInfoPanel(building, root, map, displayGrid);
+        }
+    }
+
+    private void DrawBuildingInfoPanel(Building building, Vector2 rootPosition, Map map, DisplayGrid displayGrid)
+    {
+        Button spawnCreatureButton = new SpawnCreatureButton("Spawn Peasant", "Peasant", map.PositionOf(building));
+        RectInt rectInt = new ((int)rootPosition.x + 1, (int)rootPosition.y + 1, DisplayGrid.WIDTH / 8 - 2, 6);
+        spawnCreatureButton.Draw(displayGrid, rectInt);
+        buttonRectsToButtons[rectInt] = spawnCreatureButton;
+    }
+}
+
+public abstract class Button
+{
+    public string text;
+    
+    public Button(string text)
+    {
+        this.text = text;
+    }
+
+    public virtual void Draw(DisplayGrid displayGrid, RectInt rectInt)
+    {
+        displayGrid.DisplaySprite("Art/UI/plain_white",
+            rectInt.x,
+            rectInt.y,
+            rectInt.width,
+            rectInt.height,
+            0,
+            overlapLayer: 1);
+        displayGrid.DisplayText(text, rectInt.x+1, rectInt.y+ rectInt.height / 2);
+    }
+
+    public abstract void OnClick(MapDisplayer mapDisplayer);
+}
+
+public class SpawnCreatureButton : Button
+{
+    private string creatureTypeName;
+    private Vector2Int buildingPosition;
+
+    public SpawnCreatureButton(string text, string creatureTypeName, Vector2Int buildingPosition) : base(text)
+    {
+        this.creatureTypeName = creatureTypeName;
+        this.buildingPosition = buildingPosition;
+    }
+
+    public override void OnClick(MapDisplayer mapDisplayer)
+    {
+        mapDisplayer.AddInputCommand(new SpawnCreature(creatureTypeName, buildingPosition));
     }
 }

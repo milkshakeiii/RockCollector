@@ -982,15 +982,18 @@ public class Building : Destructable
         {
             return; // Already spawning
         }
-        if (!creaturesByType.ContainsKey(type.GetName()))
+        if (!buildingType.GetSupportedCreatureTypes().Contains(type))
         {
-            throw new System.Exception("Creature type not supported");
+            throw new System.Exception("StartSpawnCreature creature type not supported");
         }
         if (CountCurrentCreaturesSupported(type) >= GetMaxCreaturesSupported(type))
         {
             return; // Max creatures already supported
         }
-
+        if (!creaturesByType.ContainsKey(type.GetName()))
+        {
+            creaturesByType[type.GetName()] = new();
+        }
         spawningCreature = Creature.NewCreatureOfType(type);
         creaturesByType[type.GetName()].Add(spawningCreature);
         spawnTicksRemaining = GetSpawnTime(type);
@@ -1003,9 +1006,13 @@ public class Building : Destructable
 
     public int CountCurrentCreaturesSupported(CreatureType type)
     {
-        if (!creaturesByType.ContainsKey(type.GetName()))
+        if (!buildingType.GetSupportedCreatureTypes().Contains(type))
         {
             throw new System.Exception("Creature type not supported");
+        }
+        if (!creaturesByType.ContainsKey(type.GetName()))
+        {
+            return 0;
         }
         return creaturesByType[type.GetName()].Count;
     }
@@ -1048,9 +1055,9 @@ public class Building : Destructable
         spawnTicksRemaining--;
         if (spawnTicksRemaining == 0)
         {
-            spawningCreature = null;
             // Place the creature
             map.Add(spawningCreature, map.PositionOf(this) - new Vector2Int(1, 1));
+            spawningCreature = null;
         }
     }
 }
