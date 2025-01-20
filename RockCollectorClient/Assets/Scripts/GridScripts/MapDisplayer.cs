@@ -243,7 +243,7 @@ public class MapDisplayer : MonoBehaviour
     {
         Button spawnCreatureButton = new SpawnCreatureButton("Spawn Peasant", "Peasant", map.PositionOf(building));
         RectInt rectInt = new ((int)rootPosition.x + 1, (int)rootPosition.y + 1, DisplayGrid.WIDTH / 8 - 2, 6);
-        spawnCreatureButton.Draw(displayGrid, rectInt);
+        spawnCreatureButton.Draw(displayGrid, rectInt, map);
         buttonRectsToButtons[rectInt] = spawnCreatureButton;
     }
 }
@@ -257,7 +257,7 @@ public abstract class Button
         this.text = text;
     }
 
-    public virtual void Draw(DisplayGrid displayGrid, RectInt rectInt)
+    public virtual void Draw(DisplayGrid displayGrid, RectInt rectInt, Map map)
     {
         displayGrid.DisplaySprite("Art/UI/plain_white",
             rectInt.x,
@@ -281,6 +281,46 @@ public class SpawnCreatureButton : Button
     {
         this.creatureTypeName = creatureTypeName;
         this.buildingPosition = buildingPosition;
+    }
+
+    public override void Draw(DisplayGrid displayGrid, RectInt rectInt, Map map)
+    {
+        // get the building at the position
+        List<Placeable> placeables = map.PlaceablesAt(buildingPosition);
+        Building building = null;
+        foreach (Placeable placeable in placeables)
+        {
+            if (placeable is Building)
+            {
+                building = (Building)placeable;
+                break;
+            }
+        }
+        if (building == null)
+        {
+            throw new System.Exception("No building at position");
+        }
+
+        if (building.IsSpawning()) {
+            // get the portion completion of the current creature spawn
+            float completion = building.CreatureSpawnCompletion();
+            // display the completion bar
+            displayGrid.DisplaySprite("Art/UI/selected_button",
+                rectInt.x,
+                rectInt.y,
+                Mathf.RoundToInt(rectInt.width * completion),
+                rectInt.height,
+                0,
+                overlapLayer: 2);
+        }
+        displayGrid.DisplaySprite("Art/UI/plain_white",
+            rectInt.x,
+            rectInt.y,
+            rectInt.width,
+            rectInt.height,
+            0,
+            overlapLayer: 1);
+        displayGrid.DisplayText(text, rectInt.x + 1, rectInt.y + rectInt.height / 2, Color.black);
     }
 
     public override void OnClick(MapDisplayer mapDisplayer)

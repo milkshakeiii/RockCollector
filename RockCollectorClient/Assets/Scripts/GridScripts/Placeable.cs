@@ -1060,6 +1060,18 @@ public class Building : Destructable
             spawningCreature = null;
         }
     }
+
+    public bool IsSpawning()
+    {
+        return spawningCreature != null;
+    }
+
+    public float CreatureSpawnCompletion()
+    {
+        int spawnTime = GetSpawnTime(spawningCreature.GetCreatureType());
+        float result = (float)(spawnTime - spawnTicksRemaining) / spawnTime;
+        return Mathf.Clamp01(result);
+    }
 }
 
 public class BuildingView : DestructableView
