@@ -266,7 +266,7 @@ public abstract class Button
             rectInt.height,
             0,
             overlapLayer: 1);
-        displayGrid.DisplayText(text, rectInt.x+1, rectInt.y+ rectInt.height / 2);
+        displayGrid.DisplayText(text, rectInt.x+1, rectInt.y+ rectInt.height / 2, Color.black);
     }
 
     public abstract void OnClick(MapDisplayer mapDisplayer);

@@ -115,14 +115,23 @@ public class DisplayGrid : MonoBehaviour
 
     public void DisplayText(string text, int x, int y)
     {
+        DisplayText(text, x, y, Color.white);
+    }
+    public void DisplayText(string text, int x, int y, Color color)
+    {
         for (int i = 0; i < text.Length; i++)
         {
-            DisplayLetter(text[i], (x + i), y);
+            DisplayLetter(text[i], (x + i), y, color);
         }
     }
 
-    private void DisplayLetter(char letter, int x, int y)
+    private void DisplayLetter(char letter, int x, int y, Color color)
     {
+        if (color == null)
+        {
+            color = Color.white;
+        }
+
         GameObject newLetter = GetCachedLetter();
 
         newLetter.GetComponent<TMP_Text>().text = letter.ToString();
@@ -133,6 +142,7 @@ public class DisplayGrid : MonoBehaviour
         newLetter.GetComponent<RectTransform>().anchorMin = new Vector2(xMin, yMin);
         newLetter.GetComponent<RectTransform>().anchorMax = new Vector2(xMax, yMax);
         newLetter.GetComponent<RectTransform>().rect.Set(0, 0, 0, 0);
+        newLetter.GetComponent<TMP_Text>().color = color;
     }
 
     public void Clear()
