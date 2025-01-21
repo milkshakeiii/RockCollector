@@ -45,7 +45,7 @@ public class SpawnCreature : MapCommand
             }
         }
         CreatureType creatureType = EntityManager.creatureTypes[creatureTypeName];
-        spawningBuilding.StartSpawnCreature(creatureType);
+        spawningBuilding.StartSpawnCreature(creatureType, map);
     }
 }
 

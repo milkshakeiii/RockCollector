@@ -185,6 +185,8 @@ public class Creature : Destructable
     private string name;
     public int teamNumber = 0;
 
+    private CreatureType creatureType;
+
     private int level = 0;
     private int experience = 0; // reset to 0 on level up
     private Dictionary<string, float> skillIncreases = new();
@@ -192,7 +194,7 @@ public class Creature : Destructable
     private List<TypeAbility> abilities = new();
     private Dictionary<TypeAbility, int> ticksLastUsed = new();
 
-    private CreatureType creatureType;
+    private Vector2Int homePosition;
 
     private CreatureBehavior behavior;
     private Activity currentActivity;
@@ -201,16 +203,17 @@ public class Creature : Destructable
 
     private int cooldownTicksRemaining = 0;
 
-    public static Creature NewCreatureOfType(CreatureType type)
+    public static Creature NewCreatureOfType(CreatureType type, int teamNumber, Vector2Int homePosition)
     {
-        return new Creature("Random Name", 0, type);
+        return new Creature("Random Name", teamNumber, type, homePosition);
     }
 
-    public Creature(string name, int teamNumber, CreatureType creatureType) : base(creatureType.GetSizeCategory())
+    public Creature(string name, int teamNumber, CreatureType creatureType, Vector2Int homePosition) : base(creatureType.GetSizeCategory())
     {
         this.name = name;
         this.teamNumber = teamNumber;
         this.creatureType = creatureType;
+        this.homePosition = homePosition;
 
         this.behavior = CreatureBehavior.FromName(creatureType.GetBehavior());
         LevelUp();
@@ -218,12 +221,13 @@ public class Creature : Destructable
 
     public override Placeable DeepCopy()
     {
-        Creature copy = new(name, teamNumber, creatureType);
+        Creature copy = new(name, teamNumber, creatureType, homePosition);
         copy.claimed = claimed; // from parent
         copy.damageTaken = damageTaken; // from parent
         copy.level = level;
         copy.feats = new List<Feat>(feats);
         copy.abilities = new List<TypeAbility>(abilities);
+        copy.ticksLastUsed = new Dictionary<TypeAbility, int>(ticksLastUsed);
         copy.behavior = null;
         copy.currentActivity = null;
         copy.newActivityComputation = null;
@@ -1048,7 +1052,7 @@ public class Building : Destructable
         return (float)(GetMaxHealth() - damageTaken) / GetMaxHealth();
     }
 
-    public void StartSpawnCreature(CreatureType type)
+    public void StartSpawnCreature(CreatureType type, Map map)
     {
         if (spawningCreature != null)
         {
@@ -1066,7 +1070,7 @@ public class Building : Destructable
         {
             creaturesByType[type.GetName()] = new();
         }
-        spawningCreature = Creature.NewCreatureOfType(type);
+        spawningCreature = Creature.NewCreatureOfType(type, 1, map.PositionOf(this));
         creaturesByType[type.GetName()].Add(spawningCreature);
         spawnTicksRemaining = GetSpawnTime(type);
     }

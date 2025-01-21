@@ -36,6 +36,10 @@ public class PeasantBehavior : CreatureBehavior
 
     public override Activity NextActivity(Map map, Creature actor)
     {
+        // priority 1: repair damaged buildings within a maximum range
+        // -> make sure you are holding a repair implement
+        // -> repair closer buildings first
+        // priority 2: supply 
         return Search.GoalSearch(map, actor);
     }
 
