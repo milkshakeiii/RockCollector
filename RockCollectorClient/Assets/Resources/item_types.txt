@@ -9,6 +9,13 @@ craftingSkill:woodcrafting
 craftingTime:10
 size:-6
 
+name:Hammer
+weaponDamage:1d6
+weaponRange:1
+weaponSkill:hammers
+repairAmount:2
+size:-6
+
 name:Double Axe
 harvestingSkill:chopping
 harvestingAmount:2

@@ -7,7 +7,7 @@ constitutionBonus:0
 intelligenceBonus:0
 wisdomBonus:0
 charismaBonus:0
-abilities:Woodcutting
+abilities:Woodcutting,Repair Building
 abilityLevels:1
 behavior:PeasantBehavior
 

@@ -13,6 +13,7 @@ public class Tester : MonoBehaviour
         AddActivity();
         CraftThings();
         WeaponAttack();
+        RepairBuilding();
         Debug.Log("Tests finished");
     }
 
@@ -125,7 +126,7 @@ public class Tester : MonoBehaviour
         Assert(EntityManager.creatureTypes["Peasant"].GetStartingHealth() == 4, "Peasant GetStartingHealth");
         Assert(EntityManager.creatureTypes["Peasant"].GetHealthPerLevel() == 3, "Peasant GetHealthPerLevel");
         Assert(EntityManager.creatureTypes["Peasant"].GetWisdomBonus() == 0, "Peasant GetWisdomBonus");
-        Assert(EntityManager.creatureTypes["Peasant"].GetAbilities().Count == 1, "Peasant GetAbilities");
+        Assert(EntityManager.creatureTypes["Peasant"].GetAbilities().Count > 1, "Peasant GetAbilities");
         Assert(EntityManager.creatureTypes["Peasant"].GetAbilityLevels().Count == 1, "Peasant GetAbilityLevels");
         Assert(EntityManager.itemTypes.Count > 2, "Items not found");
         Assert(EntityManager.itemTypes.ContainsKey("Axe"), "Axe not found");
@@ -314,6 +315,30 @@ public class Tester : MonoBehaviour
             // miss
             Assert(targetCreature.GetDamageTaken() == 0, "Target damaged");
         }
+    }
+
+    void RepairBuilding()
+    {
+        Map map = new();
+        Building farm = new(EntityManager.buildingTypes["Farm"]);
+        map.Add(farm, new Vector2Int(5, 5));
+        Creature testCreature = new("George", 0, EntityManager.creatureTypes["Peasant"]);
+        testCreature.ApplySkillIncrease("repair", 9);
+        for (int i = 0; i < 5; i++)
+        {
+            testCreature.LevelUp();
+        }
+        map.Add(testCreature, new Vector2Int(4, 4));
+        Item hammer = new (EntityManager.itemTypes["Hammer"]);
+        map.AddHeld(testCreature, hammer);
+        Assert(testCreature.RepairCooldownAndAmount(map).Item1 > 0 && testCreature.RepairCooldownAndAmount(map).Item2 > 0, "Repair cooldown and amount");
+        farm.TakeDamage(1);
+        Assert(farm.GetDamageTaken() == 1, "Building health");
+        Activity repairActivity = new RepairActivity(farm);
+        Assert(!repairActivity.IsCompletedOrImpossible(map, testCreature), "Repair impossible");
+        repairActivity.Perform(testCreature, map);
+        Assert(farm.GetDamageTaken() == 0, "Building health");
+        Assert(testCreature.GetExperience() > 0, "Experience not granted");
     }
 
     void Assert(bool condition, string message)

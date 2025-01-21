@@ -1,5 +1,6 @@
 name:Tree
 harvestingSkill:chopping
+maxHealth:100
 harvestingRequired:10
 harvestingDifficulty:10
 producedItems:Log
@@ -8,6 +9,7 @@ size:1
 
 name:Rock
 harvestingSkill:chopping
+maxHealth:100
 harvestingRequired:10
 harvestingDifficulty:10
 producedItems:Flint,Dirt

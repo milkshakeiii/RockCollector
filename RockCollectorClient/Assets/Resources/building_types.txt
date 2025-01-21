@@ -4,6 +4,15 @@ supportedCreatureCounts:5
 supportedCreatureSpawnTimes:500
 size:6
 maxHealth:100
+requestableItemTypes:Real Axe,Log
+requestableItemCounts:5,5
+craftedItemTypes:Axe,Real Axe
+buildableBuildings:Shed
+
+name:Shed
+constructionItemTypes:Log
+constructionItemAmounts:2
+size:2
+maxHealth:100
 requestableItemTypes:Real Axe
 requestableItemCounts:5
-craftedItemTypes:Axe,Real Axe

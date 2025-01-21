@@ -458,3 +458,34 @@ public class DropOffActivity : Activity
         return 1; // Dropping off an item takes 1 tick
     }
 }
+
+public class RepairActivity : Activity
+{
+    public RepairActivity(Building building) : base(0,
+        new(), null, new(), new(), building, Activity.NULL_POSITION)
+    {
+
+    }
+
+    public Building Building()
+    {
+        return (Building)sourcePlaceable;
+    }
+
+    public override bool IsCompletedOrImpossible(Map map, Creature performer)
+    {
+        return Building().GetDamageTaken() == 0 || Building().IsDestroyed() || performer.RepairCooldownAndAmount(map) == (0, 0);
+    }
+
+    public override void Perform(Creature performer, Map map)
+    {
+        performer.RepairBuilding(Building(), map);
+    }
+
+    public override int EffectAndEstimate(Creature creature, Map map)
+    {
+        Perform(creature, map);
+
+        return 1; // Repairing a building takes 1 tick
+    }
+}

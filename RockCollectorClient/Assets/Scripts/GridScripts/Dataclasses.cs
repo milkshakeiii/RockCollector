@@ -309,6 +309,10 @@ public class TypeAbility : Entity
     {
         return EntityManager.GetStringListAttribute(attributes, "weaponSkills", new List<string>());
     }
+    public List<string> GetRepairImplementSkills()
+    {
+        return EntityManager.GetStringListAttribute(attributes, "repairImplementSkills", new List<string>());
+    }
 }
 
 public class Condition : Entity
@@ -407,6 +411,10 @@ public class PropType : Entity
     {
         return EntityManager.GetStringAttribute(attributes, "name");
     }
+    public int GetMaxHealth()
+    {
+        return EntityManager.GetIntAttribute(attributes, "maxHealth");
+    }
     public int GetSize()
     {
         return EntityManager.GetIntAttribute(attributes, "size");
@@ -473,6 +481,10 @@ public class ItemType : Entity
     {
         return EntityManager.GetStringAttribute(attributes, "weaponSkill", "");
     }
+    public int GetRepairAmount()
+    {
+        return EntityManager.GetIntAttribute(attributes, "repairAmount", 0);
+    }
 }
 
 public class BuildingType : Entity
@@ -482,6 +494,10 @@ public class BuildingType : Entity
     public string GetName()
     {
         return EntityManager.GetStringAttribute(attributes, "name");
+    }
+    public int GetMaxHealth()
+    {
+        return EntityManager.GetIntAttribute(attributes, "maxHealth");
     }
     public List<CreatureType> GetSupportedCreatureTypes()
     {

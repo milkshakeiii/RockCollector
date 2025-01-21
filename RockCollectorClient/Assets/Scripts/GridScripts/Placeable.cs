@@ -134,6 +134,7 @@ public abstract class Destructable : Placeable
     public void TakeDamage(int damage)
     {
         damageTaken += damage;
+        damageTaken = Mathf.Max(0, damageTaken);
     }
 
     public int GetDamageTaken()
@@ -152,6 +153,8 @@ public abstract class Destructable : Placeable
     }
 
     public abstract float HealthFraction();
+
+    public abstract int GetMaxHealth();
 }
 
 public abstract class DestructableView : PlaceableView
@@ -319,6 +322,15 @@ public class Creature : Destructable
         // Debug.Log(GetName() + " " + skillUsed + ": " + skillIncreases[skillUsed]);
     }
 
+    public void ApplySkillIncrease(string skillName, int amount)
+    {
+        if (!skillIncreases.ContainsKey(skillName))
+        {
+            skillIncreases[skillName] = 0;
+        }
+        skillIncreases[skillName] += amount;
+    }
+
     public int EncounterLevel()
     {
         return 10 + level;
@@ -333,9 +345,16 @@ public class Creature : Destructable
         }
         if (level == 1 || level % 5 == 0)
         {
-            // Add an ability
-            TypeAbility ability = creatureType.GetAbilities()[0];
-            abilities.Add(ability); 
+            // Add an ability that we don't already have
+            List<TypeAbility> allAbilities = creatureType.GetAbilities();
+            foreach (TypeAbility ability in allAbilities)
+            {
+                if (!abilities.Contains(ability))
+                {
+                    abilities.Add(ability);
+                    break;
+                }
+            }
         }
     }
 
@@ -440,6 +459,25 @@ public class Creature : Destructable
         return defended;
     }
 
+    public void RepairBuilding(Building building, Map map)
+    {
+        (int cooldown, int bestAmount) = RepairCooldownAndAmount(map);
+
+        // set cooldown
+        cooldownTicksRemaining = cooldown;
+
+        // roll for success or failure
+        int encounterLevel = 10;
+        bool success = RollForSuccess(encounterLevel, "repair");
+
+        if (success)
+        {
+            // apply the repair and gain experience
+            building.TakeDamage(-bestAmount);
+            GainExperience(encounterLevel, "repair");
+        }
+    }
+
     public (int, int) HarvestingCooldownAndAmount(Prop prop)
     {
         string neededSkill = prop.propType.GetHarvestingSkill();
@@ -451,6 +489,33 @@ public class Creature : Destructable
         int bestAmount = bestAbility.GetHarvestingAmount();
         int cooldown = bestAbility.GetCooldown();
         return (cooldown, bestAmount);
+    }
+
+    public (int, int) RepairCooldownAndAmount(Map map)
+    {
+        int bestCooldown = 0;
+        int bestAmount = 0;
+        foreach (TypeAbility ability in abilities)
+        {
+            List<string> implementSkills = ability.GetRepairImplementSkills();
+            int cooldown = ability.GetCooldown();
+            foreach (string implementSkill in implementSkills)
+            {
+                foreach (Placeable placeable in map.HeldPlaceablesOf(this))
+                {
+                    if (placeable is Item item && item.itemType.GetWeaponSkill() == implementSkill)
+                    {
+                        int repairAmount = item.itemType.GetRepairAmount();
+                        if (bestCooldown == 0 || repairAmount / cooldown > bestAmount/bestCooldown)
+                        {
+                            bestAmount = repairAmount;
+                            bestCooldown = cooldown;
+                        }
+                    }
+                }
+            }
+        }
+        return (bestCooldown, bestAmount);
     }
 
     /// <summary>
@@ -681,7 +746,7 @@ public class Creature : Destructable
         }
     }
 
-    public int GetMaxHealth()
+    public override int GetMaxHealth()
     {
         return creatureType.GetStartingHealth() + level * creatureType.GetHealthPerLevel();
     }
@@ -973,9 +1038,14 @@ public class Building : Destructable
         return copy;
     }
 
+    public override int GetMaxHealth()
+    {
+        return buildingType.GetMaxHealth();
+    }
+
     public override float HealthFraction()
     {
-        return (float)(100 - damageTaken) / 100;
+        return (float)(GetMaxHealth() - damageTaken) / GetMaxHealth();
     }
 
     public void StartSpawnCreature(CreatureType type)
@@ -1198,9 +1268,14 @@ public class Prop : Destructable
         return copy;
     }
 
+    public override int GetMaxHealth()
+    {
+        return propType.GetMaxHealth();
+    }
+
     public override float HealthFraction()
     {
-        return (float)(100 - damageTaken) / 100;
+        return (float)(GetMaxHealth() - damageTaken) / GetMaxHealth();
     }
 
     public float HarvestedFraction()

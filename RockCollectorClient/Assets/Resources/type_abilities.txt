@@ -3,6 +3,10 @@ cooldown:10
 harvestingSkill:chopping
 harvestingAmount:1
 
+name:Repair Building
+cooldown:10
+repairImplementSkills:hammers,saws
+
 name:Basic Attack
 cooldown:10
 rechargeTicks:20
