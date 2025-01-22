@@ -79,7 +79,7 @@ public class PeasantBehavior : CreatureBehavior
         {
             return nextActivity;
         }
-        return new IdleActivity(actor);
+        return new IdleActivity(map.PositionOf(actor));
     }
 
     private Activity RepairDamagedBuildings(Map map, Creature actor)

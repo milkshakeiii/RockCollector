@@ -555,8 +555,8 @@ public class IdleActivity : Activity
 {
     private int firstPerformedTick = -1;
 
-    public IdleActivity(Creature idleCreature) : base(0,
-        new(), null, new(), new(), idleCreature, Activity.NULL_POSITION)
+    public IdleActivity(Vector2Int position) : base(0,
+        new(), null, new(), new(), null, position)
     {
 
     }

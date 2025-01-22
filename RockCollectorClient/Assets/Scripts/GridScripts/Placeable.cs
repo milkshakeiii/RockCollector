@@ -639,7 +639,7 @@ public class Creature : Destructable
         }
         else if (currentActivity.IsCompletedOrImpossible(map, this))
         {
-            Debug.Log("Activity impossible");
+            Debug.Log("Activity finished " + currentActivity);
             // Something else completed the activity this frame
             // or there is no activity assigned
             AbandonCurrentActivity();
