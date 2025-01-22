@@ -356,6 +356,14 @@ public class Tester : MonoBehaviour
         Activity dropOffActivity = behavior.NextActivity(map, testCreature);
         Assert(dropOffActivity is DropOffActivity, "Activity should be drop off");
         Assert(dropOffActivity.GetLocation(map) == map.PositionOf(farm), "Drop off location");
+
+        map.Remove(log);
+        map.Add(log, new Vector2Int(-2, -2));
+
+        // test PickUpRequestedItems
+        Activity pickUpActivity2 = behavior.NextActivity(map, testCreature);
+        Assert(pickUpActivity2 is PickUpActivity, "Activity should be pick up");
+        Assert(pickUpActivity2.GetLocation(map) == new Vector2Int(-2, -2), "Pick up location");
     }
 
     void Assert(bool condition, string message)

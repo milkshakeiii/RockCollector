@@ -59,7 +59,7 @@ public class PeasantBehavior : CreatureBehavior
         {
             return nextActivity;
         }
-        //nextActivity = PickUpRequestedItems(map, actor);
+        nextActivity = PickUpRequestedItems(map, actor);
         if (nextActivity != null)
         {
             return nextActivity;
@@ -140,6 +140,26 @@ public class PeasantBehavior : CreatureBehavior
                 if (homeBuilding.GetMissingItemAmount(item.itemType, map) > 0)
                 {
                     return new DropOffActivity(homeBuilding);
+                }
+            }
+        }
+        return null;
+    }
+
+    private Activity PickUpRequestedItems(Map map, Creature actor)
+    {
+        Building homeBuilding = actor.GetHomeBuilding(map);
+        if (homeBuilding == null)
+        {
+            return null;
+        }
+        foreach (Placeable placeable in map.UnheldPlaceables())
+        {
+            if (placeable is Item item)
+            {
+                if (homeBuilding.GetMissingItemAmount(item.itemType, map) > 0)
+                {
+                    return new PickUpActivity(item);
                 }
             }
         }
