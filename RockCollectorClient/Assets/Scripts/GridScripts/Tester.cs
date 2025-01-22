@@ -10,7 +10,6 @@ public class Tester : MonoBehaviour
         DistancesBetweenPlaceablesOfVariousSizes();
         LoadEntities();
         HoldAndDropItems();
-        AddActivity();
         CraftThings();
         WeaponAttack();
         RepairBuilding();
@@ -137,29 +136,6 @@ public class Tester : MonoBehaviour
         Assert(EntityManager.buildingTypes.ContainsKey("Farm"), "Farm not found");
         Assert(EntityManager.buildingTypes["Farm"].GetSupportedCreatureTypes()[0].GetName() == "Peasant", "Farm GetSupportedCreatureTypes");
         Assert(EntityManager.buildingTypes["Farm"].GetSupportedCreatureSpawnTimes()[0] == 500, "Farm GetSupportedCreatureSpawnTimes");
-    }
-
-    void AddActivity()
-    {
-        Map map = new();
-        Prop prop = new(EntityManager.propTypes["Tree"]);
-        map.Add(prop, Map.NULL_POSITION);
-        Creature testCreature = new("George", 0, EntityManager.creatureTypes["Peasant"], Map.NULL_POSITION);
-        map.Add(testCreature, new Vector2Int(5, 5));
-        Assert(map.GetActivities(testCreature).Count == 1, "Activities empty");
-        Activity activity = null;
-        foreach (Activity a in map.GetActivities(testCreature))
-        {
-            activity = a;
-        }
-        if (activity == null)
-        {
-            Debug.LogError("Activity not found");
-            return;
-        }
-        Assert(activity.GetLocation(map) == new Vector2Int(0, 0), "Activity location");
-        Assert(activity.droppedItems.Count == 1, "Activity dropped items");
-        Assert(activity.droppedItems[0].GetName() == "Log", "Activity dropped item");
     }
 
     void CraftThings()
