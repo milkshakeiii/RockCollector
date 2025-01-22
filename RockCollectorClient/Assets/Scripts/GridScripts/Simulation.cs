@@ -466,6 +466,15 @@ public class Map
         return heldToHolder.ContainsKey(placeable);
     }
 
+    public Placeable HolderOf(Placeable held)
+    {
+        if (!heldToHolder.ContainsKey(held))
+        {
+            return null;
+        }
+        return heldToHolder[held];
+    }
+
     public List<Placeable> HeldPlaceablesOf(Placeable holder)
     {
         if (!holderToHeld.ContainsKey(holder))

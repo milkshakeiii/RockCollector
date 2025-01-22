@@ -333,7 +333,7 @@ public class Tester : MonoBehaviour
         Item hammer = new (EntityManager.itemTypes["Hammer"]);
         map.Add(hammer, new Vector2Int(0, 0));
 
-        // pick up hammer
+        // test pick up hammer for repair
         Activity pickUpActivity = behavior.NextActivity(map, testCreature);
         Assert(pickUpActivity is PickUpActivity, "Activity should be pick up");
         Assert(pickUpActivity.GetLocation(map) == new Vector2Int(0, 0), "Pick up location");
@@ -364,6 +364,25 @@ public class Tester : MonoBehaviour
         Activity pickUpActivity2 = behavior.NextActivity(map, testCreature);
         Assert(pickUpActivity2 is PickUpActivity, "Activity should be pick up");
         Assert(pickUpActivity2.GetLocation(map) == new Vector2Int(-2, -2), "Pick up location");
+
+        map.Remove(log);
+
+        // test HarvestRequestedItems
+        Prop tree = new(EntityManager.propTypes["Tree"]);
+        map.Add(tree, new Vector2Int(10, 10));
+        Item axe = new(EntityManager.itemTypes["Axe"]);
+        map.AddHeld(testCreature, axe);
+        Activity harvestActivity = behavior.NextActivity(map, testCreature);
+        Assert(harvestActivity is HarvestActivity, "Activity should be harvest");
+        Assert(harvestActivity.GetLocation(map) == map.PositionOf(tree), "Harvest location");
+
+        map.Remove(axe);
+        map.Add(axe, new Vector2Int(-2, -2));
+
+        // test pick up axe for harvest
+        Activity pickUpActivity3 = behavior.NextActivity(map, testCreature);
+        Assert(pickUpActivity3 is PickUpActivity, "Activity should be pick up");
+        Assert(pickUpActivity3.GetLocation(map) == new Vector2Int(-2, -2), "Pick up location");
     }
 
     void Assert(bool condition, string message)

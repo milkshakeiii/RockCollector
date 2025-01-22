@@ -1,7 +1,6 @@
 name:Woodcutting
 cooldown:10
 harvestingSkill:chopping
-harvestingAmount:1
 
 name:Repair Building
 cooldown:10

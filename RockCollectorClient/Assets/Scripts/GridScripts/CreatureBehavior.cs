@@ -64,7 +64,7 @@ public class PeasantBehavior : CreatureBehavior
         {
             return nextActivity;
         }
-        //nextActivity = HarvestRequestedItems(map, actor);
+        nextActivity = HarvestRequestedItems(map, actor);
         if (nextActivity != null)
         {
             return nextActivity;
@@ -160,6 +160,58 @@ public class PeasantBehavior : CreatureBehavior
                 if (homeBuilding.GetMissingItemAmount(item.itemType, map) > 0)
                 {
                     return new PickUpActivity(item);
+                }
+            }
+        }
+        return null;
+    }
+
+    private Activity HarvestRequestedItems(Map map, Creature actor)
+    {
+        Building homeBuilding = actor.GetHomeBuilding(map);
+        if (homeBuilding == null)
+        {
+            return null;
+        }
+        foreach (ItemType itemType in homeBuilding.GetRequestableItemTypes())
+        {
+            if (homeBuilding.GetMissingItemAmount(itemType, map) <= 0)
+            {
+                continue;
+            }
+            // for now, just harvest the first prop that has a chance of dropping the requested item
+            // in the future, we should at least prioritize props that are closer to the home building
+            foreach (Placeable placeable in map.UnheldPlaceables())
+            {
+                if (placeable is Prop prop && prop.ChanceOfItemDrop(itemType) > 0)
+                {
+                    string neededSkill = prop.propType.GetHarvestingSkill();
+                    if (actor.BestHarvestingAbility(neededSkill) == null)
+                    {
+                        Debug.Log("No harvesting ability for skill: " + neededSkill);
+                        continue;
+                    }
+                    // make sure you are holding the correct tool
+                    if (actor.HarvestingCooldownAndAmount(prop, map).Item1 == 0)
+                    {
+                        // we are not holding the correct tool
+                        // so find the correct tool
+                        foreach (Placeable placeable2 in map.AllPlaceables())
+                        {
+                            if (map.HolderOf(placeable2) is Creature)
+                            {
+                                continue;
+                            }
+                            if (placeable2 is Item item && item.itemType.GetHarvestingSkills().Contains(neededSkill))
+                            {
+                                return new PickUpActivity(item);
+                            }
+                        }
+                        // we were unable to find the correct tool
+                        continue;
+                    }
+                    // harvest the prop
+                    return new HarvestActivity(prop);
                 }
             }
         }

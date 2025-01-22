@@ -368,7 +368,7 @@ public class Creature : Destructable
         {
             throw new System.Exception("Skill name cannot be null");
         }
-        int modifier = GetLevel();
+        int modifier = skillIncreases.ContainsKey(skillName) ? (int)skillIncreases[skillName] : 0;
         foreach (Feat feat in feats)
         {
             if (feat.GetSkillBonusName().Equals(skillName))
@@ -414,7 +414,7 @@ public class Creature : Destructable
     public void HarvestProp(Prop prop, Map map)
     {
         // use the best ability to harvest the prop
-        (int cooldown, int bestAmount) = HarvestingCooldownAndAmount(prop);
+        (int cooldown, int bestAmount) = HarvestingCooldownAndAmount(prop, map);
 
         // creatures should not be instructed to harvest props they cannot harvest
         // (activity impossibility should be checked before this)
@@ -482,17 +482,31 @@ public class Creature : Destructable
         }
     }
 
-    public (int, int) HarvestingCooldownAndAmount(Prop prop)
+    public (int, int) HarvestingCooldownAndAmount(Prop prop, Map map)
     {
         string neededSkill = prop.propType.GetHarvestingSkill();
-        TypeAbility bestAbility = BestHarvestingAbility(neededSkill);
-        if (bestAbility == null)
+        int bestCooldown = 0;
+        int bestAmount = 0;
+        foreach (TypeAbility ability in abilities)
         {
-            return (0, 0);
+            if (ability.GetHarvestingSkill() == neededSkill)
+            {
+                int cooldown = ability.GetCooldown();
+                foreach (Placeable placeable in map.HeldPlaceablesOf(this))
+                {
+                    if (placeable is Item item && item.itemType.GetHarvestingSkills().Contains(neededSkill))
+                    {
+                        int harvestAmount = item.itemType.GetHarvestingAmount();
+                        if (bestCooldown == 0 || harvestAmount / cooldown > bestAmount / bestCooldown)
+                        {
+                            bestAmount = harvestAmount;
+                            bestCooldown = cooldown;
+                        }
+                    }
+                }
+            }
         }
-        int bestAmount = bestAbility.GetHarvestingAmount();
-        int cooldown = bestAbility.GetCooldown();
-        return (cooldown, bestAmount);
+        return (bestAmount, bestAmount);
     }
 
     public (int, int) RepairCooldownAndAmount(Map map)
@@ -568,15 +582,15 @@ public class Creature : Destructable
     public TypeAbility BestHarvestingAbility(string skill)
     {
         TypeAbility bestAbility = null;
-        int bestAmount = 0;
+        int bestCooldown = 0;
         foreach (TypeAbility ability in abilities)
         {
             if (ability.GetHarvestingSkill() == skill)
             {
-                if (ability.GetHarvestingAmount() > bestAmount)
+                if (bestCooldown == 0 || ability.GetCooldown() < bestCooldown)
                 {
                     bestAbility = ability;
-                    bestAmount = ability.GetHarvestingAmount();
+                    bestCooldown = ability.GetCooldown();
                 }
             }
         }
@@ -865,7 +879,7 @@ public class CreatureView : DestructableView
 
     public (int, int) HarvestingCooldownAndAmount(Prop prop)
     {
-        return (placeable as Creature).HarvestingCooldownAndAmount(prop);
+        return (placeable as Creature).HarvestingCooldownAndAmount(prop, map);
     }
 
     public (DieRoll, int) WeaponDamangeAndRange(string weaponSkill)
@@ -984,7 +998,7 @@ public class CreatureSelf
 
     public (int, int) HarvestingCooldownAndAmount(Prop prop)
     {
-        return self.HarvestingCooldownAndAmount(prop);
+        return self.HarvestingCooldownAndAmount(prop, map);
     }
 
     public (DieRoll, int) WeaponDamangeAndRange(string weaponSkill)

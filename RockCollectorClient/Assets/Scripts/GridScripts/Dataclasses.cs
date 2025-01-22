@@ -87,7 +87,7 @@ public static class EntityManager
             throw new System.Exception("Unrecognized entity identifier");
         }
     }
-
+        
     public static string GetStringAttribute(ReadOnlyDictionary<string, string> attributes, string key, string defaultValue = null)
     {
         if (attributes.ContainsKey(key))
@@ -292,14 +292,9 @@ public class TypeAbility : Entity
         // in health points
         return EntityManager.GetIntAttribute(attributes, "heal", 0);
     }
-    public int GetHarvestingAmount()
-    {
-        // in ticks
-        return EntityManager.GetIntAttribute(attributes, "harvestingAmount");
-    }
     public string GetHarvestingSkill()
     {
-        return EntityManager.GetStringAttribute(attributes, "harvestingSkill");
+        return EntityManager.GetStringAttribute(attributes, "harvestingSkill", "none");
     }
     public int GetEnemyTargets()
     {
@@ -449,7 +444,7 @@ public class ItemType : Entity
     {
         return EntityManager.GetStringAttribute(attributes, "name");
     }
-    public List<string> GetHarvestingTypes()
+    public List<string> GetHarvestingSkills()
     {
         return EntityManager.GetStringListAttribute(attributes, "harvestingSkill", new List<string>());
     }

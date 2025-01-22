@@ -136,7 +136,7 @@ public class HarvestActivity : Activity
 
     public override bool IsCompletedOrImpossible(Map map, Creature performer)
     {
-        return SourceProp().IsDestroyed();
+        return SourceProp().IsDestroyed() || performer.HarvestingCooldownAndAmount(SourceProp(), map).Item1 == 0;
     }
 
     public override void Perform(Creature performer, Map map)
@@ -147,7 +147,7 @@ public class HarvestActivity : Activity
     public override int EffectAndEstimate(Creature creature, Map map)
     {
         // estimate the number of ticks required to harvest the prop
-        (int harvestCooldown, int harvestAmount) = creature.HarvestingCooldownAndAmount(SourceProp());
+        (int harvestCooldown, int harvestAmount) = creature.HarvestingCooldownAndAmount(SourceProp(), map);
         int propHarvestRequired = SourceProp().propType.GetHarvestingRequired();   
         int estimatedTicks = Mathf.CeilToInt((float)harvestAmount / (float)propHarvestRequired) * harvestCooldown;
 
