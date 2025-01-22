@@ -527,6 +527,14 @@ public class BuildingType : Entity
     {
         return EntityManager.GetItemListAttribute(attributes, "craftedItemTypes", new List<ItemType>());
     }
+    public int GetRestHealAmount()
+    {
+        return EntityManager.GetIntAttribute(attributes, "restHealAmount", 1);
+    }
+    public int GetRestHealCooldown()
+    {
+        return EntityManager.GetIntAttribute(attributes, "restHealCooldown", 10);
+    }
 }
 
 public class DieRoll

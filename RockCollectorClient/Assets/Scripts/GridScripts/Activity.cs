@@ -60,7 +60,7 @@ public abstract class Activity
 
     public abstract void Perform(Creature performer, Map map);
 
-    internal int DistanceTo(Creature creature, Map map)
+    public int DistanceTo(Creature creature, Map map)
     {
         if (sourcePlaceable != null)
         {
@@ -378,6 +378,7 @@ public class CraftActivity : Activity
         Item outputItem = new(craftingOutputItem, finalSuccessProbability);
         map.AddHeld(Workshop(), outputItem);
         //Debug.Log(Workshop() + " holds " + outputItem.itemType.GetName() + " with probability " + outputItem.GetProbability());
+        performer.AddCooldown(outputItem.itemType.GetCraftingTime());
     }
 
     public override void Perform(Creature performer, Map map)
@@ -439,7 +440,21 @@ public class DropOffActivity : Activity
 
     public override bool IsCompletedOrImpossible(Map map, Creature performer)
     {
-        return Building().IsDestroyed() || map.HeldPlaceablesOf(performer).Count == 0;
+        bool noItemsRequested = true;
+        List<Placeable> heldItems = new(map.HeldPlaceablesOf(performer));
+        foreach (Placeable heldItem in heldItems)
+        {
+            if (heldItem is Item item)
+            {
+                // only transfer items that are requested by the building
+                if (Building().GetMissingItemAmount(item.itemType, map) > 0)
+                {
+                    noItemsRequested = false;
+                    break;
+                }
+            }
+        }
+        return Building().IsDestroyed() || map.HeldPlaceablesOf(performer).Count == 0 || noItemsRequested;
     }
 
     public override void Perform(Creature performer, Map map)
@@ -447,7 +462,14 @@ public class DropOffActivity : Activity
         List<Placeable> heldItems = new(map.HeldPlaceablesOf(performer));
         foreach (Placeable heldItem in heldItems)
         {
-            map.Transfer(heldItem, Building());
+            if (heldItem is Item item)
+            {
+                // only transfer items that are requested by the building
+                if (Building().GetMissingItemAmount(item.itemType, map) > 0)
+                {
+                    map.Transfer(heldItem, Building());
+                }
+            }
         }
     }
 
@@ -486,6 +508,79 @@ public class RepairActivity : Activity
     {
         Perform(creature, map);
 
-        return 1; // Repairing a building takes 1 tick
+        return 1;
+    }
+}
+
+public class RestActivity : Activity
+{
+    /// <summary>
+    /// Building is the building to rest in. Creatures can always rest
+    /// at home but may also be able to rest in other buildings.
+    /// </summary>
+    /// <param name="building"></param>
+    public RestActivity(Building building) : base(0,
+        new(), null, new(), new(), building, Activity.NULL_POSITION)
+    {
+
+    }
+
+    public Building Building()
+    {
+        return (Building)sourcePlaceable;
+    }
+
+    public override bool IsCompletedOrImpossible(Map map, Creature performer)
+    {
+        return Building().IsDestroyed() || performer.GetDamageTaken() == 0;
+    }
+
+    public override void Perform(Creature performer, Map map)
+    {
+        int healAmount = Building().buildingType.GetRestHealAmount();
+        performer.TakeDamage(-healAmount);
+        int cooldown = Building().buildingType.GetRestHealCooldown();
+        performer.AddCooldown(cooldown);
+    }
+
+    public override int EffectAndEstimate(Creature creature, Map map)
+    {
+        Perform(creature, map);
+
+        return 1;
+    }
+}
+
+public class IdleActivity : Activity
+{
+    private int firstPerformedTick = -1;
+
+    public IdleActivity(Creature idleCreature) : base(0,
+        new(), null, new(), new(), idleCreature, Activity.NULL_POSITION)
+    {
+
+    }
+
+    public override int ProximityRequirement(Creature forCreature, Map map)
+    {
+        return 0;
+    }
+
+    public override bool IsCompletedOrImpossible(Map map, Creature performer)
+    {
+        return firstPerformedTick != -1 && map.CurrentTick() - firstPerformedTick >= 150;
+    }
+
+    public override void Perform(Creature performer, Map map)
+    {
+        if (firstPerformedTick == -1)
+        {
+            firstPerformedTick = map.CurrentTick();
+        }
+    }
+
+    public override int EffectAndEstimate(Creature creature, Map map)
+    {
+        return 150;
     }
 }

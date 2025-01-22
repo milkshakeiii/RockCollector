@@ -86,10 +86,10 @@ public class Tester : MonoBehaviour
     void HoldAndDropItems()
     {
         Map map = new();
-        Creature testCreature = new("George", 0, EntityManager.creatureTypes["Peasant"], new Vector2Int(0, 0));
-        map.Add(testCreature, new Vector2Int(0, 0));
+        Creature testCreature = new("George", 0, EntityManager.creatureTypes["Peasant"], Map.NULL_POSITION);
+        map.Add(testCreature, Map.NULL_POSITION);
         Item item = new Item(EntityManager.itemTypes["Axe"]);
-        map.Add(item, new Vector2Int(0, 0));
+        map.Add(item, Map.NULL_POSITION);
         Assert(map.UnheldPlaceables().Count == 2, "Items not added correctly");
         Assert(map.HeldPlaceables().Count == 0, "Item not picked up correctly");
         map.PickUp(testCreature, item);
@@ -143,8 +143,8 @@ public class Tester : MonoBehaviour
     {
         Map map = new();
         Prop prop = new(EntityManager.propTypes["Tree"]);
-        map.Add(prop, new Vector2Int(0, 0));
-        Creature testCreature = new("George", 0, EntityManager.creatureTypes["Peasant"], new Vector2Int(0, 0));
+        map.Add(prop, Map.NULL_POSITION);
+        Creature testCreature = new("George", 0, EntityManager.creatureTypes["Peasant"], Map.NULL_POSITION);
         map.Add(testCreature, new Vector2Int(5, 5));
         Assert(map.GetActivities(testCreature).Count == 1, "Activities empty");
         Activity activity = null;
@@ -165,7 +165,7 @@ public class Tester : MonoBehaviour
     void CraftThings()
     {
         Map map = new();
-        Creature testCreature = new("George", 0, EntityManager.creatureTypes["Peasant"], new Vector2Int(0, 0));
+        Creature testCreature = new("George", 0, EntityManager.creatureTypes["Peasant"], Map.NULL_POSITION);
         map.Add(testCreature, new Vector2Int(5, 5));
         Building farm = new(EntityManager.buildingTypes["Farm"]);
         map.Add(farm, new Vector2Int(5, 5));
@@ -295,10 +295,10 @@ public class Tester : MonoBehaviour
     void WeaponAttack()
     {
         Map map = new();
-        Creature testCreature = new("Skele1", 0, EntityManager.creatureTypes["Skeleton"], new Vector2Int(0, 0));
+        Creature testCreature = new("Skele1", 0, EntityManager.creatureTypes["Skeleton"], Map.NULL_POSITION);
         testCreature.teamNumber = 0;
         map.Add(testCreature, new Vector2Int(5, 5));
-        Creature targetCreature = new("Skele2", 0, EntityManager.creatureTypes["Skeleton"], new Vector2Int(0, 0));
+        Creature targetCreature = new("Skele2", 0, EntityManager.creatureTypes["Skeleton"], Map.NULL_POSITION);
         targetCreature.teamNumber = 1;
         map.Add(targetCreature, new Vector2Int(5, 6));
         Item axe = new (EntityManager.itemTypes["Axe"]);
@@ -322,7 +322,7 @@ public class Tester : MonoBehaviour
         Map map = new();
         Building farm = new(EntityManager.buildingTypes["Farm"]);
         map.Add(farm, new Vector2Int(5, 5));
-        Creature testCreature = new("George", 0, EntityManager.creatureTypes["Peasant"], new Vector2Int(0, 0));
+        Creature testCreature = new("George", 0, EntityManager.creatureTypes["Peasant"], Map.NULL_POSITION);
         testCreature.ApplySkillIncrease("repair", 9);
         for (int i = 0; i < 5; i++)
         {

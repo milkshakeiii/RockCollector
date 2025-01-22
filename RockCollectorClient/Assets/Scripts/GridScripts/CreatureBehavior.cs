@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 
 public abstract class CreatureBehavior
@@ -39,8 +40,110 @@ public class PeasantBehavior : CreatureBehavior
         // priority 1: repair damaged buildings within a maximum range
         // -> make sure you are holding a repair implement
         // -> repair closer buildings first
-        // priority 2: supply 
-        return Search.GoalSearch(map, actor);
+        // priority 2: drop off requested items at home building (from inventory)
+        // priority 3: pick up items that are requested by home building (from the ground)
+        // priority 4: harvest requested items
+        // -> make sure you are holding the correct tool
+        // -> harvest props (within range) that have a chance of dropping the requested item
+        // priority 5: craft items at home building
+        // -> craft items using materials in the home building
+        // priority 6: rest at home building
+        // priority 7: idle
+        Activity nextActivity = RepairDamagedBuildings(map, actor);
+        if (nextActivity != null)
+        {
+            return nextActivity;
+        }
+        nextActivity = DropOffRequestedItems(map, actor);
+        if (nextActivity != null)
+        {
+            return nextActivity;
+        }
+        //nextActivity = PickUpRequestedItems(map, actor);
+        if (nextActivity != null)
+        {
+            return nextActivity;
+        }
+        //nextActivity = HarvestRequestedItems(map, actor);
+        if (nextActivity != null)
+        {
+            return nextActivity;
+        }
+        //nextActivity = CraftItems(map, actor);
+        if (nextActivity != null)
+        {
+            return nextActivity;
+        }
+        //nextActivity = RestAtHomeBuilding(map, actor);
+        if (nextActivity != null)
+        {
+            return nextActivity;
+        }
+        return new IdleActivity(actor);
+    }
+
+    private Activity RepairDamagedBuildings(Map map, Creature actor)
+    {
+        // make sure you are holding a repair implement
+        if (actor.RepairCooldownAndAmount(map).Item1 == 0)
+        {
+            // we are not holding a repair implement
+            // so find a repair implement
+            foreach (Placeable placeable in map.AllPlaceables())
+            {
+                if (placeable is Item item && item.itemType.GetRepairAmount() > 0)
+                {
+                    return new PickUpActivity(item);
+                }
+            }
+            // we were unable to find a repair implement
+            return null;
+        }
+
+        // repair nearest damaged building
+        Building nearestDamagedBuilding = null;
+        int nearestDistance = int.MaxValue;
+        foreach (Placeable placeable in map.UnheldPlaceables())
+        {
+            if (placeable is Building building)
+            {
+                if (building.GetDamageTaken() > 0)
+                {
+                    int distance = map.DistanceBetween(actor, building);
+                    if (distance < nearestDistance)
+                    {
+                        nearestDamagedBuilding = building;
+                        nearestDistance = distance;
+                    }
+                }
+            }
+        }
+        if (nearestDamagedBuilding != null)
+        {
+            return new RepairActivity(nearestDamagedBuilding);
+        }
+        // no damaged buildings found
+        return null;
+    }
+
+    private Activity DropOffRequestedItems(Map map, Creature actor)
+    {
+        Building homeBuilding = actor.GetHomeBuilding(map);
+        if (homeBuilding == null)
+        {
+            return null;
+        }
+        foreach (Placeable placeable in map.HeldPlaceablesOf(actor))
+        {
+            if (placeable is Item item)
+            {
+                if (homeBuilding.GetMissingItemAmount(item.itemType, map) > 0)
+                {
+                    return new DropOffActivity(homeBuilding);
+                }
+            }
+        }
+        return null;
     }
 
     public override void CheckInterrupts(MapView map, CreatureSelf creature)

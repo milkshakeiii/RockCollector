@@ -93,6 +93,8 @@ public class Gamestate
 
 public class Map 
 {
+    public static Vector2Int NULL_POSITION = new(int.MinValue, int.MinValue);
+
     // We keep both a dictionary of cells to placeables and a dictionary of placeables to cells
     // We keep them in sync in the Add and Remove methods
     private Dictionary<Vector2Int, List<Placeable>> cells = new();

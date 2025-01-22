@@ -792,6 +792,33 @@ public class Creature : Destructable
     {
         return currentActivity != null;
     }
+
+    public void AddCooldown(int amount)
+    {
+        cooldownTicksRemaining += amount;
+    }
+
+    public Building GetHomeBuilding(Map map)
+    {
+        if (homePosition == Map.NULL_POSITION)
+        {
+            return null;
+        }
+        List<Placeable> placeables = map.PlaceablesAt(homePosition);
+        foreach (Placeable placeable in placeables)
+        {
+            if (placeable is Building building)
+            {
+                return building;
+            }
+        }
+        throw new System.Exception("Home building not found");
+    }
+
+    public void HomeBuildingDestroyed()
+    {
+        homePosition = Map.NULL_POSITION;
+    }
 }
 
 public class CreatureView : DestructableView
@@ -1129,6 +1156,21 @@ public class Building : Destructable
         return requestedItemAmounts[itemType];
     }
 
+    /// <summary>
+    /// Returns the amount of items needed to fulfill the request, or 0 if the item type is not requested.
+    /// </summary>
+    /// <param name="itemType"></param>
+    /// <param name="map"></param>
+    /// <returns></returns>
+    public int GetMissingItemAmount(ItemType itemType, Map map)
+    {
+        if (!GetRequestableItemTypes().Contains(itemType))
+        {
+            return 0;
+        }
+        return Mathf.Max(0, GetRequestedItemAmount(itemType) - GetItemCount(itemType, map));
+    }
+
     public List<int> GetRequestableItemAmounts()
     {
         return buildingType.GetRequestableItemCounts();
@@ -1205,6 +1247,18 @@ public class Building : Destructable
     public int GetItemCount(ItemType itemType, Map map)
     {
         return map.HeldPlaceablesOf(this).FindAll(item => (item as Item).itemType == itemType).Count;
+    }
+
+    public override void OnDestroyed(Map map)
+    {
+        // set creatures free
+        foreach (List<Creature> creatures in creaturesByType.Values)
+        {
+            foreach (Creature creature in creatures)
+            {
+                creature.HomeBuildingDestroyed();
+            }
+        }
     }
 }
 

@@ -8,6 +8,8 @@ requestableItemTypes:Real Axe,Log
 requestableItemCounts:5,5
 craftedItemTypes:Axe,Real Axe
 buildableBuildings:Shed
+restHealAmount: 3
+restHealCooldown: 20
 
 name:Shed
 constructionItemTypes:Log
