@@ -383,6 +383,15 @@ public class Tester : MonoBehaviour
         Activity pickUpActivity3 = behavior.NextActivity(map, testCreature);
         Assert(pickUpActivity3 is PickUpActivity, "Activity should be pick up");
         Assert(pickUpActivity3.GetLocation(map) == new Vector2Int(-2, -2), "Pick up location");
+
+        // test CraftItems
+        farm.ChangeRequestedItemAmount(EntityManager.itemTypes["Real Axe"], 1);
+        Item flint = new(EntityManager.itemTypes["Flint"]);
+        map.AddHeld(farm, flint);
+        map.AddHeld(farm, log);
+        Activity craftActivity = behavior.NextActivity(map, testCreature);
+        Assert(craftActivity is CraftActivity, "Activity should be craft");
+        Assert(craftActivity.GetLocation(map) == map.PositionOf(farm), "Craft location");
     }
 
     void Assert(bool condition, string message)

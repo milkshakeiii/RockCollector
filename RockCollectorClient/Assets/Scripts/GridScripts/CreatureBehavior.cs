@@ -69,7 +69,7 @@ public class PeasantBehavior : CreatureBehavior
         {
             return nextActivity;
         }
-        //nextActivity = CraftItems(map, actor);
+        nextActivity = CraftItems(map, actor);
         if (nextActivity != null)
         {
             return nextActivity;
@@ -213,6 +213,38 @@ public class PeasantBehavior : CreatureBehavior
                     // harvest the prop
                     return new HarvestActivity(prop);
                 }
+            }
+        }
+        return null;
+    }
+
+    private Activity CraftItems(Map map, Creature actor)
+    {
+        Building homeBuilding = actor.GetHomeBuilding(map);
+        if (homeBuilding == null)
+        {
+            return null;
+        }
+        foreach (ItemType itemType in homeBuilding.GetRequestableItemTypes())
+        {
+            if (homeBuilding.GetMissingItemAmount(itemType, map) <= 0)
+            {
+                continue;
+            }
+            // craft the first item that is missing that can be crafted
+            List<ItemType> inputItemTypes = itemType.GetCraftingInputs();
+            bool canCraft = true;
+            foreach (ItemType inputItemType in inputItemTypes)
+            {
+                if (homeBuilding.GetItemCount(inputItemType, map) <= 0)
+                {
+                    canCraft = false;
+                    break;
+                }
+            }
+            if (canCraft)
+            {
+                return new CraftActivity(itemType, homeBuilding);
             }
         }
         return null;

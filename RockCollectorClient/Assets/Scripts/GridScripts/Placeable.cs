@@ -1260,7 +1260,8 @@ public class Building : Destructable
 
     public int GetItemCount(ItemType itemType, Map map)
     {
-        return map.HeldPlaceablesOf(this).FindAll(item => (item as Item).itemType == itemType).Count;
+        int result = map.HeldPlaceablesOf(this).FindAll(item => (item as Item).itemType == itemType).Count;
+        return result;
     }
 
     public override void OnDestroyed(Map map)
