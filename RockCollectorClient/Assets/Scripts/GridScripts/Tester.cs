@@ -13,6 +13,7 @@ public class Tester : MonoBehaviour
         CraftThings();
         WeaponAttack();
         RepairBuilding();
+        PeasantBehaviorTest();
         Debug.Log("Tests finished");
     }
 
@@ -313,8 +314,48 @@ public class Tester : MonoBehaviour
         Activity repairActivity = new RepairActivity(farm);
         Assert(!repairActivity.IsCompletedOrImpossible(map, testCreature), "Repair impossible");
         repairActivity.Perform(testCreature, map);
-        Assert(farm.GetDamageTaken() == 0, "Building health");
+        Assert(farm.GetDamageTaken() == 0, "Building health");  
         Assert(testCreature.GetExperience() > 0, "Experience not granted");
+    }
+
+    void PeasantBehaviorTest()
+    {
+        Map map = new();
+        Building farm = new(EntityManager.buildingTypes["Farm"]);
+        map.Add(farm, new Vector2Int(5, 5));
+        Creature testCreature = new("George", 0, EntityManager.creatureTypes["Peasant"], map.PositionOf(farm));
+        map.Add(testCreature, new Vector2Int(2, 2));
+        for (int i = 0; i < 5; i++)
+        {
+            testCreature.LevelUp();
+        }
+        PeasantBehavior behavior = new();
+        Item hammer = new (EntityManager.itemTypes["Hammer"]);
+        map.Add(hammer, new Vector2Int(0, 0));
+
+        // pick up hammer
+        Activity pickUpActivity = behavior.NextActivity(map, testCreature);
+        Assert(pickUpActivity is PickUpActivity, "Activity should be pick up");
+        Assert(pickUpActivity.GetLocation(map) == new Vector2Int(0, 0), "Pick up location");
+
+        map.Remove(hammer);
+        map.AddHeld(testCreature, hammer);
+
+        // test repair
+        farm.TakeDamage(1);
+        Activity repairActivity = behavior.NextActivity(map, testCreature);
+        Assert(repairActivity is RepairActivity, "Activity should be repair");
+        Assert(repairActivity.GetLocation(map) == map.PositionOf(farm), "Repair location");
+
+        farm.TakeDamage(-1);
+
+        // test DropOffRequestedItems
+        farm.ChangeRequestedItemAmount(EntityManager.itemTypes["Log"], 1);
+        Item log = new (EntityManager.itemTypes["Log"]);
+        map.AddHeld(testCreature, log);
+        Activity dropOffActivity = behavior.NextActivity(map, testCreature);
+        Assert(dropOffActivity is DropOffActivity, "Activity should be drop off");
+        Assert(dropOffActivity.GetLocation(map) == map.PositionOf(farm), "Drop off location");
     }
 
     void Assert(bool condition, string message)
