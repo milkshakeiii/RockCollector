@@ -343,6 +343,14 @@ public class Creature : Destructable
     public void LevelUp()
     {
         level++;
+        if (level == 1)
+        {
+            // Add all starting abilities
+            foreach (TypeAbility ability in creatureType.GetStartingAbilities())
+            {
+                abilities.Add(ability);
+            }
+        }
         if (level == 1 || level % 3 == 0)
         {
             // Add a feat
@@ -832,6 +840,18 @@ public class Creature : Destructable
     public void HomeBuildingDestroyed()
     {
         homePosition = Map.NULL_POSITION;
+    }
+
+    public bool HasRepairAbility()
+    {
+        foreach (TypeAbility ability in abilities)
+        {
+            if (ability.GetRepairImplementSkills().Count > 0)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
 

@@ -36,9 +36,9 @@ public class MapDisplayer : MonoBehaviour
 
         yield return new WaitForSeconds(1);
         map = new ();
-        Creature testCreature = new ("George", 1, EntityManager.creatureTypes["Peasant"], Map.NULL_POSITION);
+        Creature testCreature = new ("Scarecrow", 1, EntityManager.creatureTypes["Peasant"], Map.NULL_POSITION);
         map.Add(testCreature, new Vector2Int(10, -5));
-        Creature testCreature2 = new("George2", 1, EntityManager.creatureTypes["Peasant"], Map.NULL_POSITION);
+        Creature testCreature2 = new("Scarecrow", 1, EntityManager.creatureTypes["Peasant"], Map.NULL_POSITION);
         map.Add(testCreature2, new Vector2Int(16, -5));
         Creature testCreature3 = new("Skele", -1, EntityManager.creatureTypes["Skeleton"], Map.NULL_POSITION);
         map.Add(testCreature3, new Vector2Int(13, -5));

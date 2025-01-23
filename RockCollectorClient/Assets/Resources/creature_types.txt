@@ -7,7 +7,20 @@ constitutionBonus:0
 intelligenceBonus:0
 wisdomBonus:0
 charismaBonus:0
-abilities:Woodcutting,Repair Building
+startingAbilities:Woodcutting,Repair Building
+abilities:Basic Attack
+abilityLevels:1
+behavior:PeasantBehavior
+
+name:Scarecrow
+startingHealth:4
+healthPerLevel:3
+strengthBonus:0
+dexterityBonus:0
+constitutionBonus:0
+intelligenceBonus:0
+wisdomBonus:0
+charismaBonus:0
 abilityLevels:1
 behavior:PeasantBehavior
 

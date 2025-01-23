@@ -378,7 +378,11 @@ public class CreatureType : Entity
     }
     public List<TypeAbility> GetAbilities()
     {
-        return EntityManager.GetTypeAbilityListAttribute(attributes, "abilities");
+        return EntityManager.GetTypeAbilityListAttribute(attributes, "abilities", new List<TypeAbility>());
+    }
+    public List<TypeAbility> GetStartingAbilities()
+    {
+        return EntityManager.GetTypeAbilityListAttribute(attributes, "startingAbilities", new List<TypeAbility>());
     }
     public List<int> GetAbilityLevels()
     {

@@ -84,6 +84,11 @@ public class PeasantBehavior : CreatureBehavior
 
     private Activity RepairDamagedBuildings(Map map, Creature actor)
     {
+        if (!actor.HasRepairAbility())
+        {
+            return null;
+        }
+
         // make sure you are holding a repair implement
         if (actor.RepairCooldownAndAmount(map).Item1 == 0)
         {
@@ -91,7 +96,7 @@ public class PeasantBehavior : CreatureBehavior
             // so find a repair implement
             foreach (Placeable placeable in map.AllPlaceables())
             {
-                if (placeable is Item item && item.itemType.GetRepairAmount() > 0)
+                if (placeable is Item item && item.itemType.GetRepairAmount() > 0 && (!map.IsHeld(item) || map.HolderOf(item) is Building))
                 {
                     return new PickUpActivity(item);
                 }

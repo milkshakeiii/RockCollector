@@ -126,7 +126,7 @@ public class Tester : MonoBehaviour
         Assert(EntityManager.creatureTypes["Peasant"].GetStartingHealth() == 4, "Peasant GetStartingHealth");
         Assert(EntityManager.creatureTypes["Peasant"].GetHealthPerLevel() == 3, "Peasant GetHealthPerLevel");
         Assert(EntityManager.creatureTypes["Peasant"].GetWisdomBonus() == 0, "Peasant GetWisdomBonus");
-        Assert(EntityManager.creatureTypes["Peasant"].GetAbilities().Count > 1, "Peasant GetAbilities");
+        Assert(EntityManager.creatureTypes["Peasant"].GetAbilities().Count > 0, "Peasant GetAbilities");
         Assert(EntityManager.creatureTypes["Peasant"].GetAbilityLevels().Count == 1, "Peasant GetAbilityLevels");
         Assert(EntityManager.itemTypes.Count > 2, "Items not found");
         Assert(EntityManager.itemTypes.ContainsKey("Axe"), "Axe not found");
