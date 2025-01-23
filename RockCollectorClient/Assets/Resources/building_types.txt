@@ -4,8 +4,8 @@ supportedCreatureCounts:5
 supportedCreatureSpawnTimes:500
 size:6
 maxHealth:100
-requestableItemTypes:Real Axe,Log,Flint
-requestableItemCounts:5,5,5
+requestableItemTypes:Real Axe,Log,Flint,Hammer,Stone
+requestableItemCounts:5,5,5,5,5
 craftedItemTypes:Axe,Real Axe
 buildableBuildings:Shed
 restHealAmount: 3

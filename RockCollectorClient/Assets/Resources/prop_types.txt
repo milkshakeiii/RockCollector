@@ -12,6 +12,6 @@ harvestingSkill:chopping
 maxHealth:100
 harvestingRequired:10
 harvestingDifficulty:10
-producedItems:Flint,Dirt
+producedItems:Flint,Stone
 producedItemsProbabilities:1,1
 size:1

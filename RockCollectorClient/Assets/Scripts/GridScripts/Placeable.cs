@@ -1197,6 +1197,10 @@ public class Building : Destructable
             throw new System.Exception("Item type not requestable");
         }
         int index = GetRequestableItemTypes().IndexOf(itemType);
+        if (GetRequestableItemAmounts().Count <= index)
+        {
+            throw new System.Exception("Missing requestable item amount");
+        }
         return GetRequestableItemAmounts()[index];
     }
 

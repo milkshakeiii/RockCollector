@@ -257,7 +257,11 @@ public class PeasantBehavior : CreatureBehavior
         {
             return null;
         }
-        return new RestActivity(homeBuilding);
+        if (actor.GetDamageTaken() > 0 || map.DistanceBetween(actor, homeBuilding) > 1)
+        {
+            return new RestActivity(homeBuilding);
+        }
+        return null;
     }
 
     public override void CheckInterrupts(MapView map, CreatureSelf creature)
