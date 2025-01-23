@@ -74,7 +74,7 @@ public class PeasantBehavior : CreatureBehavior
         {
             return nextActivity;
         }
-        //nextActivity = RestAtHomeBuilding(map, actor);
+        nextActivity = RestAtHomeBuilding(map, actor);
         if (nextActivity != null)
         {
             return nextActivity;
@@ -248,6 +248,16 @@ public class PeasantBehavior : CreatureBehavior
             }
         }
         return null;
+    }
+
+    private Activity RestAtHomeBuilding(Map map, Creature actor)
+    {
+        Building homeBuilding = actor.GetHomeBuilding(map);
+        if (homeBuilding == null)
+        {
+            return null;
+        }
+        return new RestActivity(homeBuilding);
     }
 
     public override void CheckInterrupts(MapView map, CreatureSelf creature)

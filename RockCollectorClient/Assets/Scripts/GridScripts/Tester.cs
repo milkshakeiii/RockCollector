@@ -392,6 +392,14 @@ public class Tester : MonoBehaviour
         Activity craftActivity = behavior.NextActivity(map, testCreature);
         Assert(craftActivity is CraftActivity, "Activity should be craft");
         Assert(craftActivity.GetLocation(map) == map.PositionOf(farm), "Craft location");
+
+        // test RestAtHomeBuilding
+        farm.ChangeRequestedItemAmount(EntityManager.itemTypes["Real Axe"], 0);
+        farm.ChangeRequestedItemAmount(EntityManager.itemTypes["Log"], 0);
+        farm.ChangeRequestedItemAmount(EntityManager.itemTypes["Flint"], 0);
+        Activity restActivity = behavior.NextActivity(map, testCreature);
+        Assert(restActivity is RestActivity, "Activity should be rest");
+        Assert(restActivity.GetLocation(map) == map.PositionOf(farm), "Rest location");
     }
 
     void Assert(bool condition, string message)
