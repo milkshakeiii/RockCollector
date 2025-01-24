@@ -183,7 +183,7 @@ public abstract class DestructableView : PlaceableView
 public class Creature : Destructable
 {
     private string name;
-    public int teamNumber = 0;
+    public int teamNumber = 0; // negative numbers denote CPU teams, positive denote human player teams
 
     private CreatureType creatureType;
 
@@ -1080,20 +1080,22 @@ public class CreatureSelf
 public class Building : Destructable
 {
     public BuildingType buildingType;
+    public int teamNumber = 0; // negative numbers denote CPU teams, positive denote human player teams
     
     private Dictionary<string, List<Creature>> creaturesByType = new();
     private Dictionary<ItemType, int> requestedItemAmounts = new();
     private int spawnTicksRemaining = 0;
     private Creature spawningCreature; // Null if not spawning
 
-    public Building(BuildingType buildingType) : base(buildingType.GetSize())
+    public Building(BuildingType buildingType, int teamNumber) : base(buildingType.GetSize())
     {
         this.buildingType = buildingType;
+        this.teamNumber = teamNumber;
     }
 
     public override Placeable DeepCopy()
     {
-        Building copy = new (buildingType);
+        Building copy = new (buildingType, teamNumber);
         copy.claimed = claimed; // from parent
         copy.damageTaken = damageTaken; // from parent
         copy.creaturesByType = null;
@@ -1268,6 +1270,11 @@ public class Building : Destructable
                 creatures.Remove(deadCreature);
             }
         }
+    }
+
+    public override void ThinkAndPlan(Map map)
+    {
+        // if this is a CPU team, we may need to spawn a creature
     }
 
     public bool IsSpawning()

@@ -142,9 +142,9 @@ public class Tester : MonoBehaviour
     void CraftThings()
     {
         Map map = new();
-        Creature testCreature = new("George", 0, EntityManager.creatureTypes["Peasant"], Map.NULL_POSITION);
+        Creature testCreature = new("George", 1, EntityManager.creatureTypes["Peasant"], Map.NULL_POSITION);
         map.Add(testCreature, new Vector2Int(5, 5));
-        Building farm = new(EntityManager.buildingTypes["Farm"]);
+        Building farm = new(EntityManager.buildingTypes["Farm"], 1);
         map.Add(farm, new Vector2Int(5, 5));
         Item log = new (EntityManager.itemTypes["Log"]);
         map.AddHeld(testCreature, log);
@@ -297,9 +297,9 @@ public class Tester : MonoBehaviour
     void RepairBuilding()
     {
         Map map = new();
-        Building farm = new(EntityManager.buildingTypes["Farm"]);
+        Building farm = new(EntityManager.buildingTypes["Farm"], 1);
         map.Add(farm, new Vector2Int(5, 5));
-        Creature testCreature = new("George", 0, EntityManager.creatureTypes["Peasant"], Map.NULL_POSITION);
+        Creature testCreature = new("George", 1, EntityManager.creatureTypes["Peasant"], Map.NULL_POSITION);
         testCreature.ApplySkillIncrease("repair", 9);
         for (int i = 0; i < 5; i++)
         {
@@ -321,9 +321,9 @@ public class Tester : MonoBehaviour
     void PeasantBehaviorTest()
     {
         Map map = new();
-        Building farm = new(EntityManager.buildingTypes["Farm"]);
+        Building farm = new(EntityManager.buildingTypes["Farm"], 1);
         map.Add(farm, new Vector2Int(5, 5));
-        Creature testCreature = new("George", 0, EntityManager.creatureTypes["Peasant"], map.PositionOf(farm));
+        Creature testCreature = new("George", 1, EntityManager.creatureTypes["Peasant"], map.PositionOf(farm));
         map.Add(testCreature, new Vector2Int(2, 2));
         for (int i = 0; i < 5; i++)
         {

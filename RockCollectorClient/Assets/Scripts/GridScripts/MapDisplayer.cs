@@ -48,7 +48,7 @@ public class MapDisplayer : MonoBehaviour
         Item axe2 = new(EntityManager.itemTypes["Axe"]);
         map.Add(axe2, new Vector2Int(7, 7));
 
-        Building testBuilding = new (EntityManager.buildingTypes["Farm"]);
+        Building testBuilding = new (EntityManager.buildingTypes["Farm"], 1);
         testBuilding.TakeDamage(50);
         map.Add(testBuilding, new Vector2Int(-10, -10));
         for (int i = 1; i <= 3; i++)

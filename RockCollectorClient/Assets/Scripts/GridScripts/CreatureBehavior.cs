@@ -110,7 +110,7 @@ public class PeasantBehavior : CreatureBehavior
         int nearestDistance = int.MaxValue;
         foreach (Placeable placeable in map.UnheldPlaceables())
         {
-            if (placeable is Building building)
+            if (placeable is Building building && building.teamNumber == actor.teamNumber)
             {
                 if (building.GetDamageTaken() > 0)
                 {
