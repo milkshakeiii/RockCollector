@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      BG_Plants_Farther_02_0: 2547412873537898928
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

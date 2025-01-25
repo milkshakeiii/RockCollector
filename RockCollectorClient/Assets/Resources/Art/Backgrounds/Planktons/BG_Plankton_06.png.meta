@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      BG_Plankton_06_0: -4276131023216429689
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
