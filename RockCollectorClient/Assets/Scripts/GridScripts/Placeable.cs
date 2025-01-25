@@ -1133,7 +1133,7 @@ public class Building : Destructable
         {
             creaturesByType[type.GetName()] = new();
         }
-        spawningCreature = Creature.NewCreatureOfType(type, 1, map.PositionOf(this));
+        spawningCreature = Creature.NewCreatureOfType(type, teamNumber, map.PositionOf(this));
         creaturesByType[type.GetName()].Add(spawningCreature);
         spawnTicksRemaining = GetSpawnTime(type);
     }
@@ -1275,6 +1275,21 @@ public class Building : Destructable
     public override void ThinkAndPlan(Map map)
     {
         // if this is a CPU team, we may need to spawn a creature
+        if (teamNumber < 0)
+        {
+            if (!IsSpawning())
+            {
+                List<CreatureType> availableTypes = GetCreatureTypesAvailable();
+                foreach (CreatureType type in availableTypes)
+                {
+                    if (CountCurrentCreaturesSupported(type) < GetMaxCreaturesSupported(type))
+                    {
+                        StartSpawnCreature(type, map);
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     public bool IsSpawning()

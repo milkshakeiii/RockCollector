@@ -40,10 +40,6 @@ public class MapDisplayer : MonoBehaviour
         map.Add(testCreature, new Vector2Int(10, -5));
         Creature testCreature2 = new("Scarecrow", 1, EntityManager.creatureTypes["Peasant"], Map.NULL_POSITION);
         map.Add(testCreature2, new Vector2Int(16, -5));
-        Creature testCreature3 = new("Skele", -1, EntityManager.creatureTypes["Skeleton"], Map.NULL_POSITION);
-        map.Add(testCreature3, new Vector2Int(13, -5));
-        Item axe = new (EntityManager.itemTypes["Axe"]);
-        map.AddHeld(testCreature3, axe);
 
         Item axe2 = new(EntityManager.itemTypes["Axe"]);
         map.Add(axe2, new Vector2Int(7, 7));
@@ -51,6 +47,12 @@ public class MapDisplayer : MonoBehaviour
         Building testBuilding = new (EntityManager.buildingTypes["Farm"], 1);
         testBuilding.TakeDamage(50);
         map.Add(testBuilding, new Vector2Int(-10, -10));
+
+        Building lair = new (EntityManager.buildingTypes["Graveyard"], -1);
+        map.Add(lair, new Vector2Int(10, -10));
+        Item axe = new(EntityManager.itemTypes["Axe"]);
+        map.Add(axe, new Vector2Int(9, -10));
+
         for (int i = 1; i <= 3; i++)
         {
             for (int j = 1; j <= 3; j++)
