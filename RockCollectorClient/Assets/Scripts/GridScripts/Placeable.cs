@@ -1251,6 +1251,13 @@ public class Building : Destructable
         {
             // Place the creature
             map.Add(spawningCreature, map.PositionOf(this) - new Vector2Int(1, 1));
+
+            // Add starting equipment
+            foreach (ItemType itemType in spawningCreature.GetCreatureType().GetStartingEquipment())
+            {
+                map.AddHeld(spawningCreature, new Item(itemType));
+            }
+
             spawningCreature = null;
         }
 

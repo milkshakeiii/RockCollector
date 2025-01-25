@@ -35,4 +35,5 @@ wisdomBonus:0
 charismaBonus:0
 abilities:Basic Attack
 abilityLevels:1
+startingEquipment:Axe
 behavior:SkeletonBehavior

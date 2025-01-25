@@ -400,6 +400,10 @@ public class CreatureType : Entity
     {
         return EntityManager.GetStringAttribute(attributes, "behavior");
     }
+    public List<ItemType> GetStartingEquipment()
+    {
+        return EntityManager.GetItemListAttribute(attributes, "startingEquipment", new List<ItemType>());
+    }
 }
 
 public class PropType : Entity
