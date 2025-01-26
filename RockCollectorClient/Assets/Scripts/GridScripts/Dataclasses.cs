@@ -184,6 +184,19 @@ public static class EntityManager
         return defaultValue;
     }
 
+    public static List<BuildingType> GetBuildingTypeListAttribute(ReadOnlyDictionary<string, string> attributes, string key, List<BuildingType> defaultValue = null)
+    {
+        if (attributes.ContainsKey(key))
+        {
+            return new List<BuildingType>(System.Array.ConvertAll(attributes[key].Split(','), x => buildingTypes[x]));
+        }
+        if (defaultValue == null)
+        {
+            throw new System.ArgumentNullException("No default value");
+        }
+        return defaultValue;
+    }
+
     public static DieRoll GetDieRollAttribute(ReadOnlyDictionary<string, string> attributes, string key)
     {
         string[] parts = attributes[key].Split('d');
@@ -537,6 +550,10 @@ public class BuildingType : Entity
     public int GetRestHealCooldown()
     {
         return EntityManager.GetIntAttribute(attributes, "restHealCooldown", 10);
+    }
+    public List<BuildingType> GetBuildableBuildingTypes()
+    {
+        return EntityManager.GetBuildingTypeListAttribute(attributes, "buildableBuildingTypes", new List<BuildingType>());
     }
 }
 

@@ -16,6 +16,7 @@ public class MapDisplayer : MonoBehaviour
 
     private Map map;
     private List<MapCommand> inputCommands = new();
+    private BuildBuildingButton activePlaceBuildingButton = null;
 
     private struct Selection
     {
@@ -279,6 +280,22 @@ public class MapDisplayer : MonoBehaviour
                 (int)rootPosition.y + DisplayGrid.HEIGHT - 1 - 7 * (i + 1),
                 Color.black);
         }
+
+        List<BuildingType> buildableBuildingTypes = building.buildingType.GetBuildableBuildingTypes();
+        for (int i = 0; i < buildableBuildingTypes.Count; i++)
+        {
+            Debug.Log("Building type: " + buildableBuildingTypes[i].GetName());
+            BuildingType buildingType = buildableBuildingTypes[i];
+            Button buildBuildingButton = new BuildBuildingButton("Build " + buildingType.GetName(), building.teamNumber, buildingType.GetName(), map.PositionOf(building), map.PositionOf(building));
+            RectInt rectInt = new((int)rootPosition.x + 1, (int)rootPosition.y + DisplayGrid.HEIGHT - 36 - 7 * (i + 1 + requestableItemTypes.Count), DisplayGrid.WIDTH / 8 - 2, 6);
+            buildBuildingButton.Draw(displayGrid, rectInt, map, activePlaceBuildingButton != null);
+            buttonRectsToButtons[rectInt] = buildBuildingButton;
+        }
+    }
+
+    public void SetPlaceBuildingButton(BuildBuildingButton button)
+    {
+        activePlaceBuildingButton = button;
     }
 }
 
@@ -291,7 +308,7 @@ public abstract class Button
         this.text = text;
     }
 
-    public virtual void Draw(DisplayGrid displayGrid, RectInt rectInt, Map map)
+    public virtual void Draw(DisplayGrid displayGrid, RectInt rectInt, Map map, bool placingBuilding = false)
     {
         displayGrid.DisplaySprite("Art/UI/plain_white",
             rectInt.x,
@@ -317,7 +334,7 @@ public class SpawnCreatureButton : Button
         this.buildingPosition = buildingPosition;
     }
 
-    public override void Draw(DisplayGrid displayGrid, RectInt rectInt, Map map)
+    public override void Draw(DisplayGrid displayGrid, RectInt rectInt, Map map, bool placingBuilding = false)
     {
         // get the building at the position
         List<Placeable> placeables = map.PlaceablesAt(buildingPosition);
@@ -397,8 +414,25 @@ public class BuildBuildingButton : Button
         this.builtBuildingPosition = builtBuildingPosition;
     }
 
+    public override void Draw(DisplayGrid displayGrid, RectInt rectInt, Map map, bool placingBuilding = false)
+    {
+        string spriteName = "Art/UI/plain_white";
+        if (placingBuilding)
+        {
+            spriteName = "Art/UI/selected_button";
+        }
+        displayGrid.DisplaySprite(spriteName,
+            rectInt.x,
+            rectInt.y,
+            rectInt.width,
+            rectInt.height,
+            0,
+            overlapLayer: 1);
+        displayGrid.DisplayText(text, rectInt.x + 1, rectInt.y + rectInt.height / 2, Color.black);
+    }
+
     public override void OnClick(MapDisplayer mapDisplayer)
     {
-        mapDisplayer.AddInputCommand(new BuildBuilding(teamNumber, buildingTypeName, sourceBuildingPosition, builtBuildingPosition));
+        mapDisplayer.SetPlaceBuildingButton(this);
     }
 }
