@@ -555,6 +555,14 @@ public class BuildingType : Entity
     {
         return EntityManager.GetBuildingTypeListAttribute(attributes, "buildableBuildingTypes", new List<BuildingType>());
     }
+    public List<ItemType> GetConstructionItemTypes()
+    {
+        return EntityManager.GetItemListAttribute(attributes, "constructionItemTypes", new List<ItemType>());
+    }
+    public List<int> GetConstructionItemAmounts()
+    {
+        return EntityManager.GetIntListAttribute(attributes, "constructionItemAmounts", new List<int>());
+    }
 }
 
 public class DieRoll

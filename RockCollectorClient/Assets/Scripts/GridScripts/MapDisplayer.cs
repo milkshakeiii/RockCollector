@@ -72,6 +72,26 @@ public class MapDisplayer : MonoBehaviour
         }
         DisplayMap(map);
     }
+    
+    public Map GetMap()
+    {
+        return map;
+    }
+
+    private Vector2Int GetMousePosition()
+    {
+        Vector3 mousePosition = Input.mousePosition;
+        mousePosition.z = DisplayGrid.HEIGHT / 2f;
+        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
+        return WorldPositionToGamePosition(worldPosition);
+    }
+
+    private Vector2Int WorldPositionToGamePosition(Vector3 worldPosition)
+    {
+        int x = Mathf.FloorToInt(worldPosition.x / (float)cellsPerSquare);
+        int y = Mathf.FloorToInt(worldPosition.y / (float)cellsPerSquare);
+        return new Vector2Int(x, y);
+    }
 
     void OnSelect(Vector3 worldPosition, Vector2Int screenPosition, int mouseButton)
     {
@@ -89,11 +109,18 @@ public class MapDisplayer : MonoBehaviour
             }
         }
 
-        // otherwise check for clicked placeables
-        int x = Mathf.FloorToInt(worldPosition.x / (float)cellsPerSquare);
-        int y = Mathf.FloorToInt(worldPosition.y / (float)cellsPerSquare);
-        Vector2Int gamePosition = new (x, y);
+        // otherwise check for building placement
+        Vector2Int gamePosition = WorldPositionToGamePosition(worldPosition);
+        if (activePlaceBuildingButton != null)
+        {
+            if (activePlaceBuildingButton.TryMakeCommand(this, gamePosition))
+            {
+                activePlaceBuildingButton = null;
+            }
+            return;
+        }
 
+        // otherwise check for clicked placeables
         Selection selection;
         if (mouseButton == 0)
         {
@@ -175,6 +202,8 @@ public class MapDisplayer : MonoBehaviour
         buttonRectsToButtons.Clear();
         DisplayInfoPanel(leftMouseSelection.placeable, new Vector2(-DisplayGrid.WIDTH/2, -DisplayGrid.HEIGHT/2f));
         DisplayInfoPanel(rightMouseSelection.placeable, new Vector2(3*DisplayGrid.WIDTH/8,-DisplayGrid.HEIGHT/2f));
+
+        DisplayBuildingShadow();
     }
 
     void DisplayBars(Placeable placeable, Vector2Int position)
@@ -284,9 +313,8 @@ public class MapDisplayer : MonoBehaviour
         List<BuildingType> buildableBuildingTypes = building.buildingType.GetBuildableBuildingTypes();
         for (int i = 0; i < buildableBuildingTypes.Count; i++)
         {
-            Debug.Log("Building type: " + buildableBuildingTypes[i].GetName());
             BuildingType buildingType = buildableBuildingTypes[i];
-            Button buildBuildingButton = new BuildBuildingButton("Build " + buildingType.GetName(), building.teamNumber, buildingType.GetName(), map.PositionOf(building), map.PositionOf(building));
+            Button buildBuildingButton = new BuildBuildingButton("Build " + buildingType.GetName(), building.teamNumber, buildingType.GetName(), map.PositionOf(building));
             RectInt rectInt = new((int)rootPosition.x + 1, (int)rootPosition.y + DisplayGrid.HEIGHT - 36 - 7 * (i + 1 + requestableItemTypes.Count), DisplayGrid.WIDTH / 8 - 2, 6);
             buildBuildingButton.Draw(displayGrid, rectInt, map, activePlaceBuildingButton != null);
             buttonRectsToButtons[rectInt] = buildBuildingButton;
@@ -296,6 +324,24 @@ public class MapDisplayer : MonoBehaviour
     public void SetPlaceBuildingButton(BuildBuildingButton button)
     {
         activePlaceBuildingButton = button;
+    }
+
+    void DisplayBuildingShadow()
+    {
+        if (activePlaceBuildingButton == null)
+        {
+            return;
+        }
+        Vector2Int mousePosition = GetMousePosition();
+        BuildingType buildingType = activePlaceBuildingButton.GetBuildingType();
+        displayGrid.DisplaySprite("Art/UI/button",
+            mousePosition.x * cellsPerSquare,
+            mousePosition.y * cellsPerSquare,
+            cellsPerSquare * buildingType.GetSize(),
+            cellsPerSquare * buildingType.GetSize(),
+            0,
+            0,
+            true);
     }
 }
 
@@ -404,20 +450,28 @@ public class BuildBuildingButton : Button
     private int teamNumber;
     private string buildingTypeName;
     private Vector2Int sourceBuildingPosition;
-    private Vector2Int builtBuildingPosition;
 
-    public BuildBuildingButton(string text, int teamNumber, string buildingTypeName, Vector2Int sourceBuildingPosition, Vector2Int builtBuildingPosition) : base(text)
+    public BuildBuildingButton(string text, int teamNumber, string buildingTypeName, Vector2Int sourceBuildingPosition) : base(text)
     {
         this.teamNumber = teamNumber;
         this.buildingTypeName = buildingTypeName;
         this.sourceBuildingPosition = sourceBuildingPosition;
-        this.builtBuildingPosition = builtBuildingPosition;
+    }
+
+    public BuildingType GetBuildingType()
+    {
+        return EntityManager.buildingTypes[buildingTypeName];
     }
 
     public override void Draw(DisplayGrid displayGrid, RectInt rectInt, Map map, bool placingBuilding = false)
     {
         string spriteName = "Art/UI/plain_white";
         if (placingBuilding)
+        {
+            spriteName = "Art/UI/selected_button";
+        }
+        Building sourceBuilding = GetSourceBuilding(map);
+        if (!sourceBuilding.BuildBuildingInputMaterialsPresent(EntityManager.buildingTypes[buildingTypeName], map))
         {
             spriteName = "Art/UI/selected_button";
         }
@@ -431,8 +485,41 @@ public class BuildBuildingButton : Button
         displayGrid.DisplayText(text, rectInt.x + 1, rectInt.y + rectInt.height / 2, Color.black);
     }
 
+    private Building GetSourceBuilding(Map map)
+    {
+        List<Placeable> placeables = map.PlaceablesAt(sourceBuildingPosition);
+        foreach (Placeable placeable in placeables)
+        {
+            if (placeable is Building building && building.teamNumber == teamNumber)
+            {
+                return building;
+            }
+        }
+        return null;
+    }
+
     public override void OnClick(MapDisplayer mapDisplayer)
     {
-        mapDisplayer.SetPlaceBuildingButton(this);
+        Map map = mapDisplayer.GetMap();
+        Building sourceBuilding = GetSourceBuilding(map);
+        if (sourceBuilding == null)
+        {
+            return;
+        }
+        if (sourceBuilding.BuildBuildingInputMaterialsPresent(EntityManager.buildingTypes[buildingTypeName], map))
+        {
+            mapDisplayer.SetPlaceBuildingButton(this);
+        }
+    }
+
+    public bool TryMakeCommand( MapDisplayer mapDisplayer, Vector2Int builtBuildingPosition)
+    {
+        BuildBuilding buildBuilding = new(teamNumber, buildingTypeName, sourceBuildingPosition, builtBuildingPosition);
+        if (buildBuilding.CheckStillValid(mapDisplayer.GetMap()))
+        {
+            mapDisplayer.AddInputCommand(buildBuilding);
+            return true;
+        }
+        return false;
     }
 }

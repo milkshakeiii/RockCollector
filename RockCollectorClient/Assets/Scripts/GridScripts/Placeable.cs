@@ -1233,6 +1233,20 @@ public class Building : Destructable
         requestedItemAmounts[itemType] = amount;
     }
 
+    public void SpendStoredItems(ItemType itemType, int amountChange, Map map)
+    {
+        int currentAmount = GetItemCount(itemType, map);
+        if (currentAmount < amountChange)
+        {
+            throw new System.Exception("Not enough stored items");
+        }
+        List<Placeable> items = map.HeldPlaceablesOf(this).FindAll(item => (item as Item).itemType == itemType);
+        for (int i = 0; i < amountChange; i++)
+        {
+            map.Remove(items[i]);
+        }
+    }
+
     private int IndexOfCreatureType(CreatureType type)
     {
         List<CreatureType> supportedTypes = GetCreatureTypesAvailable();
@@ -1327,6 +1341,20 @@ public class Building : Destructable
                 creature.HomeBuildingDestroyed();
             }
         }
+    }
+
+    public bool BuildBuildingInputMaterialsPresent(BuildingType buildingType, Map map)
+    {
+        List<ItemType> requiredItems = buildingType.GetConstructionItemTypes();
+        List<int> requiredCounts = buildingType.GetConstructionItemAmounts();
+        for (int i = 0; i < requiredItems.Count; i++)
+        {
+            if (GetItemCount(requiredItems[i], map) < requiredCounts[i])
+            {
+                return false;
+            }
+        }
+        return true;
     }
 }
 
