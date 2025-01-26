@@ -110,41 +110,13 @@ public class Map
     private Dictionary<Placeable, Placeable> heldToHolder = new();
     private Dictionary<Placeable, List<Placeable>> holderToHeld = new();
 
+    private Dictionary<Creature, HashSet<Item>> creatureOutfits = new();
+
     private int currentTick = 0;
 
     public Map()
     {
 
-    }
-
-    public Map ShallowCopy()
-    {
-        Map copy = new Map();
-
-        // This is a shallow copy, but not so shallow that we can just use the same lists
-        copy.cells = new Dictionary<Vector2Int, List<Placeable>>();
-        foreach (Vector2Int cell in cells.Keys)
-        {
-            copy.cells[cell] = new List<Placeable>(cells[cell]);
-        }
-
-        copy.placeableToCells = new Dictionary<Placeable, List<Vector2Int>>();
-        foreach (Placeable placeable in placeableToCells.Keys)
-        {
-            copy.placeableToCells[placeable] = new List<Vector2Int>(placeableToCells[placeable]);
-        }
-
-        copy.heldToHolder = new Dictionary<Placeable, Placeable>(heldToHolder);
-
-        copy.holderToHeld = new Dictionary<Placeable, List<Placeable>>();
-        foreach (Placeable holder in holderToHeld.Keys)
-        {
-            copy.holderToHeld[holder] = new List<Placeable>(holderToHeld[holder]);
-        }
-
-        copy.currentTick = currentTick;
-
-        return copy;
     }
 
     public (Map, Dictionary<Placeable, Placeable>, Creature) DeepCopy(Creature caller)
@@ -188,6 +160,16 @@ public class Map
             foreach (Placeable held in holderToHeld[holder])
             {
                 deepCopy.holderToHeld[placeableCopies[holder]].Add(placeableCopies[held]);
+            }
+        }
+
+        deepCopy.creatureOutfits = new Dictionary<Creature, HashSet<Item>>();
+        foreach (Creature creature in creatureOutfits.Keys)
+        {
+            deepCopy.creatureOutfits[(Creature)placeableCopies[creature]] = new HashSet<Item>();
+            foreach (Item item in creatureOutfits[creature])
+            {
+                deepCopy.creatureOutfits[(Creature)placeableCopies[creature]].Add((Item)placeableCopies[item]);
             }
         }
 
@@ -235,14 +217,18 @@ public class Map
         {
             throw new System.Exception("Placeable is already held by new holder");
         }
+        Placeable previousHolder = heldToHolder[placeable];
+        if (previousHolder is Creature creature && placeable is Item item && creature.OutfitContains(item, this))
+        {
+            throw new System.Exception("Cannot transfer item that is part of a creature's outfit.");
+        }
 
         // Remove from held dicts
-        Placeable holder = heldToHolder[placeable];
         heldToHolder.Remove(placeable);
-        holderToHeld[holder].Remove(placeable);
-        if (holderToHeld[holder].Count == 0)
+        holderToHeld[previousHolder].Remove(placeable);
+        if (holderToHeld[previousHolder].Count == 0)
         {
-            holderToHeld.Remove(holder);
+            holderToHeld.Remove(previousHolder);
         }
 
         // Add to held dicts
@@ -302,6 +288,7 @@ public class Map
         heldToHolder[held] = holder;
     }
 
+    // Warning: not removing held items can cause dangling references
     public void Remove(Placeable placeable, bool removeHeldItems = true)
     {
         if (!placeableToCells.ContainsKey(placeable) && !heldToHolder.ContainsKey(placeable))
@@ -309,10 +296,23 @@ public class Map
             throw new System.Exception("Placeable does not exist in map");
         }
 
+        // if this is a creature, remove it from the outfit dict
+        if (placeable is Creature outfitCreature)
+        {
+            if (creatureOutfits.ContainsKey(outfitCreature))
+            {
+                creatureOutfits.Remove(outfitCreature);
+            }
+        }
+
         // If this is a held item, remove it from held dicts
         if (heldToHolder.ContainsKey(placeable))
         {
             Placeable holder = heldToHolder[placeable];
+            if (placeable is Item item && holder is Creature creature && creature.OutfitContains(item, this))
+            {
+                throw new System.Exception("Cannot remove placeable that is part of a creature's outfit.");
+            }
             holderToHeld[holder].Remove(placeable);
             if (holderToHeld[holder].Count == 0)
             {
@@ -576,6 +576,24 @@ public class Map
             }
         }
         return true;
+    }
+
+    public void AddToOutfit(Creature creature, Item item)
+    {
+        if (!creatureOutfits.ContainsKey(creature))
+        {
+            creatureOutfits[creature] = new();
+        }
+        creatureOutfits[creature].Add(item);
+    }
+
+    public bool IsInOutfit(Creature creature, Item item)
+    {
+        if (!creatureOutfits.ContainsKey(creature))
+        {
+            return false;
+        }
+        return creatureOutfits[creature].Contains(item);
     }
 }
 

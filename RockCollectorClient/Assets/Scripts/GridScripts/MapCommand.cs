@@ -147,6 +147,8 @@ public class BuildBuilding : MapCommand
 
         BuildingType buildingType = EntityManager.buildingTypes[buildingTypeName];
         Building building = new (buildingType, teamNumber);
+        // New buildings start at 10% health
+        building.TakeDamage(Mathf.CeilToInt(building.GetMaxHealth() * 0.9f));
         map.Add(building, builtBuildingPosition);
     }
 }

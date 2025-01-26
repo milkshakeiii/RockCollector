@@ -396,10 +396,12 @@ public class CraftActivity : Activity
 
 public class PickUpActivity : Activity
 {
-    public PickUpActivity(Item item) : base(0,
+    bool addToOutfit;
+
+    public PickUpActivity(Item item, bool addToOutfit) : base(0,
         new(), null, new(), new(), item, Activity.NULL_POSITION)
     {
-
+        this.addToOutfit = addToOutfit;
     }
 
     public Item Item()
@@ -421,6 +423,10 @@ public class PickUpActivity : Activity
         else
         {
             map.PickUp(performer, Item());
+        }
+        if (addToOutfit)
+        {
+            performer.AddToOutfit(Item(), map);
         }
     }
 
@@ -454,7 +460,7 @@ public class DropOffActivity : Activity
             if (heldItem is Item item)
             {
                 // only transfer items that are requested by the building
-                if (Building().GetMissingItemAmount(item.itemType, map) > 0)
+                if (Building().GetMissingItemAmount(item.itemType, map) > 0 && !performer.OutfitContains(item, map))
                 {
                     noItemsRequested = false;
                     break;
@@ -466,13 +472,13 @@ public class DropOffActivity : Activity
 
     public override void Perform(Creature performer, Map map)
     {
-        List<Placeable> heldItems = new(map.HeldPlaceablesOf(performer));
-        foreach (Placeable heldItem in heldItems)
+        List<Placeable> heldPlaceables = new(map.HeldPlaceablesOf(performer));
+        foreach (Placeable heldItem in heldPlaceables)
         {
             if (heldItem is Item item)
             {
                 // only transfer items that are requested by the building
-                if (Building().GetMissingItemAmount(item.itemType, map) > 0)
+                if (Building().GetMissingItemAmount(item.itemType, map) > 0 && !performer.OutfitContains(item, map))
                 {
                     map.Transfer(heldItem, Building());
                 }

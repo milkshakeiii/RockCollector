@@ -853,6 +853,16 @@ public class Creature : Destructable
         }
         return false;
     }
+
+    public void AddToOutfit(Item item, Map map)
+    {
+        map.AddToOutfit(this, item);
+    }
+
+    public bool OutfitContains(Item item, Map map)
+    {
+        return map.IsInOutfit(this, item);
+    }
 }
 
 public class CreatureView : DestructableView

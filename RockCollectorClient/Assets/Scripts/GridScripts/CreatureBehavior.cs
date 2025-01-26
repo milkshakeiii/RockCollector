@@ -98,7 +98,7 @@ public class PeasantBehavior : CreatureBehavior
             {
                 if (placeable is Item item && item.itemType.GetRepairAmount() > 0 && (!map.IsHeld(item) || map.HolderOf(item) is Building))
                 {
-                    return new PickUpActivity(item);
+                    return new PickUpActivity(item, true);
                 }
             }
             // we were unable to find a repair implement
@@ -142,8 +142,9 @@ public class PeasantBehavior : CreatureBehavior
         {
             if (placeable is Item item)
             {
-                if (homeBuilding.GetMissingItemAmount(item.itemType, map) > 0)
+                if (homeBuilding.GetMissingItemAmount(item.itemType, map) > 0 && !actor.OutfitContains(item, map))
                 {
+                    Debug.Log("Dropping off item: " + item.itemType.GetName());
                     return new DropOffActivity(homeBuilding);
                 }
             }
@@ -164,7 +165,7 @@ public class PeasantBehavior : CreatureBehavior
             {
                 if (homeBuilding.GetMissingItemAmount(item.itemType, map) > 0)
                 {
-                    return new PickUpActivity(item);
+                    return new PickUpActivity(item, false);
                 }
             }
         }
@@ -209,7 +210,7 @@ public class PeasantBehavior : CreatureBehavior
                             }
                             if (placeable2 is Item item && item.itemType.GetHarvestingSkills().Contains(neededSkill))
                             {
-                                return new PickUpActivity(item);
+                                return new PickUpActivity(item, true);
                             }
                         }
                         // we were unable to find the correct tool
