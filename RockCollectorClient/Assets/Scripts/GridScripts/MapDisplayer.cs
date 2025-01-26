@@ -381,3 +381,24 @@ public class ChangeItemRequestsButton : Button
         mapDisplayer.AddInputCommand(new ChangeRequestedItemAmount(itemName, amount, buildingPosition));
     }
 }
+
+public class BuildBuildingButton : Button
+{
+    private int teamNumber;
+    private string buildingTypeName;
+    private Vector2Int sourceBuildingPosition;
+    private Vector2Int builtBuildingPosition;
+
+    public BuildBuildingButton(string text, int teamNumber, string buildingTypeName, Vector2Int sourceBuildingPosition, Vector2Int builtBuildingPosition) : base(text)
+    {
+        this.teamNumber = teamNumber;
+        this.buildingTypeName = buildingTypeName;
+        this.sourceBuildingPosition = sourceBuildingPosition;
+        this.builtBuildingPosition = builtBuildingPosition;
+    }
+
+    public override void OnClick(MapDisplayer mapDisplayer)
+    {
+        mapDisplayer.AddInputCommand(new BuildBuilding(teamNumber, buildingTypeName, sourceBuildingPosition, builtBuildingPosition));
+    }
+}

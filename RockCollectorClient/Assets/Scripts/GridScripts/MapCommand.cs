@@ -91,3 +91,36 @@ public class ChangeRequestedItemAmount : MapCommand
         building.ChangeRequestedItemAmount(itemType, amount);
     }
 }
+
+public class BuildBuilding : MapCommand
+{
+    private int teamNumber;
+    private string buildingTypeName;
+    private Vector2Int sourceBuildingPosition;
+    private Vector2Int buildingPosition;
+
+    public BuildBuilding(int teamNumber, string buildingTypeName, Vector2Int sourceBuildingPosition, Vector2Int buildingPosition)
+    {
+        this.teamNumber = teamNumber;
+        this.buildingTypeName = buildingTypeName;
+        this.sourceBuildingPosition = sourceBuildingPosition;
+        this.buildingPosition = buildingPosition;
+    }
+
+    public override bool CheckStillValid(Map map)
+    {
+        bool inputMaterialsPresent = true;
+
+
+        BuildingType buildingType = EntityManager.buildingTypes[buildingTypeName];
+        int size = buildingType.GetSize();
+        return map.IsBuildable(buildingPosition, size) && inputMaterialsPresent;
+    }
+
+    public override void Execute(Map map)
+    {
+        BuildingType buildingType = EntityManager.buildingTypes[buildingTypeName];
+        Building building = new (buildingType, teamNumber);
+        map.Add(building, buildingPosition);
+    }
+}

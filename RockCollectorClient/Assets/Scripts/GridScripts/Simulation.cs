@@ -557,6 +557,26 @@ public class Map
     {
         return MapView.GetMapView(this);
     }
+
+    public bool IsBuildable(Vector2Int buildingPosition, int size)
+    {
+        for (int x = 0; x < size; x++)
+        {
+            for (int y = 0; y < size; y++)
+            {
+                Vector2Int position = new(buildingPosition.x + x, buildingPosition.y + y);
+                List<Placeable> placeablesAtPosition = PlaceablesAt(position);
+                foreach (Placeable placeable in placeablesAtPosition)
+                {
+                    if (placeable is Building || placeable is Prop)
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
 }
 
 public class MapView 
