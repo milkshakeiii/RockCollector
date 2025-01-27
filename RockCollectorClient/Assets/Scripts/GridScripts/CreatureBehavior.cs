@@ -22,7 +22,7 @@ public class CreatureBehavior
         foreach (string behaviorPriorityName in creatureBehaviorType.GetPriorities())
         {
             BehaviorPriority behaviorPriority = BehaviorPriority.FromName(behaviorPriorityName);
-            Activity activity = behaviorPriority.ChosenActivityOrNull(map, actor);
+            Activity activity = behaviorPriority.ChosenActivityOrNull(map, actor, creatureBehaviorType);
             if (activity != null)
             {
                 return activity;
@@ -57,6 +57,10 @@ public abstract class BehaviorPriority
                 return new RestPriority();
             case "Idle":
                 return new IdlePriority();
+            case "Wander":
+                return new WanderPriority();
+            case "Hunt":
+                return new HuntPriority();
             default:
                 throw new Exception("Unknown behavior priority: " + name);
         }
@@ -70,12 +74,12 @@ public abstract class BehaviorPriority
     /// <param name="map"></param>
     /// <param name="actor"></param>
     /// <returns></returns>
-    public abstract Activity ChosenActivityOrNull(Map map, Creature actor);
+    public abstract Activity ChosenActivityOrNull(Map map, Creature actor, CreatureBehaviorType behaviorType);
 }
 
 public class RepairDamagedBuildingsPriority : BehaviorPriority
 {
-    public override Activity ChosenActivityOrNull(Map map, Creature actor)
+    public override Activity ChosenActivityOrNull(Map map, Creature actor, CreatureBehaviorType behaviorType)
     {
         if (!actor.HasRepairAbility())
         {
@@ -127,7 +131,7 @@ public class RepairDamagedBuildingsPriority : BehaviorPriority
 
 public class DropOffRequestedItemsPriority : BehaviorPriority
 {
-    public override Activity ChosenActivityOrNull(Map map, Creature actor)
+    public override Activity ChosenActivityOrNull(Map map, Creature actor, CreatureBehaviorType behaviorType)
     {
         Building homeBuilding = actor.GetHomeBuilding(map);
         if (homeBuilding == null)
@@ -150,7 +154,7 @@ public class DropOffRequestedItemsPriority : BehaviorPriority
 
 public class PickUpRequestedItemsPriority : BehaviorPriority
 {
-    public override Activity ChosenActivityOrNull(Map map, Creature actor)
+    public override Activity ChosenActivityOrNull(Map map, Creature actor, CreatureBehaviorType behaviorType)
     {
         Building homeBuilding = actor.GetHomeBuilding(map);
         if (homeBuilding == null)
@@ -173,7 +177,7 @@ public class PickUpRequestedItemsPriority : BehaviorPriority
 
 public class HarvestRequestedItemsPriority : BehaviorPriority
 {
-    public override Activity ChosenActivityOrNull(Map map, Creature actor)
+    public override Activity ChosenActivityOrNull(Map map, Creature actor, CreatureBehaviorType behaviorType)
     {
         Building homeBuilding = actor.GetHomeBuilding(map);
         if (homeBuilding == null)
@@ -228,7 +232,7 @@ public class HarvestRequestedItemsPriority : BehaviorPriority
 
 public class CraftItemsPriority : BehaviorPriority
 {
-    public override Activity ChosenActivityOrNull(Map map, Creature actor)
+    public override Activity ChosenActivityOrNull(Map map, Creature actor, CreatureBehaviorType behaviorType)
     {
         Building homeBuilding = actor.GetHomeBuilding(map);
         if (homeBuilding == null)
@@ -263,7 +267,7 @@ public class CraftItemsPriority : BehaviorPriority
 
 public class RestPriority : BehaviorPriority
 {
-    public override Activity ChosenActivityOrNull(Map map, Creature actor)
+    public override Activity ChosenActivityOrNull(Map map, Creature actor, CreatureBehaviorType behaviorType)
     {
         Building homeBuilding = actor.GetHomeBuilding(map);
         if (homeBuilding == null)
@@ -280,8 +284,36 @@ public class RestPriority : BehaviorPriority
 
 public class IdlePriority : BehaviorPriority
 {
-    public override Activity ChosenActivityOrNull(Map map, Creature actor)
+    public override Activity ChosenActivityOrNull(Map map, Creature actor, CreatureBehaviorType behaviorType)
     {
         return new IdleActivity(map.PositionOf(actor));
+    }
+}
+
+public class WanderPriority : BehaviorPriority
+{
+    public override Activity ChosenActivityOrNull(Map map, Creature actor, CreatureBehaviorType behaviorType)
+    {
+        return new WanderActivity(actor.GetHomeBuilding(map), behaviorType.GetWanderRange());
+    }
+}
+
+public class HuntPriority : BehaviorPriority
+{
+    public override Activity ChosenActivityOrNull(Map map, Creature actor, CreatureBehaviorType behaviorType)
+    {
+        Building homeBuilding = actor.GetHomeBuilding(map);
+        foreach (Placeable placeable in map.UnheldPlaceables())
+        {
+            if (placeable is Creature creature && creature.teamNumber != actor.teamNumber
+                && map.DistanceBetween(homeBuilding, creature) <= behaviorType.GetHuntRange()
+                && map.DistanceBetween(actor, creature) <= behaviorType.GetHuntLookDistance()
+                && creature.EncounterLevel() - actor.EncounterLevel() <= behaviorType.GetHuntMaximumLevelDifference()
+                && creature.EncounterLevel() - actor.EncounterLevel() >= behaviorType.GetHuntMinimumLevelDifference())
+            {
+                return new HuntActivity(creature);
+            }
+        }
+        return null;
     }
 }

@@ -111,6 +111,11 @@ public abstract class Activity
     {
         sourcePlaceable?.Unclaim();
     }
+
+    public virtual bool ClaimsSourcePlaceable()
+    {
+        return true;
+    }
 }
 
 public class HarvestActivity : Activity
@@ -143,6 +148,11 @@ public class HuntActivity : Activity
         new(), null, target.GetCreatureType().GetDroppedItems(), target.GetCreatureType().GetDroppedItemsProbabilities(), target, Activity.NULL_POSITION)
     {
 
+    }
+
+    public override bool ClaimsSourcePlaceable()
+    {
+        return false;
     }
 
     public override int ProximityRequirement(Creature forCreature, Map map)
@@ -423,6 +433,11 @@ public class RestActivity : Activity
 
     }
 
+    public override bool ClaimsSourcePlaceable()
+    {
+        return false;
+    }
+
     public Building Building()
     {
         return (Building)sourcePlaceable;
@@ -452,6 +467,11 @@ public class IdleActivity : Activity
 
     }
 
+    public override bool ClaimsSourcePlaceable()
+    {
+        return false;
+    }
+
     public override int ProximityRequirement(Creature forCreature, Map map)
     {
         return 0;
@@ -467,6 +487,53 @@ public class IdleActivity : Activity
         if (firstPerformedTick == -1)
         {
             firstPerformedTick = map.CurrentTick();
+        }
+    }
+}
+
+public class WanderActivity : Activity
+{
+    private int firstPerformedTick = -1;
+    private int range;
+
+    public WanderActivity(Building homeBuilding, int range) : base(0,
+        new(), null, new(), new(), homeBuilding, Activity.NULL_POSITION)
+    {
+        this.range = range;
+    }
+
+    public override bool ClaimsSourcePlaceable()
+    {
+        return false;
+    }
+
+    public override int ProximityRequirement(Creature forCreature, Map map)
+    {
+        return int.MaxValue;
+    }
+
+    public override bool IsCompletedOrImpossible(Map map, Creature performer)
+    {
+        return firstPerformedTick != -1 && map.CurrentTick() - firstPerformedTick >= 150;
+    }
+
+    public override void Perform(Creature performer, Map map)
+    {
+        if (firstPerformedTick == -1)
+        {
+            firstPerformedTick = map.CurrentTick();
+        }
+        // 1% chance of moving to a new location
+        if (UnityEngine.Random.Range(0, 100) != 0)
+        {
+            return;
+        }
+        Vector2Int randomDirection = new(UnityEngine.Random.Range(-1, 2), UnityEngine.Random.Range(-1, 2));
+        Vector2Int newPosition = map.PositionOf(performer) + randomDirection;
+        // if this would not take us out of range, move to the new position
+        if (map.DistanceTo(newPosition, sourcePlaceable) <= range)
+        {
+            performer.MoveInDirection(randomDirection, map);
         }
     }
 }

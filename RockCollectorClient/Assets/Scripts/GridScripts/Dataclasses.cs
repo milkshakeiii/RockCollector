@@ -619,6 +619,26 @@ public class CreatureBehaviorType : Entity
     {
         return EntityManager.GetIntAttribute(attributes, "restRange");
     }
+    public int GetWanderRange()
+    {
+        return EntityManager.GetIntAttribute(attributes, "wanderRange");
+    }
+    public int GetHuntRange()
+    {
+        return EntityManager.GetIntAttribute(attributes, "huntRange");
+    }
+    public int GetHuntLookDistance()
+    {
+        return EntityManager.GetIntAttribute(attributes, "huntLookDistance");
+    }
+    public int GetHuntMaximumLevelDifference()
+    {
+        return EntityManager.GetIntAttribute(attributes, "huntMaximumLevelDifference");
+    }
+    public int GetHuntMinimumLevelDifference()
+    {
+        return EntityManager.GetIntAttribute(attributes, "huntMinimumLevelDifference");
+    }
 }
 
 public class DieRoll

@@ -692,7 +692,10 @@ public class Creature : Destructable
             // when we have a new activity, we need to mark the target placeable as claimed
             // new activities always are assigned here
             // Debug.Log("Activity promoted: " + currentActivity + " " + currentActivity.GetLocation(map));
-            currentActivity.MarkSourcePlaceableClaimed();
+            if (currentActivity.ClaimsSourcePlaceable())
+            {
+                currentActivity.MarkSourcePlaceableClaimed();
+            }
         }
         else
         {
@@ -765,7 +768,10 @@ public class Creature : Destructable
     {
         if (currentActivity != null)
         {
-            currentActivity.MarkSourcePlaceableUnclaimed();
+            if (currentActivity.ClaimsSourcePlaceable())
+            {
+                currentActivity.MarkSourcePlaceableUnclaimed();
+            }
             currentActivity = null;
             stagedActivity = null;
         }
