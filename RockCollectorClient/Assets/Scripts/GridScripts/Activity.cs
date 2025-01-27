@@ -445,7 +445,7 @@ public class RestActivity : Activity
 
     public override bool IsCompletedOrImpossible(Map map, Creature performer)
     {
-        return Building().IsDestroyed() || performer.GetDamageTaken() == 0;
+        return Building().IsDestroyed() || (performer.GetDamageTaken() == 0 && map.DistanceBetween(performer, Building()) <= 1);
     }
 
     public override void Perform(Creature performer, Map map)

@@ -44,6 +44,10 @@ public class MapDisplayer : MonoBehaviour
 
         Item axe2 = new(EntityManager.itemTypes["Axe"]);
         map.Add(axe2, new Vector2Int(7, 7));
+        Item woodenSword = new(EntityManager.itemTypes["Wooden Sword"]);
+        map.Add(woodenSword, new Vector2Int(2, 2));
+        Item woodenShield = new(EntityManager.itemTypes["Wooden Shield"]);
+        map.Add(woodenShield, new Vector2Int(1, 2));
 
         Building testBuilding = new (EntityManager.buildingTypes["Farm"], 1);
         testBuilding.TakeDamage(50);

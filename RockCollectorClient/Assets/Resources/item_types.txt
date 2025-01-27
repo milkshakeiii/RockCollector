@@ -38,7 +38,9 @@ size:-2
 name:Stone
 size:-2
 
-name:Sword
+name:Wooden Sword
+equipmentCategory:swords
+equipmentLevel:1
 weaponDamage:1d6
 weaponRange:1
 weaponSkill:swords
@@ -47,7 +49,9 @@ craftingSkill:woodcrafting
 craftingTime:10
 size:-6
 
-name:Shield
+name:Wooden Shield
+equipmentCategory:shields
+equipmentLevel:1
 craftingInputs:Log,Log
 craftingSkill:woodcrafting
 craftingTime:10

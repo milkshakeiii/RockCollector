@@ -475,6 +475,10 @@ public class ItemType : Entity
     {
         return EntityManager.GetStringAttribute(attributes, "name");
     }
+    public string GetEquipmentCategory()
+    {
+        return EntityManager.GetStringAttribute(attributes, "equipmentCategory", "none");
+    }
     public List<string> GetHarvestingSkills()
     {
         return EntityManager.GetStringListAttribute(attributes, "harvestingSkill", new List<string>());
@@ -518,6 +522,10 @@ public class ItemType : Entity
     public List<int> GetSkillBonusAmounts()
     {
         return EntityManager.GetIntListAttribute(attributes, "skillBonusAmounts", new List<int>());
+    }
+    public int GetEquipmentLevel()
+    {
+        return EntityManager.GetIntAttribute(attributes, "equipmentLevel", 0);
     }
 }
 
@@ -638,6 +646,14 @@ public class CreatureBehaviorType : Entity
     public int GetHuntMinimumLevelDifference()
     {
         return EntityManager.GetIntAttribute(attributes, "huntMinimumLevelDifference");
+    }
+    public List<string> GetEquipCategories()
+    {
+        return EntityManager.GetStringListAttribute(attributes, "equipCategories");
+    }
+    public int GetEquipRange()
+    {
+        return EntityManager.GetIntAttribute(attributes, "equipRange");
     }
 }
 

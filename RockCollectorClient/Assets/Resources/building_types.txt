@@ -34,7 +34,7 @@ supportedCreatureCounts:5
 supportedCreatureSpawnTimes:500
 size:5
 maxHealth:100
-requestableItemTypes:Log,Sword,Shield
+requestableItemTypes:Log,Wooden Sword,Wooden Shield
 requestableItemCounts:5,5,5,5
 craftedItemTypes:Sword,Shield
 restHealAmount: 3

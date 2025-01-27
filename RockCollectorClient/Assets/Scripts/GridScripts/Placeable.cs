@@ -868,6 +868,19 @@ public class Creature : Destructable
     {
         return map.IsInOutfit(this, item);
     }
+
+    public int EquipmentLevel(string equipmentCategory, Map map)
+    {
+        int level = 0;
+        foreach (Item item in map.OutfitOf(this))
+        {
+            if (item.itemType.GetEquipmentCategory() == equipmentCategory)
+            {
+                level = Mathf.Max(level, item.itemType.GetEquipmentLevel());
+            }
+        }
+        return level;
+    }
 }
 
 public class CreatureView : DestructableView

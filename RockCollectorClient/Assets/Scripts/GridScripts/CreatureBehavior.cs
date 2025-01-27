@@ -61,6 +61,8 @@ public abstract class BehaviorPriority
                 return new WanderPriority();
             case "Hunt":
                 return new HuntPriority();
+            case "Equip":
+                return new EquipPriority();
             default:
                 throw new Exception("Unknown behavior priority: " + name);
         }
@@ -312,6 +314,38 @@ public class HuntPriority : BehaviorPriority
                 && creature.EncounterLevel() - actor.EncounterLevel() >= behaviorType.GetHuntMinimumLevelDifference())
             {
                 return new HuntActivity(creature);
+            }
+        }
+        return null;
+    }
+}
+
+public class EquipPriority : BehaviorPriority
+{
+    public override Activity ChosenActivityOrNull(Map map, Creature actor, CreatureBehaviorType behaviorType)
+    {
+        Building homeBuilding = actor.GetHomeBuilding(map);
+        if (homeBuilding == null)
+        {
+            return null;
+        }
+        int range = behaviorType.GetEquipRange();
+        foreach (string equipmentCategory in behaviorType.GetEquipCategories())
+        {
+            int currentEquipmentLevel = actor.EquipmentLevel(equipmentCategory, map);
+            foreach (Placeable placeable in map.AllPlaceables())
+            {
+                if (placeable is Item item && item.itemType.GetEquipmentCategory() == equipmentCategory
+                    && map.DistanceBetween(homeBuilding, item) <= range
+                    && !item.IsClaimed()
+                    && (!map.IsHeld(item) || map.HolderOf(item) is Building))
+                {
+                    int itemEquipmentLevel = item.itemType.GetEquipmentLevel();
+                    if (itemEquipmentLevel > currentEquipmentLevel)
+                    {
+                        return new PickUpActivity(item, true);
+                    }
+                }
             }
         }
         return null;

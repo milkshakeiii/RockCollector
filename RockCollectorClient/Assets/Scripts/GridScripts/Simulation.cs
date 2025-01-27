@@ -595,6 +595,15 @@ public class Map
         }
         return creatureOutfits[creature].Contains(item);
     }
+
+    public HashSet<Item> OutfitOf(Creature creature)
+    {
+        if (!creatureOutfits.ContainsKey(creature))
+        {
+            return new();
+        }
+        return new(creatureOutfits[creature]);
+    }
 }
 
 public class MapView 

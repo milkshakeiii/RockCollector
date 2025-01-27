@@ -14,3 +14,14 @@ huntLookDistance:4
 huntMinimumLevelDifference:-999
 huntMaximumLevelDifference:999
 wanderRange:5
+
+name:Warrior Behavior
+priorities:Equip,Hunt,Rest,Wander
+equipCategories:swords,shields
+equipRange:999
+huntRange:100
+huntLookDistance:100
+huntMinimumLevelDifference:-999
+huntMaximumLevelDifference:999
+restRange:0
+wanderRange:5

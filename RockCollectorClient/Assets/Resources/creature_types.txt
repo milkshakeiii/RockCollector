@@ -22,7 +22,7 @@ wisdomBonus:-2
 charismaBonus:0
 abilities:Basic Attack
 abilityLevels:1
-behavior:Peasant Behavior
+behavior:Warrior Behavior
 
 name:Scarecrow
 startingHealth:4
