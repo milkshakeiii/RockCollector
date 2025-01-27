@@ -501,6 +501,14 @@ public class ItemType : Entity
     {
         return EntityManager.GetIntAttribute(attributes, "repairAmount", 0);
     }
+    public List<string> GetSkillBonusNames()
+    {
+        return EntityManager.GetStringListAttribute(attributes, "skillBonusNames", new List<string>());
+    }
+    public List<int> GetSkillBonusAmounts()
+    {
+        return EntityManager.GetIntListAttribute(attributes, "skillBonusAmounts", new List<int>());
+    }
 }
 
 public class BuildingType : Entity

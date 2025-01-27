@@ -343,34 +343,18 @@ public class Creature : Destructable
     public void LevelUp()
     {
         level++;
-        if (level == 1)
+        List<TypeAbility> abilities = creatureType.GetAbilities();
+        List<int> abilityLevels = creatureType.GetAbilityLevels();
+        for (int i = 0; i < abilities.Count; i++)
         {
-            // Add all starting abilities
-            foreach (TypeAbility ability in creatureType.GetStartingAbilities())
+            if (abilityLevels[i] == level)
             {
-                abilities.Add(ability);
-            }
-        }
-        if (level == 1 || level % 3 == 0)
-        {
-            // Add a feat
-        }
-        if (level == 1 || level % 5 == 0)
-        {
-            // Add an ability that we don't already have
-            List<TypeAbility> allAbilities = creatureType.GetAbilities();
-            foreach (TypeAbility ability in allAbilities)
-            {
-                if (!abilities.Contains(ability))
-                {
-                    abilities.Add(ability);
-                    break;
-                }
+                this.abilities.Add(abilities[i]);
             }
         }
     }
 
-    public int SkillModifier(string skillName)
+    public int SkillModifier(string skillName, Map map)
     {
         if (skillName == null)
         {
@@ -384,6 +368,21 @@ public class Creature : Destructable
                 modifier += feat.GetSkillBonus();
             }
         }
+        foreach (Placeable placeable in map.HeldPlaceablesOf(this))
+        {
+            if (placeable is Item item)
+            {
+                List<string> skillBonuses = item.itemType.GetSkillBonusNames(); 
+                List<int> skillBonusAmounts = item.itemType.GetSkillBonusAmounts();
+                for (int i = 0; i < skillBonuses.Count; i++)
+                {
+                    if (skillBonuses[i].Equals(skillName))
+                    {
+                        modifier += skillBonusAmounts[i];
+                    }
+                }
+            }
+        }
         return modifier;
     }
 
@@ -392,17 +391,17 @@ public class Creature : Destructable
         return UnityEngine.Random.Range(1, 21);
     }
 
-    public bool RollForSuccess(int difficulty, string skillName)
+    public bool RollForSuccess(int difficulty, string skillName, Map map)
     {
         int roll = Roll20();
-        int modifier = SkillModifier(skillName);
+        int modifier = SkillModifier(skillName, map);
         return roll + modifier >= difficulty || roll == 20;
     }
 
-    public int RollForMultiplier(int difficulty, string skillName)
+    public int RollForMultiplier(int difficulty, string skillName, Map map)
     {
         int roll = Roll20();
-        int modifier = SkillModifier(skillName);
+        int modifier = SkillModifier(skillName, map);
         int multiplier = 0;
         if (roll + modifier >= difficulty)
         {
@@ -435,7 +434,7 @@ public class Creature : Destructable
         cooldownTicksRemaining = cooldown;
 
         // roll for success or failure
-        bool success = RollForSuccess(prop.propType.GetHarvestingDifficulty(), prop.propType.GetHarvestingSkill());
+        bool success = RollForSuccess(prop.propType.GetHarvestingDifficulty(), prop.propType.GetHarvestingSkill(), map);
         
         if (success)
         {
@@ -452,7 +451,7 @@ public class Creature : Destructable
     public void Strike(Creature target, DieRoll damage, int toHit, string weaponSkill, Map map)
     {
         int toHitResult = Roll20() + toHit;
-        if (!target.Defend(toHitResult))
+        if (!target.Defend(toHitResult, map))
         {
             int damageAmount = damage.Roll();
             target.TakeDamage(damageAmount);
@@ -460,9 +459,9 @@ public class Creature : Destructable
         }
     }
 
-    public bool Defend(int toHitResult)
+    public bool Defend(int toHitResult, Map map)
     {
-        int defenseSkill = SkillModifier("defense");
+        int defenseSkill = SkillModifier("defense", map);
         bool defended = toHitResult <= 10 + defenseSkill;
         if (defended)
         {
@@ -480,7 +479,7 @@ public class Creature : Destructable
 
         // roll for success or failure
         int encounterLevel = 10;
-        bool success = RollForSuccess(encounterLevel, "repair");
+        bool success = RollForSuccess(encounterLevel, "repair", map);
 
         if (success)
         {
@@ -904,7 +903,7 @@ public class CreatureView : DestructableView
 
     public int SkillModifier(string skillName)
     {
-        return (placeable as Creature).SkillModifier(skillName);
+        return (placeable as Creature).SkillModifier(skillName, map);
     }
 
     public (int, int) HarvestingCooldownAndAmount(Prop prop)
@@ -1018,7 +1017,7 @@ public class CreatureSelf
 
     public int SkillModifier(string skillName)
     {
-        return self.SkillModifier(skillName);
+        return self.SkillModifier(skillName, map);
     }
 
     public void HarvestProp(Prop prop)

@@ -51,8 +51,6 @@ public class MapDisplayer : MonoBehaviour
 
         Building lair = new (EntityManager.buildingTypes["Graveyard"], -1);
         map.Add(lair, new Vector2Int(10, -10));
-        Item axe = new(EntityManager.itemTypes["Axe"]);
-        map.Add(axe, new Vector2Int(9, -10));
 
         for (int i = 1; i <= 3; i++)
         {

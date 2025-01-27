@@ -53,7 +53,7 @@ public class Simulation
         {
             throw new System.Exception("No weapon to use with ability.");
         }
-        int chosenWeaponModifier = actor.SkillModifier(chosenWeaponSkill);
+        int chosenWeaponModifier = actor.SkillModifier(chosenWeaponSkill, map);
         // we have also now set the chosenWeaponSkill and chosenWeaponModifier
 
         // get the range of possible targets

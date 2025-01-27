@@ -4,7 +4,7 @@ weaponRange:1
 weaponSkill:axes
 harvestingSkill:chopping
 harvestingAmount:1
-craftingInputs:Log
+craftingInputs:Log,Flint
 craftingSkill:woodcrafting
 craftingTime:10
 size:-6
@@ -15,23 +15,6 @@ weaponRange:1
 weaponSkill:hammers
 repairAmount:2
 craftingInputs:Log,Stone
-size:-6
-
-name:Double Axe
-harvestingSkill:chopping
-harvestingAmount:2
-craftingInputs:Log,Log
-craftingSkill:woodcrafting
-craftingTime:10
-size:-6
-
-name:Real Axe
-baseDamage:
-harvestingSkill:chopping
-harvestingAmount:2
-craftingInputs:Log,Flint
-craftingSkill:woodcrafting
-craftingTime:10
 size:-6
 
 name:Log
@@ -54,3 +37,21 @@ size:-2
 
 name:Stone
 size:-2
+
+name:Sword
+weaponDamage:1d6
+weaponRange:1
+weaponSkill:swords
+craftingInputs:Log
+craftingSkill:woodcrafting
+craftingTime:10
+size:-6
+
+name:Shield
+craftingInputs:Log,Log
+craftingSkill:woodcrafting
+craftingTime:10
+skillBonusNames:defense
+skillBonusAmounts:4
+craftingTime:10
+size:-6

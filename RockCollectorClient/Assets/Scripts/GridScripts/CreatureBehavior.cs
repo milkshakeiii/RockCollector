@@ -144,7 +144,6 @@ public class PeasantBehavior : CreatureBehavior
             {
                 if (homeBuilding.GetMissingItemAmount(item.itemType, map) > 0 && !actor.OutfitContains(item, map))
                 {
-                    Debug.Log("Dropping off item: " + item.itemType.GetName());
                     return new DropOffActivity(homeBuilding);
                 }
             }

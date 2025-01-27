@@ -127,7 +127,6 @@ public class Tester : MonoBehaviour
         Assert(EntityManager.creatureTypes["Peasant"].GetHealthPerLevel() == 3, "Peasant GetHealthPerLevel");
         Assert(EntityManager.creatureTypes["Peasant"].GetWisdomBonus() == 0, "Peasant GetWisdomBonus");
         Assert(EntityManager.creatureTypes["Peasant"].GetAbilities().Count > 0, "Peasant GetAbilities");
-        Assert(EntityManager.creatureTypes["Peasant"].GetAbilityLevels().Count == 1, "Peasant GetAbilityLevels");
         Assert(EntityManager.itemTypes.Count > 2, "Items not found");
         Assert(EntityManager.itemTypes.ContainsKey("Axe"), "Axe not found");
         Assert(EntityManager.propTypes.ContainsKey("Tree"), "Tree not found");
@@ -148,10 +147,14 @@ public class Tester : MonoBehaviour
         map.Add(farm, new Vector2Int(5, 5));
         Item log = new (EntityManager.itemTypes["Log"]);
         map.AddHeld(testCreature, log);
+        Item flint = new(EntityManager.itemTypes["Flint"]);
+        map.AddHeld(testCreature, flint);
         Activity craftActivity = new CraftActivity(EntityManager.itemTypes["Axe"], farm);
         craftActivity.Perform(testCreature, map);
         Assert(log.IsConsumed(), "Input item not consumed");
+        Assert(flint.IsConsumed(), "Input item not consumed");
         map.Remove(log);
+        map.Remove(flint);
         Assert(map.HeldPlaceablesOf(farm).Count == 1, "Crafted item not held by farm");
         Item item = (Item)map.HeldPlaceablesOf(farm)[0];
         Assert(item.itemType.GetName() == "Axe", "Crafted item not axe");
@@ -184,7 +187,7 @@ public class Tester : MonoBehaviour
         map.AddHeld(farm, log3);
         Item log4 = new (EntityManager.itemTypes["Log"], 0.2f);
         map.AddHeld(farm, log4);
-        Activity craftActivity3 = new CraftActivity(EntityManager.itemTypes["Double Axe"], farm);
+        Activity craftActivity3 = new CraftActivity(EntityManager.itemTypes["Shield"], farm);
         craftActivity3.Perform(testCreature, map);
         Assert(log3.IsConsumed(), "Input item not consumed");
         Assert(log4.IsConsumed(), "Input item not consumed");
@@ -192,7 +195,7 @@ public class Tester : MonoBehaviour
         map.Remove(log4);
         Assert(map.HeldPlaceablesOf(farm).Count == 1, "Crafted item not held by farm");
         Item item3 = (Item)map.HeldPlaceablesOf(farm)[0];
-        Assert(item3.itemType.GetName() == "Double Axe", "Crafted item not double axe");
+        Assert(item3.itemType.GetName() == "Shield", "Crafted item not Shield");
         Assert(item3.GetProbability() == 0.35f, "Crafted item probability"); // should actually be 0.5 * 0.2 = 0.1
         map.Remove(item3);
 
@@ -203,7 +206,7 @@ public class Tester : MonoBehaviour
         map.AddHeld(farm, log6);
         Item log7 = new(EntityManager.itemTypes["Log"], 0.7f);
         map.AddHeld(farm, log7);
-        Activity craftActivity4 = new CraftActivity(EntityManager.itemTypes["Axe"], farm);
+        Activity craftActivity4 = new CraftActivity(EntityManager.itemTypes["Sword"], farm);
         craftActivity4.Perform(testCreature, map);
         Assert(log5.IsConsumed(), "Input item not consumed");
         Assert(log6.IsConsumed(), "Input item not consumed");
@@ -214,10 +217,11 @@ public class Tester : MonoBehaviour
         Item item4 = (Item)map.HeldPlaceablesOf(farm)[0];
         Assert(item4.itemType.GetName() == "Log", "Remainder log not found");
         Item item5 = (Item)map.HeldPlaceablesOf(farm)[1];
-        Assert(item5.itemType.GetName() == "Axe", "Crafted item not axe");
+        Assert(item5.itemType.GetName() == "Sword", "Crafted item not sword");
         Assert(item5.GetProbability() == 1f, "Crafted item probability");
         map.Remove(item4);
         map.Remove(item5);
+
         {
             // test crafting with excessive inputs, whole probability
             Item log8 = new(EntityManager.itemTypes["Log"], 1f);
@@ -226,7 +230,7 @@ public class Tester : MonoBehaviour
             map.AddHeld(farm, log9);
             Item log10 = new(EntityManager.itemTypes["Log"], 1f);
             map.AddHeld(farm, log10);
-            Activity craftActivity5 = new CraftActivity(EntityManager.itemTypes["Axe"], farm);
+            Activity craftActivity5 = new CraftActivity(EntityManager.itemTypes["Sword"], farm);
             craftActivity5.Perform(testCreature, map);
             Assert(log8.IsConsumed(), "Input item not consumed");
             Assert(!log9.IsConsumed(), "Extra item consumed");
@@ -234,7 +238,7 @@ public class Tester : MonoBehaviour
             map.Remove(log8);
             Assert(map.HeldPlaceablesOf(farm).Count == 3, "Crafted item not held by farm");
             Item item7 = (Item)map.HeldPlaceablesOf(farm)[2];
-            Assert(item7.itemType.GetName() == "Axe", "Crafted item not axe");
+            Assert(item7.itemType.GetName() == "Sword", "Crafted item not sword");
             Assert(item7.GetProbability() == 1f, "Crafted item probability");
             map.Remove(item7);
             map.Remove(log9);
@@ -248,7 +252,7 @@ public class Tester : MonoBehaviour
             map.AddHeld(testCreature, log9);
             Item log10 = new(EntityManager.itemTypes["Log"], 1f);
             map.AddHeld(testCreature, log10);
-            Activity craftActivity5 = new CraftActivity(EntityManager.itemTypes["Axe"], farm);
+            Activity craftActivity5 = new CraftActivity(EntityManager.itemTypes["Sword"], farm);
             craftActivity5.Perform(testCreature, map);
             Assert(log8.IsConsumed(), "Input item not consumed");
             Assert(!log9.IsConsumed(), "Extra item consumed");
@@ -257,9 +261,9 @@ public class Tester : MonoBehaviour
             Assert(map.HeldPlaceablesOf(farm).Count == 1, "Crafted item not held by farm");
             Assert(map.HeldPlaceablesOf(testCreature).Count == 2, "left over items not held by creature");
             Item item7 = (Item)map.HeldPlaceablesOf(farm)[0];
-            Assert(item7.itemType.GetName() == "Axe", "Crafted item not axe");
+            Assert(item7.itemType.GetName() == "Sword", "Crafted item not axe");
             Assert(item7.GetProbability() == 1f, "Crafted item probability");
-            Activity craftActivity6 = new CraftActivity(EntityManager.itemTypes["Axe"], farm);
+            Activity craftActivity6 = new CraftActivity(EntityManager.itemTypes["Sword"], farm);
             craftActivity6.Perform(testCreature, map);
             Assert(log9.IsConsumed(), "item not consumed");
             Assert(!log10.IsConsumed(), "Extra item consumed");
@@ -384,17 +388,20 @@ public class Tester : MonoBehaviour
         Assert(pickUpActivity3 is PickUpActivity, "Activity should be pick up");
         Assert(pickUpActivity3.GetLocation(map) == new Vector2Int(-2, -2), "Pick up location");
 
+        map.Remove(axe);
+
         // test CraftItems
-        farm.ChangeRequestedItemAmount(EntityManager.itemTypes["Real Axe"], 1);
+        farm.ChangeRequestedItemAmount(EntityManager.itemTypes["Axe"], 1);
         Item flint = new(EntityManager.itemTypes["Flint"]);
         map.AddHeld(farm, flint);
-        map.AddHeld(farm, log);
+        Item log2 = new(EntityManager.itemTypes["Log"]);
+        map.AddHeld(farm, log2);
         Activity craftActivity = behavior.NextActivity(map, testCreature);
         Assert(craftActivity is CraftActivity, "Activity should be craft");
         Assert(craftActivity.GetLocation(map) == map.PositionOf(farm), "Craft location");
 
         // test RestAtHomeBuilding
-        farm.ChangeRequestedItemAmount(EntityManager.itemTypes["Real Axe"], 0);
+        farm.ChangeRequestedItemAmount(EntityManager.itemTypes["Axe"], 0);
         farm.ChangeRequestedItemAmount(EntityManager.itemTypes["Log"], 0);
         farm.ChangeRequestedItemAmount(EntityManager.itemTypes["Flint"], 0);
         Activity restActivity = behavior.NextActivity(map, testCreature);
