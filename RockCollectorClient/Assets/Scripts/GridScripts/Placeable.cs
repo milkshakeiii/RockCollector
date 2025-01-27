@@ -1501,20 +1501,6 @@ public class Prop : Destructable
         return sum;
     }
 
-    public void MakeImaginaryDrops(Map map)
-    {
-        List<ItemType> droppedItems = propType.GetProducedItems();
-        List<int> probabilities = propType.GetProducedItemsProbabilities();
-        int probabilitySum = DroppedItemsProbabilitiesSum();
-        for (int i = 0; i < droppedItems.Count; i++)
-        {
-            ItemType droppedItem = droppedItems[i];
-            int probability = probabilities[i];
-            Item item = new(droppedItem, (float)probability / (float)probabilitySum);
-            map.Add(item, map.PositionOf(this));
-        }
-    }
-
     public void TakeHarvest(int amount)
     {
         harvestedAmount += amount;
@@ -1548,12 +1534,10 @@ public class Item : Placeable
 {
     public ItemType itemType;
     private bool consumed = false;
-    private float probability;
 
-    public Item(ItemType itemType, float probability = 1) : base(itemType.GetSize())
+    public Item(ItemType itemType) : base(itemType.GetSize())
     {
         this.itemType = itemType;
-        this.probability = probability;
     }
 
     public override Placeable DeepCopy()
@@ -1562,13 +1546,7 @@ public class Item : Placeable
         copy.claimed = claimed; // from parent
         copy.itemType = itemType;
         copy.consumed = consumed;
-        copy.probability = probability;
         return copy;
-    }
-
-    public float GetProbability()
-    {
-        return probability;
     }
 
     public void Consume()
@@ -1583,7 +1561,7 @@ public class Item : Placeable
 
     public float Value()
     {
-        return 10 * GetProbability();
+        return 10;
     }
 }
 

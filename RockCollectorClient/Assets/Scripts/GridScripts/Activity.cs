@@ -247,7 +247,7 @@ public class CraftActivity : Activity
         return false;
     }
 
-    private void PerformWithOptions(Creature performer, Map map, bool successRoll, bool immediateConsume)
+    public override void Perform(Creature performer, Map map)
     {
         // how many of each input item are demanded
         Dictionary<ItemType, int> countsRequired = new();
@@ -267,30 +267,19 @@ public class CraftActivity : Activity
         List<Placeable> availableItems = new(map.HeldPlaceablesOf(performer));
         availableItems.AddRange(map.HeldPlaceablesOf(Workshop()));
 
-        Dictionary<ItemType, List<float>> expectedValuesAvailable = new();
         HashSet<Item> consumedItems = new();
         foreach (ItemType inputType in countsRequired.Keys)
         {
             // consume input items until we run out of items or we reach the expected values demanded
-            float expectedAmountCollected = 0;
+            int amountCollected = 0;
             foreach (Placeable availableItem in availableItems)
             {
                 if (availableItem is Item item && !consumedItems.Contains(item) && item.itemType.GetName() == inputType.GetName())
                 {
                     consumedItems.Add(item);
 
-                    float itemProbability = item.GetProbability();
-                    if (expectedValuesAvailable.ContainsKey(inputType))
-                    {
-                        expectedValuesAvailable[inputType].Add(itemProbability);
-                    }
-                    else
-                    {
-                        expectedValuesAvailable[inputType] = new List<float> { itemProbability };
-                    }
-
-                    expectedAmountCollected += itemProbability;
-                    if (expectedAmountCollected >= countsRequired[inputType])
+                    amountCollected += 1;
+                    if (amountCollected >= countsRequired[inputType])
                     {
                         break;
                     }
@@ -298,65 +287,16 @@ public class CraftActivity : Activity
             }
         }
 
-        if (!immediateConsume)
+        // consume the items
+        foreach (Item consumedItem in consumedItems)
         {
-            // consume the items
-            foreach (Item consumedItem in consumedItems)
-            {
-                consumedItem.Consume();
-            }
-        }
-        else
-        {
-            // directly remove the items from the map
-            foreach (Item consumedItem in consumedItems)
-            {
-                map.Remove(consumedItem);
-            }
+            consumedItem.Consume();
         }
 
         // create the output item
-        float finalSuccessProbability = 1;
-        foreach (ItemType inputType in countsRequired.Keys)
-        {
-            if (!expectedValuesAvailable.ContainsKey(inputType))
-            {
-                throw new Exception("Expected values for input type " + inputType.GetName() + " not found");
-            }
-            if (expectedValuesAvailable[inputType].Count < countsRequired[inputType])
-            {
-                throw new Exception("Not enough items of type " + inputType.GetName() + ". Expected " + countsRequired[inputType] + " but only found " + expectedValuesAvailable[inputType].Count);
-            }
-            float expectedValue = 0;
-            for (int i = 0; i < expectedValuesAvailable[inputType].Count; i++)
-            {
-                float availableProbability = expectedValuesAvailable[inputType][i];
-                expectedValue += availableProbability;
-            }
-            // if the expected value is greater than the count required, we consider it guaranteed success
-            // and we only will consume as many items as are needed to reach that expected value.
-            float outputProbability;
-            if (expectedValue > countsRequired[inputType])
-            {
-                outputProbability = 1;
-            }
-            // otherwise, we sum the probabilities and divide by the counts required to determine the chance of success.
-            // Note: this is not how math actually works.
-            else
-            {
-                outputProbability = expectedValue / countsRequired[inputType];
-            }
-            finalSuccessProbability *= outputProbability;
-        }
-        Item outputItem = new(craftingOutputItem, finalSuccessProbability);
+        Item outputItem = new(craftingOutputItem);
         map.AddHeld(Workshop(), outputItem);
-        //Debug.Log(Workshop() + " holds " + outputItem.itemType.GetName() + " with probability " + outputItem.GetProbability());
         performer.AddCooldown(outputItem.itemType.GetCraftingTime());
-    }
-
-    public override void Perform(Creature performer, Map map)
-    {
-        PerformWithOptions(performer, map, true, false);
     }
 }
 
