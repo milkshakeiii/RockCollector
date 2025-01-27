@@ -222,6 +222,7 @@ public class Tester : MonoBehaviour
             map.Remove(log9);
             map.Remove(log10);
         }
+
         {
             // creature holding / craft twice
             Item log8 = new(EntityManager.itemTypes["Log"]);
@@ -310,7 +311,7 @@ public class Tester : MonoBehaviour
         {
             testCreature.LevelUp();
         }
-        PeasantBehavior behavior = new();
+        CreatureBehavior behavior = CreatureBehavior.FromName("Peasant Behavior");
         Item hammer = new (EntityManager.itemTypes["Hammer"]);
         map.Add(hammer, new Vector2Int(0, 0));
 

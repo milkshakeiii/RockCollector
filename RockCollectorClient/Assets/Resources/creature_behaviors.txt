@@ -1,0 +1,11 @@
+name:Peasant Behavior
+priorities:Repair Damaged Buildings,Drop Off Requested Items,Pick Up Requested Items,Harvest Requested Items,Craft Items,Rest,Idle
+repairRange:0
+dropOffRange:0
+pickUpRange:999
+harvestRange:999
+craftRange:0
+restRange:0
+
+name:Skeleton Behavior
+priorities:Idle

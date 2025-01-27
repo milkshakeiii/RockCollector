@@ -9,7 +9,7 @@ wisdomBonus:0
 charismaBonus:0
 abilities:Basic Attack,Woodcutting,Repair Building
 abilityLevels:1,1,1
-behavior:PeasantBehavior
+behavior:Peasant Behavior
 
 name:Warrior
 startingHealth:8
@@ -22,7 +22,7 @@ wisdomBonus:-2
 charismaBonus:0
 abilities:Basic Attack
 abilityLevels:1
-behavior:PeasantBehavior
+behavior:Peasant Behavior
 
 name:Scarecrow
 startingHealth:4
@@ -34,7 +34,7 @@ intelligenceBonus:0
 wisdomBonus:0
 charismaBonus:0
 abilityLevels:1
-behavior:PeasantBehavior
+behavior:Peasant Behavior
 
 name:Skeleton
 startingHealth:4
@@ -48,4 +48,4 @@ charismaBonus:0
 abilities:Basic Attack
 abilityLevels:1
 startingEquipment:Axe
-behavior:SkeletonBehavior
+behavior:Skeleton Behavior

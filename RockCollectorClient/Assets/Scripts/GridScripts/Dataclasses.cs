@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public static class EntityManager
+public static class EntityManager 
 {
     public static Dictionary<string, Feat> feats = new();
     public static Dictionary<string, TypeAbility> typeAbilities = new();
@@ -15,6 +15,7 @@ public static class EntityManager
     public static Dictionary<string, PropType> propTypes = new();
     public static Dictionary<string, ItemType> itemTypes = new();
     public static Dictionary<string, BuildingType> buildingTypes = new();
+    public static Dictionary<string, CreatureBehaviorType> creatureBehaviors = new();
 
     public static void StoreEntity(string identifier, Entity entity)
     {
@@ -45,6 +46,10 @@ public static class EntityManager
         else if (identifier == "building_types")
         {
             buildingTypes[entity.attributes["name"]] = (BuildingType)entity;
+        }
+        else if (identifier == "creature_behaviors")
+        {
+            creatureBehaviors[entity.attributes["name"]] = (CreatureBehaviorType)entity;
         }
         else
         {
@@ -81,6 +86,10 @@ public static class EntityManager
         else if (identifier == "building_types")
         {
             return new BuildingType (attributes);
+        }
+        else if (identifier == "creature_behaviors")
+        {
+            return new CreatureBehaviorType (attributes);
         }
         else
         {
@@ -212,9 +221,10 @@ public static class EntityManager
         ReadEntity("prop_types");
         ReadEntity("item_types");
         ReadEntity("building_types");
+        ReadEntity("creature_behaviors");
     }
 
-    public static void ReadEntity(string identifier)
+    private static void ReadEntity(string identifier)
     {
         TextAsset textAsset = Resources.Load<TextAsset>(identifier);
         string[] lines = textAsset.text.Split('\n');
@@ -235,7 +245,7 @@ public static class EntityManager
     }
 }
 
-public class Entity
+public class Entity 
 {
     public readonly ReadOnlyDictionary<string, string> attributes;
 
@@ -570,6 +580,44 @@ public class BuildingType : Entity
     public List<int> GetConstructionItemAmounts()
     {
         return EntityManager.GetIntListAttribute(attributes, "constructionItemAmounts", new List<int>());
+    }
+}
+
+public class CreatureBehaviorType : Entity
+{
+    public CreatureBehaviorType(Dictionary<string, string> attributes) : base(attributes) { }
+
+    public string GetName()
+    {
+        return EntityManager.GetStringAttribute(attributes, "name");
+    }
+    public List<string> GetPriorities()
+    {
+        return EntityManager.GetStringListAttribute(attributes, "priorities", new List<string>());
+    }
+    public int GetRepairRange()
+    {
+        return EntityManager.GetIntAttribute(attributes, "repairRange");
+    }
+    public int GetDropOffRange()
+    {
+        return EntityManager.GetIntAttribute(attributes, "dropoffRange");
+    }
+    public int GetPickUpRange()
+    {
+        return EntityManager.GetIntAttribute(attributes, "pickupRange");
+    }
+    public int GetHarvestRange()
+    {
+        return EntityManager.GetIntAttribute(attributes, "harvestRange");
+    }
+    public int GetCraftRange()
+    {
+        return EntityManager.GetIntAttribute(attributes, "craftRange");
+    }
+    public int GetRestRange()
+    {
+        return EntityManager.GetIntAttribute(attributes, "restRange");
     }
 }
 
