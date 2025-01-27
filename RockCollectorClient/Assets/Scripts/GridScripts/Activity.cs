@@ -73,14 +73,6 @@ public abstract class Activity
         throw new Exception("Unable to determine location of activity");
     }
 
-    /// <summary>
-    /// Mutate map (probabilistic version). Return the estimate for the number of ticks.
-    /// </summary>
-    /// <param name="creature"></param>
-    /// <param name="map"></param>
-    /// <returns></returns>
-    public abstract int EffectAndEstimate(Creature creature, Map map);
-
     public void MarkForBackConversion(Dictionary<Placeable, Placeable> newBackDictionary)
     {
         if (this.backDictionary != null)
@@ -143,20 +135,6 @@ public class HarvestActivity : Activity
     {
         performer.HarvestProp(SourceProp(), map);
     }
-
-    public override int EffectAndEstimate(Creature creature, Map map)
-    {
-        // estimate the number of ticks required to harvest the prop
-        (int harvestCooldown, int harvestAmount) = creature.HarvestingCooldownAndAmount(SourceProp(), map);
-        int propHarvestRequired = SourceProp().propType.GetHarvestingRequired();   
-        int estimatedTicks = Mathf.CeilToInt((float)harvestAmount / (float)propHarvestRequired) * harvestCooldown;
-
-        // mutate the map
-        SourceProp().MakeImaginaryDrops(map);
-        map.Remove(SourceProp());
-
-        return estimatedTicks;
-    }
 }
 
 public class HuntActivity : Activity
@@ -202,11 +180,6 @@ public class HuntActivity : Activity
     public override void Perform(Creature performer, Map map)
     {
         performer.UseAnyAbility(map);
-    }
-
-    public override int EffectAndEstimate(Creature creature, Map map)
-    {
-        return 0; // TODO: Implement
     }
 }
 
@@ -385,13 +358,6 @@ public class CraftActivity : Activity
     {
         PerformWithOptions(performer, map, true, false);
     }
-
-    public override int EffectAndEstimate(Creature creature, Map map)
-    {
-        PerformWithOptions(creature, map, false, true);
-
-        return craftingOutputItem.GetCraftingTime();
-    }
 }
 
 public class PickUpActivity : Activity
@@ -428,13 +394,6 @@ public class PickUpActivity : Activity
         {
             performer.AddToOutfit(Item(), map);
         }
-    }
-
-    public override int EffectAndEstimate(Creature creature, Map map)
-    {
-        Perform(creature, map);
-
-        return 1; // Picking up an item takes 1 tick
     }
 }
 
@@ -485,13 +444,6 @@ public class DropOffActivity : Activity
             }
         }
     }
-
-    public override int EffectAndEstimate(Creature creature, Map map)
-    {
-        Perform(creature, map);
-
-        return 1; // Dropping off an item takes 1 tick
-    }
 }
 
 public class RepairActivity : Activity
@@ -515,13 +467,6 @@ public class RepairActivity : Activity
     public override void Perform(Creature performer, Map map)
     {
         performer.RepairBuilding(Building(), map);
-    }
-
-    public override int EffectAndEstimate(Creature creature, Map map)
-    {
-        Perform(creature, map);
-
-        return 1;
     }
 }
 
@@ -555,13 +500,6 @@ public class RestActivity : Activity
         int cooldown = Building().buildingType.GetRestHealCooldown();
         performer.AddCooldown(cooldown);
     }
-
-    public override int EffectAndEstimate(Creature creature, Map map)
-    {
-        Perform(creature, map);
-
-        return 1;
-    }
 }
 
 public class IdleActivity : Activity
@@ -590,10 +528,5 @@ public class IdleActivity : Activity
         {
             firstPerformedTick = map.CurrentTick();
         }
-    }
-
-    public override int EffectAndEstimate(Creature creature, Map map)
-    {
-        return 150;
     }
 }
