@@ -49,32 +49,32 @@ public class PeasantBehavior : CreatureBehavior
         // -> craft items using materials in the home building
         // priority 6: rest at home building
         // priority 7: idle
-        Activity nextActivity = RepairDamagedBuildings(map, actor);
+        Activity nextActivity = new RepairDamagedBuildingsPriority().ChosenActivityOrNull(map, actor);
         if (nextActivity != null)
         {
             return nextActivity;
         }
-        nextActivity = DropOffRequestedItems(map, actor);
+        nextActivity = new DropOffRequestedItemsPriority().ChosenActivityOrNull(map, actor);
         if (nextActivity != null)
         {
             return nextActivity;
         }
-        nextActivity = PickUpRequestedItems(map, actor);
+        nextActivity = new PickUpRequestedItemsPriority().ChosenActivityOrNull(map, actor);
         if (nextActivity != null)
         {
             return nextActivity;
         }
-        nextActivity = HarvestRequestedItems(map, actor);
+        nextActivity = new HarvestRequestedItemsPriority().ChosenActivityOrNull(map, actor);
         if (nextActivity != null)
         {
             return nextActivity;
         }
-        nextActivity = CraftItems(map, actor);
+        nextActivity = new CraftItemsPriority().ChosenActivityOrNull(map, actor);
         if (nextActivity != null)
         {
             return nextActivity;
         }
-        nextActivity = RestAtHomeBuilding(map, actor);
+        nextActivity = new RestAtHomeBuildingPriority().ChosenActivityOrNull(map, actor);
         if (nextActivity != null)
         {
             return nextActivity;
@@ -82,7 +82,71 @@ public class PeasantBehavior : CreatureBehavior
         return new IdleActivity(map.PositionOf(actor));
     }
 
-    private Activity RepairDamagedBuildings(Map map, Creature actor)
+    public override void CheckInterrupts(MapView map, CreatureSelf creature)
+    {
+        
+    }
+}
+
+public class SkeletonBehavior : CreatureBehavior
+{
+    public override string Name()
+    {
+        return "SkeletonBehavior";
+    }
+
+    public override Activity NextActivity(Map map, Creature actor)
+    {
+        // if there is a creature within 4 squares, hunt it
+        for (int x = -2; x <= 2; x++)
+        {
+            for (int y = -2; y <= 2; y++)
+            {
+                List<Placeable> targets = map.PlaceablesAt(map.PositionOf(actor) + new Vector2Int(x, y));
+                foreach (Placeable target in targets)
+                {
+                    if (target is Creature creature && creature.teamNumber != actor.teamNumber)
+                    {
+                        return new HuntActivity(creature);
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public override void CheckInterrupts(MapView map, CreatureSelf self)
+    {
+        if (self.HasCurrentActivity())
+        {
+            return;
+        }
+
+        // with a 1 in 100 chance, move to a random adjacent square
+        if (UnityEngine.Random.Range(0, 100) == 0)
+        {
+            Vector2Int target = new (UnityEngine.Random.Range(-1, 2), UnityEngine.Random.Range(-1, 2));
+            self.MoveInDirection(target);
+        }
+    }
+}
+
+public abstract class BehaviorPriority 
+{
+    /// <summary>
+    /// Check this priority level to see if the actor should perform a chosen activity.
+    /// If the actor should perform an activity for this priority, return the activity.
+    /// If the actor should not perform the activity, return null.
+    /// </summary>
+    /// <param name="map"></param>
+    /// <param name="actor"></param>
+    /// <returns></returns>
+    public abstract Activity ChosenActivityOrNull(Map map, Creature actor);
+}
+
+public class RepairDamagedBuildingsPriority : BehaviorPriority
+{
+    public override Activity ChosenActivityOrNull(Map map, Creature actor)
     {
         if (!actor.HasRepairAbility())
         {
@@ -130,8 +194,11 @@ public class PeasantBehavior : CreatureBehavior
         // no damaged buildings found
         return null;
     }
+}
 
-    private Activity DropOffRequestedItems(Map map, Creature actor)
+public class DropOffRequestedItemsPriority : BehaviorPriority
+{
+    public override Activity ChosenActivityOrNull(Map map, Creature actor)
     {
         Building homeBuilding = actor.GetHomeBuilding(map);
         if (homeBuilding == null)
@@ -150,8 +217,11 @@ public class PeasantBehavior : CreatureBehavior
         }
         return null;
     }
+}
 
-    private Activity PickUpRequestedItems(Map map, Creature actor)
+public class PickUpRequestedItemsPriority : BehaviorPriority
+{
+    public override Activity ChosenActivityOrNull(Map map, Creature actor)
     {
         Building homeBuilding = actor.GetHomeBuilding(map);
         if (homeBuilding == null)
@@ -170,8 +240,11 @@ public class PeasantBehavior : CreatureBehavior
         }
         return null;
     }
+}
 
-    private Activity HarvestRequestedItems(Map map, Creature actor)
+public class HarvestRequestedItemsPriority : BehaviorPriority
+{
+    public override Activity ChosenActivityOrNull(Map map, Creature actor)
     {
         Building homeBuilding = actor.GetHomeBuilding(map);
         if (homeBuilding == null)
@@ -222,8 +295,11 @@ public class PeasantBehavior : CreatureBehavior
         }
         return null;
     }
+}
 
-    private Activity CraftItems(Map map, Creature actor)
+public class CraftItemsPriority : BehaviorPriority
+{
+    public override Activity ChosenActivityOrNull(Map map, Creature actor)
     {
         Building homeBuilding = actor.GetHomeBuilding(map);
         if (homeBuilding == null)
@@ -254,8 +330,11 @@ public class PeasantBehavior : CreatureBehavior
         }
         return null;
     }
+}
 
-    private Activity RestAtHomeBuilding(Map map, Creature actor)
+public class RestAtHomeBuildingPriority : BehaviorPriority
+{
+    public override Activity ChosenActivityOrNull(Map map, Creature actor)
     {
         Building homeBuilding = actor.GetHomeBuilding(map);
         if (homeBuilding == null)
@@ -267,53 +346,5 @@ public class PeasantBehavior : CreatureBehavior
             return new RestActivity(homeBuilding);
         }
         return null;
-    }
-
-    public override void CheckInterrupts(MapView map, CreatureSelf creature)
-    {
-        
-    }
-}
-
-public class SkeletonBehavior : CreatureBehavior
-{
-    public override string Name()
-    {
-        return "SkeletonBehavior";
-    }
-
-    public override Activity NextActivity(Map map, Creature actor)
-    {
-        // if there is a creature within 4 squares, hunt it
-        for (int x = -2; x <= 2; x++)
-        {
-            for (int y = -2; y <= 2; y++)
-            {
-                List<Placeable> targets = map.PlaceablesAt(map.PositionOf(actor) + new Vector2Int(x, y));
-                foreach (Placeable target in targets)
-                {
-                    if (target is Creature creature && creature.teamNumber != actor.teamNumber)
-                    {
-                        return new HuntActivity(creature);
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-    public override void CheckInterrupts(MapView map, CreatureSelf self)
-    {
-        if (self.HasCurrentActivity())
-        {
-            return;
-        }
-
-        // with a 1 in 100 chance, move to a random adjacent square
-        if (UnityEngine.Random.Range(0, 100) == 0)
-        {
-            Vector2Int target = new (UnityEngine.Random.Range(-1, 2), UnityEngine.Random.Range(-1, 2));
-            self.MoveInDirection(target);
-        }
     }
 }

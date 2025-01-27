@@ -49,6 +49,9 @@ public class MapDisplayer : MonoBehaviour
         testBuilding.TakeDamage(50);
         map.Add(testBuilding, new Vector2Int(-10, -10));
 
+        Building barracks = new (EntityManager.buildingTypes["Barracks"], 1);
+        map.Add(barracks, new Vector2Int(0, -10));
+
         Building lair = new (EntityManager.buildingTypes["Graveyard"], -1);
         map.Add(lair, new Vector2Int(10, -10));
 
