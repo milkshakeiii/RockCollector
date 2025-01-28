@@ -386,6 +386,32 @@ public class Creature : Destructable
         return modifier;
     }
 
+    /// <summary>
+    /// Returns -1 if the creature does not have a crafting ability for the skill.
+    /// </summary>
+    /// <param name="skillName"></param>
+    /// <param name="map"></param>
+    /// <returns></returns>
+    public int CraftingSkillModifier(string skillName, Map map)
+    {
+        int modifier = SkillModifier(skillName, map);
+        // check if the creature has a crafting ability and whether it boosts the skill
+        bool hasCraftingAbility = false;
+        foreach (TypeAbility ability in abilities)
+        {
+            if (ability.GetCraftingSkill() == skillName)
+            {
+                modifier += ability.GetCraftingSkillBonus();
+                hasCraftingAbility = true;
+            }
+        }
+        if (!hasCraftingAbility)
+        {
+            return -1;
+        }
+        return modifier;
+    }
+
     public static int Roll20()
     {
         return UnityEngine.Random.Range(1, 21);
@@ -676,7 +702,7 @@ public class Creature : Destructable
             currentActivity.Perform(this, map);
             if (currentActivity.IsCompletedOrImpossible(map, this))
             {
-                // Debug.Log("Activity completed");
+                Debug.Log("Activity finished " + currentActivity);
                 AbandonCurrentActivity(); // Otherwise, there would be a "stunned" frame
             }
             return;

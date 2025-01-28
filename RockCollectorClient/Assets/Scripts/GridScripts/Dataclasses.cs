@@ -331,6 +331,14 @@ public class TypeAbility : Entity
     {
         return EntityManager.GetStringListAttribute(attributes, "repairImplementSkills", new List<string>());
     }
+    public string GetCraftingSkill()
+    {
+        return EntityManager.GetStringAttribute(attributes, "craftingSkill", "none");
+    }
+    public int GetCraftingSkillBonus()
+    {
+        return EntityManager.GetIntAttribute(attributes, "craftingSkillBonus", 0);
+    }
 }
 
 public class Condition : Entity
@@ -494,6 +502,14 @@ public class ItemType : Entity
     public List<ItemType> GetCraftingInputs()
     {
         return EntityManager.GetItemListAttribute(attributes, "craftingInputs", new List<ItemType>());
+    }
+    public string GetCraftingSkill()
+    {
+        return EntityManager.GetStringAttribute(attributes, "craftingSkill", "none");
+    }
+    public int GetCraftingLevel()
+    {
+        return EntityManager.GetIntAttribute(attributes, "craftingLevel", 0);
     }
     public int GetCraftingTime()
     {

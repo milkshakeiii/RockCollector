@@ -6,9 +6,9 @@ public class Tester : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
+        LoadEntities();
         AddAndRemovePlaceablesOfVariousSizes();
         DistancesBetweenPlaceablesOfVariousSizes();
-        LoadEntities();
         HoldAndDropItems();
         CraftThings();
         WeaponAttack();
@@ -54,6 +54,18 @@ public class Tester : MonoBehaviour
         // check that the placeables were removed correctly
         Assert(map.CountAllPlaceables() == 0, "Placeables not removed correctly");
         Assert(map.CountOccupiedSquares() == 0, "Placeables not removed correctly");
+
+        // moving a creature doesn't remove the held placeables or outfit
+        Creature testCreature = new("George", 0, EntityManager.creatureTypes["Peasant"], Map.NULL_POSITION);
+        map.Add(testCreature, new Vector2Int(5, 5));
+        Item item = new Item(EntityManager.itemTypes["Axe"]);
+        map.AddHeld(testCreature, item);
+        testCreature.AddToOutfit(item, map);
+        map.MovePlaceable(testCreature, new Vector2Int(10, 10));
+        Assert(map.PositionOf(testCreature) == new Vector2Int(10, 10), "Creature not moved correctly");
+        Assert(map.PositionOf(item) == new Vector2Int(10, 10), "Item not moved correctly");
+        Assert(map.HolderOf(item) == testCreature, "Item not in held placeables");
+        Assert(testCreature.OutfitContains(item, map), "Item not in outfit");
     }
 
     void DistancesBetweenPlaceablesOfVariousSizes()
@@ -141,6 +153,8 @@ public class Tester : MonoBehaviour
     void CraftThings()
     {
         Map map = new();
+
+        // Peasant can craft
         Creature testCreature = new("George", 1, EntityManager.creatureTypes["Peasant"], Map.NULL_POSITION);
         map.Add(testCreature, new Vector2Int(5, 5));
         Building farm = new(EntityManager.buildingTypes["Farm"], 1);
@@ -248,6 +262,19 @@ public class Tester : MonoBehaviour
             map.Remove(log9);
             Assert(map.HeldPlaceablesOf(farm).Count == 2, "Crafted item not held by farm");
             Assert(map.HeldPlaceablesOf(testCreature).Count == 1, "left over item not held by creature");
+        }
+        {
+            // Skeleton can't craft
+            Creature skeleton = new("Skele1", 0, EntityManager.creatureTypes["Skeleton"], Map.NULL_POSITION);
+            map.Add(skeleton, new Vector2Int(5, 5));
+            Item log8 = new(EntityManager.itemTypes["Log"]);
+            map.AddHeld(skeleton, log8);
+            Item flint2 = new(EntityManager.itemTypes["Flint"]);
+            map.AddHeld(skeleton, flint2);
+            Activity craftActivity7 = new CraftActivity(EntityManager.itemTypes["Axe"], farm);
+            Assert(craftActivity7.IsCompletedOrImpossible(map, skeleton), "Crafting should be impossible");
+            map.Remove(log8);
+            map.Remove(flint2);
         }
     }
 

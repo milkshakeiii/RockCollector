@@ -37,10 +37,10 @@ public class MapDisplayer : MonoBehaviour
 
         yield return new WaitForSeconds(1);
         map = new ();
-        Creature testCreature = new ("Scarecrow", 1, EntityManager.creatureTypes["Peasant"], Map.NULL_POSITION);
-        map.Add(testCreature, new Vector2Int(10, -5));
-        Creature testCreature2 = new("Scarecrow", 1, EntityManager.creatureTypes["Peasant"], Map.NULL_POSITION);
-        map.Add(testCreature2, new Vector2Int(16, -5));
+        //Creature testCreature = new ("Scarecrow", 1, EntityManager.creatureTypes["Peasant"], Map.NULL_POSITION);
+        //map.Add(testCreature, new Vector2Int(10, -5));
+        //Creature testCreature2 = new("Scarecrow", 1, EntityManager.creatureTypes["Peasant"], Map.NULL_POSITION);
+        //map.Add(testCreature2, new Vector2Int(16, -5));
 
         Item axe2 = new(EntityManager.itemTypes["Axe"]);
         map.Add(axe2, new Vector2Int(7, 7));
@@ -56,8 +56,8 @@ public class MapDisplayer : MonoBehaviour
         Building barracks = new (EntityManager.buildingTypes["Barracks"], 1);
         map.Add(barracks, new Vector2Int(0, -10));
 
-        Building lair = new (EntityManager.buildingTypes["Graveyard"], -1);
-        map.Add(lair, new Vector2Int(10, -10));
+        //Building lair = new (EntityManager.buildingTypes["Graveyard"], -1);
+        //map.Add(lair, new Vector2Int(10, -10));
 
         for (int i = 1; i <= 3; i++)
         {

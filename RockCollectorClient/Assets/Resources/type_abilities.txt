@@ -2,6 +2,10 @@ name:Woodcutting
 cooldown:10
 harvestingSkill:chopping
 
+name:Woodcrafting
+craftingSkill:woodcrafting
+craftingSkillBonus:0
+
 name:Repair Building
 cooldown:10
 repairImplementSkills:hammers,saws

@@ -247,6 +247,7 @@ public class CraftItemsPriority : BehaviorPriority
             {
                 continue;
             }
+
             // craft the first item that is missing that can be crafted
             List<ItemType> inputItemTypes = itemType.GetCraftingInputs();
             bool canCraft = true;
@@ -258,6 +259,11 @@ public class CraftItemsPriority : BehaviorPriority
                     break;
                 }
             }
+
+            // make sure you have a high enough skill level
+            string neededSkill = itemType.GetCraftingSkill();
+            canCraft = canCraft && actor.CraftingSkillModifier(neededSkill, map) >= itemType.GetCraftingLevel();
+
             if (canCraft)
             {
                 return new CraftActivity(itemType, homeBuilding);

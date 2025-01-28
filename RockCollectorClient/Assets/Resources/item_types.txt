@@ -6,6 +6,7 @@ harvestingSkill:chopping
 harvestingAmount:1
 craftingInputs:Log,Flint
 craftingSkill:woodcrafting
+craftingLevel:0
 craftingTime:10
 size:-6
 
@@ -15,6 +16,8 @@ weaponRange:1
 weaponSkill:hammers
 repairAmount:2
 craftingInputs:Log,Stone
+craftingSkill:woodcrafting
+craftingLevel:0
 size:-6
 
 name:Log
@@ -46,6 +49,7 @@ weaponRange:1
 weaponSkill:swords
 craftingInputs:Log
 craftingSkill:woodcrafting
+craftingLevel:1
 craftingTime:10
 size:-6
 
@@ -54,6 +58,7 @@ equipmentCategory:shields
 equipmentLevel:1
 craftingInputs:Log,Log
 craftingSkill:woodcrafting
+craftingLevel:1
 craftingTime:10
 skillBonusNames:defense
 skillBonusAmounts:4

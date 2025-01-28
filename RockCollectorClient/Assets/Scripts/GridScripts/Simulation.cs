@@ -297,7 +297,7 @@ public class Map
         }
 
         // if this is a creature, remove it from the outfit dict
-        if (placeable is Creature outfitCreature)
+        if (placeable is Creature outfitCreature && removeHeldItems)
         {
             if (creatureOutfits.ContainsKey(outfitCreature))
             {

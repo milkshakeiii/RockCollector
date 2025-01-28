@@ -19,6 +19,13 @@ maxHealth:100
 requestableItemTypes:Axe
 requestableItemCounts:5
 
+name:Guild
+supportedCreatureTypes:Woodcrafter
+supportedCreatureCounts:2
+supportedCreatureSpawnTimes:500
+size:5
+maxHealth:100
+
 name:Graveyard
 supportedCreatureTypes:Skeleton
 supportedCreatureCounts:5

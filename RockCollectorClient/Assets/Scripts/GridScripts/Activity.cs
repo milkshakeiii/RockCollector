@@ -218,6 +218,13 @@ public class CraftActivity : Activity
             return true;
         }
 
+        // check that the performer has the required skill level
+        string craftingSkill = craftingOutputItem.GetCraftingSkill();
+        if (performer.CraftingSkillModifier(craftingSkill, map) < craftingOutputItem.GetCraftingLevel())
+        {
+            return true;
+        }
+
         foreach (ItemType inputItem in craftingOutputItem.GetCraftingInputs())
         {
             bool itemFound = false;
