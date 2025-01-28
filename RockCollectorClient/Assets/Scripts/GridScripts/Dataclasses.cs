@@ -625,11 +625,11 @@ public class CreatureBehaviorType : Entity
     }
     public int GetDropOffRange()
     {
-        return EntityManager.GetIntAttribute(attributes, "dropoffRange");
+        return EntityManager.GetIntAttribute(attributes, "dropOffRange");
     }
     public int GetPickUpRange()
     {
-        return EntityManager.GetIntAttribute(attributes, "pickupRange");
+        return EntityManager.GetIntAttribute(attributes, "pickUpRange");
     }
     public int GetHarvestRange()
     {

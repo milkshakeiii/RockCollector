@@ -1,14 +1,18 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 public class DisplayGrid : MonoBehaviour
 {
     public const int WIDTH = 240;
     public const int HEIGHT = 135;
 
-    public delegate void OnMouseUp(Vector3 worldPosition, Vector2Int screenPosition, int mouseButton);
-    public static event OnMouseUp MouseUp;
+    public delegate void OnMouse(Vector3 worldPosition, Vector2Int screenPosition, int mouseButton);
+    public static event OnMouse MouseUp;
+    public static event OnMouse MouseDown;
 
     public GameObject gridCamera;
 
@@ -27,22 +31,32 @@ public class DisplayGrid : MonoBehaviour
     void Update()
     {
         // check for mouse up
-        int mouseButton = -1;
+        int mouseUpButton = -1;
         if (Input.GetMouseButtonUp(0))
         {
-            mouseButton = 0;
+            mouseUpButton = 0;
         }
         else if (Input.GetMouseButtonUp(1))
         {
-            mouseButton = 1;
+            mouseUpButton = 1;
         }
-        if (mouseButton != -1)
+        if (mouseUpButton != -1)
         {
             Vector3 mousePos = Input.mousePosition;
             mousePos.z = HEIGHT/2f;
             Vector3 worldPos = gridCamera.GetComponent<Camera>().ScreenToWorldPoint(mousePos);
             Vector2Int screenPosition = new(Mathf.RoundToInt(mousePos.x/8f) - WIDTH/2, Mathf.RoundToInt(mousePos.y/8f) - HEIGHT/2 - 1);
-            MouseUp?.Invoke(worldPos, screenPosition, mouseButton);
+            MouseUp?.Invoke(worldPos, screenPosition, mouseUpButton);
+        }
+
+        // check for mouse down
+        if (Input.GetMouseButtonDown(0))
+        {
+            Vector3 mousePos = Input.mousePosition;
+            mousePos.z = HEIGHT/2f;
+            Vector3 worldPos = gridCamera.GetComponent<Camera>().ScreenToWorldPoint(mousePos);
+            Vector2Int screenPosition = new(Mathf.RoundToInt(mousePos.x/8f) - WIDTH/2, Mathf.RoundToInt(mousePos.y/8f) - HEIGHT/2 - 1);
+            MouseDown?.Invoke(worldPos, screenPosition, 0);
         }
     }
 
@@ -103,9 +117,6 @@ public class DisplayGrid : MonoBehaviour
         float scaleX = (float)width / spriteFullWidth;
         float scaleY = (float)height / spriteFullHeight;
 
-        // set the sprite
-        newSquare.GetComponent<SpriteRenderer>().sprite = sprite;
-
         // set the scale
         newSquare.transform.localScale = new Vector3(scaleX, scaleY, 1);
 
@@ -165,14 +176,7 @@ public class DisplayGrid : MonoBehaviour
     {
         if (!cachedSprites.ContainsKey(spriteName))
         {
-            GameObject newFirstSquare = Instantiate(baseSquarePrefab, transform);
-            Sprite firstSprite = Resources.Load<Sprite>(spriteName);
-            if (firstSprite == null)
-            {
-                Debug.LogError("Sprite not found: " + spriteName);
-                return null;
-            }
-            newFirstSquare.GetComponent<SpriteRenderer>().sprite = firstSprite;
+            GameObject newFirstSquare = NewGameObject(spriteName);
             cachedSprites.Add(spriteName, new List<GameObject> { newFirstSquare });
             return newFirstSquare;
         }
@@ -186,15 +190,21 @@ public class DisplayGrid : MonoBehaviour
             }
         }
 
+        GameObject newSquare = NewGameObject(spriteName);
+        cachedSprites[spriteName].Add(newSquare);
+        return newSquare;
+    }
+
+    private GameObject NewGameObject(string spriteName)
+    {
         GameObject newSquare = Instantiate(baseSquarePrefab, transform);
-        Sprite sprite = Resources.Load<Sprite>(spriteName);
-        if (sprite == null)
+        Sprite firstSprite = Resources.Load<Sprite>(spriteName);
+        if (firstSprite == null)
         {
             Debug.LogError("Sprite not found: " + spriteName);
             return null;
         }
-        newSquare.GetComponent<SpriteRenderer>().sprite = sprite;
-        cachedSprites[spriteName].Add(newSquare);
+        newSquare.GetComponent<SpriteRenderer>().sprite = firstSprite;
         return newSquare;
     }
 
@@ -212,5 +222,44 @@ public class DisplayGrid : MonoBehaviour
         GameObject newLetter = Instantiate(letterPrefab, letterCanvas.transform);
         letters.Add(newLetter);
         return newLetter;
+    }
+
+    public void AnimateTo(string spriteName, float fromX, float fromY, float toX, float toY, int width, int height, float duration)
+    {
+        StartCoroutine(AnimateToCoroutine(spriteName, fromX, fromY, toX, toY, width, height, duration));
+    }
+
+    public IEnumerator AnimateToCoroutine(string spriteName, float fromX, float fromY, float toX, float toY, int width, int height, float duration)
+    {
+        // create a new GameObject
+        GameObject newSquare = NewGameObject(spriteName);
+        newSquare.transform.SetParent(transform);
+        newSquare.transform.localPosition = new Vector3(fromX, fromY, 0);
+
+        // set the scale
+        Sprite sprite = newSquare.GetComponent<SpriteRenderer>().sprite;
+        uint spritePixelWidth = (uint)sprite.rect.width;
+        uint spritePixelHeight = (uint)sprite.rect.height;
+        uint spriteFullWidth = spritePixelWidth / 8;
+        uint spriteFullHeight = spritePixelHeight / 8;
+        float scaleX = (float)width / spriteFullWidth;
+        float scaleY = (float)height / spriteFullHeight;
+        newSquare.transform.localScale = new Vector3(scaleX, scaleY, 1);
+
+        // set the sorting layer
+        newSquare.GetComponent<SpriteRenderer>().sortingOrder = 10;
+
+        // animate
+        float time = 0;
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+            float t = time / duration;
+            newSquare.transform.localPosition = new Vector3(Mathf.Lerp(fromX, toX, t), Mathf.Lerp(fromY, toY, t), 0);
+            yield return null;
+        }
+
+        // destroy the GameObject
+        Destroy(newSquare);
     }
 }

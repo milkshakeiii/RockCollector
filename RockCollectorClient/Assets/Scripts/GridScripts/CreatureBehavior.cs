@@ -140,13 +140,16 @@ public class DropOffRequestedItemsPriority : BehaviorPriority
         {
             return null;
         }
-        foreach (Placeable placeable in map.HeldPlaceablesOf(actor))
+        foreach (Placeable placeable in map.UnheldPlaceables())
         {
-            if (placeable is Item item)
+            if (placeable is Building requestorBuilding && map.DistanceBetween(placeable, homeBuilding) <= behaviorType.GetDropOffRange())
             {
-                if (homeBuilding.GetMissingItemAmount(item.itemType, map) > 0 && !actor.OutfitContains(item, map))
+                foreach (Placeable heldPlaceable in map.HeldPlaceablesOf(actor))
                 {
-                    return new DropOffActivity(homeBuilding);
+                    if (heldPlaceable is Item item && requestorBuilding.GetMissingItemAmount(item.itemType, map) > 0 && !actor.OutfitContains(item, map))
+                    {
+                        return new DropOffActivity(requestorBuilding);
+                    }
                 }
             }
         }
@@ -165,11 +168,30 @@ public class PickUpRequestedItemsPriority : BehaviorPriority
         }
         foreach (Placeable placeable in map.UnheldPlaceables())
         {
-            if (placeable is Item item)
+            if (placeable is Building requestorBuilding && map.DistanceBetween(placeable, homeBuilding) <= behaviorType.GetPickUpRange())
             {
-                if (homeBuilding.GetMissingItemAmount(item.itemType, map) > 0)
+                foreach (Placeable unheldPlaceable in map.UnheldPlaceables())
                 {
-                    return new PickUpActivity(item, false);
+                    if (unheldPlaceable is Item item)
+                    {
+                        if (requestorBuilding.GetMissingItemAmount(item.itemType, map) > 0)
+                        {
+                            return new PickUpActivity(item, false);
+                        }
+                    }
+                }
+                foreach (Placeable heldPlaceable in map.HeldPlaceables())
+                {
+                    // we may still want to pick up an item if it is in a building that
+                    // has a transport route to the requesting building
+                    if (heldPlaceable is Item item && map.HolderOf(item) is Building building)
+                    {
+                        if (building != requestorBuilding && map.TransportRouteExists(building, requestorBuilding) && requestorBuilding.GetMissingItemAmount(item.itemType, map) > 0)
+                        {
+                            Debug.Log("Picking up item for transport route");
+                            return new PickUpActivity(item, false);
+                        }
+                    }
                 }
             }
         }

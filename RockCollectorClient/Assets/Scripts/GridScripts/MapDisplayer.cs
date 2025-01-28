@@ -17,6 +17,7 @@ public class MapDisplayer : MonoBehaviour
     private Map map;
     private List<MapCommand> inputCommands = new();
     private BuildBuildingButton activePlaceBuildingButton = null;
+    private Placeable mouseDownPlaceable = null;
 
     private struct Selection
     {
@@ -33,7 +34,8 @@ public class MapDisplayer : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     IEnumerator Start()
     {
-        DisplayGrid.MouseUp += OnSelect;
+        DisplayGrid.MouseUp += OnMouseUpEvent;
+        DisplayGrid.MouseDown += OnMouseDownEvent;
 
         yield return new WaitForSeconds(1);
         map = new ();
@@ -55,6 +57,9 @@ public class MapDisplayer : MonoBehaviour
 
         Building barracks = new (EntityManager.buildingTypes["Barracks"], 1);
         map.Add(barracks, new Vector2Int(0, -10));
+
+        Building barracks2 = new(EntityManager.buildingTypes["Guild"], 1);
+        map.Add(barracks2, new Vector2Int(0, -15));
 
         //Building lair = new (EntityManager.buildingTypes["Graveyard"], -1);
         //map.Add(lair, new Vector2Int(10, -10));
@@ -98,7 +103,7 @@ public class MapDisplayer : MonoBehaviour
         return new Vector2Int(x, y);
     }
 
-    void OnSelect(Vector3 worldPosition, Vector2Int screenPosition, int mouseButton)
+    void OnMouseUpEvent(Vector3 worldPosition, Vector2Int screenPosition, int mouseButton)
     {
         // check if this is a button press
         Debug.Log(screenPosition);
@@ -114,6 +119,18 @@ public class MapDisplayer : MonoBehaviour
             }
         }
 
+        // if the leftMouseSelection is not null and this click is in the left 1/8 of the screen, do nothing
+        if (leftMouseSelection.placeable != null && screenPosition.x < -DisplayGrid.WIDTH / 8)
+        {
+            return;
+        }
+
+        // if the rightMouseSelection is not null and this click is in the right 1/8 of the screen, do nothing
+        if (rightMouseSelection.placeable != null && screenPosition.x > 7 * DisplayGrid.WIDTH / 8)
+        {
+            return;
+        }
+
         // otherwise check for building placement
         Vector2Int gamePosition = WorldPositionToGamePosition(worldPosition);
         if (activePlaceBuildingButton != null)
@@ -123,6 +140,25 @@ public class MapDisplayer : MonoBehaviour
                 activePlaceBuildingButton = null;
             }
             return;
+        }
+
+        // otherwise check for dragging style input
+        if (mouseButton == 0 && mouseDownPlaceable != null)
+        {
+            // if the mouse is over a building and we were dragging from a building, make a transport route
+            Placeable mouseUpBuilding = map.PlaceablesAt(gamePosition).Find(placeable => placeable is Building);
+            if (mouseUpBuilding != null && mouseDownPlaceable is Building mouseDownBuilding && mouseDownBuilding != mouseUpBuilding)
+            {
+                Building sourceBuilding = (Building)mouseDownPlaceable;
+                Building targetBuilding = (Building)mouseUpBuilding;
+                inputCommands.Add(new MakeTransportRoute(map.PositionOf(sourceBuilding), map.PositionOf(targetBuilding)));
+                // visual feedback for the route
+                RouteFeedback(sourceBuilding, targetBuilding);
+                return;
+            }
+
+            // unset the mouseDownPlaceable because the drag is over
+            mouseDownPlaceable = null;
         }
 
         // otherwise check for clicked placeables
@@ -164,6 +200,40 @@ public class MapDisplayer : MonoBehaviour
         else
         {
             rightMouseSelection = selection;
+        }
+
+        if (selection.placeable is Building building)
+        {
+            AllRoutesFeedback(building);
+        }
+    }
+
+    void OnMouseDownEvent(Vector3 worldPosition, Vector2Int screenPosition, int mouseButton)
+    {
+        // if the leftMouseSelection is not null and this click is in the left 1/8 of the screen, do nothing
+        if (leftMouseSelection.placeable != null && screenPosition.x < -DisplayGrid.WIDTH / 8)
+        {
+            return;
+        }
+
+        // if the rightMouseSelection is not null and this click is in the right 1/8 of the screen, do nothing
+        if (rightMouseSelection.placeable != null && screenPosition.x > 7 * DisplayGrid.WIDTH / 8)
+        {
+            return;
+        }
+
+        // don't set mouseDownPlaceable if we are placing a building
+        if (activePlaceBuildingButton != null)
+        {
+            return;
+        }
+
+        // otherwise, set the mouseDownPlaceable to the clicked placeable if there is one
+        Vector2Int gamePosition = WorldPositionToGamePosition(worldPosition);
+        List<Placeable> placeables = map.PlaceablesAt(gamePosition);
+        if (placeables.Count > 0)
+        {
+            mouseDownPlaceable = placeables[0];
         }
     }
 
@@ -280,6 +350,7 @@ public class MapDisplayer : MonoBehaviour
 
     private void DrawBuildingInfoPanel(Building building, Vector2 rootPosition, Map map, DisplayGrid displayGrid)
     {
+        // spawn creature buttons
         List<CreatureType> creatureTypes = building.GetCreatureTypesAvailable();
         for (int i = 0; i < creatureTypes.Count; i++)
         {
@@ -290,6 +361,7 @@ public class MapDisplayer : MonoBehaviour
             buttonRectsToButtons[rectInt] = spawnCreatureButton;
         }
 
+        // requestable items
         List<ItemType> requestableItemTypes = building.GetRequestableItemTypes();
         for (int i = 0; i < requestableItemTypes.Count; i++)
         {
@@ -315,6 +387,7 @@ public class MapDisplayer : MonoBehaviour
                 Color.black);
         }
 
+        // build building buttons
         List<BuildingType> buildableBuildingTypes = building.buildingType.GetBuildableBuildingTypes();
         for (int i = 0; i < buildableBuildingTypes.Count; i++)
         {
@@ -347,6 +420,36 @@ public class MapDisplayer : MonoBehaviour
             0,
             0,
             true);
+    }
+
+    private void AllRoutesFeedback(Building building)
+    {
+        // visual feedback for all routes to and from the building
+        foreach (Placeable placeable in map.UnheldPlaceables())
+        {
+            if (placeable is Building otherBuilding)
+            {
+                if (map.TransportRouteExists(building, otherBuilding))
+                {
+                    RouteFeedback(building, otherBuilding);
+                }
+                if (map.TransportRouteExists(otherBuilding, building))
+                {
+                    RouteFeedback(otherBuilding, building);
+                }
+            }
+        }
+    }
+
+    private void RouteFeedback(Building sourceBuilding, Building targetBuilding)
+    {
+        displayGrid.AnimateTo(
+            "Art/UI/selected_button",
+            (map.PositionOf(sourceBuilding).x + sourceBuilding.buildingType.GetSize() / 2f) * cellsPerSquare - 2,
+            (map.PositionOf(sourceBuilding).y + sourceBuilding.buildingType.GetSize() / 2f) * cellsPerSquare - 2,
+            (map.PositionOf(targetBuilding).x + targetBuilding.buildingType.GetSize() / 2f) * cellsPerSquare - 2,
+            (map.PositionOf(targetBuilding).y + targetBuilding.buildingType.GetSize() / 2f) * cellsPerSquare - 2,
+            4, 4, 1f);
     }
 }
 

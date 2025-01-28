@@ -97,24 +97,19 @@ public abstract class Activity
         return map.PlaceableExists(originalPlaceable);
     }
 
-    public bool IsSourcePlaceableClaimed()
+    public virtual bool TryClaimPlaceables(Creature performer, Map map)
     {
-        return sourcePlaceable?.IsClaimed() ?? false;
-    }
-
-    public void MarkSourcePlaceableClaimed()
-    {
+        if (sourcePlaceable.IsClaimed())
+        {
+            return false;
+        }
         sourcePlaceable?.Claim();
+        return true;
     }
 
-    public void MarkSourcePlaceableUnclaimed()
+    public virtual void UnclaimPlaceables(Creature performer, Map map)
     {
         sourcePlaceable?.Unclaim();
-    }
-
-    public virtual bool ClaimsSourcePlaceable()
-    {
-        return true;
     }
 }
 
@@ -150,9 +145,15 @@ public class HuntActivity : Activity
 
     }
 
-    public override bool ClaimsSourcePlaceable()
+    public override bool TryClaimPlaceables(Creature performer, Map map)
     {
-        return false;
+        // do nothing
+        return true;
+    }
+
+    public override void UnclaimPlaceables(Creature performer, Map map)
+    {
+        // do nothing
     }
 
     public override int ProximityRequirement(Creature forCreature, Map map)
@@ -201,6 +202,48 @@ public class CraftActivity : Activity
 
     }
 
+    private HashSet<Item> ConsumedItems(Creature performer, Map map)
+    {
+        // how many of each input item are demanded
+        Dictionary<ItemType, int> countsRequired = new();
+        foreach (ItemType inputItem in craftingInputItems)
+        {
+            if (countsRequired.ContainsKey(inputItem))
+            {
+                countsRequired[inputItem] += 1;
+            }
+            else
+            {
+                countsRequired[inputItem] = 1;
+            }
+        }
+
+        // consume held items first before consuming workshop items
+        List<Placeable> availableItems = new(map.HeldPlaceablesOf(performer));
+        availableItems.AddRange(map.HeldPlaceablesOf(Workshop()));
+
+        HashSet<Item> consumedItems = new();
+        foreach (ItemType inputType in countsRequired.Keys)
+        {
+            // consume input items until we run out of items or we reach the expected values demanded
+            int amountCollected = 0;
+            foreach (Placeable availableItem in availableItems)
+            {
+                if (availableItem is Item item && !consumedItems.Contains(item) && item.itemType.GetName() == inputType.GetName())
+                {
+                    consumedItems.Add(item);
+
+                    amountCollected += 1;
+                    if (amountCollected >= countsRequired[inputType])
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+        return consumedItems;
+    }
+
     private Building Workshop()
     {
         return (Building)sourcePlaceable;
@@ -225,6 +268,7 @@ public class CraftActivity : Activity
             return true;
         }
 
+        // check that the performer or the workshop has the required input items
         foreach (ItemType inputItem in craftingOutputItem.GetCraftingInputs())
         {
             bool itemFound = false;
@@ -266,43 +310,7 @@ public class CraftActivity : Activity
 
     public override void Perform(Creature performer, Map map)
     {
-        // how many of each input item are demanded
-        Dictionary<ItemType, int> countsRequired = new();
-        foreach (ItemType inputItem in craftingInputItems)
-        {
-            if (countsRequired.ContainsKey(inputItem))
-            {
-                countsRequired[inputItem] += 1;
-            }
-            else
-            {
-                countsRequired[inputItem] = 1;
-            }
-        }
-
-        // consume held items first before consuming workshop items
-        List<Placeable> availableItems = new(map.HeldPlaceablesOf(performer));
-        availableItems.AddRange(map.HeldPlaceablesOf(Workshop()));
-
-        HashSet<Item> consumedItems = new();
-        foreach (ItemType inputType in countsRequired.Keys)
-        {
-            // consume input items until we run out of items or we reach the expected values demanded
-            int amountCollected = 0;
-            foreach (Placeable availableItem in availableItems)
-            {
-                if (availableItem is Item item && !consumedItems.Contains(item) && item.itemType.GetName() == inputType.GetName())
-                {
-                    consumedItems.Add(item);
-
-                    amountCollected += 1;
-                    if (amountCollected >= countsRequired[inputType])
-                    {
-                        break;
-                    }
-                }
-            }
-        }
+        HashSet<Item> consumedItems = ConsumedItems(performer, map);
 
         // consume the items
         foreach (Item consumedItem in consumedItems)
@@ -440,9 +448,15 @@ public class RestActivity : Activity
 
     }
 
-    public override bool ClaimsSourcePlaceable()
+    public override bool TryClaimPlaceables(Creature performer, Map map)
     {
-        return false;
+        // we don't need to claim the building
+        return true;
+    }
+
+    public override void UnclaimPlaceables(Creature performer, Map map)
+    {
+        // do nothing
     }
 
     public Building Building()
@@ -474,9 +488,15 @@ public class IdleActivity : Activity
 
     }
 
-    public override bool ClaimsSourcePlaceable()
+    public override bool TryClaimPlaceables(Creature performer, Map map)
     {
-        return false;
+        // do nothing
+        return true;
+    }
+
+    public override void UnclaimPlaceables(Creature performer, Map map)
+    {
+        // do nothing
     }
 
     public override int ProximityRequirement(Creature forCreature, Map map)
@@ -509,9 +529,15 @@ public class WanderActivity : Activity
         this.range = range;
     }
 
-    public override bool ClaimsSourcePlaceable()
+    public override bool TryClaimPlaceables(Creature performer, Map map)
     {
-        return false;
+        // do nothing
+        return true;
+    }
+
+    public override void UnclaimPlaceables(Creature performer, Map map)
+    {
+        // do nothing
     }
 
     public override int ProximityRequirement(Creature forCreature, Map map)

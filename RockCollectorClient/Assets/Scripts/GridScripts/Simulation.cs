@@ -112,6 +112,8 @@ public class Map
 
     private Dictionary<Creature, HashSet<Item>> creatureOutfits = new();
 
+    private HashSet<(Building, Building)> transportRoutes = new();
+
     private int currentTick = 0;
 
     public Map()
@@ -171,6 +173,12 @@ public class Map
             {
                 deepCopy.creatureOutfits[(Creature)placeableCopies[creature]].Add((Item)placeableCopies[item]);
             }
+        }
+
+        deepCopy.transportRoutes = new HashSet<(Building, Building)>();
+        foreach ((Building, Building) route in transportRoutes)
+        {
+            deepCopy.transportRoutes.Add(((Building)placeableCopies[route.Item1], (Building)placeableCopies[route.Item2]));
         }
 
         deepCopy.currentTick = currentTick;
@@ -302,6 +310,23 @@ public class Map
             if (creatureOutfits.ContainsKey(outfitCreature))
             {
                 creatureOutfits.Remove(outfitCreature);
+            }
+        }
+
+        // If this is a building, remove all transport routes to/from it
+        if (placeable is Building building)
+        {
+            List<(Building, Building)> routesToRemove = new();
+            foreach ((Building, Building) route in transportRoutes)
+            {
+                if (route.Item1 == building || route.Item2 == building)
+                {
+                    routesToRemove.Add(route);
+                }
+            }
+            foreach ((Building, Building) route in routesToRemove)
+            {
+                transportRoutes.Remove(route);
             }
         }
 
@@ -603,6 +628,16 @@ public class Map
             return new();
         }
         return new(creatureOutfits[creature]);
+    }
+
+    public void AddTransportRoute(Building sourceBuilding, Building destinationBuilding)
+    {
+        transportRoutes.Add((sourceBuilding, destinationBuilding));
+    }
+
+    public bool TransportRouteExists(Building sourceBuilding, Building destinationBuilding)
+    {
+        return transportRoutes.Contains((sourceBuilding, destinationBuilding));
     }
 }
 

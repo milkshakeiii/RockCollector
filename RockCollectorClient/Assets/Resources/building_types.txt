@@ -23,7 +23,7 @@ name:Guild
 supportedCreatureTypes:Woodcrafter
 supportedCreatureCounts:2
 supportedCreatureSpawnTimes:500
-size:5
+size:4
 maxHealth:100
 
 name:Graveyard

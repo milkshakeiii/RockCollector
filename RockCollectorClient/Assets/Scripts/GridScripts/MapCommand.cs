@@ -152,3 +152,69 @@ public class BuildBuilding : MapCommand
         map.Add(building, builtBuildingPosition);
     }
 }
+
+public class MakeTransportRoute : MapCommand
+{
+    private Vector2Int sourceBuildingPosition;
+    private Vector2Int destinationBuildingPosition;
+
+    public MakeTransportRoute(Vector2Int sourceBuildingPosition, Vector2Int destinationBuildingPosition)
+    {
+        this.sourceBuildingPosition = sourceBuildingPosition;
+        this.destinationBuildingPosition = destinationBuildingPosition;
+    }
+
+    public override bool CheckStillValid(Map map)
+    {
+        bool sourceFound = false;
+        bool destinationFound = false;
+        List<Placeable> placeablesAtSource = map.PlaceablesAt(sourceBuildingPosition);
+        foreach (Placeable placeable in placeablesAtSource)
+        {
+            if (placeable is Building)
+            {
+                sourceFound = true;
+                break;
+            }
+        }
+        List<Placeable> placeablesAtDestination = map.PlaceablesAt(destinationBuildingPosition);
+        foreach (Placeable placeable in placeablesAtDestination)
+        {
+            if (placeable is Building)
+            {
+                destinationFound = true;
+                break;
+            }
+        }
+        return sourceFound && destinationFound;
+    }
+
+    public override void Execute(Map map)
+    {
+        Building sourceBuilding = null;
+        List<Placeable> placeablesAtPosition = map.PlaceablesAt(sourceBuildingPosition);
+        foreach (Placeable placeable in placeablesAtPosition)
+        {
+            if (placeable is Building building)
+            {
+                sourceBuilding = building;
+                break;
+            }
+        }
+        Building destinationBuilding = null;
+        placeablesAtPosition = map.PlaceablesAt(destinationBuildingPosition);
+        foreach (Placeable placeable in placeablesAtPosition)
+        {
+            if (placeable is Building building)
+            {
+                destinationBuilding = building;
+                break;
+            }
+        }
+        if (sourceBuilding == null || destinationBuilding == null)
+        {
+            throw new System.Exception("Source or destination building not found");
+        }
+        map.AddTransportRoute(sourceBuilding, destinationBuilding);
+    }
+}

@@ -689,7 +689,7 @@ public class Creature : Destructable
             Debug.Log("Activity finished " + currentActivity);
             // Something else completed the activity this frame
             // or there is no activity assigned
-            AbandonCurrentActivity();
+            AbandonCurrentActivity(map);
             return;
         }
         else if (currentActivity.DistanceTo(this, map) > currentActivity.ProximityRequirement(this, map))
@@ -703,7 +703,7 @@ public class Creature : Destructable
             if (currentActivity.IsCompletedOrImpossible(map, this))
             {
                 Debug.Log("Activity finished " + currentActivity);
-                AbandonCurrentActivity(); // Otherwise, there would be a "stunned" frame
+                AbandonCurrentActivity(map); // Otherwise, there would be a "stunned" frame
             }
             return;
         }
@@ -712,16 +712,12 @@ public class Creature : Destructable
     private void TryPromoteStagedActivity(Map map)
     {
         currentActivity = stagedActivity;
-        if (currentActivity.SuccessfulBackConversion(map) && !currentActivity.IsSourcePlaceableClaimed())
+        // when we have a new activity, we need to mark the target placeables as claimed
+        // new activities always are assigned here
+        // Debug.Log("Activity promoted: " + currentActivity + " " + currentActivity.GetLocation(map));
+        if (currentActivity.SuccessfulBackConversion(map) && currentActivity.TryClaimPlaceables(this, map))
         {
             stagedActivity = null;
-            // when we have a new activity, we need to mark the target placeable as claimed
-            // new activities always are assigned here
-            // Debug.Log("Activity promoted: " + currentActivity + " " + currentActivity.GetLocation(map));
-            if (currentActivity.ClaimsSourcePlaceable())
-            {
-                currentActivity.MarkSourcePlaceableClaimed();
-            }
         }
         else
         {
@@ -790,14 +786,11 @@ public class Creature : Destructable
         return location - currentPosition;
     }
 
-    public void AbandonCurrentActivity()
+    public void AbandonCurrentActivity(Map map)
     {
         if (currentActivity != null)
         {
-            if (currentActivity.ClaimsSourcePlaceable())
-            {
-                currentActivity.MarkSourcePlaceableUnclaimed();
-            }
+            currentActivity.UnclaimPlaceables(this, map);
             currentActivity = null;
             stagedActivity = null;
         }
@@ -1097,7 +1090,7 @@ public class CreatureSelf
 
     public void AbandonCurrentActivity()
     {
-        self.AbandonCurrentActivity();
+        self.AbandonCurrentActivity(map);
     }
 
     public int GetMaxHealth()
