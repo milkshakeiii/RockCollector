@@ -345,7 +345,7 @@ public class Tester : MonoBehaviour
         // test pick up hammer for repair
         Activity pickUpActivity = behavior.NextActivity(map, testCreature);
         Assert(pickUpActivity is PickUpActivity, "Activity should be pick up");
-        Assert(pickUpActivity.GetLocation(map) == new Vector2Int(0, 0), "Pick up location");
+        Assert(pickUpActivity.GetLocation(testCreature, map) == new Vector2Int(0, 0), "Pick up location");
 
         map.Remove(hammer);
         map.AddHeld(testCreature, hammer);
@@ -354,7 +354,7 @@ public class Tester : MonoBehaviour
         farm.TakeDamage(1);
         Activity repairActivity = behavior.NextActivity(map, testCreature);
         Assert(repairActivity is RepairActivity, "Activity should be repair");
-        Assert(repairActivity.GetLocation(map) == map.PositionOf(farm), "Repair location");
+        Assert(repairActivity.GetLocation(testCreature, map) == map.PositionOf(farm), "Repair location");
 
         farm.TakeDamage(-1);
 
@@ -363,16 +363,16 @@ public class Tester : MonoBehaviour
         Item log = new (EntityManager.itemTypes["Log"]);
         map.AddHeld(testCreature, log);
         Activity dropOffActivity = behavior.NextActivity(map, testCreature);
-        Assert(dropOffActivity is DropOffActivity, "Activity should be drop off");
-        Assert(dropOffActivity.GetLocation(map) == map.PositionOf(farm), "Drop off location");
+        Assert(dropOffActivity is DeliverActivity, "Activity should be deliver");
+        Assert(dropOffActivity.GetLocation(testCreature, map) == map.PositionOf(farm), "Drop off location");
 
         map.Remove(log);
         map.Add(log, new Vector2Int(-2, -2));
 
         // test PickUpRequestedItems
         Activity pickUpActivity2 = behavior.NextActivity(map, testCreature);
-        Assert(pickUpActivity2 is PickUpActivity, "Activity should be pick up");
-        Assert(pickUpActivity2.GetLocation(map) == new Vector2Int(-2, -2), "Pick up location");
+        Assert(pickUpActivity2 is DeliverActivity, "Activity should be deliver");
+        Assert(pickUpActivity2.GetLocation(testCreature, map) == new Vector2Int(-2, -2), "Pick up location");
 
         map.Remove(log);
 
@@ -383,7 +383,7 @@ public class Tester : MonoBehaviour
         map.AddHeld(testCreature, axe);
         Activity harvestActivity = behavior.NextActivity(map, testCreature);
         Assert(harvestActivity is HarvestActivity, "Activity should be harvest");
-        Assert(harvestActivity.GetLocation(map) == map.PositionOf(tree), "Harvest location");
+        Assert(harvestActivity.GetLocation(testCreature, map) == map.PositionOf(tree), "Harvest location");
 
         map.Remove(axe);
         map.Add(axe, new Vector2Int(-2, -2));
@@ -391,7 +391,7 @@ public class Tester : MonoBehaviour
         // test pick up axe for harvest
         Activity pickUpActivity3 = behavior.NextActivity(map, testCreature);
         Assert(pickUpActivity3 is PickUpActivity, "Activity should be pick up");
-        Assert(pickUpActivity3.GetLocation(map) == new Vector2Int(-2, -2), "Pick up location");
+        Assert(pickUpActivity3.GetLocation(testCreature, map) == new Vector2Int(-2, -2), "Pick up location");
 
         map.Remove(axe);
 
@@ -403,7 +403,7 @@ public class Tester : MonoBehaviour
         map.AddHeld(farm, log2);
         Activity craftActivity = behavior.NextActivity(map, testCreature);
         Assert(craftActivity is CraftActivity, "Activity should be craft");
-        Assert(craftActivity.GetLocation(map) == map.PositionOf(farm), "Craft location");
+        Assert(craftActivity.GetLocation(testCreature, map) == map.PositionOf(farm), "Craft location");
 
         // test RestAtHomeBuilding
         farm.ChangeRequestedItemAmount(EntityManager.itemTypes["Axe"], 0);
@@ -411,7 +411,7 @@ public class Tester : MonoBehaviour
         farm.ChangeRequestedItemAmount(EntityManager.itemTypes["Flint"], 0);
         Activity restActivity = behavior.NextActivity(map, testCreature);
         Assert(restActivity is RestActivity, "Activity should be rest");
-        Assert(restActivity.GetLocation(map) == map.PositionOf(farm), "Rest location");
+        Assert(restActivity.GetLocation(testCreature, map) == map.PositionOf(farm), "Rest location");
     }
 
     void Assert(bool condition, string message)

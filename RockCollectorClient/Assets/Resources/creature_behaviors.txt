@@ -1,5 +1,5 @@
 name:Peasant Behavior
-priorities:Repair Damaged Buildings,Drop Off Requested Items,Pick Up Requested Items,Harvest Requested Items,Craft Items,Rest,Idle
+priorities:Repair Damaged Buildings,Deliver Requested Items,Harvest Requested Items,Craft Items,Rest,Idle
 repairRange:0
 dropOffRange:0
 pickUpRange:999
@@ -16,7 +16,7 @@ huntMaximumLevelDifference:999
 wanderRange:5
 
 name:Warrior Behavior
-priorities:Equip,Hunt,Drop Off Requested Items,Pick Up Requested Items,Rest,Wander
+priorities:Equip,Hunt,Deliver Requested Items,Rest,Wander
 equipCategories:swords,shields
 equipRange:999
 huntRange:100
@@ -29,7 +29,7 @@ restRange:0
 wanderRange:5
 
 name:Woodcrafter Behavior
-priorities:Repair Damaged Buildings,Drop Off Requested Items,Pick Up Requested Items,Craft Items,Rest,Idle
+priorities:Repair Damaged Buildings,Deliver Requested Items,Craft Items,Rest,Idle
 repairRange:0
 dropOffRange:0
 pickUpRange:999

@@ -38,13 +38,13 @@ public abstract class Activity
         this.position = position;
     }
 
-    public Vector2Int GetLocation(Map map)
+    public virtual Vector2Int GetLocation(Creature performer, Map map)
     {
         if (sourcePlaceable != null)
         {
             return map.PositionOf(sourcePlaceable);
         }
-        if (position != Vector2Int.zero)
+        if (position != NULL_POSITION)
         {
             return position;
         }
@@ -60,7 +60,7 @@ public abstract class Activity
 
     public abstract void Perform(Creature performer, Map map);
 
-    public int DistanceTo(Creature creature, Map map)
+    public virtual int DistanceTo(Creature creature, Map map)
     {
         if (sourcePlaceable != null)
         {
@@ -340,6 +340,15 @@ public class PickUpActivity : Activity
         return (Item)sourcePlaceable;
     }
 
+    public override int DistanceTo(Creature creature, Map map)
+    {
+        if (map.HolderOf(Item()) != null)
+        {
+            return map.DistanceBetween(creature, map.HolderOf(Item()));
+        }
+        return map.DistanceTo(map.PositionOf(Item()), creature);
+    }
+
     public override bool IsCompletedOrImpossible(Map map, Creature performer)
     {
         return Item().IsConsumed() || (map.HolderOf(Item()) is Creature);
@@ -362,49 +371,95 @@ public class PickUpActivity : Activity
     }
 }
 
-public class DropOffActivity : Activity
+public class DeliverActivity : Activity
 {
-    public DropOffActivity(Building building) : base(0,
-        new(), null, new(), new(), building, Activity.NULL_POSITION)
-    {
+    private Vector2Int buildingLocation;
+    private bool delivered = false;
 
+    public DeliverActivity(Item item, Vector2Int buildingLocation) : base(0,
+        new(), null, new(), new(), item, Activity.NULL_POSITION)
+    {
+        this.buildingLocation = buildingLocation;
     }
 
-    public Building Building()
+    public Item Item()
     {
-        return (Building)sourcePlaceable;
+        return (Item)sourcePlaceable;
+    }
+
+    public override Vector2Int GetLocation(Creature performer, Map map)
+    {
+        if (map.HolderOf(Item()) != performer)
+        {
+            return map.PositionOf(Item());
+        }
+        return buildingLocation;
+    }
+
+    public override int DistanceTo(Creature creature, Map map)
+    {
+        if (map.HolderOf(Item()) != creature)
+        {
+            return map.DistanceTo(map.PositionOf(Item()), creature);
+        }
+        return map.DistanceBetween(creature, Building(map));
+    }
+
+    public Building Building(Map map)
+    {
+        List<Placeable> placeables = map.PlaceablesAt(buildingLocation);
+        foreach (Placeable placeable in placeables)
+        {
+            if (placeable is Building building)
+            {
+                return building;
+            }
+        }
+        return null;
     }
 
     public override bool IsCompletedOrImpossible(Map map, Creature performer)
     {
-        bool noItemsRequested = true;
-        List<Placeable> heldItems = new(map.HeldPlaceablesOf(performer));
-        foreach (Placeable heldItem in heldItems)
+        Building building = Building(map);
+        if (building == null)
         {
-            if (heldItem is Item item)
-            {
-                // only transfer items that are requested by the building
-                if (Building().GetMissingItemAmount(item.itemType, map) > 0 && !performer.OutfitContains(item, map))
-                {
-                    noItemsRequested = false;
-                    break;
-                }
-            }
+            return true;
         }
-        return Building().IsDestroyed() || map.HeldPlaceablesOf(performer).Count == 0 || noItemsRequested;
+        return building.IsDestroyed() || building.GetMissingItemAmount(Item().itemType, map) <= 0 || delivered;
     }
 
     public override void Perform(Creature performer, Map map)
     {
-        List<Placeable> heldPlaceables = new(map.HeldPlaceablesOf(performer));
-        foreach (Placeable heldItem in heldPlaceables)
+        Building building = Building(map);
+        if (building == null)
         {
-            if (heldItem is Item item)
+            throw new Exception("Building not found");
+        }
+        if (map.HolderOf(Item()) != performer)
+        {
+            if (map.IsHeld(Item()))
             {
-                // only transfer items that are requested by the building
-                if (Building().GetMissingItemAmount(item.itemType, map) > 0 && !performer.OutfitContains(item, map))
+                map.Transfer(Item(), performer);
+            }
+            else
+            {
+                map.PickUp(performer, Item());
+            }
+        }
+        else
+        {
+            List<Placeable> heldPlaceables = new(map.HeldPlaceablesOf(performer));
+            foreach (Placeable heldItem in heldPlaceables)
+            {
+                if (heldItem is Item item)
                 {
-                    map.Transfer(heldItem, Building());
+                    // only transfer items that are requested by the building
+                    if (building.GetMissingItemAmount(item.itemType, map) > 0 && !performer.OutfitContains(item, map))
+                    {
+                        Debug.Log("Delivering " + item.itemType.GetName() + " to " + building.buildingType.GetName());
+                        map.Transfer(heldItem, building);
+                        delivered = true;
+                    }
                 }
             }
         }

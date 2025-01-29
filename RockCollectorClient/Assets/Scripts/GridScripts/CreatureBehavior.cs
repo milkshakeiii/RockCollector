@@ -45,10 +45,8 @@ public abstract class BehaviorPriority
         {
             case "Repair Damaged Buildings":
                 return new RepairDamagedBuildingsPriority();
-            case "Drop Off Requested Items":
-                return new DropOffRequestedItemsPriority();
-            case "Pick Up Requested Items":
-                return new PickUpRequestedItemsPriority();
+            case "Deliver Requested Items":
+                return new DeliverRequestedItemsPriority();
             case "Harvest Requested Items":
                 return new HarvestRequestedItemsPriority();
             case "Craft Items":
@@ -131,33 +129,7 @@ public class RepairDamagedBuildingsPriority : BehaviorPriority
     }
 }
 
-public class DropOffRequestedItemsPriority : BehaviorPriority
-{
-    public override Activity ChosenActivityOrNull(Map map, Creature actor, CreatureBehaviorType behaviorType)
-    {
-        Building homeBuilding = actor.GetHomeBuilding(map);
-        if (homeBuilding == null)
-        {
-            return null;
-        }
-        foreach (Placeable placeable in map.UnheldPlaceables())
-        {
-            if (placeable is Building requestorBuilding && map.DistanceBetween(placeable, homeBuilding) <= behaviorType.GetDropOffRange())
-            {
-                foreach (Placeable heldPlaceable in map.HeldPlaceablesOf(actor))
-                {
-                    if (heldPlaceable is Item item && requestorBuilding.GetMissingItemAmount(item.itemType, map) > 0 && !actor.OutfitContains(item, map))
-                    {
-                        return new DropOffActivity(requestorBuilding);
-                    }
-                }
-            }
-        }
-        return null;
-    }
-}
-
-public class PickUpRequestedItemsPriority : BehaviorPriority
+public class DeliverRequestedItemsPriority : BehaviorPriority
 {
     public override Activity ChosenActivityOrNull(Map map, Creature actor, CreatureBehaviorType behaviorType)
     {
@@ -176,20 +148,27 @@ public class PickUpRequestedItemsPriority : BehaviorPriority
                     {
                         if (requestorBuilding.GetMissingItemAmount(item.itemType, map) > 0)
                         {
-                            return new PickUpActivity(item, false);
+                            return new DeliverActivity(item, map.PositionOf(requestorBuilding));
                         }
                     }
                 }
                 foreach (Placeable heldPlaceable in map.HeldPlaceables())
                 {
                     // we may still want to pick up an item if it is in a building that
-                    // has a transport route to the requesting building
+                    // has a transport route to the requesting building or if the item is held
+                    // by the actor and not part of the actor's outfit
                     if (heldPlaceable is Item item && map.HolderOf(item) is Building building)
                     {
                         if (building != requestorBuilding && map.TransportRouteExists(building, requestorBuilding) && requestorBuilding.GetMissingItemAmount(item.itemType, map) > 0)
                         {
-                            Debug.Log("Picking up item for transport route");
-                            return new PickUpActivity(item, false);
+                            return new DeliverActivity(item, map.PositionOf(requestorBuilding));
+                        }
+                    }
+                    if (heldPlaceable is Item item2 && map.HolderOf(item2) is Creature creature)
+                    {
+                        if (creature == actor && !actor.OutfitContains(item2, map) && requestorBuilding.GetMissingItemAmount(item2.itemType, map) > 0)
+                        {
+                            return new DeliverActivity(item2, map.PositionOf(requestorBuilding));
                         }
                     }
                 }

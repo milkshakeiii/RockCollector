@@ -394,6 +394,10 @@ public class Creature : Destructable
     /// <returns></returns>
     public int CraftingSkillModifier(string skillName, Map map)
     {
+        if (skillName == "none")
+        {
+            return -1;
+        }
         int modifier = SkillModifier(skillName, map);
         // check if the creature has a crafting ability and whether it boosts the skill
         bool hasCraftingAbility = false;
@@ -723,7 +727,7 @@ public class Creature : Destructable
         {
             try
             {
-                Debug.Log("Activity not promoted: " + currentActivity + " " + currentActivity.GetLocation(map));
+                Debug.Log("Activity not promoted: " + currentActivity + " " + currentActivity.GetLocation(this, map));
             }
             catch (System.Exception e)
             {
@@ -781,7 +785,7 @@ public class Creature : Destructable
 
     public Vector2Int DirectionToNextActivity(Map map)
     {
-        Vector2Int location = currentActivity.GetLocation(map);
+        Vector2Int location = currentActivity.GetLocation(this, map);
         Vector2Int currentPosition = map.PositionOf(this);
         return location - currentPosition;
     }
@@ -804,15 +808,6 @@ public class Creature : Destructable
     public override float HealthFraction()
     {
         return (float)(GetMaxHealth() - damageTaken) / GetMaxHealth();
-    }
-
-    public int MoveAndEstimate(Activity activity, Map map)
-    {
-        int distance = activity.DistanceTo(this, map);
-        int ticksPerSquare = MoveSpeed();
-        int estimatedTicks = distance * ticksPerSquare;
-        map.MovePlaceable(this, activity.GetLocation(map) - (Vector2Int.one * activity.ProximityRequirement(this, map)));
-        return estimatedTicks;
     }
 
     public void PickUp(Item item, Map map)
