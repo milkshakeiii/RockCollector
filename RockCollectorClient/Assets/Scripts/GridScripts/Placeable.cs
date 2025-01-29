@@ -222,6 +222,7 @@ public class Creature : Destructable
     public override Placeable DeepCopy()
     {
         Creature copy = new(name, teamNumber, creatureType, homePosition);
+        copy.name = name;
         copy.claimed = claimed; // from parent
         copy.damageTaken = damageTaken; // from parent
         copy.level = level;
@@ -230,8 +231,12 @@ public class Creature : Destructable
         copy.ticksLastUsed = new Dictionary<TypeAbility, int>(ticksLastUsed);
         copy.behavior = null;
         copy.currentActivity = null;
+        copy.stagedActivity = null;
         copy.newActivityComputation = null;
         copy.cooldownTicksRemaining = cooldownTicksRemaining;
+        copy.skillIncreases = new Dictionary<string, float>(skillIncreases);
+        copy.experience = experience;
+        copy.homePosition = homePosition;
         return copy;
     }
 

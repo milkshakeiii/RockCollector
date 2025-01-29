@@ -58,7 +58,7 @@ equipmentCategory:shields
 equipmentLevel:1
 craftingInputs:Log,Log
 craftingSkill:woodcrafting
-craftingLevel:1
+craftingLevel:0
 craftingTime:10
 skillBonusNames:defense
 skillBonusAmounts:4

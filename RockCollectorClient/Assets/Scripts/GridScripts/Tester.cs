@@ -176,20 +176,26 @@ public class Tester : MonoBehaviour
         Assert(map.HeldPlaceablesOf(farm).Count == 0, "Crafted item not removed from farm");
 
         // test crafting with duplicated inputs
+        Building barracks = new(EntityManager.buildingTypes["Barracks"], 1);
+        map.Add(barracks, new Vector2Int(5, 5));
+        Creature woodCrafter = new("George", 1, EntityManager.creatureTypes["Woodcrafter"], Map.NULL_POSITION);
+        barracks.ChangeRequestedItemAmount(EntityManager.itemTypes["Wooden Shield"], 1);
         Item log3 = new (EntityManager.itemTypes["Log"]);
-        map.AddHeld(farm, log3);
+        map.AddHeld(barracks, log3);
+        Activity craftActivity3 = new CraftActivity(EntityManager.itemTypes["Wooden Shield"], barracks);
+        Assert(craftActivity3.IsCompletedOrImpossible(map, woodCrafter), "Crafting should be impossible");
         Item log4 = new (EntityManager.itemTypes["Log"]);
-        map.AddHeld(farm, log4);
-        Activity craftActivity3 = new CraftActivity(EntityManager.itemTypes["Wooden Shield"], farm);
-        craftActivity3.Perform(testCreature, map);
+        map.AddHeld(barracks, log4);
+        craftActivity3.Perform(woodCrafter, map);
         Assert(log3.IsConsumed(), "Input item not consumed");
         Assert(log4.IsConsumed(), "Input item not consumed");
         map.Remove(log3);
         map.Remove(log4);
-        Assert(map.HeldPlaceablesOf(farm).Count == 1, "Crafted item not held by farm");
-        Item item3 = (Item)map.HeldPlaceablesOf(farm)[0];
+        Assert(map.HeldPlaceablesOf(barracks).Count == 1, "Crafted item not held by farm");
+        Item item3 = (Item)map.HeldPlaceablesOf(barracks)[0];
         Assert(item3.itemType.GetName() == "Wooden Shield", "Crafted item not Shield");
         map.Remove(item3);
+        barracks.ChangeRequestedItemAmount(EntityManager.itemTypes["Wooden Shield"], 0);
 
         // test crafting with excessive inputs
         Item log5 = new (EntityManager.itemTypes["Log"]);

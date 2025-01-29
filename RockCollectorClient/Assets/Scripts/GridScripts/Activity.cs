@@ -196,6 +196,8 @@ public class HuntActivity : Activity
 
 public class CraftActivity : Activity
 {
+    bool crafted = false;
+
     public CraftActivity(ItemType producedItemType, Building workshop) : base(0,
         producedItemType.GetCraftingInputs(), producedItemType, new(), new(), workshop, Activity.NULL_POSITION)
     {
@@ -256,7 +258,14 @@ public class CraftActivity : Activity
 
     public override bool IsCompletedOrImpossible(Map map, Creature performer)
     {
-        if (Workshop().IsDestroyed())
+        // check if the item has already been crafted or the workshop is destroyed
+        if (crafted || Workshop().IsDestroyed())
+        {
+            return true;
+        }
+
+        // check that the item is still requested
+        if (Workshop().GetMissingItemAmount(craftingOutputItem, map) <= 0)
         {
             return true;
         }
@@ -269,42 +278,11 @@ public class CraftActivity : Activity
         }
 
         // check that the performer or the workshop has the required input items
-        foreach (ItemType inputItem in craftingOutputItem.GetCraftingInputs())
+        if (ConsumedItems(performer, map).Count != craftingInputItems.Count)
         {
-            bool itemFound = false;
-
-            // check if the workshop is holding the input item
-            List<Placeable> heldItemsWorkshop = new(map.HeldPlaceablesOf(Workshop()));
-            foreach (Placeable heldItem in heldItemsWorkshop)
-            {
-                if (heldItem is Item item && item.itemType.GetName() == inputItem.GetName() && !item.IsConsumed())
-                {
-                    itemFound = true;
-                    break;
-                }
-            }
-
-            // check if the performer is holding the input item
-            if (!itemFound)
-            {
-                List<Placeable> heldItems = new(map.HeldPlaceablesOf(performer));
-                foreach (Placeable heldItem in heldItems)
-                {
-                    if (heldItem is Item item && item.itemType.GetName() == inputItem.GetName() && !item.IsConsumed())
-                    {
-                        itemFound = true;
-                        break;
-                    }
-                }
-            }
-
-            if (!itemFound)
-            {
-                // if an input item is missing, the crafting activity is completed (cannot continue)
-                return true;
-            }
+            return true;
         }
-
+        
         return false;
     }
 
@@ -321,6 +299,8 @@ public class CraftActivity : Activity
         // create the output item
         Item outputItem = new(craftingOutputItem);
         map.AddHeld(Workshop(), outputItem);
+        crafted = true;
+        performer.GainExperience(craftingOutputItem.GetCraftingLevel() + 10, craftingOutputItem.GetCraftingSkill());
         performer.AddCooldown(outputItem.itemType.GetCraftingTime());
     }
 }
@@ -398,7 +378,11 @@ public class DeliverActivity : Activity
 
     public override int DistanceTo(Creature creature, Map map)
     {
-        if (map.HolderOf(Item()) != creature)
+        if (map.HolderOf(Item()) != creature && map.IsHeld(Item()))
+        {
+            return map.DistanceBetween(creature, map.HolderOf(Item()));
+        }
+        else if (map.HolderOf(Item()) != creature)
         {
             return map.DistanceTo(map.PositionOf(Item()), creature);
         }

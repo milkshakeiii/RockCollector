@@ -242,32 +242,47 @@ public class CraftItemsPriority : BehaviorPriority
         {
             return null;
         }
-        foreach (ItemType itemType in homeBuilding.GetRequestableItemTypes())
+        foreach (Placeable placeable in map.UnheldPlaceables())
         {
-            if (homeBuilding.GetMissingItemAmount(itemType, map) <= 0)
+            if (placeable is Building craftBuilding && craftBuilding.teamNumber == actor.teamNumber && map.DistanceBetween(homeBuilding, craftBuilding) <= behaviorType.GetCraftRange())
             {
-                continue;
-            }
-
-            // craft the first item that is missing that can be crafted
-            List<ItemType> inputItemTypes = itemType.GetCraftingInputs();
-            bool canCraft = true;
-            foreach (ItemType inputItemType in inputItemTypes)
-            {
-                if (homeBuilding.GetItemCount(inputItemType, map) <= 0)
+                foreach (ItemType itemType in craftBuilding.GetRequestableItemTypes())
                 {
-                    canCraft = false;
-                    break;
+                    if (craftBuilding.GetMissingItemAmount(itemType, map) <= 0)
+                    {
+                        continue;
+                    }
+
+                    // craft the first item that is missing that can be crafted
+                    List<ItemType> inputItemTypes = itemType.GetCraftingInputs();
+                    Dictionary<ItemType, int> neededCount = new Dictionary<ItemType, int>();
+                    foreach (ItemType inputItemType in inputItemTypes)
+                    {
+                        if (!neededCount.ContainsKey(inputItemType))
+                        {
+                            neededCount[inputItemType] = 0;
+                        }
+                        neededCount[inputItemType]++;
+                    }
+                    bool canCraft = true;
+                    foreach (ItemType inputItemType in inputItemTypes)
+                    {
+                        if (craftBuilding.GetItemCount(inputItemType, map) < neededCount[inputItemType])
+                        {
+                            canCraft = false;
+                            break;
+                        }
+                    }
+
+                    // make sure you have a high enough skill level
+                    string neededSkill = itemType.GetCraftingSkill();
+                    canCraft = canCraft && actor.CraftingSkillModifier(neededSkill, map) >= itemType.GetCraftingLevel();
+
+                    if (canCraft)
+                    {
+                        return new CraftActivity(itemType, craftBuilding);
+                    }
                 }
-            }
-
-            // make sure you have a high enough skill level
-            string neededSkill = itemType.GetCraftingSkill();
-            canCraft = canCraft && actor.CraftingSkillModifier(neededSkill, map) >= itemType.GetCraftingLevel();
-
-            if (canCraft)
-            {
-                return new CraftActivity(itemType, homeBuilding);
             }
         }
         return null;
