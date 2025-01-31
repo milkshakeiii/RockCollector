@@ -61,8 +61,8 @@ public class MapDisplayer : MonoBehaviour
         Building barracks2 = new(EntityManager.buildingTypes["Guild"], 1);
         map.Add(barracks2, new Vector2Int(0, -15));
 
-        //Building lair = new (EntityManager.buildingTypes["Graveyard"], -1);
-        //map.Add(lair, new Vector2Int(10, -10));
+        Building lair = new (EntityManager.buildingTypes["Graveyard"], -1);
+        map.Add(lair, new Vector2Int(10, -10));
 
         for (int i = 1; i <= 3; i++)
         {
@@ -105,14 +105,17 @@ public class MapDisplayer : MonoBehaviour
 
     void OnMouseUpEvent(Vector3 worldPosition, Vector2Int screenPosition, int mouseButton)
     {
+        // always clear the mouseDownPlaceable
+        Placeable previousMouseDownPlaceable = mouseDownPlaceable;
+        mouseDownPlaceable = null;
+
         // check if this is a button press
         Debug.Log(screenPosition);
         foreach (RectInt rectInt in buttonRectsToButtons.Keys)
         {
-            Debug.Log("Checking button rect " + rectInt);
             if (rectInt.Contains(screenPosition))
             {
-                Debug.Log("Button clicked");
+                Debug.Log("Button clicked " + buttonRectsToButtons[rectInt].text);
                 Button callback = buttonRectsToButtons[rectInt];
                 callback.OnClick(this);
                 return;
@@ -120,13 +123,13 @@ public class MapDisplayer : MonoBehaviour
         }
 
         // if the leftMouseSelection is not null and this click is in the left 1/8 of the screen, do nothing
-        if (leftMouseSelection.placeable != null && screenPosition.x < -DisplayGrid.WIDTH / 8)
+        if (leftMouseSelection.placeable != null && screenPosition.x < -(DisplayGrid.WIDTH/2) + DisplayGrid.WIDTH/8)
         {
             return;
         }
 
         // if the rightMouseSelection is not null and this click is in the right 1/8 of the screen, do nothing
-        if (rightMouseSelection.placeable != null && screenPosition.x > 7 * DisplayGrid.WIDTH / 8)
+        if (rightMouseSelection.placeable != null && screenPosition.x > (DisplayGrid.WIDTH/2) - DisplayGrid.WIDTH/8)
         {
             return;
         }
@@ -143,22 +146,19 @@ public class MapDisplayer : MonoBehaviour
         }
 
         // otherwise check for dragging style input
-        if (mouseButton == 0 && mouseDownPlaceable != null)
+        if (mouseButton == 0 && previousMouseDownPlaceable != null)
         {
             // if the mouse is over a building and we were dragging from a building, make a transport route
             Placeable mouseUpBuilding = map.PlaceablesAt(gamePosition).Find(placeable => placeable is Building);
-            if (mouseUpBuilding != null && mouseDownPlaceable is Building mouseDownBuilding && mouseDownBuilding != mouseUpBuilding)
+            if (mouseUpBuilding != null && previousMouseDownPlaceable is Building mouseDownBuilding && mouseDownBuilding != mouseUpBuilding)
             {
-                Building sourceBuilding = (Building)mouseDownPlaceable;
+                Building sourceBuilding = (Building)previousMouseDownPlaceable;
                 Building targetBuilding = (Building)mouseUpBuilding;
                 inputCommands.Add(new MakeTransportRoute(map.PositionOf(sourceBuilding), map.PositionOf(targetBuilding)));
                 // visual feedback for the route
                 RouteFeedback(sourceBuilding, targetBuilding);
                 return;
             }
-
-            // unset the mouseDownPlaceable because the drag is over
-            mouseDownPlaceable = null;
         }
 
         // otherwise check for clicked placeables
@@ -346,6 +346,10 @@ public class MapDisplayer : MonoBehaviour
         {
             DrawBuildingInfoPanel(building, root, map, displayGrid);
         }
+        if (placeable is Creature creature)
+        {
+            DrawCreatureInfoPanel(creature, root, map, displayGrid);
+        }
     }
 
     private void DrawBuildingInfoPanel(Building building, Vector2 rootPosition, Map map, DisplayGrid displayGrid)
@@ -397,6 +401,16 @@ public class MapDisplayer : MonoBehaviour
             buildBuildingButton.Draw(displayGrid, rectInt, map, activePlaceBuildingButton != null);
             buttonRectsToButtons[rectInt] = buildBuildingButton;
         }
+    }
+
+    private void DrawCreatureInfoPanel(Creature creature, Vector2 rootPosition, Map map, DisplayGrid displayGrid)
+    {
+        // display the creature name
+        displayGrid.DisplayText(
+            creature.GetName() + " - Level " + creature.GetLevel(),
+            (int)rootPosition.x + 1,
+            (int)rootPosition.y + DisplayGrid.HEIGHT - 4,
+            Color.black);
     }
 
     public void SetPlaceBuildingButton(BuildBuildingButton button)
