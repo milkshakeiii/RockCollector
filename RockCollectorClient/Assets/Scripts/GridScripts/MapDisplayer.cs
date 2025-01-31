@@ -411,6 +411,128 @@ public class MapDisplayer : MonoBehaviour
             (int)rootPosition.x + 1,
             (int)rootPosition.y + DisplayGrid.HEIGHT - 4,
             Color.black);
+
+        // display the creature's portrait
+        displayGrid.DisplaySprite(
+            "Art/UI/plain_white",
+            (int)rootPosition.x + 3,
+            (int)rootPosition.y + DisplayGrid.HEIGHT - 7 - 24,
+            24,
+            24,
+            0,
+            1,
+            true);
+
+        // display the creature's attribute scores
+        int str, dex, con, intel, wis, cha;
+        str = creature.GetAttributeScore(AttributeScores.STRENGTH);
+        dex = creature.GetAttributeScore(AttributeScores.DEXTERITY);
+        con = creature.GetAttributeScore(AttributeScores.CONSTITUTION);
+        intel = creature.GetAttributeScore(AttributeScores.INTELLIGENCE);
+        wis = creature.GetAttributeScore(AttributeScores.WISDOM);
+        cha = creature.GetAttributeScore(AttributeScores.CHARISMA);
+        string strMod, dexMod, conMod, intMod, wisMod, chaMod;
+        strMod = ((str / 2) - 5).ToString("+0;-#");
+        dexMod = ((dex / 2) - 5).ToString("+0;-#");
+        conMod = ((con / 2) - 5).ToString("+0;-#");
+        intMod = ((intel / 2) - 5).ToString("+0;-#");
+        wisMod = ((wis / 2) - 5).ToString("+0;-#");
+        chaMod = ((cha / 2) - 5).ToString("+0;-#");
+        displayGrid.DisplayText(
+            "Strength: " + str + " (" + strMod + ")",
+            (int)rootPosition.x + 1,
+            (int)rootPosition.y + DisplayGrid.HEIGHT - 7 - 24 - 4,
+            Color.black);
+        displayGrid.DisplayText(
+            "Dexterity: " + dex + " (" + dexMod + ")",
+            (int)rootPosition.x + 1,
+            (int)rootPosition.y + DisplayGrid.HEIGHT - 7 - 24 - 4 * 2,
+            Color.black);
+        displayGrid.DisplayText(
+            "Constitution: " + con + " (" + conMod + ")",
+            (int)rootPosition.x + 1,
+            (int)rootPosition.y + DisplayGrid.HEIGHT - 7 - 24 - 4 * 3,
+            Color.black);
+        displayGrid.DisplayText(
+            "Intelligence: " + intel + " (" + intMod + ")",
+            (int)rootPosition.x + 1,
+            (int)rootPosition.y + DisplayGrid.HEIGHT - 7 - 24 - 4 * 4,
+            Color.black);
+        displayGrid.DisplayText(
+            "Wisdom: " + wis + " (" + wisMod + ")",
+            (int)rootPosition.x + 1,
+            (int)rootPosition.y + DisplayGrid.HEIGHT - 7 - 24 - 4 * 5,
+            Color.black);
+        displayGrid.DisplayText(
+            "Charisma: " + cha + " (" + chaMod + ")",
+            (int)rootPosition.x + 1,
+            (int)rootPosition.y + DisplayGrid.HEIGHT - 7 - 24 - 4 * 6,
+            Color.black);
+
+        // display a divider line
+        displayGrid.DisplaySprite(
+            "Art/UI/plain_black",
+            (int)rootPosition.x + 1,
+            (int)rootPosition.y + DisplayGrid.HEIGHT - 7 - 24 - 4 * 7,
+            DisplayGrid.WIDTH / 8 - 2,
+            1,
+            0,
+            1,
+            true);
+
+        // display the creature's skills
+        List<string> skillNames = creature.ListSkills();
+        for (int i = 0; i < skillNames.Count; i++)
+        {
+            string skillName = skillNames[i];
+            displayGrid.DisplayText(
+                skillName + " (" + creature.SkillModifier(skillName, map) + ")",
+                (int)rootPosition.x + 1,
+                (int)rootPosition.y + DisplayGrid.HEIGHT - 7 - 24 - 4 * (8 + i),
+                Color.black);
+        }
+
+        // display a divider line
+        displayGrid.DisplaySprite(
+            "Art/UI/plain_black",
+            (int)rootPosition.x + 1,
+            (int)rootPosition.y + DisplayGrid.HEIGHT - 7 - 24 - 4 * (8 + skillNames.Count),
+            DisplayGrid.WIDTH / 8 - 2,
+            1,
+            0,
+            1,
+            true);
+
+        // display the creature's inventory
+        List<Placeable> items = map.HeldPlaceablesOf(creature);
+        List<string> inventoryStrings = new List<string>();
+        foreach (Placeable placeable in items)
+        {
+            if (placeable is Item item)
+            {
+                string newPart = item.itemType.GetName() + ", ";
+                if (creature.OutfitContains(item, map))
+                {
+                    newPart = "<" + newPart + ">";
+                }
+                if (inventoryStrings.Count == 0 || inventoryStrings[inventoryStrings.Count - 1].Length + newPart.Length > 30)
+                {
+                    inventoryStrings.Add(newPart);
+                }
+                else
+                {
+                    inventoryStrings[inventoryStrings.Count - 1] += newPart;
+                }
+            }
+        }
+        for (int i = 0; i < inventoryStrings.Count; i++)
+        {
+            displayGrid.DisplayText(
+                inventoryStrings[i],
+                (int)rootPosition.x + 1,
+                (int)rootPosition.y + DisplayGrid.HEIGHT - 7 - 24 - 4 * (9 + skillNames.Count + i),
+                Color.black);
+        }
     }
 
     public void SetPlaceBuildingButton(BuildBuildingButton button)

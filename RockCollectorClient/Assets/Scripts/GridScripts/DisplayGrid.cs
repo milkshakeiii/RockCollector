@@ -130,13 +130,24 @@ public class DisplayGrid : MonoBehaviour
     }
     public void DisplayText(string text, int x, int y, Color color)
     {
+        bool bold = false;
         for (int i = 0; i < text.Length; i++)
         {
-            DisplayLetter(text[i], (x + i), y, color);
+            if (text[i] == '<')
+            {
+                bold = true;
+                continue;
+            }
+            if (text[i] == '>')
+            {
+                bold = false;
+                continue;
+            }
+            DisplayLetter(text[i], (x + i), y, color, bold);
         }
     }
 
-    private void DisplayLetter(char letter, int x, int y, Color color)
+    private void DisplayLetter(char letter, int x, int y, Color color, bool bold)
     {
         if (color == null)
         {
@@ -154,6 +165,7 @@ public class DisplayGrid : MonoBehaviour
         newLetter.GetComponent<RectTransform>().anchorMax = new Vector2(xMax, yMax);
         newLetter.GetComponent<RectTransform>().rect.Set(0, 0, 0, 0);
         newLetter.GetComponent<TMP_Text>().color = color;
+        newLetter.GetComponent<TMP_Text>().fontStyle = bold ? FontStyles.Bold : FontStyles.Normal;
     }
 
     public void Clear()

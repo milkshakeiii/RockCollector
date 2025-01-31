@@ -180,12 +180,24 @@ public abstract class DestructableView : PlaceableView
     }
 }
 
+public enum AttributeScores
+{
+    STRENGTH,
+    DEXTERITY,
+    CONSTITUTION,
+    INTELLIGENCE,
+    WISDOM,
+    CHARISMA
+}
+
 public class Creature : Destructable
 {
     private string name;
     public int teamNumber = 0; // negative numbers denote CPU teams, positive denote human player teams
 
     private CreatureType creatureType;
+
+    private Dictionary<AttributeScores, int> attributeScores;
 
     private int level = 0;
     private int experience = 0; // reset to 0 on level up
@@ -216,6 +228,13 @@ public class Creature : Destructable
         this.homePosition = homePosition;
 
         this.behavior = CreatureBehavior.FromName(creatureType.GetBehavior());
+
+        this.attributeScores = new Dictionary<AttributeScores, int>();
+        foreach (AttributeScores score in Enum.GetValues(typeof(AttributeScores)))
+        {
+            attributeScores[score] = 8 + new DieRoll(1, 6).Roll();
+        }
+
         LevelUp();
     }
 
@@ -223,6 +242,7 @@ public class Creature : Destructable
     {
         Creature copy = new(name, teamNumber, creatureType, homePosition);
         copy.name = name;
+        copy.attributeScores = new Dictionary<AttributeScores, int>(attributeScores);
         copy.claimed = claimed; // from parent
         copy.damageTaken = damageTaken; // from parent
         copy.level = level;
@@ -389,6 +409,12 @@ public class Creature : Destructable
             }
         }
         return modifier;
+    }
+
+    public List<string> ListSkills()
+    {
+        List<string> skills = new(skillIncreases.Keys);
+        return skills;
     }
 
     /// <summary>
@@ -899,6 +925,21 @@ public class Creature : Destructable
             }
         }
         return level;
+    }
+
+    public int GetAttributeScore(AttributeScores score)
+    {
+        int baseScore = attributeScores[score];
+        return score switch
+        {
+            AttributeScores.STRENGTH => baseScore + creatureType.GetStrengthBonus(),
+            AttributeScores.DEXTERITY => baseScore + creatureType.GetDexterityBonus(),
+            AttributeScores.CONSTITUTION => baseScore + creatureType.GetConstitutionBonus(),
+            AttributeScores.INTELLIGENCE => baseScore + creatureType.GetIntelligenceBonus(),
+            AttributeScores.WISDOM => baseScore + creatureType.GetWisdomBonus(),
+            AttributeScores.CHARISMA => baseScore + creatureType.GetCharismaBonus(),
+            _ => throw new System.Exception("Attribute score not found"),
+        };
     }
 }
 

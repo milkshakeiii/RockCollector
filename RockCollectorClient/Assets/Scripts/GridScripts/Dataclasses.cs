@@ -209,7 +209,7 @@ public static class EntityManager
     public static DieRoll GetDieRollAttribute(ReadOnlyDictionary<string, string> attributes, string key)
     {
         string[] parts = attributes[key].Split('d');
-        return new DieRoll { rolls = int.Parse(parts[0]), sides = int.Parse(parts[1]) };
+        return new DieRoll(int.Parse(parts[0]), int.Parse(parts[1]));
     }
 
     public static void ReadAllEntities()
@@ -678,6 +678,12 @@ public class DieRoll
     public int sides;
     public int rolls;
 
+    public DieRoll(int sides, int rolls)
+    {
+        this.sides = sides;
+        this.rolls = rolls;
+    }
+
     public override string ToString()
     {
         return rolls + "d" + sides;
@@ -690,6 +696,7 @@ public class DieRoll
 
     public int Roll()
     {
-        return UnityEngine.Random.Range(rolls, sides * rolls + 1);
+        System.Random random = new();
+        return random.Next(sides, rolls * sides + 1);
     }
 }
