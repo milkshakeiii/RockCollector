@@ -342,6 +342,10 @@ public class Creature : Destructable
 
     public void GainExperience(int encounterLevel, string skillUsed)
     {
+        if (teamNumber <= 0)
+        {
+            return; // only player creatures gain experience
+        }
         experience += (encounterLevel - 9) * (encounterLevel - 9);
         if (!skillIncreases.ContainsKey(skillUsed))
         {
@@ -407,6 +411,21 @@ public class Creature : Destructable
                     }
                 }
             }
+        }
+        if (!EntityManager.skillsToAttributeScores.ContainsKey(skillName))
+        {
+            throw new System.Exception("Key attribute score not found for skill: " + skillName);
+        }
+        string attributeName = EntityManager.skillsToAttributeScores[skillName];
+        AttributeScores score;
+        bool parseSuccess = Enum.TryParse(attributeName, true, out score);
+        if (parseSuccess)
+        {
+            modifier += GetAttributeModifier(score);
+        }
+        else
+        {
+            throw new System.Exception("Invalid attribute score string: " + attributeName);
         }
         return modifier;
     }
@@ -940,6 +959,11 @@ public class Creature : Destructable
             AttributeScores.CHARISMA => baseScore + creatureType.GetCharismaBonus(),
             _ => throw new System.Exception("Attribute score not found"),
         };
+    }
+
+    public int GetAttributeModifier(AttributeScores score)
+    {
+        return ((GetAttributeScore(score) / 2) - 5);
     }
 }
 

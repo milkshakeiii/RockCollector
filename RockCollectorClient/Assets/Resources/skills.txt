@@ -1,0 +1,9 @@
+chopping:strength
+woodcrafting:dexterity
+hammers:strength
+saws:dexterity
+axes:strength
+swords:strength
+cooking:wisdom
+defense:dexterity
+repair:intelligence

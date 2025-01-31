@@ -432,12 +432,12 @@ public class MapDisplayer : MonoBehaviour
         wis = creature.GetAttributeScore(AttributeScores.WISDOM);
         cha = creature.GetAttributeScore(AttributeScores.CHARISMA);
         string strMod, dexMod, conMod, intMod, wisMod, chaMod;
-        strMod = ((str / 2) - 5).ToString("+0;-#");
-        dexMod = ((dex / 2) - 5).ToString("+0;-#");
-        conMod = ((con / 2) - 5).ToString("+0;-#");
-        intMod = ((intel / 2) - 5).ToString("+0;-#");
-        wisMod = ((wis / 2) - 5).ToString("+0;-#");
-        chaMod = ((cha / 2) - 5).ToString("+0;-#");
+        strMod = creature.GetAttributeModifier(AttributeScores.STRENGTH).ToString("+0;-#");
+        dexMod = creature.GetAttributeModifier(AttributeScores.DEXTERITY).ToString("+0;-#");
+        conMod = creature.GetAttributeModifier(AttributeScores.CONSTITUTION).ToString("+0;-#");
+        intMod = creature.GetAttributeModifier(AttributeScores.INTELLIGENCE).ToString("+0;-#");
+        wisMod = creature.GetAttributeModifier(AttributeScores.WISDOM).ToString("+0;-#");
+        chaMod = creature.GetAttributeModifier(AttributeScores.CHARISMA).ToString("+0;-#");
         displayGrid.DisplayText(
             "Strength: " + str + " (" + strMod + ")",
             (int)rootPosition.x + 1,

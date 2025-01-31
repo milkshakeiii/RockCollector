@@ -17,6 +17,8 @@ public static class EntityManager
     public static Dictionary<string, BuildingType> buildingTypes = new();
     public static Dictionary<string, CreatureBehaviorType> creatureBehaviors = new();
 
+    public static Dictionary<string, string> skillsToAttributeScores = new();
+
     public static void StoreEntity(string identifier, Entity entity)
     {
         if (identifier == "feats")
@@ -54,6 +56,18 @@ public static class EntityManager
         else
         {
             throw new System.Exception("Unrecognized entity identifier");
+        }
+    }
+
+    public static void StoreMapEntry(string identifier, string key, string value)
+    {
+        if (identifier == "skills")
+        {
+            skillsToAttributeScores[key] = value;
+        }
+        else
+        {
+            throw new System.Exception("Unrecognized map identifier");
         }
     }
 
@@ -222,6 +236,7 @@ public static class EntityManager
         ReadEntity("item_types");
         ReadEntity("building_types");
         ReadEntity("creature_behaviors");
+        ReadMap("skills");
     }
 
     private static void ReadEntity(string identifier)
@@ -241,6 +256,21 @@ public static class EntityManager
                 string[] parts = line.Split(':');
                 currentItem[parts[0]] = parts[1][..^1];
             }
+        }
+    }
+
+    private static void ReadMap(string identifier)
+    {
+        TextAsset textAsset = Resources.Load<TextAsset>(identifier);
+        string[] lines = textAsset.text.Split('\n');
+        foreach (string line in lines)
+        {
+            if (line.Length==0)
+            {
+                continue;
+            }
+            string[] parts = line.Split(':');
+            StoreMapEntry(identifier, parts[0], parts[1][..^1]);
         }
     }
 }

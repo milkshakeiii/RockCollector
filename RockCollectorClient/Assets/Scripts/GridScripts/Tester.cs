@@ -288,10 +288,10 @@ public class Tester : MonoBehaviour
     {
         Map map = new();
         Creature testCreature = new("Skele1", 0, EntityManager.creatureTypes["Skeleton"], Map.NULL_POSITION);
-        testCreature.teamNumber = 0;
+        testCreature.teamNumber = 1;
         map.Add(testCreature, new Vector2Int(5, 5));
         Creature targetCreature = new("Skele2", 0, EntityManager.creatureTypes["Skeleton"], Map.NULL_POSITION);
-        targetCreature.teamNumber = 1;
+        targetCreature.teamNumber = 2;
         map.Add(targetCreature, new Vector2Int(5, 6));
         Item axe = new (EntityManager.itemTypes["Axe"]);
         map.AddHeld(testCreature, axe);
