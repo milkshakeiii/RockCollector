@@ -15,7 +15,7 @@ restRange:0
 name:Skeleton Behavior
 priorities:Hunt,Wander
 huntRange:10
-huntLookDistance:4
+huntLookDistance:5
 huntMinimumLevelDifference:-999
 huntMaximumLevelDifference:999
 wanderRange:5
