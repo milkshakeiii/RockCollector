@@ -15,3 +15,12 @@ cooldown:10
 rechargeTicks:20
 weaponSkills:axes,swords
 enemyTargets:1
+
+name:Fireball
+cooldown:40
+rechargeTicks:100
+enemyTargets:1
+damage:1d12
+range:7
+effectRadius:3
+skill:evocation

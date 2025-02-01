@@ -549,8 +549,9 @@ public class Creature : Destructable
         }
     }
 
-    public void Strike(Creature target, DieRoll damage, int toHit, string weaponSkill, Map map)
+    public void MeleeStrike(Creature target, DieRoll damage, string weaponSkill, Map map)
     {
+        int toHit = SkillModifier(weaponSkill, map);
         int toHitResult = Roll20() + toHit;
         if (!target.Defend(toHitResult, map))
         {
@@ -560,15 +561,54 @@ public class Creature : Destructable
         }
     }
 
+    public void RangedStrike(Creature target, DieRoll damage, string weaponSkill, Map map)
+    {
+        int toHit = SkillModifier(weaponSkill, map);
+        int toHitResult = Roll20() + toHit;
+        if (!target.Dodge(toHitResult, map))
+        {
+            int damageAmount = damage.Roll();
+            target.TakeDamage(damageAmount);
+            GainExperience(target.EncounterLevel(), weaponSkill);
+        }
+    }
+
+    public void NonweaponStrike(Creature target, DieRoll damage, string skillName, Map map)
+    {
+        int toHit = SkillModifier(skillName, map);
+        int toHitResult = Roll20() + toHit;
+        if (!target.Resist(toHitResult, map))
+        {
+            int damageAmount = damage.Roll();
+            target.TakeDamage(damageAmount);
+            GainExperience(target.EncounterLevel(), skillName);
+        }
+    }
+
+    public bool Dodge(int toHitResult, Map map)
+    {
+        return BlockWithSkill("dodge", toHitResult, map);
+    }
+
     public bool Defend(int toHitResult, Map map)
     {
-        int defenseSkill = SkillModifier("defense", map);
-        bool defended = toHitResult <= 10 + defenseSkill;
-        if (defended)
+        return BlockWithSkill("defense", toHitResult, map);
+    }
+
+    public bool Resist(int toHitResult, Map map)
+    {
+        return BlockWithSkill("resistance", toHitResult, map);
+    }
+
+    private bool BlockWithSkill(string skill, int toHitResult, Map map)
+    {
+        int blockSkill = SkillModifier(skill, map);
+        bool blocked = toHitResult <= 10 + blockSkill;
+        if (blocked)
         {
-            GainExperience(toHitResult, "defense");
+            GainExperience(toHitResult, skill);
         }
-        return defended;
+        return blocked;
     }
 
     public void RepairBuilding(Building building, Map map)

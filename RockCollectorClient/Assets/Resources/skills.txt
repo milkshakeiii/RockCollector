@@ -5,5 +5,8 @@ saws:dexterity
 axes:strength
 swords:strength
 cooking:wisdom
-defense:dexterity
+defense:constitution
+dodge:dexterity
+resistance:wisdom
 repair:intelligence
+evocation:charisma

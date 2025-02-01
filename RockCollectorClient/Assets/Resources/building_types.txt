@@ -36,9 +36,9 @@ restHealAmount: 3
 restHealCooldown: 20
 
 name:Barracks
-supportedCreatureTypes:Warrior
-supportedCreatureCounts:5
-supportedCreatureSpawnTimes:500
+supportedCreatureTypes:Warrior,Wizard
+supportedCreatureCounts:5,5
+supportedCreatureSpawnTimes:500,600
 size:5
 maxHealth:100
 requestableItemTypes:Log,Wooden Sword,Wooden Shield

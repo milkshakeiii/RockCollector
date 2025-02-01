@@ -22,16 +22,24 @@ public class Simulation
         if (ability.GetEnemyTargets() > 0)
         {
             List<string> weaponSkills = ability.GetWeaponSkills();
-            // if the ability uses weapon skills, it is a basic weapon attack
+            // if the ability uses weapon skills, it is a weapon attack
             if (weaponSkills.Count > 0)
             {
-                BasicWeaponAttack(ability, actor, map, weaponSkills);
+                WeaponAttack(ability, actor, map, weaponSkills);
+                return;
+            }
+
+            DieRoll damage = ability.GetDamage();
+            // if the ability has a damage value, it is a non-weapon attack
+            if (damage != null)
+            {
+                NonweaponAttack(ability, actor, map);
                 return;
             }
         }
     }
 
-    private static void BasicWeaponAttack(TypeAbility ability, Creature actor, Map map, List<string> weaponSkills)
+    private static void WeaponAttack(TypeAbility ability, Creature actor, Map map, List<string> weaponSkills)
     {
         DieRoll damage = null;
         int range = 0;
@@ -53,8 +61,6 @@ public class Simulation
         {
             throw new System.Exception("No weapon to use with ability.");
         }
-        int chosenWeaponModifier = actor.SkillModifier(chosenWeaponSkill, map);
-        // we have also now set the chosenWeaponSkill and chosenWeaponModifier
 
         // get the range of possible targets
         RectInt actorRect = map.ExtentsOf(actor);
@@ -76,7 +82,14 @@ public class Simulation
                 {
                     if (placeable is Creature target && target.teamNumber != actor.teamNumber)
                     {
-                        actor.Strike(target, damage, chosenWeaponModifier, chosenWeaponSkill, map);
+                        if (range == 1)
+                        {
+                            actor.MeleeStrike(target, damage, chosenWeaponSkill, map);
+                        }
+                        else
+                        {
+                            actor.RangedStrike(target, damage, chosenWeaponSkill, map);
+                        }
                         targetsStruck++;
                         if (targetsStruck >= ability.GetEnemyTargets())
                         {
@@ -88,6 +101,67 @@ public class Simulation
             if (targetsStruck >= ability.GetEnemyTargets())
             {
                 break;
+            }
+        }
+    }
+
+    private static void NonweaponAttack(TypeAbility ability, Creature actor, Map map)
+    {
+        DieRoll damage = ability.GetDamage();
+        int range = ability.GetRange();
+        int radius = ability.GetEffectRadius();
+        string skill = ability.GetSkill();
+        int maxTargets = ability.GetEnemyTargets();
+
+        RectInt actorRect = map.ExtentsOf(actor);
+        int xMin = actorRect.xMin - range;
+        int xMax = actorRect.xMax + range;
+        int yMin = actorRect.yMin - range;
+        int yMax = actorRect.yMax + range;
+
+        int targetsStruck = 0;
+        List<Vector2Int> affectedPositions = new();
+        for (int x = xMin; x <= xMax; x++)
+        {
+            for (int y = yMin; y <= yMax; y++)
+            {
+                Vector2Int position = new(x, y);
+                List<Placeable> placeables = map.PlaceablesAt(position);
+                foreach (Placeable placeable in placeables)
+                {
+                    if (placeable is Creature target && target.teamNumber != actor.teamNumber)
+                    {
+                        affectedPositions.Add(position);
+                        targetsStruck++;
+                        if (targetsStruck >= maxTargets)
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+            if (targetsStruck >= maxTargets)
+            {
+                break;
+            }
+        }
+
+        foreach (Vector2Int position in affectedPositions)
+        {
+            for (int x = position.x - radius; x <= position.x + radius; x++)
+            {
+                for (int y = position.y - radius; y <= position.y + radius; y++)
+                {
+                    Vector2Int blastSquare = new(x, y);
+                    List<Placeable> placeables = map.PlaceablesAt(blastSquare);
+                    foreach (Placeable placeable in placeables)
+                    {
+                        if (placeable is Creature target && target.teamNumber != actor.teamNumber)
+                        {
+                            actor.NonweaponStrike(target, damage, skill, map);
+                        }
+                    }
+                }
             }
         }
     }

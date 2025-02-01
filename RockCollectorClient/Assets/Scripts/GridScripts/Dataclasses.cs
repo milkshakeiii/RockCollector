@@ -220,8 +220,12 @@ public static class EntityManager
         return defaultValue;
     }
 
-    public static DieRoll GetDieRollAttribute(ReadOnlyDictionary<string, string> attributes, string key)
+    public static DieRoll GetDieRollAttribute(ReadOnlyDictionary<string, string> attributes, string key, DieRoll defaultValue = null)
     {
+        if (!attributes.ContainsKey(key))
+        {
+            return defaultValue;
+        }
         string[] parts = attributes[key].Split('d');
         return new DieRoll(int.Parse(parts[0]), int.Parse(parts[1]));
     }
@@ -316,10 +320,9 @@ public class TypeAbility : Entity
         // in squares
         return EntityManager.GetIntAttribute(attributes, "range", 1);
     }
-    public int GetEffectArea()
+    public int GetEffectRadius()
     {
-        // in square diameter
-        return EntityManager.GetIntAttribute(attributes, "effectArea", 1);
+        return EntityManager.GetIntAttribute(attributes, "effectRadius", 0);
     }
     public int GetCooldown()
     {
@@ -335,10 +338,13 @@ public class TypeAbility : Entity
         // in ticks
         return EntityManager.GetIntAttribute(attributes, "duration", 0);
     }
-    public int GetDamage()
+    public DieRoll GetDamage()
     {
-        // in health points
-        return EntityManager.GetIntAttribute(attributes, "damage", 0);
+        return EntityManager.GetDieRollAttribute(attributes, "damage", null);
+    }
+    public string GetSkill()
+    {
+        return EntityManager.GetStringAttribute(attributes, "skill", "none");
     }
     public int GetHeal()
     {
