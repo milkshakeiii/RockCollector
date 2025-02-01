@@ -45,7 +45,7 @@ public class DisplayGrid : MonoBehaviour
         if (mouseUpButton != -1)
         {
             Vector3 mousePos = Input.mousePosition;
-            mousePos.z = HEIGHT/2f;
+            mousePos.z = -gridCamera.transform.position.z;
             Vector3 worldPos = gridCamera.GetComponent<Camera>().ScreenToWorldPoint(mousePos);
             Vector2Int screenPosition = new(Mathf.RoundToInt(mousePos.x/8f) - WIDTH/2, Mathf.RoundToInt(mousePos.y/8f) - HEIGHT/2 - 1);
             MouseUp?.Invoke(worldPos, screenPosition, mouseUpButton);
@@ -55,7 +55,7 @@ public class DisplayGrid : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             Vector3 mousePos = Input.mousePosition;
-            mousePos.z = HEIGHT/2f;
+            mousePos.z = -gridCamera.transform.position.z;
             Vector3 worldPos = gridCamera.GetComponent<Camera>().ScreenToWorldPoint(mousePos);
             Vector2Int screenPosition = new(Mathf.RoundToInt(mousePos.x/8f) - WIDTH/2, Mathf.RoundToInt(mousePos.y/8f) - HEIGHT/2 - 1);
             MouseDown?.Invoke(worldPos, screenPosition, 0);
