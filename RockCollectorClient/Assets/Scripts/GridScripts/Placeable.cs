@@ -214,6 +214,10 @@ public class Creature : Destructable
     private Thread newActivityComputation;
 
     private int cooldownTicksRemaining = 0;
+    private int lastInterruptTick = 0;
+
+    private string ingVerb = "";
+    private string stagedIngVerb = "";
 
     public static Creature NewCreatureOfType(CreatureType type, int teamNumber, Vector2Int homePosition)
     {
@@ -269,11 +273,16 @@ public class Creature : Destructable
     {
         if (currentActivity != null)
         {
-            return currentActivity.DescriptiveString();
+            return ingVerb + " " + currentActivity.TargetDescriptiveString();
         }
         else
         {
-            return "Thinking...";
+            string noPreposition = ingVerb.Split(' ')[0];
+            if (noPreposition == "Fleeing")
+            {
+                return "Cowering";
+            }
+            return noPreposition;
         }
     }
 
@@ -737,13 +746,15 @@ public class Creature : Destructable
             cooldownTicksRemaining--;
             return;
         }
-        // If off cooldown, check for short-term interrupts to perform instead of the current activity
-        Activity replacementActivity = behavior.CheckInterrupts(map.GetView(), GetSelfView(map));
-        if (replacementActivity != null)
+        // If off cooldown and interrupt hasn't been performed too recently, check for interrupts
+        if (map.CurrentTick() - lastInterruptTick > 1000)
         {
-            AbandonCurrentActivity(map);
-            stagedActivity = replacementActivity;
-            TryPromoteStagedActivity(map);
+            bool interrupt = behavior.CheckInterrupts(map.GetView(), GetSelfView(map));
+            if (interrupt)
+            {
+                AbandonCurrentActivity(map);
+                lastInterruptTick = map.CurrentTick();
+            }
         }
         // If an action was performed during the interrupt check, we may be on cooldown again
         if (cooldownTicksRemaining > 0)
@@ -784,6 +795,7 @@ public class Creature : Destructable
     private void TryPromoteStagedActivity(Map map)
     {
         currentActivity = stagedActivity;
+        ingVerb = stagedIngVerb;
         // when we have a new activity, we need to mark the target placeables as claimed
         // new activities always are assigned here
         // Debug.Log("Activity promoted: " + currentActivity + " " + currentActivity.GetLocation(map));
@@ -817,11 +829,12 @@ public class Creature : Destructable
         {
             Thread.CurrentThread.IsBackground = true; 
             Thread.CurrentThread.Priority = System.Threading.ThreadPriority.Lowest;
-            Activity bestActivity = behavior.NextActivity(mapCopy, newMe);
+            (Activity bestActivity, string newIngVerb) = behavior.NextActivity(mapCopy, newMe);
             if (bestActivity != null)
             {
                 bestActivity.MarkForBackConversion(backDictionary);
                 this.stagedActivity = bestActivity;
+                this.stagedIngVerb = newIngVerb;
             }
         });
         newActivityComputation.Start();
@@ -1072,6 +1085,11 @@ public class CreatureView : DestructableView
     {
         return new HuntActivity(placeable as Creature);
     }
+
+    public PlaceableView GetHomeBuilding()
+    {
+        return PlaceableView.GetPlaceableView((placeable as Creature).GetHomeBuilding(map), map);
+    }
 }
 
 public class CreatureSelf 
@@ -1221,9 +1239,9 @@ public class CreatureSelf
         return self.teamNumber;
     }
 
-    public PlaceableView View()
+    public CreatureView View()
     {
-        return PlaceableView.GetPlaceableView(self, map);
+        return (CreatureView)PlaceableView.GetPlaceableView(self, map);
     }
 
     public Building GetHomeBuilding()

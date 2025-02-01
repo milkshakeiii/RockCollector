@@ -675,7 +675,7 @@ public class CreatureBehaviorType : Entity
     }
     public int GetWanderRange()
     {
-        return EntityManager.GetIntAttribute(attributes, "wanderRange");
+        return EntityManager.GetIntAttribute(attributes, "wanderRange", 1);
     }
     public int GetHuntRange()
     {
@@ -705,13 +705,17 @@ public class CreatureBehaviorType : Entity
     {
         return EntityManager.GetIntAttribute(attributes, "dangerLookDistance", 0);
     }
-    public int GetInterruptToRestDangerThreshold()
+    public int GetInterruptDangerThreshold()
     {
-        return EntityManager.GetIntAttribute(attributes, "interruptToRestDangerThreshold", 999);
+        return EntityManager.GetIntAttribute(attributes, "interruptDangerThreshold", 999);
     }
-    public int GetInterruptToHuntDangerThreshold()
+    public int GetFleeDangerThreshold()
     {
-        return EntityManager.GetIntAttribute(attributes, "interruptToHuntDangerThreshold", 999);
+        return EntityManager.GetIntAttribute(attributes, "fleeDangerThreshold", 999);
+    }
+    public int GetFightDangerThreshold()
+    {
+        return EntityManager.GetIntAttribute(attributes, "fightDangerThreshold", 999);
     }
 }
 

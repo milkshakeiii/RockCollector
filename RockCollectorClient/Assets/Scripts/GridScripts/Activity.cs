@@ -112,7 +112,7 @@ public abstract class Activity
         sourcePlaceable?.Unclaim();
     }
 
-    public abstract string DescriptiveString();
+    public abstract string TargetDescriptiveString();
 }
 
 public class HarvestActivity : Activity
@@ -123,9 +123,9 @@ public class HarvestActivity : Activity
 
     }
 
-    public override string DescriptiveString()
+    public override string TargetDescriptiveString()
     {
-        return "Harvesting " + SourceProp().propType.GetName();
+        return SourceProp().propType.GetName();
     }
 
     public Prop SourceProp()
@@ -152,9 +152,9 @@ public class HuntActivity : Activity
 
     }
 
-    public override string DescriptiveString()
+    public override string TargetDescriptiveString()
     {
-        return "Hunting " + SourceCreature().GetCreatureType().GetName();
+        return SourceCreature().GetCreatureType().GetName();
     }
 
     public override bool TryClaimPlaceables(Creature performer, Map map)
@@ -216,9 +216,9 @@ public class CraftActivity : Activity
 
     }
 
-    public override string DescriptiveString()
+    public override string TargetDescriptiveString()
     {
-        return "Crafting " + craftingOutputItem.GetName();
+        return craftingOutputItem.GetName();
     }
 
     private HashSet<Item> ConsumedItems(Creature performer, Map map)
@@ -332,13 +332,9 @@ public class PickUpActivity : Activity
         this.addToOutfit = addToOutfit;
     }
 
-    public override string DescriptiveString()
+    public override string TargetDescriptiveString()
     {
-        if (addToOutfit)
-        {
-            return "Equipping " + Item().itemType.GetName();
-        }
-        return "Picking up " + Item().itemType.GetName();
+        return Item().itemType.GetName();
     }
 
     public Item Item()
@@ -388,9 +384,9 @@ public class DeliverActivity : Activity
         this.buildingLocation = buildingLocation;
     }
 
-    public override string DescriptiveString()
+    public override string TargetDescriptiveString()
     {
-        return "Delivering " + Item().itemType.GetName();
+        return Item().itemType.GetName();
     }
 
     public Item Item()
@@ -489,9 +485,9 @@ public class RepairActivity : Activity
 
     }
 
-    public override string DescriptiveString()
+    public override string TargetDescriptiveString()
     {
-        return "Repairing " + Building().buildingType.GetName();
+        return Building().buildingType.GetName();
     }
 
     public Building Building()
@@ -523,9 +519,9 @@ public class RestActivity : Activity
 
     }
 
-    public override string DescriptiveString()
+    public override string TargetDescriptiveString()
     {
-        return "Resting at " + Building().buildingType.GetName();
+        return Building().buildingType.GetName();
     }
 
     public override bool TryClaimPlaceables(Creature performer, Map map)
@@ -568,9 +564,9 @@ public class IdleActivity : Activity
 
     }
 
-    public override string DescriptiveString()
+    public override string TargetDescriptiveString()
     {
-        return "Idling";
+        return "";
     }
 
     public override bool TryClaimPlaceables(Creature performer, Map map)
@@ -614,9 +610,9 @@ public class WanderActivity : Activity
         this.range = range;
     }
 
-    public override string DescriptiveString()
+    public override string TargetDescriptiveString()
     {
-        return "Wandering";
+        return "";
     }
 
     public override bool TryClaimPlaceables(Creature performer, Map map)

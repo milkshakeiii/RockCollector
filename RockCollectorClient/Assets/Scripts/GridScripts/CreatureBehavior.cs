@@ -17,7 +17,7 @@ public class CreatureBehavior
         this.creatureBehaviorType = creatureBehaviorType;
     }
 
-    public Activity NextActivity(Map map, Creature actor)
+    public (Activity, string) NextActivity(Map map, Creature actor)
     {
         foreach (string behaviorPriorityName in creatureBehaviorType.GetPriorities())
         {
@@ -25,29 +25,22 @@ public class CreatureBehavior
             Activity activity = behaviorPriority.ChosenActivityOrNull(map, actor, creatureBehaviorType);
             if (activity != null)
             {
-                return activity;
+                string ingVerb = behaviorPriority.GetIngVerb();
+                return (activity, ingVerb);
             }
         }
-        return null;
+        return (null, "");
     }
 
-    public Activity CheckInterrupts(MapView map, CreatureSelf creature)
+    public bool CheckInterrupts(MapView map, CreatureSelf creature)
     {
         int dangerRating = GetDangerRating(map, creature);
         int selfEncounterLevel = creature.EncounterLevel();
-        if (dangerRating > selfEncounterLevel * creatureBehaviorType.GetInterruptToRestDangerThreshold())
+        if (dangerRating > selfEncounterLevel * creatureBehaviorType.GetInterruptDangerThreshold())
         {
-            return new RestActivity(creature.GetHomeBuilding());
+            return true;
         }
-        if (dangerRating > selfEncounterLevel * creatureBehaviorType.GetInterruptToHuntDangerThreshold())
-        {
-            CreatureView mostDangerousCreature = MostDangerousCreatureInLookRange(map, creature);
-            if (mostDangerousCreature != null)
-            {
-                return mostDangerousCreature.HuntActivity();
-            }
-        }
-        return null;
+        return false;
     }
 
     private int GetDangerRating(MapView map, CreatureSelf self)
@@ -71,60 +64,30 @@ public class CreatureBehavior
         }
         return dangerRating;
     }
-
-    private CreatureView MostDangerousCreatureInLookRange(MapView map, CreatureSelf self)
-    {
-        CreatureView mostDangerousCreature = null;
-        int highestDangerRating = 0;
-        foreach (PlaceableView placeable in map.UnheldPlaceables())
-        {
-            if (placeable is CreatureView creature2
-                               && map.DistanceBetween(self.View(), creature2) <= creatureBehaviorType.GetDangerLookDistance())
-            {
-                if (creature2.GetTeamNumber() != self.GetTeamNumber())
-                {
-                    int dangerRating = creature2.EncounterLevel();
-                    if (dangerRating > highestDangerRating)
-                    {
-                        highestDangerRating = dangerRating;
-                        mostDangerousCreature = creature2;
-                    }
-                }
-            }
-        }
-        return mostDangerousCreature;
-    
-    }
 }
 
 public abstract class BehaviorPriority 
 {
     public static BehaviorPriority FromName(string name)
     {
-        switch (name)
+        return name switch
         {
-            case "Repair Damaged Buildings":
-                return new RepairDamagedBuildingsPriority();
-            case "Deliver Requested Items":
-                return new DeliverRequestedItemsPriority();
-            case "Harvest Requested Items":
-                return new HarvestRequestedItemsPriority();
-            case "Craft Items":
-                return new CraftItemsPriority();
-            case "Rest":
-                return new RestPriority();
-            case "Idle":
-                return new IdlePriority();
-            case "Wander":
-                return new WanderPriority();
-            case "Hunt":
-                return new HuntPriority();
-            case "Equip":
-                return new EquipPriority();
-            default:
-                throw new Exception("Unknown behavior priority: " + name);
-        }
+            "Repair Damaged Buildings" => new RepairDamagedBuildingsPriority(),
+            "Deliver Requested Items" => new DeliverRequestedItemsPriority(),
+            "Harvest Requested Items" => new HarvestRequestedItemsPriority(),
+            "Craft Items" => new CraftItemsPriority(),
+            "Rest" => new RestPriority(),
+            "Idle" => new IdlePriority(),
+            "Wander" => new WanderPriority(),
+            "Hunt" => new HuntPriority(),
+            "Equip" => new EquipPriority(),
+            "Flee" => new FleePriority(),
+            "Fight" => new FightPriority(),
+            _ => throw new Exception("Unknown behavior priority: " + name),
+        };
     }
+
+    public abstract string GetIngVerb();
 
     /// <summary>
     /// Check this priority level to see if the actor should perform a chosen activity.
@@ -135,6 +98,27 @@ public abstract class BehaviorPriority
     /// <param name="actor"></param>
     /// <returns></returns>
     public abstract Activity ChosenActivityOrNull(Map map, Creature actor, CreatureBehaviorType behaviorType);
+
+    protected int GetDangerRating(Map map, Creature actor, CreatureBehaviorType behaviorType)
+    {
+        int dangerRating = 0;
+        foreach (Placeable placeable in map.UnheldPlaceables())
+        {
+            if (placeable is Creature creature2
+                               && map.DistanceBetween(actor, creature2) <= behaviorType.GetDangerLookDistance())
+            {
+                if (creature2.teamNumber != actor.teamNumber)
+                {
+                    dangerRating += creature2.EncounterLevel();
+                }
+                else
+                {
+                    dangerRating -= creature2.EncounterLevel();
+                }
+            }
+        }
+        return dangerRating;
+    }
 }
 
 public class RepairDamagedBuildingsPriority : BehaviorPriority
@@ -187,6 +171,11 @@ public class RepairDamagedBuildingsPriority : BehaviorPriority
         // no damaged buildings found
         return null;
     }
+
+    public override string GetIngVerb()
+    {
+        return "Repairing";
+    }
 }
 
 public class DeliverRequestedItemsPriority : BehaviorPriority
@@ -235,6 +224,11 @@ public class DeliverRequestedItemsPriority : BehaviorPriority
             }
         }
         return null;
+    }
+
+    public override string GetIngVerb()
+    {
+        return "Delivering";
     }
 }
 
@@ -290,6 +284,11 @@ public class HarvestRequestedItemsPriority : BehaviorPriority
             }
         }
         return null;
+    }
+
+    public override string GetIngVerb()
+    {
+        return "Harvesting";
     }
 }
 
@@ -347,6 +346,11 @@ public class CraftItemsPriority : BehaviorPriority
         }
         return null;
     }
+
+    public override string GetIngVerb()
+    {
+        return "Crafting";
+    }
 }
 
 public class RestPriority : BehaviorPriority
@@ -358,11 +362,16 @@ public class RestPriority : BehaviorPriority
         {
             return null;
         }
-        if (actor.GetDamageTaken() > 0 || map.DistanceBetween(actor, homeBuilding) > 1)
+        if (actor.GetDamageTaken() > 0 || map.DistanceBetween(actor, homeBuilding) > behaviorType.GetWanderRange())
         {
             return new RestActivity(homeBuilding);
         }
         return null;
+    }
+
+    public override string GetIngVerb()
+    {
+        return "Resting at";
     }
 }
 
@@ -372,6 +381,11 @@ public class IdlePriority : BehaviorPriority
     {
         return new IdleActivity(map.PositionOf(actor));
     }
+
+    public override string GetIngVerb()
+    {
+        return "Idling";
+    }
 }
 
 public class WanderPriority : BehaviorPriority
@@ -379,6 +393,11 @@ public class WanderPriority : BehaviorPriority
     public override Activity ChosenActivityOrNull(Map map, Creature actor, CreatureBehaviorType behaviorType)
     {
         return new WanderActivity(actor.GetHomeBuilding(map), behaviorType.GetWanderRange());
+    }
+
+    public override string GetIngVerb()
+    {
+        return "Wandering";
     }
 }
 
@@ -399,6 +418,11 @@ public class HuntPriority : BehaviorPriority
             }
         }
         return null;
+    }
+
+    public override string GetIngVerb()
+    {
+        return "Hunting";
     }
 }
 
@@ -431,5 +455,79 @@ public class EquipPriority : BehaviorPriority
             }
         }
         return null;
+    }
+
+    public override string GetIngVerb()
+    {
+        return "Equipping";
+    }
+}
+
+public class FleePriority : BehaviorPriority
+{
+    public override Activity ChosenActivityOrNull(Map map, Creature actor, CreatureBehaviorType behaviorType)
+    {
+        int dangerRating = GetDangerRating(map, actor, behaviorType);
+        if (dangerRating < behaviorType.GetFleeDangerThreshold() * actor.EncounterLevel())
+        {
+            return null;
+        }
+        Building homeBuilding = actor.GetHomeBuilding(map);
+        if (homeBuilding == null)
+        {
+            return null;
+        }
+        return new RestActivity(homeBuilding);
+    }
+
+    public override string GetIngVerb()
+    {
+        return "Fleeing to";
+    }
+}
+
+public class FightPriority : BehaviorPriority
+{
+    public override Activity ChosenActivityOrNull(Map map, Creature actor, CreatureBehaviorType behaviorType)
+    {
+        int dangerRating = GetDangerRating(map, actor, behaviorType);
+        if (dangerRating < behaviorType.GetFightDangerThreshold() * actor.EncounterLevel())
+        {
+            return null;
+        }
+        Creature mostDangerousCreature = MostDangerousCreatureInLookRange(map, actor, behaviorType);
+        if (mostDangerousCreature != null)
+        {
+            return new HuntActivity(mostDangerousCreature);
+        }
+        return null;
+    }
+
+    private Creature MostDangerousCreatureInLookRange(Map map, Creature self, CreatureBehaviorType creatureBehaviorType)
+    {
+        Creature mostDangerousCreature = null;
+        int highestDangerRating = 0;
+        foreach (Placeable placeable in map.UnheldPlaceables())
+        {
+            if (placeable is Creature creature2
+                               && map.DistanceBetween(self, creature2) <= creatureBehaviorType.GetDangerLookDistance())
+            {
+                if (creature2.teamNumber != self.teamNumber)
+                {
+                    int dangerRating = creature2.EncounterLevel();
+                    if (dangerRating > highestDangerRating)
+                    {
+                        highestDangerRating = dangerRating;
+                        mostDangerousCreature = creature2;
+                    }
+                }
+            }
+        }
+        return mostDangerousCreature;
+    }
+
+    public override string GetIngVerb()
+    {
+        return "Fighting";
     }
 }
