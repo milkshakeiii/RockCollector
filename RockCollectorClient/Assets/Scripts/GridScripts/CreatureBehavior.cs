@@ -568,7 +568,7 @@ public class PlantPriority : BehaviorPriority
                         {
                             Vector2Int position = new Vector2Int(buildingPosition.x + xOffset, buildingPosition.y + yOffset);
                             // only plant when position x and y are both even
-                            if (position.x % 2 != 0 && position.y % 2 != 0)
+                            if (position.x % 2 != 0 || position.y % 2 != 0)
                             {
                                 continue;
                             }
