@@ -246,8 +246,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62f1d1322107a8f4a89ccc3c66cc8c57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
-  zoomSpeed: 5
+  moveSpeed: 30
+  zoomSpeed: 20
+  zoomMax: -25
 --- !u!1 &503557342
 GameObject:
   m_ObjectHideFlags: 0
@@ -497,7 +498,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 10
+  m_SortingOrder: 2
   m_TargetDisplay: 0
 --- !u!224 &1377047429
 RectTransform:

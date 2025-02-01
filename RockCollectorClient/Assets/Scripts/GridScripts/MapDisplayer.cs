@@ -350,7 +350,7 @@ public class MapDisplayer : MonoBehaviour
             DisplayGrid.WIDTH/8,
             DisplayGrid.HEIGHT,
             0,
-            0,
+            5,
             true);
         if (placeable is Building building)
         {
@@ -387,7 +387,7 @@ public class MapDisplayer : MonoBehaviour
             24,
             24,
             0,
-            1,
+            6,
             true);
 
         // requestable items
@@ -487,7 +487,7 @@ public class MapDisplayer : MonoBehaviour
             24,
             24,
             0,
-            1,
+            6,
             true);
 
         // display the creature's activity string
@@ -649,7 +649,7 @@ public class MapDisplayer : MonoBehaviour
             24,
             24,
             0,
-            1,
+            6,
             true);
 
         // display item drop chances
@@ -735,7 +735,7 @@ public abstract class Button
             rectInt.width,
             rectInt.height,
             0,
-            overlapLayer: 1,
+            overlapLayer: 6,
             true);
         displayGrid.DisplayText(text, rectInt.x+1, rectInt.y+ rectInt.height / 2, Color.black, true);
     }
@@ -782,7 +782,7 @@ public class SpawnCreatureButton : Button
                 Mathf.RoundToInt(rectInt.width * completion),
                 rectInt.height,
                 0,
-                overlapLayer: 2,
+                overlapLayer: 7,
                 true);
         }
         displayGrid.DisplaySprite("Art/UI/plain_white",
@@ -791,7 +791,7 @@ public class SpawnCreatureButton : Button
             rectInt.width,
             rectInt.height,
             0,
-            overlapLayer: 1,
+            overlapLayer: 6,
             true);
         displayGrid.DisplayText(text, rectInt.x + 1, rectInt.y + rectInt.height / 2, Color.black, true);
     }
@@ -857,7 +857,7 @@ public class BuildBuildingButton : Button
             rectInt.width,
             rectInt.height,
             0,
-            overlapLayer: 1,
+            overlapLayer: 6,
             true);
         displayGrid.DisplayText(text, rectInt.x + 1, rectInt.y + rectInt.height / 2, Color.black, true);
     }
@@ -889,7 +889,7 @@ public class BuildBuildingButton : Button
         }
     }
 
-    public bool TryMakeCommand( MapDisplayer mapDisplayer, Vector2Int builtBuildingPosition)
+    public bool TryMakeCommand(MapDisplayer mapDisplayer, Vector2Int builtBuildingPosition)
     {
         BuildBuilding buildBuilding = new(teamNumber, buildingTypeName, sourceBuildingPosition, builtBuildingPosition);
         if (buildBuilding.CheckStillValid(mapDisplayer.GetMap()))

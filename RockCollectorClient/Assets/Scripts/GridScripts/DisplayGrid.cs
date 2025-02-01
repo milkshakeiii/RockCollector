@@ -78,7 +78,7 @@ public class DisplayGrid : MonoBehaviour
         if (parentToCamera)
         {
             newSquare.transform.SetParent(gridCamera.transform);
-            newSquare.transform.localPosition = new Vector3(x, y, -gridCamera.transform.localPosition.z);
+            newSquare.transform.localPosition = new Vector3(x, y, DisplayGrid.HEIGHT/2f);
         }
         else
         {

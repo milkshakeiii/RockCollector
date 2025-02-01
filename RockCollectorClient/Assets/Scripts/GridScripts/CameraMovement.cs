@@ -4,6 +4,7 @@ public class CameraMovement : MonoBehaviour
 {
     public float moveSpeed = 5f;
     public float zoomSpeed = 5f;
+    public float zoomMax = -25f;
 
     private float startingZoom;
 
@@ -20,7 +21,11 @@ public class CameraMovement : MonoBehaviour
         float scroll = UnityEngine.Input.mouseScrollDelta.y;
         if (scroll != 0)
         {
-            Camera.main.transform.position += new Vector3(0, 0, scroll * zoomSpeed * Time.deltaTime);
+            Camera.main.transform.position += new Vector3(0, 0, scroll * zoomSpeed);
+            if (Camera.main.transform.position.z > zoomMax)
+            {
+                Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, zoomMax);
+            }
         }
         // reset zoom with tab
         if (UnityEngine.Input.GetKeyDown(KeyCode.Tab))
