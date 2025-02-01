@@ -1619,6 +1619,7 @@ public class Prop : Destructable
     public PropType propType;
 
     private int harvestedAmount = 0;
+    private int tickCreated = -1;
 
     public Prop(PropType propType) : base(propType.GetSize())
     {
@@ -1708,6 +1709,21 @@ public class Prop : Destructable
     public void TakeHarvest(int amount)
     {
         harvestedAmount += amount;
+    }
+
+    public override void ObserveAndFeel(Map map)
+    {
+        if (tickCreated == -1)
+        {
+            tickCreated = map.CurrentTick();
+        }
+        if (propType.GetGrowthTicks() > 0 && map.CurrentTick() - tickCreated >= propType.GetGrowthTicks())
+        {
+            // Grow
+            PropType growsInto = propType.GetGrowsInto();
+            map.Remove(this);
+            map.Add(new Prop(growsInto), map.PositionOf(this));
+        }
     }
 }
 

@@ -24,3 +24,9 @@ damage:1d12
 range:7
 effectRadius:3
 skill:evocation
+
+name:Plant Tree
+cooldown:80
+rechargeTicks:80
+plantingSkill:forestry
+plantProp:Sapling

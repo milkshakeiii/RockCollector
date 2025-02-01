@@ -220,6 +220,15 @@ public static class EntityManager
         return defaultValue;
     }
 
+    public static PropType GetPropTypeAttribute(ReadOnlyDictionary<string, string> attributes, string key, PropType defaultValue = null)
+    {
+        if (!attributes.ContainsKey(key))
+        {
+            return defaultValue;
+        }
+        return propTypes[attributes[key]];
+    }
+
     public static DieRoll GetDieRollAttribute(ReadOnlyDictionary<string, string> attributes, string key, DieRoll defaultValue = null)
     {
         if (!attributes.ContainsKey(key))
@@ -508,6 +517,18 @@ public class PropType : Entity
     public List<int> GetProducedItemsProbabilities()
     {
         return EntityManager.GetIntListAttribute(attributes, "producedItemsProbabilities", new List<int>());
+    }
+    public int GetPlantingDifficulty()
+    {
+        return EntityManager.GetIntAttribute(attributes, "plantingDifficulty");
+    }
+    public int GetGrowthTicks()
+    {
+        return EntityManager.GetIntAttribute(attributes, "growthTicks", 0);
+    }
+    public PropType GetGrowsInto()
+    {
+        return EntityManager.GetPropTypeAttribute(attributes, "growsInto");
     }
 }
 
