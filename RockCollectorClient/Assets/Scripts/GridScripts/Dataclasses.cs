@@ -508,7 +508,7 @@ public class PropType : Entity
     }
     public int GetHarvestingRequired()
     {
-        return EntityManager.GetIntAttribute(attributes, "harvestingRequired");
+        return EntityManager.GetIntAttribute(attributes, "harvestingRequired", 0);
     }
     public List<ItemType> GetProducedItems()
     {

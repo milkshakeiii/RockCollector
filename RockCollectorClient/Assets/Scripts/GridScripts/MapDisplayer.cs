@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 using Unity.VisualScripting;
+using UnityEngine.UIElements;
 
 public class MapDisplayer : MonoBehaviour
 {
@@ -72,6 +73,9 @@ public class MapDisplayer : MonoBehaviour
 
         Building lair4 = new(EntityManager.buildingTypes["Graveyard"], -1);
         map.Add(lair4, new Vector2Int(10, -20));
+
+        Prop sapling = new(EntityManager.propTypes["Sapling"]);
+        map.Add(sapling, new Vector2Int(1, 1));
 
         for (int i = 1; i <= 3; i++)
         {
@@ -308,7 +312,7 @@ public class MapDisplayer : MonoBehaviour
                 0,
                 overlapLayer: 1);
         }
-        if (placeable is Prop prop)
+        if (placeable is Prop prop && prop.propType.GetHarvestingRequired() != 0)
         {
             displayGrid.DisplaySprite("Art/UI/button",
                 position.x * cellsPerSquare,
@@ -359,20 +363,35 @@ public class MapDisplayer : MonoBehaviour
         {
             DrawCreatureInfoPanel(creature, root, map, displayGrid);
         }
+        if (placeable is Prop prop)
+        {
+            DrawPropInfoPanel(prop, root, map, displayGrid);
+        }
     }
 
     private void DrawBuildingInfoPanel(Building building, Vector2 rootPosition, Map map, DisplayGrid displayGrid)
     {
-        // spawn creature buttons
-        List<CreatureType> creatureTypes = building.GetCreatureTypesAvailable();
-        for (int i = 0; i < creatureTypes.Count; i++)
-        {
-            CreatureType creatureType = creatureTypes[i];
-            Button spawnCreatureButton = new SpawnCreatureButton("Spawn " + creatureType.GetName(), creatureType.GetName(), map.PositionOf(building));
-            RectInt rectInt = new ((int)rootPosition.x + 1, (int)rootPosition.y + 1 + 7*i, DisplayGrid.WIDTH / 8 - 2, 6);
-            spawnCreatureButton.Draw(displayGrid, rectInt, map);
-            buttonRectsToButtons[rectInt] = spawnCreatureButton;
-        }
+
+        // display the building name
+        int height = (int)rootPosition.y + DisplayGrid.HEIGHT - 4;
+        displayGrid.DisplayText(
+            building.buildingType.GetName(),
+            (int)rootPosition.x + 1,
+            height,
+            Color.black,
+            true);
+
+        // display the building portrait
+        height -= 3 + 24;
+        displayGrid.DisplaySprite(
+            "Art/UI/plain_white",
+            (int)rootPosition.x + 3,
+            height,
+            24,
+            24,
+            0,
+            1,
+            true);
 
         // requestable items
         List<ItemType> requestableItemTypes = building.GetRequestableItemTypes();
@@ -380,26 +399,39 @@ public class MapDisplayer : MonoBehaviour
         {
             ItemType itemType = requestableItemTypes[i];
             int currentlyRequested = building.GetRequestedItemAmount(itemType);
-            
+
             // display the + button to increase the requested amount
+            height -= 7;
             Button increaseRequestButton = new ChangeItemRequestsButton("+", itemType.GetName(), currentlyRequested + 1, map.PositionOf(building));
-            RectInt rectInt = new((int)rootPosition.x + 1, (int)rootPosition.y + DisplayGrid.HEIGHT - 1 - 7 * (i + 1), 6, 6);
+            RectInt rectInt = new((int)rootPosition.x + 1, height, 6, 6);
             increaseRequestButton.Draw(displayGrid, rectInt, map);
             buttonRectsToButtons[rectInt] = increaseRequestButton;
 
             // display the - button to decrease the requested amount
             Button decreaseRequestButton = new ChangeItemRequestsButton("-", itemType.GetName(), currentlyRequested - 1, map.PositionOf(building));
-            rectInt = new((int)rootPosition.x + DisplayGrid.WIDTH / 8 - 7, (int)rootPosition.y + DisplayGrid.HEIGHT - 1 - 7 * (i + 1), 6, 6);
+            rectInt = new((int)rootPosition.x + DisplayGrid.WIDTH / 8 - 7, height, 6, 6);
             decreaseRequestButton.Draw(displayGrid, rectInt, map);
             buttonRectsToButtons[rectInt] = decreaseRequestButton;
 
             // display the item name and (amount present/amount requested)
             displayGrid.DisplayText(itemType.GetName() + " (" + building.GetItemCount(itemType, map) + "/" + currentlyRequested + ")",
                 (int)rootPosition.x + 8,
-                (int)rootPosition.y + DisplayGrid.HEIGHT - 1 - 7 * (i + 1),
+                height,
                 Color.black,
                 true);
         }
+
+        // display a divider line
+        height -= 4;
+        displayGrid.DisplaySprite(
+            "Art/UI/plain_black",
+            (int)rootPosition.x + 1,
+            height,
+            DisplayGrid.WIDTH / 8 - 2,
+            1,
+            0,
+            1,
+            true);
 
         // build building buttons
         List<BuildingType> buildableBuildingTypes = building.buildingType.GetBuildableBuildingTypes();
@@ -407,9 +439,34 @@ public class MapDisplayer : MonoBehaviour
         {
             BuildingType buildingType = buildableBuildingTypes[i];
             Button buildBuildingButton = new BuildBuildingButton("Build " + buildingType.GetName(), building.teamNumber, buildingType.GetName(), map.PositionOf(building));
-            RectInt rectInt = new((int)rootPosition.x + 1, (int)rootPosition.y + DisplayGrid.HEIGHT - 36 - 7 * (i + 1 + requestableItemTypes.Count), DisplayGrid.WIDTH / 8 - 2, 6);
+            height -= 7;
+            RectInt rectInt = new((int)rootPosition.x + 1, height, DisplayGrid.WIDTH / 8 - 2, 6);
             buildBuildingButton.Draw(displayGrid, rectInt, map, activePlaceBuildingButton != null);
             buttonRectsToButtons[rectInt] = buildBuildingButton;
+        }
+
+        // display a divider line
+        height -= 4;
+        displayGrid.DisplaySprite(
+            "Art/UI/plain_black",
+            (int)rootPosition.x + 1,
+            height,
+            DisplayGrid.WIDTH / 8 - 2,
+            1,
+            0,
+            1,
+            true);
+
+        // spawn creature buttons
+        List<CreatureType> creatureTypes = building.GetCreatureTypesAvailable();
+        for (int i = 0; i < creatureTypes.Count; i++)
+        {
+            CreatureType creatureType = creatureTypes[i];
+            Button spawnCreatureButton = new SpawnCreatureButton("Spawn " + creatureType.GetName(), creatureType.GetName(), map.PositionOf(building));
+            height -= 7;
+            RectInt rectInt = new((int)rootPosition.x + 1, height, DisplayGrid.WIDTH / 8 - 2, 6);
+            spawnCreatureButton.Draw(displayGrid, rectInt, map);
+            buttonRectsToButtons[rectInt] = spawnCreatureButton;
         }
     }
 
@@ -568,6 +625,41 @@ public class MapDisplayer : MonoBehaviour
             height -= 4;
             displayGrid.DisplayText(
                 inventoryStrings[i],
+                (int)rootPosition.x + 1,
+                height,
+                Color.black,
+                true);
+        }
+    }
+
+    private void DrawPropInfoPanel(Prop prop, Vector2 rootPosition, Map map, DisplayGrid displayGrid)
+    {
+        // display the prop name
+        int height = (int)rootPosition.y + DisplayGrid.HEIGHT - 4;
+        displayGrid.DisplayText(
+            prop.propType.GetName(),
+            (int)rootPosition.x + 1,
+            height,
+            Color.black,
+            true);
+
+        // display the prop portrait
+        height -= 3 + 24;
+        displayGrid.DisplaySprite(
+            "Art/UI/plain_white",
+            (int)rootPosition.x + 3,
+            height,
+            24,
+            24,
+            0,
+            1,
+            true);
+
+        // display item drop chances
+        foreach (ItemType itemType in prop.propType.GetProducedItems()) {
+            height -= 4;
+            displayGrid.DisplayText(
+                itemType.GetName() + "(" + ((int)(prop.ChanceOfItemDrop(itemType) * 100)) + "%)",
                 (int)rootPosition.x + 1,
                 height,
                 Color.black,

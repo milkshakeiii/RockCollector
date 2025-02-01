@@ -1721,8 +1721,9 @@ public class Prop : Destructable
         {
             // Grow
             PropType growsInto = propType.GetGrowsInto();
+            Vector2Int position = map.PositionOf(this);
             map.Remove(this);
-            map.Add(new Prop(growsInto), map.PositionOf(this));
+            map.Add(new Prop(growsInto), position);
         }
     }
 }
