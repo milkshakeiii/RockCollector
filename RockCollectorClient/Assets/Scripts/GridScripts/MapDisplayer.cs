@@ -64,6 +64,15 @@ public class MapDisplayer : MonoBehaviour
         Building lair = new (EntityManager.buildingTypes["Graveyard"], -1);
         map.Add(lair, new Vector2Int(10, -10));
 
+        Building lair2 = new(EntityManager.buildingTypes["Graveyard"], -1);
+        map.Add(lair2, new Vector2Int(10, -15));
+
+        Building lair3 = new(EntityManager.buildingTypes["Graveyard"], -1);
+        map.Add(lair3, new Vector2Int(15, -15));
+
+        Building lair4 = new(EntityManager.buildingTypes["Graveyard"], -1);
+        map.Add(lair4, new Vector2Int(10, -20));
+
         for (int i = 1; i <= 3; i++)
         {
             for (int j = 1; j <= 3; j++)
@@ -388,7 +397,8 @@ public class MapDisplayer : MonoBehaviour
             displayGrid.DisplayText(itemType.GetName() + " (" + building.GetItemCount(itemType, map) + "/" + currentlyRequested + ")",
                 (int)rootPosition.x + 8,
                 (int)rootPosition.y + DisplayGrid.HEIGHT - 1 - 7 * (i + 1),
-                Color.black);
+                Color.black,
+                true);
         }
 
         // build building buttons
@@ -406,21 +416,33 @@ public class MapDisplayer : MonoBehaviour
     private void DrawCreatureInfoPanel(Creature creature, Vector2 rootPosition, Map map, DisplayGrid displayGrid)
     {
         // display the creature name
+        int height = (int)rootPosition.y + DisplayGrid.HEIGHT - 4;
         displayGrid.DisplayText(
             creature.GetName() + " - Level " + creature.GetLevel(),
             (int)rootPosition.x + 1,
-            (int)rootPosition.y + DisplayGrid.HEIGHT - 4,
-            Color.black);
+            height,
+            Color.black,
+            true);
 
         // display the creature's portrait
+        height -= 3 + 24;
         displayGrid.DisplaySprite(
             "Art/UI/plain_white",
             (int)rootPosition.x + 3,
-            (int)rootPosition.y + DisplayGrid.HEIGHT - 7 - 24,
+            height,
             24,
             24,
             0,
             1,
+            true);
+
+        // display the creature's activity string
+        height -= 4;
+        displayGrid.DisplayText(
+            "<" + creature.GetActivityString() + ">",
+            (int)rootPosition.x + 1,
+            height,
+            Color.black,
             true);
 
         // display the creature's attribute scores
@@ -438,42 +460,55 @@ public class MapDisplayer : MonoBehaviour
         intMod = creature.GetAttributeModifier(AttributeScores.INTELLIGENCE).ToString("+0;-#");
         wisMod = creature.GetAttributeModifier(AttributeScores.WISDOM).ToString("+0;-#");
         chaMod = creature.GetAttributeModifier(AttributeScores.CHARISMA).ToString("+0;-#");
+        height -= 4;
         displayGrid.DisplayText(
             "Strength: " + str + " (" + strMod + ")",
             (int)rootPosition.x + 1,
-            (int)rootPosition.y + DisplayGrid.HEIGHT - 7 - 24 - 4,
-            Color.black);
+            height,
+            Color.black,
+            true);
+        height -= 4;
         displayGrid.DisplayText(
             "Dexterity: " + dex + " (" + dexMod + ")",
             (int)rootPosition.x + 1,
-            (int)rootPosition.y + DisplayGrid.HEIGHT - 7 - 24 - 4 * 2,
-            Color.black);
+            height,
+            Color.black,
+            true);
+        height -= 4;
         displayGrid.DisplayText(
             "Constitution: " + con + " (" + conMod + ")",
             (int)rootPosition.x + 1,
-            (int)rootPosition.y + DisplayGrid.HEIGHT - 7 - 24 - 4 * 3,
-            Color.black);
+            height,
+            Color.black,
+            true);
+        height -= 4;
         displayGrid.DisplayText(
             "Intelligence: " + intel + " (" + intMod + ")",
             (int)rootPosition.x + 1,
-            (int)rootPosition.y + DisplayGrid.HEIGHT - 7 - 24 - 4 * 4,
-            Color.black);
+            height,
+            Color.black,
+            true);
+        height -= 4;
         displayGrid.DisplayText(
             "Wisdom: " + wis + " (" + wisMod + ")",
             (int)rootPosition.x + 1,
-            (int)rootPosition.y + DisplayGrid.HEIGHT - 7 - 24 - 4 * 5,
-            Color.black);
+            height,
+            Color.black,
+            true);
+        height -= 4;
         displayGrid.DisplayText(
             "Charisma: " + cha + " (" + chaMod + ")",
             (int)rootPosition.x + 1,
-            (int)rootPosition.y + DisplayGrid.HEIGHT - 7 - 24 - 4 * 6,
-            Color.black);
+            height,
+            Color.black,
+            true);
 
         // display a divider line
+        height -= 4;
         displayGrid.DisplaySprite(
             "Art/UI/plain_black",
             (int)rootPosition.x + 1,
-            (int)rootPosition.y + DisplayGrid.HEIGHT - 7 - 24 - 4 * 7,
+            height,
             DisplayGrid.WIDTH / 8 - 2,
             1,
             0,
@@ -485,18 +520,21 @@ public class MapDisplayer : MonoBehaviour
         for (int i = 0; i < skillNames.Count; i++)
         {
             string skillName = skillNames[i];
+            height -= 4;
             displayGrid.DisplayText(
                 skillName + " (" + creature.SkillModifier(skillName, map) + ")",
                 (int)rootPosition.x + 1,
-                (int)rootPosition.y + DisplayGrid.HEIGHT - 7 - 24 - 4 * (8 + i),
-                Color.black);
+                height,
+                Color.black,
+                true);
         }
 
         // display a divider line
+        height -= 4;
         displayGrid.DisplaySprite(
             "Art/UI/plain_black",
             (int)rootPosition.x + 1,
-            (int)rootPosition.y + DisplayGrid.HEIGHT - 7 - 24 - 4 * (8 + skillNames.Count),
+            height,
             DisplayGrid.WIDTH / 8 - 2,
             1,
             0,
@@ -527,11 +565,13 @@ public class MapDisplayer : MonoBehaviour
         }
         for (int i = 0; i < inventoryStrings.Count; i++)
         {
+            height -= 4;
             displayGrid.DisplayText(
                 inventoryStrings[i],
                 (int)rootPosition.x + 1,
-                (int)rootPosition.y + DisplayGrid.HEIGHT - 7 - 24 - 4 * (9 + skillNames.Count + i),
-                Color.black);
+                height,
+                Color.black,
+                true);
         }
     }
 
@@ -606,8 +646,9 @@ public abstract class Button
             rectInt.width,
             rectInt.height,
             0,
-            overlapLayer: 1);
-        displayGrid.DisplayText(text, rectInt.x+1, rectInt.y+ rectInt.height / 2, Color.black);
+            overlapLayer: 1,
+            true);
+        displayGrid.DisplayText(text, rectInt.x+1, rectInt.y+ rectInt.height / 2, Color.black, true);
     }
 
     public abstract void OnClick(MapDisplayer mapDisplayer);
@@ -652,7 +693,8 @@ public class SpawnCreatureButton : Button
                 Mathf.RoundToInt(rectInt.width * completion),
                 rectInt.height,
                 0,
-                overlapLayer: 2);
+                overlapLayer: 2,
+                true);
         }
         displayGrid.DisplaySprite("Art/UI/plain_white",
             rectInt.x,
@@ -660,8 +702,9 @@ public class SpawnCreatureButton : Button
             rectInt.width,
             rectInt.height,
             0,
-            overlapLayer: 1);
-        displayGrid.DisplayText(text, rectInt.x + 1, rectInt.y + rectInt.height / 2, Color.black);
+            overlapLayer: 1,
+            true);
+        displayGrid.DisplayText(text, rectInt.x + 1, rectInt.y + rectInt.height / 2, Color.black, true);
     }
 
     public override void OnClick(MapDisplayer mapDisplayer)
@@ -725,8 +768,9 @@ public class BuildBuildingButton : Button
             rectInt.width,
             rectInt.height,
             0,
-            overlapLayer: 1);
-        displayGrid.DisplayText(text, rectInt.x + 1, rectInt.y + rectInt.height / 2, Color.black);
+            overlapLayer: 1,
+            true);
+        displayGrid.DisplayText(text, rectInt.x + 1, rectInt.y + rectInt.height / 2, Color.black, true);
     }
 
     private Building GetSourceBuilding(Map map)

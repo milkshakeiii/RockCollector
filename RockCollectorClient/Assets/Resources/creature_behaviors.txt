@@ -27,6 +27,9 @@ dropOffRange:0
 pickUpRange:999
 restRange:0
 wanderRange:5
+dangerLookDistance:10
+interruptToRestDangerThreshold:2
+interruptToHuntDangerThreshold:1
 
 name:Woodcrafter Behavior
 priorities:Repair Damaged Buildings,Deliver Requested Items,Craft Items,Rest,Idle

@@ -6,7 +6,7 @@ harvestingSkill:chopping
 harvestingAmount:1
 craftingInputs:Log,Flint
 craftingSkill:woodcrafting
-craftingLevel:0
+craftingLevel:-1
 craftingTime:10
 size:-6
 

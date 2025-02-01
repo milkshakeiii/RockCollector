@@ -31,9 +31,69 @@ public class CreatureBehavior
         return null;
     }
 
-    public void CheckInterrupts(MapView map, CreatureSelf creature)
+    public Activity CheckInterrupts(MapView map, CreatureSelf creature)
     {
+        int dangerRating = GetDangerRating(map, creature);
+        int selfEncounterLevel = creature.EncounterLevel();
+        if (dangerRating > selfEncounterLevel * creatureBehaviorType.GetInterruptToRestDangerThreshold())
+        {
+            return new RestActivity(creature.GetHomeBuilding());
+        }
+        if (dangerRating > selfEncounterLevel * creatureBehaviorType.GetInterruptToHuntDangerThreshold())
+        {
+            CreatureView mostDangerousCreature = MostDangerousCreatureInLookRange(map, creature);
+            if (mostDangerousCreature != null)
+            {
+                return mostDangerousCreature.HuntActivity();
+            }
+        }
+        return null;
+    }
 
+    private int GetDangerRating(MapView map, CreatureSelf self)
+    {
+        int dangerRating = 0;
+        foreach (PlaceableView placeable in map.UnheldPlaceables())
+        {
+
+            if (placeable is CreatureView creature2
+                && map.DistanceBetween(self.View(), creature2) <= creatureBehaviorType.GetDangerLookDistance())
+            {
+                if (creature2.GetTeamNumber() != self.GetTeamNumber())
+                {
+                    dangerRating += creature2.EncounterLevel();
+                }
+                else
+                {
+                    dangerRating -= creature2.EncounterLevel();
+                }
+            }
+        }
+        return dangerRating;
+    }
+
+    private CreatureView MostDangerousCreatureInLookRange(MapView map, CreatureSelf self)
+    {
+        CreatureView mostDangerousCreature = null;
+        int highestDangerRating = 0;
+        foreach (PlaceableView placeable in map.UnheldPlaceables())
+        {
+            if (placeable is CreatureView creature2
+                               && map.DistanceBetween(self.View(), creature2) <= creatureBehaviorType.GetDangerLookDistance())
+            {
+                if (creature2.GetTeamNumber() != self.GetTeamNumber())
+                {
+                    int dangerRating = creature2.EncounterLevel();
+                    if (dangerRating > highestDangerRating)
+                    {
+                        highestDangerRating = dangerRating;
+                        mostDangerousCreature = creature2;
+                    }
+                }
+            }
+        }
+        return mostDangerousCreature;
+    
     }
 }
 

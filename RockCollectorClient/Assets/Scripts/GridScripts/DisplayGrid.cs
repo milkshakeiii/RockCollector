@@ -19,9 +19,11 @@ public class DisplayGrid : MonoBehaviour
     public GameObject baseSquarePrefab;
     public GameObject letterPrefab;
     public GameObject letterCanvas;
+    public GameObject letterCanvasOnCamera;
 
     private Dictionary<string, List<GameObject>> cachedSprites = new();
-    private List<GameObject> letters = new();
+    private List<GameObject> worldLetters = new();
+    private List<GameObject> cameraLetters = new();
 
     void OnEnable()
     {
@@ -124,11 +126,12 @@ public class DisplayGrid : MonoBehaviour
         newSquare.GetComponent<SpriteRenderer>().sortingOrder = overlapLayer;
     }
 
-    public void DisplayText(string text, int x, int y)
+    public void DisplayText(string text, int x, int y, bool parentToCamera = false)
     {
-        DisplayText(text, x, y, Color.white);
+        DisplayText(text, x, y, Color.white, parentToCamera);
     }
-    public void DisplayText(string text, int x, int y, Color color)
+
+    public void DisplayText(string text, int x, int y, Color color, bool parentToCamera = false)
     {
         bool bold = false;
         for (int i = 0; i < text.Length; i++)
@@ -143,18 +146,18 @@ public class DisplayGrid : MonoBehaviour
                 bold = false;
                 continue;
             }
-            DisplayLetter(text[i], (x + i), y, color, bold);
+            DisplayLetter(text[i], (x + i), y, color, bold, parentToCamera);
         }
     }
 
-    private void DisplayLetter(char letter, int x, int y, Color color, bool bold)
+    private void DisplayLetter(char letter, int x, int y, Color color, bool bold, bool parentToCamera)
     {
         if (color == null)
         {
             color = Color.white;
         }
 
-        GameObject newLetter = GetCachedLetter();
+        GameObject newLetter = GetCachedLetter(parentToCamera);
 
         newLetter.GetComponent<TMP_Text>().text = letter.ToString();
         float xMin = (float)x / WIDTH;
@@ -166,6 +169,7 @@ public class DisplayGrid : MonoBehaviour
         newLetter.GetComponent<RectTransform>().rect.Set(0, 0, 0, 0);
         newLetter.GetComponent<TMP_Text>().color = color;
         newLetter.GetComponent<TMP_Text>().fontStyle = bold ? FontStyles.Bold : FontStyles.Normal;
+
     }
 
     public void Clear()
@@ -178,7 +182,12 @@ public class DisplayGrid : MonoBehaviour
             }
         }
 
-        foreach (GameObject letter in letters)
+        foreach (GameObject letter in worldLetters)
+        {
+            letter.SetActive(false);
+        }
+
+        foreach (GameObject letter in cameraLetters)
         {
             letter.SetActive(false);
         }
@@ -220,8 +229,10 @@ public class DisplayGrid : MonoBehaviour
         return newSquare;
     }
 
-    private GameObject GetCachedLetter()
+    private GameObject GetCachedLetter(bool parentToCamera)
     {
+        GameObject parent = parentToCamera ? letterCanvasOnCamera : letterCanvas;
+        List<GameObject> letters = parentToCamera ? cameraLetters : worldLetters;
         foreach (GameObject letter in letters)
         {
             if (!letter.activeSelf)
@@ -231,7 +242,7 @@ public class DisplayGrid : MonoBehaviour
             }
         }
 
-        GameObject newLetter = Instantiate(letterPrefab, letterCanvas.transform);
+        GameObject newLetter = Instantiate(letterPrefab, parent.transform);
         letters.Add(newLetter);
         return newLetter;
     }

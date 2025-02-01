@@ -265,6 +265,18 @@ public class Creature : Destructable
         return name;
     }
 
+    public string GetActivityString()
+    {
+        if (currentActivity != null)
+        {
+            return currentActivity.DescriptiveString();
+        }
+        else
+        {
+            return "Thinking...";
+        }
+    }
+
     public CreatureSelf GetSelfView(Map map)
     {
         return CreatureSelf.GetSelfView(this, map);
@@ -726,7 +738,13 @@ public class Creature : Destructable
             return;
         }
         // If off cooldown, check for short-term interrupts to perform instead of the current activity
-        behavior.CheckInterrupts(map.GetView(), GetSelfView(map));
+        Activity replacementActivity = behavior.CheckInterrupts(map.GetView(), GetSelfView(map));
+        if (replacementActivity != null)
+        {
+            AbandonCurrentActivity(map);
+            stagedActivity = replacementActivity;
+            TryPromoteStagedActivity(map);
+        }
         // If an action was performed during the interrupt check, we may be on cooldown again
         if (cooldownTicksRemaining > 0)
         {
@@ -1044,6 +1062,16 @@ public class CreatureView : DestructableView
         return (placeable as Creature).ListAbilities();
     
     }
+
+    public int GetTeamNumber()
+    {
+        return (placeable as Creature).teamNumber;
+    }
+
+    public HuntActivity HuntActivity()
+    {
+        return new HuntActivity(placeable as Creature);
+    }
 }
 
 public class CreatureSelf 
@@ -1186,6 +1214,21 @@ public class CreatureSelf
     public bool HasCurrentActivity()
     {
         return self.HasCurrentActivity();
+    }
+
+    public int GetTeamNumber()
+    {
+        return self.teamNumber;
+    }
+
+    public PlaceableView View()
+    {
+        return PlaceableView.GetPlaceableView(self, map);
+    }
+
+    public Building GetHomeBuilding()
+    {
+        return self.GetHomeBuilding(map);
     }
 }
 

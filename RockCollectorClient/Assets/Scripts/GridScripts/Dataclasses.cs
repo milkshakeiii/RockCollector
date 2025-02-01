@@ -701,6 +701,18 @@ public class CreatureBehaviorType : Entity
     {
         return EntityManager.GetIntAttribute(attributes, "equipRange");
     }
+    public int GetDangerLookDistance()
+    {
+        return EntityManager.GetIntAttribute(attributes, "dangerLookDistance", 0);
+    }
+    public int GetInterruptToRestDangerThreshold()
+    {
+        return EntityManager.GetIntAttribute(attributes, "interruptToRestDangerThreshold", 999);
+    }
+    public int GetInterruptToHuntDangerThreshold()
+    {
+        return EntityManager.GetIntAttribute(attributes, "interruptToHuntDangerThreshold", 999);
+    }
 }
 
 public class DieRoll

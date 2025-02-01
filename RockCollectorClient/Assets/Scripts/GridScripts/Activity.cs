@@ -86,7 +86,7 @@ public abstract class Activity
     {
         if (backDictionary == null)
         {
-            throw new Exception("Not marked for back conversion");
+            return true;
         }
         if (sourcePlaceable == null)
         {
@@ -111,6 +111,8 @@ public abstract class Activity
     {
         sourcePlaceable?.Unclaim();
     }
+
+    public abstract string DescriptiveString();
 }
 
 public class HarvestActivity : Activity
@@ -119,6 +121,11 @@ public class HarvestActivity : Activity
         new(), null, prop.propType.GetProducedItems(), prop.propType.GetProducedItemsProbabilities(), prop, Activity.NULL_POSITION)
     {
 
+    }
+
+    public override string DescriptiveString()
+    {
+        return "Harvesting " + SourceProp().propType.GetName();
     }
 
     public Prop SourceProp()
@@ -143,6 +150,11 @@ public class HuntActivity : Activity
         new(), null, target.GetCreatureType().GetDroppedItems(), target.GetCreatureType().GetDroppedItemsProbabilities(), target, Activity.NULL_POSITION)
     {
 
+    }
+
+    public override string DescriptiveString()
+    {
+        return "Hunting " + SourceCreature().GetCreatureType().GetName();
     }
 
     public override bool TryClaimPlaceables(Creature performer, Map map)
@@ -202,6 +214,11 @@ public class CraftActivity : Activity
         producedItemType.GetCraftingInputs(), producedItemType, new(), new(), workshop, Activity.NULL_POSITION)
     {
 
+    }
+
+    public override string DescriptiveString()
+    {
+        return "Crafting " + craftingOutputItem.GetName();
     }
 
     private HashSet<Item> ConsumedItems(Creature performer, Map map)
@@ -315,6 +332,15 @@ public class PickUpActivity : Activity
         this.addToOutfit = addToOutfit;
     }
 
+    public override string DescriptiveString()
+    {
+        if (addToOutfit)
+        {
+            return "Equipping " + Item().itemType.GetName();
+        }
+        return "Picking up " + Item().itemType.GetName();
+    }
+
     public Item Item()
     {
         return (Item)sourcePlaceable;
@@ -360,6 +386,11 @@ public class DeliverActivity : Activity
         new(), null, new(), new(), item, Activity.NULL_POSITION)
     {
         this.buildingLocation = buildingLocation;
+    }
+
+    public override string DescriptiveString()
+    {
+        return "Delivering " + Item().itemType.GetName();
     }
 
     public Item Item()
@@ -458,6 +489,11 @@ public class RepairActivity : Activity
 
     }
 
+    public override string DescriptiveString()
+    {
+        return "Repairing " + Building().buildingType.GetName();
+    }
+
     public Building Building()
     {
         return (Building)sourcePlaceable;
@@ -485,6 +521,11 @@ public class RestActivity : Activity
         new(), null, new(), new(), building, Activity.NULL_POSITION)
     {
 
+    }
+
+    public override string DescriptiveString()
+    {
+        return "Resting at " + Building().buildingType.GetName();
     }
 
     public override bool TryClaimPlaceables(Creature performer, Map map)
@@ -527,6 +568,11 @@ public class IdleActivity : Activity
 
     }
 
+    public override string DescriptiveString()
+    {
+        return "Idling";
+    }
+
     public override bool TryClaimPlaceables(Creature performer, Map map)
     {
         // do nothing
@@ -566,6 +612,11 @@ public class WanderActivity : Activity
         new(), null, new(), new(), homeBuilding, Activity.NULL_POSITION)
     {
         this.range = range;
+    }
+
+    public override string DescriptiveString()
+    {
+        return "Wandering";
     }
 
     public override bool TryClaimPlaceables(Creature performer, Map map)
