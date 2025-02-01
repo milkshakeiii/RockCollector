@@ -74,9 +74,6 @@ public class MapDisplayer : MonoBehaviour
         Building lair4 = new(EntityManager.buildingTypes["Graveyard"], -1);
         map.Add(lair4, new Vector2Int(10, -20));
 
-        Prop sapling = new(EntityManager.propTypes["Sapling"]);
-        map.Add(sapling, new Vector2Int(1, 1));
-
         for (int i = 1; i <= 3; i++)
         {
             for (int j = 1; j <= 3; j++)

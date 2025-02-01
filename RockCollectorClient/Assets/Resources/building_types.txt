@@ -1,6 +1,6 @@
 name:Farm
-supportedCreatureTypes:Peasant
-supportedCreatureCounts:5
+supportedCreatureTypes:Peasant,Forester
+supportedCreatureCounts:5,5
 supportedCreatureSpawnTimes:500
 size:6
 maxHealth:100
@@ -8,8 +8,12 @@ requestableItemTypes:Axe,Log,Flint,Hammer,Stone
 requestableItemCounts:5,5,5,5,5
 craftedItemTypes:Axe,Real Axe
 buildableBuildingTypes:Shed
-restHealAmount: 3
-restHealCooldown: 20
+restHealAmount:3
+restHealCooldown:20
+plantingZoneXMin:-10
+plantingZoneYMin:-10
+plantingZoneXMax:-1
+plantingZoneYMax:-1
 
 name:Shed
 constructionItemTypes:Log

@@ -554,6 +554,41 @@ public class RestActivity : Activity
     }
 }
 
+public class PlantActivity : Activity
+{
+    private PropType propTypeToPlant;
+
+    public PlantActivity(Vector2Int plantPosition, PropType propTypeToPlant) : base(0,
+        new(), null, new(), new(), null, plantPosition)
+    {
+        this.propTypeToPlant = propTypeToPlant;
+    }
+
+    public override string TargetDescriptiveString()
+    {
+        return propTypeToPlant.GetName();
+    }
+
+    public override bool IsCompletedOrImpossible(Map map, Creature performer)
+    {
+        // check if there is a prop or building at the target location
+        List<Placeable> placeables = map.PlaceablesAt(position);
+        foreach (Placeable placeable in placeables)
+        {
+            if (placeable is Prop || placeable is Building)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public override void Perform(Creature performer, Map map)
+    {
+        
+    }
+}
+
 public class IdleActivity : Activity
 {
     private int firstPerformedTick = -1;
