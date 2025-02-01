@@ -574,14 +574,18 @@ public class PlantPriority : BehaviorPriority
                             }
                             // don't plant if there is already a prop or building there
                             List<Placeable> placeables = map.PlaceablesAt(position);
+                            bool alreadyOccupied = false;
                             foreach (Placeable placeable2 in placeables)
                             {
                                 if (placeable2 is Prop || placeable2 is Building)
                                 {
-                                    continue;
+                                    alreadyOccupied = true;
                                 }
                             }
-                            Debug.Log("Planting at " + position);
+                            if (alreadyOccupied)
+                            {
+                                continue;
+                            }
                             return new PlantActivity(position, propType);
                         }
                     }
