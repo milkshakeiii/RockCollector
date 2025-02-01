@@ -18,7 +18,9 @@ size:1
 
 name:Sapling
 maxHealth:100
+plantingLevel:0
 plantingDifficulty:10
+plantingSkill:forestry
 size:1
 growthTicks:1000
 growsInto:Tree

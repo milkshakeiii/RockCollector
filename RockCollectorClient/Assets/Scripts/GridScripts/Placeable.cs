@@ -487,6 +487,36 @@ public class Creature : Destructable
         return modifier;
     }
 
+    /// <summary>
+    /// Returns -1 if the creature does not have a planting ability for the skill.
+    /// </summary>
+    /// <param name="skillName"></param>
+    /// <param name="map"></param>
+    /// <returns></returns>
+    public int PlantingSkillModifier(string skillName, Map map)
+    {
+        if (skillName == "none")
+        {
+            return -1;
+        }
+        int modifier = SkillModifier(skillName, map);
+        // check if the creature has a planting ability and whether it boosts the skill
+        bool hasPlantingAbility = false;
+        foreach (TypeAbility ability in abilities)
+        {
+            if (ability.GetPlantingSkill() == skillName)
+            {
+                modifier += ability.GetPlantingSkillBonus();
+                hasPlantingAbility = true;
+            }
+        }
+        if (!hasPlantingAbility)
+        {
+            return -1;
+        }
+        return modifier;
+    }
+
     public static int Roll20()
     {
         return UnityEngine.Random.Range(1, 21);
@@ -496,6 +526,13 @@ public class Creature : Destructable
     {
         int roll = Roll20();
         int modifier = SkillModifier(skillName, map);
+        return roll + modifier >= difficulty || roll == 20;
+    }
+
+    public bool RollForPlantingSuccess(int difficulty, string skillName, Map map)
+    {
+        int roll = Roll20();
+        int modifier = PlantingSkillModifier(skillName, map);
         return roll + modifier >= difficulty || roll == 20;
     }
 
@@ -546,6 +583,36 @@ public class Creature : Destructable
             {
                 GainExperience(encounterLevel, prop.propType.GetHarvestingSkill());
             }
+        }
+    }
+
+    public void PlantProp(PropType propType, Vector2Int targetPosition, Map map)
+    {
+        // use the best ability to plant the prop
+        int bestCooldown = 0;
+        foreach (TypeAbility ability in abilities)
+        {
+            if (ability.GetPlantingSkill() == propType.GetPlantingSkill())
+            {
+                int cooldown = ability.GetCooldown();
+                if (bestCooldown == 0 || cooldown < bestCooldown)
+                {
+                    bestCooldown = cooldown;
+                }
+            }
+        }
+        // set cooldown
+        cooldownTicksRemaining = bestCooldown;
+
+        // roll for success or failure
+        bool success = RollForPlantingSuccess(propType.GetPlantingDifficulty(), propType.GetPlantingSkill(), map);
+
+        if (success)
+        {
+            // plant and gain experience
+            Prop prop = new (propType);
+            map.Add(prop, targetPosition);
+            GainExperience(propType.GetPlantingDifficulty(), propType.GetPlantingSkill());
         }
     }
 
@@ -809,7 +876,10 @@ public class Creature : Destructable
         }
         else if (currentActivity.IsCompletedOrImpossible(map, this))
         {
-            Debug.Log("Activity finished " + currentActivity);
+            if (teamNumber > 0)
+            {
+                Debug.Log("Activity finished " + currentActivity);
+            }
             // Something else completed the activity this frame
             // or there is no activity assigned
             AbandonCurrentActivity(map);

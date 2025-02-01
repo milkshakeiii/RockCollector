@@ -83,6 +83,7 @@ public abstract class BehaviorPriority
             "Equip" => new EquipPriority(),
             "Flee" => new FleePriority(),
             "Fight" => new FightPriority(),
+            "Plant Props" => new PlantPriority(),
             _ => throw new Exception("Unknown behavior priority: " + name),
         };
     }
@@ -529,5 +530,69 @@ public class FightPriority : BehaviorPriority
     public override string GetIngVerb()
     {
         return "Fighting";
+    }
+}
+
+public class PlantPriority : BehaviorPriority
+{
+    public override Activity ChosenActivityOrNull(Map map, Creature actor, CreatureBehaviorType behaviorType)
+    {
+        Building homeBuilding = actor.GetHomeBuilding(map);
+        if (homeBuilding == null)
+        {
+            return null;
+        }
+        foreach (Placeable placeable in map.UnheldPlaceables())
+        {
+            if (placeable is Building building && building.buildingType.GetPlantablePropTypes().Count > 0
+                && map.DistanceBetween(homeBuilding, building) <= behaviorType.GetPlantRange())
+            {
+                foreach (PropType propType in building.buildingType.GetPlantablePropTypes())
+                {
+                    // ensure we have the correct skill level
+                    string neededSkill = propType.GetPlantingSkill();
+                    int skillLevel = actor.PlantingSkillModifier(neededSkill, map);
+                    if (skillLevel < propType.GetPlantingLevel())
+                    {
+                        continue;
+                    }
+
+                    Vector2Int buildingPosition = map.PositionOf(building);
+                    int xOffsetMin = building.buildingType.GetPlantingZoneXMin();
+                    int xOffsetMax = building.buildingType.GetPlantingZoneXMax();
+                    int yOffsetMin = building.buildingType.GetPlantingZoneYMin();
+                    int yOffsetMax = building.buildingType.GetPlantingZoneYMax();
+                    for (int xOffset = xOffsetMin; xOffset <= xOffsetMax; xOffset++)
+                    {
+                        for (int yOffset = yOffsetMin; yOffset <= yOffsetMax; yOffset++)
+                        {
+                            Vector2Int position = new Vector2Int(buildingPosition.x + xOffset, buildingPosition.y + yOffset);
+                            // only plant when position x and y are both even
+                            if (position.x % 2 != 0 && position.y % 2 != 0)
+                            {
+                                continue;
+                            }
+                            // don't plant if there is already a prop or building there
+                            List<Placeable> placeables = map.PlaceablesAt(position);
+                            foreach (Placeable placeable2 in placeables)
+                            {
+                                if (placeable2 is Prop || placeable2 is Building)
+                                {
+                                    continue;
+                                }
+                            }
+                            Debug.Log("Planting at " + position);
+                            return new PlantActivity(position, propType);
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public override string GetIngVerb()
+    {
+        return "Planting";
     }
 }

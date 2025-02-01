@@ -229,6 +229,19 @@ public static class EntityManager
         return propTypes[attributes[key]];
     }
 
+    public static List<PropType> GetPropTypeListAttribute(ReadOnlyDictionary<string, string> attributes, string key, List<PropType> defaultValue = null)
+    {
+        if (attributes.ContainsKey(key))
+        {
+            return new List<PropType>(System.Array.ConvertAll(attributes[key].Split(','), x => propTypes[x]));
+        }
+        if (defaultValue == null)
+        {
+            throw new System.ArgumentNullException("No default value");
+        }
+        return defaultValue;
+    }
+
     public static DieRoll GetDieRollAttribute(ReadOnlyDictionary<string, string> attributes, string key, DieRoll defaultValue = null)
     {
         if (!attributes.ContainsKey(key))
@@ -384,6 +397,14 @@ public class TypeAbility : Entity
     {
         return EntityManager.GetIntAttribute(attributes, "craftingSkillBonus", 0);
     }
+    public string GetPlantingSkill()
+    {
+        return EntityManager.GetStringAttribute(attributes, "plantingSkill", "none");
+    }
+    public int GetPlantingSkillBonus()
+    {
+        return EntityManager.GetIntAttribute(attributes, "plantingSkillBonus", 0);
+    }
 }
 
 public class Condition : Entity
@@ -521,6 +542,14 @@ public class PropType : Entity
     public int GetPlantingDifficulty()
     {
         return EntityManager.GetIntAttribute(attributes, "plantingDifficulty");
+    }
+    public int GetPlantingLevel()
+    {
+        return EntityManager.GetIntAttribute(attributes, "plantingLevel");
+    }
+    public string GetPlantingSkill()
+    {
+        return EntityManager.GetStringAttribute(attributes, "plantingSkill");
     }
     public int GetGrowthTicks()
     {
@@ -662,6 +691,26 @@ public class BuildingType : Entity
     {
         return EntityManager.GetIntListAttribute(attributes, "constructionItemAmounts", new List<int>());
     }
+    public List<PropType> GetPlantablePropTypes()
+    {
+        return EntityManager.GetPropTypeListAttribute(attributes, "plantablePropTypes", new List<PropType>());
+    }
+    public int GetPlantingZoneXMin()
+    {
+        return EntityManager.GetIntAttribute(attributes, "plantingZoneXMin", 0);
+    }
+    public int GetPlantingZoneXMax()
+    {
+        return EntityManager.GetIntAttribute(attributes, "plantingZoneXMax", 0);
+    }
+    public int GetPlantingZoneYMin()
+    {
+        return EntityManager.GetIntAttribute(attributes, "plantingZoneYMin", 0);
+    }
+    public int GetPlantingZoneYMax()
+    {
+        return EntityManager.GetIntAttribute(attributes, "plantingZoneYMax", 0);
+    }
 }
 
 public class CreatureBehaviorType : Entity
@@ -743,6 +792,10 @@ public class CreatureBehaviorType : Entity
     public int GetFightDangerThreshold()
     {
         return EntityManager.GetIntAttribute(attributes, "fightDangerThreshold", 999);
+    }
+    public int GetPlantRange()
+    {
+        return EntityManager.GetIntAttribute(attributes, "plantRange");
     }
 }
 

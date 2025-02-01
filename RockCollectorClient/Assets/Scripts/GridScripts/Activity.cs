@@ -99,6 +99,10 @@ public abstract class Activity
 
     public virtual bool TryClaimPlaceables(Creature performer, Map map)
     {
+        if (sourcePlaceable == null)
+        {
+            return true;
+        }
         if (sourcePlaceable.IsClaimed())
         {
             return false;
@@ -571,6 +575,13 @@ public class PlantActivity : Activity
 
     public override bool IsCompletedOrImpossible(Map map, Creature performer)
     {
+        // check if the performer has the required skill level
+        string plantingSkill = propTypeToPlant.GetPlantingSkill();
+        if (performer.PlantingSkillModifier(plantingSkill, map) < propTypeToPlant.GetPlantingLevel())
+        {
+            return true;
+        }
+
         // check if there is a prop or building at the target location
         List<Placeable> placeables = map.PlaceablesAt(position);
         foreach (Placeable placeable in placeables)
@@ -585,7 +596,7 @@ public class PlantActivity : Activity
 
     public override void Perform(Creature performer, Map map)
     {
-        
+        performer.PlantProp(propTypeToPlant, GetLocation(performer, map), map);
     }
 }
 

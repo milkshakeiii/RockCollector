@@ -10,3 +10,4 @@ dodge:dexterity
 resistance:wisdom
 repair:intelligence
 evocation:charisma
+forestry:wisdom
