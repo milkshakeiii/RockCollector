@@ -711,6 +711,22 @@ public class BuildingType : Entity
     {
         return EntityManager.GetIntAttribute(attributes, "plantingZoneYMax", 0);
     }
+    public List<PropType> GetSupportedBonusProps()
+    {
+        return EntityManager.GetPropTypeListAttribute(attributes, "supportedBonusProps", new List<PropType>());
+    }
+    public List<int> GetSupportedBonusPropXs()
+    {
+        return EntityManager.GetIntListAttribute(attributes, "supportedBonusPropXs", new List<int>());
+    }
+    public List<int> GetSupportedBonusPropYs()
+    {
+        return EntityManager.GetIntListAttribute(attributes, "supportedBonusPropYs", new List<int>());
+    }
+    public List<int> GetSupportedBonusPropRespawnTicks()
+    {
+        return EntityManager.GetIntListAttribute(attributes, "supportedBonusPropRespawnTicks", new List<int>());
+    }
 }
 
 public class CreatureBehaviorType : Entity

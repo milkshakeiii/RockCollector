@@ -98,7 +98,7 @@ public class MapDisplayer : MonoBehaviour
         return map;
     }
 
-    private Vector2Int GetMousePosition()
+    private Vector2Int GetMouseWorldPosition()
     {
         Vector3 mousePosition = Input.mousePosition;
         mousePosition.z = -Camera.main.transform.position.z;
@@ -675,7 +675,7 @@ public class MapDisplayer : MonoBehaviour
         {
             return;
         }
-        Vector2Int mousePosition = GetMousePosition();
+        Vector2Int mousePosition = GetMouseWorldPosition();
         BuildingType buildingType = activePlaceBuildingButton.GetBuildingType();
         displayGrid.DisplaySprite("Art/UI/button",
             mousePosition.x * cellsPerSquare,
@@ -684,7 +684,7 @@ public class MapDisplayer : MonoBehaviour
             cellsPerSquare * buildingType.GetSize(),
             0,
             0,
-            true);
+            false);
     }
 
     private void AllRoutesFeedback(Building building)

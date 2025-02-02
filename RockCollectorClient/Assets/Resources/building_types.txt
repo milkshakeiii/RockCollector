@@ -23,6 +23,10 @@ size:2
 maxHealth:100
 requestableItemTypes:Axe
 requestableItemCounts:5
+supportedBonusProps:Sapling,Sapling
+supportedBonusPropXs:0,1
+supportedBonusPropYs:2,2
+supportedBonusPropRespawnTicks:400,400
 
 name:Guild
 supportedCreatureTypes:Woodcrafter

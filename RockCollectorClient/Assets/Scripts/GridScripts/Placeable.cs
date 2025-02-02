@@ -1370,6 +1370,8 @@ public class Building : Destructable
     private int spawnTicksRemaining = 0;
     private Creature spawningCreature; // Null if not spawning
 
+    private Dictionary<Vector2Int, int> bonusPropHarvestTicks = new();
+
     public Building(BuildingType buildingType, int teamNumber) : base(buildingType.GetSize())
     {
         this.buildingType = buildingType;
@@ -1591,6 +1593,33 @@ public class Building : Destructable
                         StartSpawnCreature(type, map);
                         break;
                     }
+                }
+            }
+        }
+
+        // check for empty bonus prop positions
+        List<PropType> bonusProps = buildingType.GetSupportedBonusProps();
+        List<int> bonusPropXs = buildingType.GetSupportedBonusPropXs();
+        List<int> bonusPropYs = buildingType.GetSupportedBonusPropYs();
+        List<int> respawnTimes = buildingType.GetSupportedBonusPropRespawnTicks();
+        for (int i = 0; i < bonusProps.Count; i++)
+        {
+            Vector2Int position = map.PositionOf(this) + new Vector2Int(bonusPropXs[i], bonusPropYs[i]);
+            if (map.PlaceablesAt(position).Count == 0)
+            {
+                if (!bonusPropHarvestTicks.ContainsKey(position))
+                {
+                    bonusPropHarvestTicks[position] = respawnTimes[i];
+                }
+                else
+                {
+                    bonusPropHarvestTicks[position]--;
+                    if (bonusPropHarvestTicks[position] == 0)
+                    {
+                        map.Add(new Prop(bonusProps[i]), position);
+                        bonusPropHarvestTicks[position] = respawnTimes[i];
+                    }
+                    break;
                 }
             }
         }
