@@ -101,7 +101,7 @@ public class MapDisplayer : MonoBehaviour
     private Vector2Int GetMousePosition()
     {
         Vector3 mousePosition = Input.mousePosition;
-        mousePosition.z = DisplayGrid.HEIGHT / 2f;
+        mousePosition.z = -Camera.main.transform.position.z;
         Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
         return WorldPositionToGamePosition(worldPosition);
     }
