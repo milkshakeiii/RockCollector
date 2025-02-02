@@ -137,6 +137,15 @@ public static class EntityManager
         return defaultValue;
     }
 
+    public static bool GetBoolAttribute(ReadOnlyDictionary<string, string> attributes, string key, bool defaultValue = false)
+    {
+        if (attributes.ContainsKey(key))
+        {
+            return bool.Parse(attributes[key]);
+        }
+        return defaultValue;
+    }
+
     public static List<int> GetIntListAttribute(ReadOnlyDictionary<string, string> attributes, string key, List<int> defaultValue = null)
     {
         if (attributes.ContainsKey(key))
@@ -377,6 +386,10 @@ public class TypeAbility : Entity
     {
         return EntityManager.GetStringAttribute(attributes, "harvestingSkill", "none");
     }
+    public int GetHarvestingAmount()
+    {
+        return EntityManager.GetIntAttribute(attributes, "harvestingAmount", 0);
+    }
     public int GetEnemyTargets()
     {
         return EntityManager.GetIntAttribute(attributes, "enemyTargets", 1);
@@ -513,7 +526,7 @@ public class PropType : Entity
     }
     public int GetMaxHealth()
     {
-        return EntityManager.GetIntAttribute(attributes, "maxHealth");
+        return EntityManager.GetIntAttribute(attributes, "maxHealth", 100);
     }
     public int GetSize()
     {
@@ -558,6 +571,14 @@ public class PropType : Entity
     public PropType GetGrowsInto()
     {
         return EntityManager.GetPropTypeAttribute(attributes, "growsInto");
+    }
+    public PropType GetReplacedBy()
+    {
+        return EntityManager.GetPropTypeAttribute(attributes, "replacedBy");
+    }
+    public bool GetRequiresImplement()
+    {
+        return EntityManager.GetBoolAttribute(attributes, "requiresImplement", true);
     }
 }
 

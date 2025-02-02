@@ -707,15 +707,27 @@ public class Creature : Destructable
             if (ability.GetHarvestingSkill() == neededSkill)
             {
                 int cooldown = ability.GetCooldown();
-                foreach (Placeable placeable in map.HeldPlaceablesOf(this))
+                if (!prop.propType.GetRequiresImplement())
                 {
-                    if (placeable is Item item && item.itemType.GetHarvestingSkills().Contains(neededSkill))
+                    int harvestAmount = ability.GetHarvestingAmount();
+                    if (bestCooldown == 0 || harvestAmount / cooldown > bestAmount / bestCooldown)
                     {
-                        int harvestAmount = item.itemType.GetHarvestingAmount();
-                        if (bestCooldown == 0 || harvestAmount / cooldown > bestAmount / bestCooldown)
+                        bestAmount = harvestAmount;
+                        bestCooldown = cooldown;
+                    }
+                }
+                else
+                {
+                    foreach (Placeable placeable in map.HeldPlaceablesOf(this))
+                    {
+                        if (placeable is Item item && item.itemType.GetHarvestingSkills().Contains(neededSkill))
                         {
-                            bestAmount = harvestAmount;
-                            bestCooldown = cooldown;
+                            int harvestAmount = item.itemType.GetHarvestingAmount();
+                            if (bestCooldown == 0 || harvestAmount / cooldown > bestAmount / bestCooldown)
+                            {
+                                bestAmount = harvestAmount;
+                                bestCooldown = cooldown;
+                            }
                         }
                     }
                 }
@@ -1779,6 +1791,13 @@ public class Prop : Destructable
 
             ItemType droppedItem = droppedItemsMultipliedByProbability[UnityEngine.Random.Range(0, droppedItemsMultipliedByProbability.Count)];
             map.Add(new Item(droppedItem), map.PositionOf(this));
+
+            // Replace with a new prop if applicable
+            PropType growsInto = propType.GetGrowsInto();
+            if (growsInto != null)
+            {
+                map.Add(new Prop(growsInto), map.PositionOf(this));
+            }
         }
     }
 

@@ -257,11 +257,10 @@ public class HarvestRequestedItemsPriority : BehaviorPriority
                     string neededSkill = prop.propType.GetHarvestingSkill();
                     if (actor.BestHarvestingAbility(neededSkill) == null)
                     {
-                        Debug.Log("No harvesting ability for skill: " + neededSkill);
                         continue;
                     }
                     // make sure you are holding the correct tool
-                    if (actor.HarvestingCooldownAndAmount(prop, map).Item1 == 0)
+                    if (prop.propType.GetRequiresImplement() && actor.HarvestingCooldownAndAmount(prop, map).Item1 == 0)
                     {
                         // we are not holding the correct tool
                         // so find the correct tool

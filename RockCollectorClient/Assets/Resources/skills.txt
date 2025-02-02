@@ -11,3 +11,4 @@ resistance:wisdom
 repair:intelligence
 evocation:charisma
 forestry:wisdom
+gathering:intelligence

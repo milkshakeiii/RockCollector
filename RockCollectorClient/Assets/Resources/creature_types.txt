@@ -7,8 +7,8 @@ constitutionBonus:0
 intelligenceBonus:0
 wisdomBonus:0
 charismaBonus:0
-abilities:Basic Attack,Woodcutting,Repair Building,Woodcrafting
-abilityLevels:1,1,1,1
+abilities:Basic Attack,Woodcutting,Repair Building,Woodcrafting,Gathering
+abilityLevels:1,1,1,1,1
 behavior:Peasant Behavior
 
 name:Forester
@@ -20,8 +20,8 @@ constitutionBonus:0
 intelligenceBonus:0
 wisdomBonus:0
 charismaBonus:0
-abilities:Plant Tree
-abilityLevels:1
+abilities:Plant Tree,Gathering
+abilityLevels:1,1
 behavior:Forester Behavior
 
 name:Woodcrafter

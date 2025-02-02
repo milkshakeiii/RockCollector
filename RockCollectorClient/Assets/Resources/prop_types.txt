@@ -1,15 +1,28 @@
 name:Tree
 harvestingSkill:chopping
-maxHealth:100
 harvestingRequired:10
 harvestingDifficulty:10
 producedItems:Log
 producedItemsProbabilities:1
 size:1
 
+name:Bush
+growthTicks:1000
+growsInto:Fruited Bush
+size:1
+
+name:Fruited Bush
+harvestingSkill:gathering
+harvestingRequired:10
+harvestingDifficulty:10
+requiresImplement:false
+producedItems:Berry
+producedItemsProbabilities:1
+replacedBy:Bush
+size:1
+
 name:Rock
 harvestingSkill:chopping
-maxHealth:100
 harvestingRequired:10
 harvestingDifficulty:10
 producedItems:Flint,Stone
@@ -17,7 +30,6 @@ producedItemsProbabilities:1,1
 size:1
 
 name:Sapling
-maxHealth:100
 plantingLevel:0
 plantingDifficulty:10
 plantingSkill:forestry

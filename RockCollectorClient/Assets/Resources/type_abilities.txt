@@ -2,6 +2,11 @@ name:Woodcutting
 cooldown:10
 harvestingSkill:chopping
 
+name:Gathering
+cooldown:20
+harvestingAmount:1
+harvestingSkill:gathering
+
 name:Woodcrafting
 craftingSkill:woodcrafting
 craftingSkillBonus:0

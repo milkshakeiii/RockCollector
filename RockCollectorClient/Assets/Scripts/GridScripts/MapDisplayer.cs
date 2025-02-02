@@ -73,7 +73,7 @@ public class MapDisplayer : MonoBehaviour
 
         Building lair4 = new(EntityManager.buildingTypes["Graveyard"], -1);
         map.Add(lair4, new Vector2Int(10, -20));
-
+        
         for (int i = 1; i <= 3; i++)
         {
             for (int j = 1; j <= 3; j++)
@@ -90,6 +90,13 @@ public class MapDisplayer : MonoBehaviour
                 map.Add(testProp, new Vector2Int(i * 3 - 15, j * 3));
             }
         }
+
+        Prop bush = new(EntityManager.propTypes["Bush"]);
+        map.Add(bush, new Vector2Int(-20, 0));
+
+        Prop bush2 = new(EntityManager.propTypes["Bush"]);
+        map.Add(bush2, new Vector2Int(-22, 0));
+
         DisplayMap(map);
     }
     
@@ -293,7 +300,7 @@ public class MapDisplayer : MonoBehaviour
 
     void DisplayBars(Placeable placeable, Vector2Int position)
     {
-        if (placeable is Destructable destructable)
+        if (placeable is Destructable destructable && placeable is not Prop)
         {
             displayGrid.DisplaySprite("Art/UI/button",
                 position.x * cellsPerSquare,

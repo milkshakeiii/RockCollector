@@ -8,8 +8,9 @@ craftRange:0
 restRange:0
 
 name:Forester Behavior
-priorities:Plant Props,Rest,Idle
+priorities:Plant Props,Harvest Requested Items,Rest,Idle
 plantRange:999
+harvestRange:999
 restRange:0
 
 name:Skeleton Behavior
