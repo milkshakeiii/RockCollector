@@ -289,9 +289,42 @@ public class MapDisplayer : MonoBehaviour
                 0);
             DisplayBars(placeable, position);
             DisplayLabels(placeable, position);
+
+            if (placeable == leftMouseSelection.placeable)
+            {
+                leftMouseSelection.position = position;
+            }
+            if (placeable == rightMouseSelection.placeable)
+            {
+                rightMouseSelection.position = position;
+            }
         }
 
         buttonRectsToButtons.Clear();
+
+        if (leftMouseSelection.placeable != null && !map.PlaceableExists(leftMouseSelection.placeable))
+        {
+            if (map.PlaceablesAt(leftMouseSelection.position).Count > 0)
+            {
+                leftMouseSelection.placeable = map.PlaceablesAt(leftMouseSelection.position)[0];
+            }
+            else
+            {
+                leftMouseSelection.placeable = null;
+            }
+        }
+        if (rightMouseSelection.placeable != null && !map.PlaceableExists(rightMouseSelection.placeable))
+        {
+            if (map.PlaceablesAt(rightMouseSelection.position).Count > 0)
+            {
+                rightMouseSelection.placeable = map.PlaceablesAt(rightMouseSelection.position)[0];
+            }
+            else
+            {
+                rightMouseSelection.placeable = null;
+            }
+        }
+
         DisplayInfoPanel(leftMouseSelection.placeable, new Vector2(-DisplayGrid.WIDTH/2, -DisplayGrid.HEIGHT/2f));
         DisplayInfoPanel(rightMouseSelection.placeable, new Vector2(3*DisplayGrid.WIDTH/8,-DisplayGrid.HEIGHT/2f));
 
@@ -479,14 +512,22 @@ public class MapDisplayer : MonoBehaviour
         // display the creature name
         int height = (int)rootPosition.y + DisplayGrid.HEIGHT - 4;
         displayGrid.DisplayText(
-            creature.GetName() + " - Level " + creature.GetLevel(),
-            (int)rootPosition.x + 1,
+            "<" + creature.GetName() + ">",
+            (int)rootPosition.x + 3,
+            height,
+            Color.black,
+            true);
+
+        height -= 3;
+        displayGrid.DisplayText(
+            "Level " + creature.GetLevel() + " " + creature.GetCreatureType().GetName(),
+            (int)rootPosition.x + 3,
             height,
             Color.black,
             true);
 
         // display the creature's portrait
-        height -= 3 + 24;
+        height -= 2 + 24;
         displayGrid.DisplaySprite(
             "Art/UI/plain_white",
             (int)rootPosition.x + 3,

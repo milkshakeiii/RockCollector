@@ -41,8 +41,8 @@ supportedCreatureCounts:5
 supportedCreatureSpawnTimes:600
 size:3
 maxHealth:100
-restHealAmount: 3
-restHealCooldown: 20
+restHealAmount:3
+restHealCooldown:20
 
 name:Barracks
 supportedCreatureTypes:Warrior,Wizard
@@ -53,5 +53,5 @@ maxHealth:100
 requestableItemTypes:Log,Wooden Sword,Wooden Shield
 requestableItemCounts:5,5,5,5
 craftedItemTypes:Sword,Shield
-restHealAmount: 3
-restHealCooldown: 20
+restHealAmount:3
+restHealCooldown:20
