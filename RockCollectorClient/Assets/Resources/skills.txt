@@ -10,5 +10,6 @@ dodge:dexterity
 resistance:wisdom
 repair:intelligence
 evocation:charisma
+necromancy:intelligence
 forestry:wisdom
 gathering:intelligence

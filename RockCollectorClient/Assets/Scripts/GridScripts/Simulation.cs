@@ -26,7 +26,6 @@ public class Simulation
             if (weaponSkills.Count > 0)
             {
                 WeaponAttack(ability, actor, map, weaponSkills);
-                return;
             }
 
             DieRoll damage = ability.GetDamage();
@@ -34,7 +33,6 @@ public class Simulation
             if (damage != null)
             {
                 NonweaponAttack(ability, actor, map);
-                return;
             }
         }
     }

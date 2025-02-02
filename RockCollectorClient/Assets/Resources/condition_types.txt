@@ -1,2 +1,4 @@
 name:Weak
 attackPenalty:2
+inflictionAttribute:charisma
+protectionAttribute:strength

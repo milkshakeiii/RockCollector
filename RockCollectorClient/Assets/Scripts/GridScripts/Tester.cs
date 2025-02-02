@@ -14,6 +14,7 @@ public class Tester : MonoBehaviour
         WeaponAttack();
         RepairBuilding();
         PeasantBehaviorTest();
+        ConditionsTest();
         Debug.Log("Tests finished");
     }
 
@@ -418,6 +419,33 @@ public class Tester : MonoBehaviour
         Activity restActivity = behavior.NextActivity(map, testCreature).Item1;
         Assert(restActivity is RestActivity, "Activity should be rest");
         Assert(restActivity.GetLocation(testCreature, map) == map.PositionOf(farm), "Rest location");
+    }
+
+    void ConditionsTest()
+    {
+        Map map = new();
+        
+        Creature testInflictor = new("George", 1, EntityManager.creatureTypes["Wizard"], Map.NULL_POSITION);
+        map.Add(testInflictor, new Vector2Int(5, 5));
+
+        Creature testTarget = new("George", 1, EntityManager.creatureTypes["Peasant"], Map.NULL_POSITION);
+        map.Add(testTarget, new Vector2Int(5, 6));
+
+        testInflictor.UseAbility(EntityManager.typeAbilities["Weakness"], map);
+        Assert(testTarget.ListConditions().Count == 1, "Condition not applied");
+        Assert(testTarget.ListConditions()[0].GetName() == "Weak", "Condition not applied");
+        int stacks = testTarget.ListConditions()[0].GetStacks();
+        
+        testInflictor.LevelUp();
+        testInflictor.LevelUp();
+        Item staff = new (EntityManager.itemTypes["Staff"]);
+        map.AddHeld(testInflictor, staff);
+
+        // the difference should be 4 higher now, doubling the stacks
+        testInflictor.UseAbility(EntityManager.typeAbilities["Weakness"], map);
+        Assert(testTarget.ListConditions().Count == 1, "Condition not applied");
+        Assert(testTarget.ListConditions()[0].GetName() == "Weak", "Condition not applied");
+        Assert(testTarget.ListConditions()[0].GetStacks() >= stacks * 3, "Condition stacks");
     }
 
     void Assert(bool condition, string message)

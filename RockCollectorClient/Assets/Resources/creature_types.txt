@@ -59,21 +59,9 @@ constitutionBonus:-2
 intelligenceBonus:4
 wisdomBonus:0
 charismaBonus:2
-abilities:Fireball
-abilityLevels:1
+abilities:Fireball,Weakness
+abilityLevels:1,1
 behavior:Warrior Behavior
-
-name:Scarecrow
-startingHealth:4
-healthPerLevel:3
-strengthBonus:0
-dexterityBonus:0
-constitutionBonus:0
-intelligenceBonus:0
-wisdomBonus:0
-charismaBonus:0
-abilityLevels:1
-behavior:Peasant Behavior
 
 name:Skeleton
 startingHealth:4

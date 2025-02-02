@@ -30,6 +30,15 @@ range:7
 effectRadius:3
 skill:evocation
 
+name:Weakness
+cooldown:40
+rechargeTicks:100
+enemyTargets:1
+range:7
+skill:necromancy
+conditionsInflicted:Weak
+baseStacks:2
+
 name:Plant Tree
 cooldown:80
 rechargeTicks:80
