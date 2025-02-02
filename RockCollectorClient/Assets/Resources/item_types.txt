@@ -54,7 +54,7 @@ craftingInputs:Log
 craftingSkill:woodcrafting
 craftingLevel:1
 craftingTime:10
-size:-6
+size:-3
 
 name:Wooden Shield
 equipmentCategory:shields
@@ -66,4 +66,15 @@ craftingTime:10
 skillBonusNames:defense
 skillBonusAmounts:4
 craftingTime:10
-size:-6
+size:-2
+
+name:Wooden Staff
+equipmentCategory:staves
+equipmentLevel:1
+craftingInputs:Log
+craftingSkill:woodcrafting
+craftingLevel:1
+craftingTime:10
+conditionProtection:2
+conditionInfliction:2
+size:-2

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine.UIElements;
+using UnityEngine.Playables;
 
 public class MapDisplayer : MonoBehaviour
 {
@@ -670,6 +671,44 @@ public class MapDisplayer : MonoBehaviour
             height -= 4;
             displayGrid.DisplayText(
                 inventoryStrings[i],
+                (int)rootPosition.x + 1,
+                height,
+                Color.black,
+                true);
+        }
+
+        // display a divider line
+        height -= 4;
+        displayGrid.DisplaySprite(
+            "Art/UI/plain_black",
+            (int)rootPosition.x + 1,
+            height,
+            DisplayGrid.WIDTH / 8 - 2,
+            1,
+            0,
+            1,
+            true);
+
+        // display the creature's conditions
+        List<Condition> conditions = creature.ListConditions();
+        List<string> conditionStrings = new List<string>();
+        foreach (Condition condition in conditions)
+        {
+            string newPart = condition.GetName() + " (" + condition.GetStacks() + "), ";
+            if (conditionStrings.Count == 0 || conditionStrings[conditionStrings.Count - 1].Length + newPart.Length > 30)
+            {
+                conditionStrings.Add(newPart);
+            }
+            else
+            {
+                conditionStrings[conditionStrings.Count - 1] += newPart;
+            }
+        }
+        for (int i = 0; i < conditionStrings.Count; i++)
+        {
+            height -= 4;
+            displayGrid.DisplayText(
+                conditionStrings[i],
                 (int)rootPosition.x + 1,
                 height,
                 Color.black,

@@ -205,6 +205,7 @@ public class Creature : Destructable
     private List<Feat> feats = new();
     private List<TypeAbility> abilities = new();
     private Dictionary<TypeAbility, int> ticksLastUsed = new();
+    private List<Condition> conditions = new();
 
     private Vector2Int homePosition;
 
@@ -213,7 +214,7 @@ public class Creature : Destructable
     private Activity stagedActivity;
     private Thread newActivityComputation;
 
-    private int cooldownTicksRemaining = 0;
+    private float cooldownTicksRemaining = 0;
     private int lastInterruptTick = 0;
 
     private string ingVerb = "";
@@ -324,7 +325,7 @@ public class Creature : Destructable
         bool weaponRequirementsMet = weaponSkills.Count == 0;
         foreach (string weaponSkill in weaponSkills)
         {
-            (DieRoll damage, int range) = WeaponDamangeAndRange(weaponSkill, map);
+            (DieRoll damage, int range) = WeaponBaseDamangeAndRange(weaponSkill, map);
             if (damage != null)
             {
                 weaponRequirementsMet = true;
@@ -411,6 +412,8 @@ public class Creature : Destructable
             throw new System.Exception("Skill name cannot be null");
         }
         int modifier = skillIncreases.ContainsKey(skillName) ? (int)skillIncreases[skillName] : 0;
+        
+        // check for bonuses from feats
         foreach (Feat feat in feats)
         {
             if (feat.GetSkillBonusName().Equals(skillName))
@@ -418,6 +421,8 @@ public class Creature : Destructable
                 modifier += feat.GetSkillBonus();
             }
         }
+        
+        // check for bonuses from items
         foreach (Placeable placeable in map.HeldPlaceablesOf(this))
         {
             if (placeable is Item item)
@@ -433,21 +438,22 @@ public class Creature : Destructable
                 }
             }
         }
+        
+        // check for bonuses or penalties from conditions
+        foreach (Condition condition in conditions)
+        {
+            modifier += condition.GetSkillModifier(skillName);
+        }
+
+        // add attribute modifier
         if (!EntityManager.skillsToAttributeScores.ContainsKey(skillName))
         {
             throw new System.Exception("Key attribute score not found for skill: " + skillName);
         }
         string attributeName = EntityManager.skillsToAttributeScores[skillName];
-        AttributeScores score;
-        bool parseSuccess = Enum.TryParse(attributeName, true, out score);
-        if (parseSuccess)
-        {
-            modifier += GetAttributeModifier(score);
-        }
-        else
-        {
-            throw new System.Exception("Invalid attribute score string: " + attributeName);
-        }
+        AttributeScores score = EntityManager.ParseAttributeScore(attributeName);
+        modifier += GetAttributeModifier(score);
+
         return modifier;
     }
 
@@ -769,7 +775,7 @@ public class Creature : Destructable
     /// <param name="weaponSkill"></param>
     /// <param name="map"></param>
     /// <returns></returns>
-    public (DieRoll, int) WeaponDamangeAndRange(string weaponSkill, Map map)
+    public (DieRoll, int) WeaponBaseDamangeAndRange(string weaponSkill, Map map)
     {
         DieRoll damage = null;
         int range = 0;
@@ -841,6 +847,11 @@ public class Creature : Destructable
             LevelUp();
             experience = 0;
         }
+
+        foreach (Condition condition in conditions)
+        {
+            condition.Tick(this, map);
+        }
     }
 
     public override void ThinkAndPlan(Map map)
@@ -862,7 +873,13 @@ public class Creature : Destructable
         if (cooldownTicksRemaining > 0)
         {
             // Nothing can be done while on cooldown
-            cooldownTicksRemaining--;
+            float speedModifier = 1f;
+            foreach (Condition condition in conditions)
+            {
+                speedModifier += condition.GetSpeedModifier();
+            }
+
+            cooldownTicksRemaining -= Mathf.Max(0.1f, 1f + speedModifier);
             return;
         }
         // If off cooldown and interrupt hasn't been performed too recently, check for interrupts
@@ -968,7 +985,12 @@ public class Creature : Destructable
     /// <returns></returns>
     public int MoveSpeed()
     {
-        return 10;
+        int moveSpeedModifier = 0;
+        foreach (Condition condition in conditions)
+        {
+            moveSpeedModifier += condition.GetMoveSpeedModifier();
+        }
+        return Mathf.Max(1, 10 + moveSpeedModifier);
     }
 
     public void MoveInDirection(Vector2Int direction, Map map)
@@ -1005,7 +1027,12 @@ public class Creature : Destructable
 
     public override int GetMaxHealth()
     {
-        return creatureType.GetStartingHealth() + level * creatureType.GetHealthPerLevel();
+        int maxHealthModifier = 0;
+        foreach (Condition condition in conditions)
+        {
+            maxHealthModifier += condition.GetMaxHealthModifier();
+        }
+        return Mathf.Max(1, creatureType.GetStartingHealth() + level * creatureType.GetHealthPerLevel() + maxHealthModifier);
     }
 
     public override float HealthFraction()
@@ -1101,6 +1128,16 @@ public class Creature : Destructable
 
     public int GetAttributeScore(AttributeScores score)
     {
+        int modifier = 0;
+        foreach (Condition condition in conditions)
+        {
+            modifier += condition.GetAttributeModifier(score);
+        }
+        return GetUnmodifiedAttributeScore(score) + modifier;
+    }
+
+    private int GetUnmodifiedAttributeScore(AttributeScores score)
+    {
         int baseScore = attributeScores[score];
         return score switch
         {
@@ -1117,6 +1154,81 @@ public class Creature : Destructable
     public int GetAttributeModifier(AttributeScores score)
     {
         return ((GetAttributeScore(score) / 2) - 5);
+    }
+
+    public override bool IsDestroyed()
+    {
+        foreach (AttributeScores score in Enum.GetValues(typeof(AttributeScores)))
+        {
+            if (GetAttributeScore(score) <= 0)
+            {
+                return true;
+            }
+        }
+        return base.IsDestroyed();
+    }
+
+    private int GetConditionProtectionLevel(Map map)
+    {
+        int level = 0;
+        foreach (Condition condition in conditions)
+        {
+            level += condition.GetProtectionModifier();
+        }
+        foreach (Placeable heldPlaceable in map.HeldPlaceablesOf(this))
+        {
+            if (heldPlaceable is Item item)
+            {
+                level += item.itemType.GetConditionProtection();
+            }
+        }
+        return level;
+    }
+
+    private int GetConditionInflictionLevel(Map map)
+    {
+        int level = 0;
+        foreach (Condition condition in conditions)
+        {
+            level += condition.GetInflictorModifier();
+        }
+        foreach (Placeable heldPlaceable in map.HeldPlaceablesOf(this))
+        {
+            if (heldPlaceable is Item item)
+            {
+                level += item.itemType.GetConditionInfliction();
+            }
+        }
+        return level;
+    }
+
+    public void InflictConditionOn(Creature target, ConditionType conditionType, int baseStacks, Map map)
+    {
+        int levelDifference = target.GetConditionProtectionLevel(map) - GetConditionInflictionLevel(map);
+        int inflictorAttributeModifier = GetAttributeModifier(conditionType.GetInflictionAttribute());
+        int protectionAttributeModifier = target.GetAttributeModifier(conditionType.GetProtectionAttribute());
+        levelDifference += inflictorAttributeModifier;
+        levelDifference -= protectionAttributeModifier;
+        float stacks = baseStacks * MathF.Pow(2, (levelDifference/4));
+        target.AddCondition(conditionType, stacks);
+    }
+
+    public void AddCondition(ConditionType conditionType, float stacks)
+    {
+        foreach (Condition condition in conditions)
+        {
+            if (condition.conditionType == conditionType)
+            {
+                condition.AddStacks(stacks);
+                return;
+            }
+        }
+        conditions.Add(new Condition(conditionType, stacks));
+    }
+
+    public List<Condition> ListConditions()
+    {
+        return new (conditions);
     }
 }
 
@@ -1169,7 +1281,7 @@ public class CreatureView : DestructableView
 
     public (DieRoll, int) WeaponDamangeAndRange(string weaponSkill)
     {
-        return (placeable as Creature).WeaponDamangeAndRange(weaponSkill, map);
+        return (placeable as Creature).WeaponBaseDamangeAndRange(weaponSkill, map);
     }
 
     public CreatureType GetCreatureType()
@@ -1303,7 +1415,7 @@ public class CreatureSelf
 
     public (DieRoll, int) WeaponDamangeAndRange(string weaponSkill)
     {
-        return self.WeaponDamangeAndRange(weaponSkill, map);
+        return self.WeaponBaseDamangeAndRange(weaponSkill, map);
     }
 
     public CreatureType GetCreatureType()

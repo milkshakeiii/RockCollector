@@ -49,7 +49,7 @@ public class Simulation
         {
             if (weaponSkills.Contains(preferredWeaponSkill))
             {
-                (damage, range) = actor.WeaponDamangeAndRange(preferredWeaponSkill, map);
+                (damage, range) = actor.WeaponBaseDamangeAndRange(preferredWeaponSkill, map);
                 if (damage != null)
                 {
                     chosenWeaponSkill = preferredWeaponSkill;

@@ -5,12 +5,13 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
 public static class EntityManager 
 {
     public static Dictionary<string, Feat> feats = new();
     public static Dictionary<string, TypeAbility> typeAbilities = new();
-    public static Dictionary<string, Condition> conditions = new();
+    public static Dictionary<string, ConditionType> conditions = new();
     public static Dictionary<string, CreatureType> creatureTypes = new();
     public static Dictionary<string, PropType> propTypes = new();
     public static Dictionary<string, ItemType> itemTypes = new();
@@ -29,9 +30,9 @@ public static class EntityManager
         {
             typeAbilities[entity.attributes["name"]] = (TypeAbility)entity;
         }
-        else if (identifier == "conditions")
+        else if (identifier == "condition_types")
         {
-            conditions[entity.attributes["name"]] = (Condition)entity;
+            conditions[entity.attributes["name"]] = (ConditionType)entity;
         }
         else if (identifier == "prop_types")
         {
@@ -71,6 +72,16 @@ public static class EntityManager
         }
     }
 
+    public static AttributeScores ParseAttributeScore(string name)
+    {
+        bool parseSuccess = Enum.TryParse(name, true, out AttributeScores score);
+        if (!parseSuccess)
+        {
+            throw new System.ArgumentException("Invalid attribute score name: " + name);
+        }
+        return score;
+    }
+
     public static Entity CreateEntity(string identifier, Dictionary<string, string> attributes)
     {
         if (identifier == "feats")
@@ -81,9 +92,9 @@ public static class EntityManager
         {
             return new TypeAbility (attributes);
         }
-        else if (identifier == "conditions")
+        else if (identifier == "condition_types")
         {
-            return new Condition (attributes);
+            return new ConditionType (attributes);
         }
         else if (identifier == "prop_types")
         {
@@ -261,11 +272,17 @@ public static class EntityManager
         return new DieRoll(int.Parse(parts[0]), int.Parse(parts[1]));
     }
 
+    public static AttributeScores GetAttributeScoreAttribute(ReadOnlyDictionary<string, string> attributes, string key)
+    {
+        string name = GetStringAttribute(attributes, key);
+        return ParseAttributeScore(name);
+    }
+
     public static void ReadAllEntities()
     {
         ReadEntity("feats");
         ReadEntity("type_abilities");
-        ReadEntity("conditions");
+        ReadEntity("condition_types");
         ReadEntity("creature_types");
         ReadEntity("prop_types");
         ReadEntity("item_types");
@@ -420,9 +437,9 @@ public class TypeAbility : Entity
     }
 }
 
-public class Condition : Entity
+public class ConditionType : Entity
 {
-    public Condition(Dictionary<string, string> attributes) : base(attributes) {}
+    public ConditionType(Dictionary<string, string> attributes) : base(attributes) {}
 
     public string GetName()
     {
@@ -439,6 +456,14 @@ public class Condition : Entity
     public int GetDamage()
     {
         return EntityManager.GetIntAttribute(attributes, "damage", 0);
+    }
+    public AttributeScores GetInflictionAttribute()
+    {
+        return EntityManager.GetAttributeScoreAttribute(attributes, "inflictionAttribute");
+    }
+    public AttributeScores GetProtectionAttribute()
+    {
+        return EntityManager.GetAttributeScoreAttribute(attributes, "protectionAttribute");
     }
 }
 
@@ -649,6 +674,14 @@ public class ItemType : Entity
     public int GetEquipmentLevel()
     {
         return EntityManager.GetIntAttribute(attributes, "equipmentLevel", 0);
+    }
+    public int GetConditionProtection()
+    {
+        return EntityManager.GetIntAttribute(attributes, "conditionProtection", 0);
+    }
+    public int GetConditionInfliction()
+    {
+        return EntityManager.GetIntAttribute(attributes, "conditionInfliction", 0);
     }
 }
 
