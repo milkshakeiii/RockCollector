@@ -317,22 +317,22 @@ public static class EntityManager
         return defaultValue;
     }
 
-    public static void ReadAllEntities()
+    public static void ReadTeam(string teamName)
     {
-        ReadEntity("feats");
-        ReadEntity("type_abilities");
-        ReadEntity("condition_types");
-        ReadEntity("creature_types");
-        ReadEntity("prop_types");
-        ReadEntity("item_types");
-        ReadEntity("building_types");
-        ReadEntity("creature_behaviors");
-        ReadMap("skills");
+        ReadEntity("feats", teamName);
+        ReadEntity("type_abilities", teamName);
+        ReadEntity("condition_types", teamName);
+        ReadEntity("creature_types", teamName);
+        ReadEntity("prop_types", teamName);
+        ReadEntity("item_types", teamName);
+        ReadEntity("building_types", teamName);
+        ReadEntity("creature_behaviors", teamName);
+        ReadMap("skills", teamName);
     }
 
-    private static void ReadEntity(string identifier)
+    private static void ReadEntity(string identifier, string teamName)
     {
-        TextAsset textAsset = Resources.Load<TextAsset>(identifier);
+        TextAsset textAsset = Resources.Load<TextAsset>("Teams/" + teamName + "/" + identifier);
         string[] lines = textAsset.text.Split('\n');
         Dictionary<string, string> currentItem = new();
         foreach (string line in lines)
@@ -350,9 +350,9 @@ public static class EntityManager
         }
     }
 
-    private static void ReadMap(string identifier)
+    private static void ReadMap(string identifier, string teamName)
     {
-        TextAsset textAsset = Resources.Load<TextAsset>(identifier);
+        TextAsset textAsset = Resources.Load<TextAsset>("Teams/" + teamName + "/" + identifier);
         string[] lines = textAsset.text.Split('\n');
         foreach (string line in lines)
         {

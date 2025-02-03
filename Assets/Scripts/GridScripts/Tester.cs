@@ -130,7 +130,7 @@ public class Tester : MonoBehaviour
 
     void LoadEntities()
     {
-        EntityManager.ReadAllEntities();
+        EntityManager.ReadTeam("Testanians");
         Assert(EntityManager.feats.ContainsKey("Skill Focus (woodcrafting)"), "Skill Focus not found");
         Assert(EntityManager.feats["Skill Focus (woodcrafting)"].GetSkillBonusName() == "woodcrafting", "Skill Focus GetSkillBonusName");
         Assert(EntityManager.conditions.ContainsKey("Weak"), "Weak not found");
