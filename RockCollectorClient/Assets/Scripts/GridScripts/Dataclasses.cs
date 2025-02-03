@@ -148,6 +148,19 @@ public static class EntityManager
         return defaultValue;
     }
 
+    public static float GetFloatAttribute(ReadOnlyDictionary<string, string> attributes, string key, float defaultValue = -1)
+    {
+        if (attributes.ContainsKey(key))
+        {
+            return float.Parse(attributes[key]);
+        }
+        if (defaultValue == -1)
+        {
+            throw new System.ArgumentNullException("No default value");
+        }
+        return defaultValue;
+    }
+
     public static bool GetBoolAttribute(ReadOnlyDictionary<string, string> attributes, string key, bool defaultValue = false)
     {
         if (attributes.ContainsKey(key))
@@ -193,6 +206,19 @@ public static class EntityManager
         if (attributes.ContainsKey(key))
         {
             return new List<ItemType>(System.Array.ConvertAll(attributes[key].Split(','), x => itemTypes[x]));
+        }
+        if (defaultValue == null)
+        {
+            throw new System.ArgumentNullException("No default value");
+        }
+        return defaultValue;
+    }
+
+    public static List<ConditionType> GetConditionListAttribute(ReadOnlyDictionary<string, string> attributes, string key, List<ConditionType> defaultValue = null)
+    {
+        if (attributes.ContainsKey(key))
+        {
+            return new List<ConditionType>(System.Array.ConvertAll(attributes[key].Split(','), x => conditions[x]));
         }
         if (defaultValue == null)
         {
@@ -276,6 +302,19 @@ public static class EntityManager
     {
         string name = GetStringAttribute(attributes, key);
         return ParseAttributeScore(name);
+    }
+
+    public static List<AttributeScores> GetAttributeScoresListAttribute(ReadOnlyDictionary<string, string> attributes, string key, List<AttributeScores> defaultValue = null)
+    {
+        if (attributes.ContainsKey(key))
+        {
+            return new List<AttributeScores>(System.Array.ConvertAll(attributes[key].Split(','), x => ParseAttributeScore(x)));
+        }
+        if (defaultValue == null)
+        {
+            throw new System.ArgumentNullException("No default value");
+        }
+        return defaultValue;
     }
 
     public static void ReadAllEntities()
@@ -435,6 +474,14 @@ public class TypeAbility : Entity
     {
         return EntityManager.GetIntAttribute(attributes, "plantingSkillBonus", 0);
     }
+    public List<ConditionType> GetConditionsInflicted()
+    {
+        return EntityManager.GetConditionListAttribute(attributes, "conditionsInflicted", new List<ConditionType>());
+    }
+    public List<int> GetConditionsInflictedBaseStacks()
+    {
+        return EntityManager.GetIntListAttribute(attributes, "baseStacks", new List<int>());
+    }
 }
 
 public class ConditionType : Entity
@@ -457,13 +504,58 @@ public class ConditionType : Entity
     {
         return EntityManager.GetIntAttribute(attributes, "damage", 0);
     }
-    public AttributeScores GetInflictionAttribute()
-    {
-        return EntityManager.GetAttributeScoreAttribute(attributes, "inflictionAttribute");
-    }
     public AttributeScores GetProtectionAttribute()
     {
         return EntityManager.GetAttributeScoreAttribute(attributes, "protectionAttribute");
+    }
+    public bool GetIsHarmful()
+    {
+        return EntityManager.GetBoolAttribute(attributes, "isHarmful", true);
+    }
+
+    public List<string> GetSkillBonusNames()
+    {
+        return EntityManager.GetStringListAttribute(attributes, "skillBonusNames", new List<string>());
+    }
+
+    public List<int> GetSkillBonusAmounts()
+    {
+        return EntityManager.GetIntListAttribute(attributes, "skillBonusAmounts", new List<int>());
+    }
+
+    public float GetSpeedModifier()
+    {
+        return EntityManager.GetFloatAttribute(attributes, "speedModifier", 0);
+    }
+
+    public int GetMoveSpeedModifier()
+    {
+        return EntityManager.GetIntAttribute(attributes, "moveSpeedModifier", 0);
+    }
+
+    public List<AttributeScores> GetModifiedAttributeScores()
+    {
+        return EntityManager.GetAttributeScoresListAttribute(attributes, "modifiedAttributeScores", new List<AttributeScores>());
+    }
+
+    public List<int> GetAttributeModifierAmounts()
+    {
+        return EntityManager.GetIntListAttribute(attributes, "attributeModifierAmounts", new List<int>());
+    }
+
+    public int GetMaxHealthModifier()
+    {
+        return EntityManager.GetIntAttribute(attributes, "maxHealthModifier", 0);
+    }
+
+    public int GetConditionProtection()
+    {
+        return EntityManager.GetIntAttribute(attributes, "conditionProtection", 0);
+    }
+
+    public int GetDuration()
+    {
+        return EntityManager.GetIntAttribute(attributes, "duration", 0);
     }
 }
 

@@ -76,5 +76,6 @@ craftingSkill:woodcrafting
 craftingLevel:1
 craftingTime:10
 conditionProtection:2
-conditionInfliction:2
+skillBonusNames:necromancy
+skillBonusAmounts:2
 size:-2

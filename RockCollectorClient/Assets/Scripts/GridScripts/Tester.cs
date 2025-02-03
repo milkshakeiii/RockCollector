@@ -134,7 +134,8 @@ public class Tester : MonoBehaviour
         Assert(EntityManager.feats.ContainsKey("Skill Focus (woodcrafting)"), "Skill Focus not found");
         Assert(EntityManager.feats["Skill Focus (woodcrafting)"].GetSkillBonusName() == "woodcrafting", "Skill Focus GetSkillBonusName");
         Assert(EntityManager.conditions.ContainsKey("Weak"), "Weak not found");
-        Assert(EntityManager.conditions["Weak"].GetAttackPenalty() == 2, "Weak GetAttackPenalty");
+        Assert(EntityManager.conditions["Weak"].GetModifiedAttributeScores()[0] == AttributeScores.STRENGTH, "Weak GetDuration");
+        Assert(EntityManager.conditions["Weak"].GetAttributeModifierAmounts()[0] == -2, "Weak GetAttackPenalty");
         Assert(EntityManager.creatureTypes.ContainsKey("Peasant"), "Peasant not found");
         Assert(EntityManager.creatureTypes["Peasant"].GetStartingHealth() == 4, "Peasant GetStartingHealth");
         Assert(EntityManager.creatureTypes["Peasant"].GetHealthPerLevel() == 3, "Peasant GetHealthPerLevel");
@@ -428,24 +429,27 @@ public class Tester : MonoBehaviour
         Creature testInflictor = new("George", 1, EntityManager.creatureTypes["Wizard"], Map.NULL_POSITION);
         map.Add(testInflictor, new Vector2Int(5, 5));
 
-        Creature testTarget = new("George", 1, EntityManager.creatureTypes["Peasant"], Map.NULL_POSITION);
+        Creature testTarget = new("George", -1, EntityManager.creatureTypes["Peasant"], Map.NULL_POSITION);
         map.Add(testTarget, new Vector2Int(5, 6));
-
-        testInflictor.UseAbility(EntityManager.typeAbilities["Weakness"], map);
-        Assert(testTarget.ListConditions().Count == 1, "Condition not applied");
-        Assert(testTarget.ListConditions()[0].GetName() == "Weak", "Condition not applied");
-        int stacks = testTarget.ListConditions()[0].GetStacks();
         
         testInflictor.LevelUp();
         testInflictor.LevelUp();
-        Item staff = new (EntityManager.itemTypes["Staff"]);
-        map.AddHeld(testInflictor, staff);
+        Item staff = new (EntityManager.itemTypes["Wooden Staff"]);
+        map.AddHeld(testTarget, staff);
+        Assert(testTarget.GetConditionProtectionClass(map, EntityManager.conditions["Weak"]) == 11 + 2 + testTarget.GetAttributeModifier(AttributeScores.STRENGTH), "Condition protection class");
 
-        // the difference should be 4 higher now, doubling the stacks
+        int startingExperience = testInflictor.GetExperience();
         testInflictor.UseAbility(EntityManager.typeAbilities["Weakness"], map);
-        Assert(testTarget.ListConditions().Count == 1, "Condition not applied");
-        Assert(testTarget.ListConditions()[0].GetName() == "Weak", "Condition not applied");
-        Assert(testTarget.ListConditions()[0].GetStacks() >= stacks * 3, "Condition stacks");
+        if (testInflictor.GetExperience() > startingExperience)
+        {
+            Assert(testTarget.ListConditions().Count == 1, "Condition not applied");
+            Assert(testTarget.ListConditions()[0].conditionType.GetName() == "Weak", "Condition not applied");
+            Assert(testTarget.ListConditions()[0].GetStacks() == 2, "Condition stacks");
+        }
+        else
+        {
+            Assert(testTarget.ListConditions().Count == 0, "Condition applied");
+        }
     }
 
     void Assert(bool condition, string message)

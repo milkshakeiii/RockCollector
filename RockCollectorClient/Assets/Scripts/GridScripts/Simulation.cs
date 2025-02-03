@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using UnityEngine;
 
@@ -30,7 +31,9 @@ public class Simulation
 
             DieRoll damage = ability.GetDamage();
             // if the ability has a damage value, it is a non-weapon attack
-            if (damage != null)
+            // alternatively if the abilities does no damage but applies conditions, it is a non-weapon attack
+            // note that it is possible to be both a weapon and non-weapon attack
+            if (damage != null || ability.GetConditionsInflicted().Count > 0)
             {
                 NonweaponAttack(ability, actor, map);
             }
@@ -88,6 +91,8 @@ public class Simulation
                         {
                             actor.RangedStrike(target, damage, chosenWeaponSkill, map);
                         }
+                        InflictConditionsFromAbility(ability, actor, target, map);
+                        InflictConditionsFromWeapon(chosenWeaponSkill, actor, target, map);
                         targetsStruck++;
                         if (targetsStruck >= ability.GetEnemyTargets())
                         {
@@ -156,12 +161,33 @@ public class Simulation
                     {
                         if (placeable is Creature target && target.teamNumber != actor.teamNumber)
                         {
-                            actor.NonweaponStrike(target, damage, skill, map);
+                            if (damage != null)
+                            {
+                                actor.NonweaponStrike(target, damage, skill, map);
+                            }
+                            InflictConditionsFromAbility(ability, actor, target, map);
                         }
                     }
                 }
             }
         }
+    }
+
+    private static void InflictConditionsFromAbility(TypeAbility ability, Creature actor, Creature target, Map map)
+    {
+        List<ConditionType> conditions = ability.GetConditionsInflicted();
+        List<int> baseStacks = ability.GetConditionsInflictedBaseStacks();
+        for (int i = 0; i < conditions.Count; i++)
+        {
+            ConditionType condition = conditions[i];
+            int baseStack = baseStacks[i];
+            actor.InflictConditionOn(target, ability.GetSkill(), condition, baseStack, map);
+        }
+    }
+
+    private static void InflictConditionsFromWeapon(string weaponSkill, Creature actor, Creature target, Map map)
+    {
+        // TODO
     }
 }
 

@@ -386,7 +386,7 @@ public class Creature : Destructable
         skillIncreases[skillName] += amount;
     }
 
-    public int EncounterLevel()
+    public int DifficultyEstimate()
     {
         return 10 + level;
     }
@@ -630,7 +630,7 @@ public class Creature : Destructable
         {
             int damageAmount = damage.Roll();
             target.TakeDamage(damageAmount);
-            GainExperience(target.EncounterLevel(), weaponSkill);
+            GainExperience(target.DifficultyEstimate(), weaponSkill);
         }
     }
 
@@ -642,7 +642,7 @@ public class Creature : Destructable
         {
             int damageAmount = damage.Roll();
             target.TakeDamage(damageAmount);
-            GainExperience(target.EncounterLevel(), weaponSkill);
+            GainExperience(target.DifficultyEstimate(), weaponSkill);
         }
     }
 
@@ -654,7 +654,7 @@ public class Creature : Destructable
         {
             int damageAmount = damage.Roll();
             target.TakeDamage(damageAmount);
-            GainExperience(target.EncounterLevel(), skillName);
+            GainExperience(target.DifficultyEstimate(), skillName);
         }
     }
 
@@ -848,9 +848,18 @@ public class Creature : Destructable
             experience = 0;
         }
 
+        List<Condition> removeConditions = new();
         foreach (Condition condition in conditions)
         {
             condition.Tick(this, map);
+            if (condition.GetStacks() <= 0)
+            {
+                removeConditions.Add(condition);
+            }
+        }
+        foreach (Condition condition in removeConditions)
+        {
+            conditions.Remove(condition);
         }
     }
 
@@ -873,7 +882,7 @@ public class Creature : Destructable
         if (cooldownTicksRemaining > 0)
         {
             // Nothing can be done while on cooldown
-            float speedModifier = 1f;
+            float speedModifier = 0f;
             foreach (Condition condition in conditions)
             {
                 speedModifier += condition.GetSpeedModifier();
@@ -1168,49 +1177,34 @@ public class Creature : Destructable
         return base.IsDestroyed();
     }
 
-    private int GetConditionProtectionLevel(Map map)
+    public int GetConditionProtectionClass(Map map, ConditionType conditionType)
     {
-        int level = 0;
+        int result = 10 + GetLevel();
         foreach (Condition condition in conditions)
         {
-            level += condition.GetProtectionModifier();
+            result += condition.GetConditionProtection();
         }
         foreach (Placeable heldPlaceable in map.HeldPlaceablesOf(this))
         {
             if (heldPlaceable is Item item)
             {
-                level += item.itemType.GetConditionProtection();
+                result += item.itemType.GetConditionProtection();
             }
         }
-        return level;
+        result += GetAttributeModifier(conditionType.GetProtectionAttribute());
+        return result;
     }
 
-    private int GetConditionInflictionLevel(Map map)
+    public void InflictConditionOn(Creature target, string skillName, ConditionType conditionType, int baseStacks, Map map)
     {
-        int level = 0;
-        foreach (Condition condition in conditions)
+        int difficulty = target.GetConditionProtectionClass(map, conditionType);
+        int toHit = SkillModifier(skillName, map);
+        int toHitResult = Roll20() + toHit;
+        if (toHitResult >= difficulty)
         {
-            level += condition.GetInflictorModifier();
+            target.AddCondition(conditionType, baseStacks);
+            GainExperience(target.DifficultyEstimate(), skillName);
         }
-        foreach (Placeable heldPlaceable in map.HeldPlaceablesOf(this))
-        {
-            if (heldPlaceable is Item item)
-            {
-                level += item.itemType.GetConditionInfliction();
-            }
-        }
-        return level;
-    }
-
-    public void InflictConditionOn(Creature target, ConditionType conditionType, int baseStacks, Map map)
-    {
-        int levelDifference = target.GetConditionProtectionLevel(map) - GetConditionInflictionLevel(map);
-        int inflictorAttributeModifier = GetAttributeModifier(conditionType.GetInflictionAttribute());
-        int protectionAttributeModifier = target.GetAttributeModifier(conditionType.GetProtectionAttribute());
-        levelDifference += inflictorAttributeModifier;
-        levelDifference -= protectionAttributeModifier;
-        float stacks = baseStacks * MathF.Pow(2, (levelDifference/4));
-        target.AddCondition(conditionType, stacks);
     }
 
     public void AddCondition(ConditionType conditionType, float stacks)
@@ -1266,7 +1260,7 @@ public class CreatureView : DestructableView
 
     public int EncounterLevel()
     {
-        return (placeable as Creature).EncounterLevel();
+        return (placeable as Creature).DifficultyEstimate();
     }
 
     public int SkillModifier(string skillName)
@@ -1395,7 +1389,7 @@ public class CreatureSelf
 
     public int EncounterLevel()
     {
-        return self.EncounterLevel();
+        return self.DifficultyEstimate();
     }
 
     public int SkillModifier(string skillName)

@@ -110,11 +110,11 @@ public abstract class BehaviorPriority
             {
                 if (creature2.teamNumber != actor.teamNumber)
                 {
-                    dangerRating += creature2.EncounterLevel();
+                    dangerRating += creature2.DifficultyEstimate();
                 }
                 else
                 {
-                    dangerRating -= creature2.EncounterLevel();
+                    dangerRating -= creature2.DifficultyEstimate();
                 }
             }
         }
@@ -411,8 +411,8 @@ public class HuntPriority : BehaviorPriority
             if (placeable is Creature creature && creature.teamNumber != actor.teamNumber
                 && map.DistanceBetween(homeBuilding, creature) <= behaviorType.GetHuntRange()
                 && map.DistanceBetween(actor, creature) <= behaviorType.GetHuntLookDistance()
-                && creature.EncounterLevel() - actor.EncounterLevel() <= behaviorType.GetHuntMaximumLevelDifference()
-                && creature.EncounterLevel() - actor.EncounterLevel() >= behaviorType.GetHuntMinimumLevelDifference())
+                && creature.DifficultyEstimate() - actor.DifficultyEstimate() <= behaviorType.GetHuntMaximumLevelDifference()
+                && creature.DifficultyEstimate() - actor.DifficultyEstimate() >= behaviorType.GetHuntMinimumLevelDifference())
             {
                 return new HuntActivity(creature);
             }
@@ -468,7 +468,7 @@ public class FleePriority : BehaviorPriority
     public override Activity ChosenActivityOrNull(Map map, Creature actor, CreatureBehaviorType behaviorType)
     {
         int dangerRating = GetDangerRating(map, actor, behaviorType);
-        if (dangerRating < behaviorType.GetFleeDangerThreshold() * actor.EncounterLevel())
+        if (dangerRating < behaviorType.GetFleeDangerThreshold() * actor.DifficultyEstimate())
         {
             return null;
         }
@@ -491,7 +491,7 @@ public class FightPriority : BehaviorPriority
     public override Activity ChosenActivityOrNull(Map map, Creature actor, CreatureBehaviorType behaviorType)
     {
         int dangerRating = GetDangerRating(map, actor, behaviorType);
-        if (dangerRating < behaviorType.GetFightDangerThreshold() * actor.EncounterLevel())
+        if (dangerRating < behaviorType.GetFightDangerThreshold() * actor.DifficultyEstimate())
         {
             return null;
         }
@@ -514,7 +514,7 @@ public class FightPriority : BehaviorPriority
             {
                 if (creature2.teamNumber != self.teamNumber)
                 {
-                    int dangerRating = creature2.EncounterLevel();
+                    int dangerRating = creature2.DifficultyEstimate();
                     if (dangerRating > highestDangerRating)
                     {
                         highestDangerRating = dangerRating;

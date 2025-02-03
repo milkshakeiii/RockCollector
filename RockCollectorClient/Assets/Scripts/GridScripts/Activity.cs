@@ -150,7 +150,7 @@ public class HarvestActivity : Activity
 
 public class HuntActivity : Activity
 {
-    public HuntActivity(Creature target) : base(target.EncounterLevel(),
+    public HuntActivity(Creature target) : base(target.DifficultyEstimate(),
         new(), null, target.GetCreatureType().GetDroppedItems(), target.GetCreatureType().GetDroppedItemsProbabilities(), target, Activity.NULL_POSITION)
     {
 

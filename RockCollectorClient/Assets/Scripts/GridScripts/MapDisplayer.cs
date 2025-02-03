@@ -290,15 +290,6 @@ public class MapDisplayer : MonoBehaviour
                 0);
             DisplayBars(placeable, position);
             DisplayLabels(placeable, position);
-
-            if (placeable == leftMouseSelection.placeable)
-            {
-                leftMouseSelection.position = position;
-            }
-            if (placeable == rightMouseSelection.placeable)
-            {
-                rightMouseSelection.position = position;
-            }
         }
 
         buttonRectsToButtons.Clear();
@@ -694,7 +685,7 @@ public class MapDisplayer : MonoBehaviour
         List<string> conditionStrings = new List<string>();
         foreach (Condition condition in conditions)
         {
-            string newPart = condition.GetName() + " (" + condition.GetStacks() + "), ";
+            string newPart = condition.conditionType.GetName() + " (" + condition.GetStacks() + "), ";
             if (conditionStrings.Count == 0 || conditionStrings[conditionStrings.Count - 1].Length + newPart.Length > 30)
             {
                 conditionStrings.Add(newPart);

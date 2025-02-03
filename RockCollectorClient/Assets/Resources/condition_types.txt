@@ -1,4 +1,5 @@
 name:Weak
-attackPenalty:2
-inflictionAttribute:charisma
+modifiedAttributeScores:strength
+attributeModifierAmounts:-2
 protectionAttribute:strength
+duration:200

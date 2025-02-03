@@ -1,4 +1,6 @@
+using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Condition
@@ -6,15 +8,15 @@ public class Condition
     public ConditionType conditionType;
     private float stacks;
 
+    // a measure of how long the condition has been active
+    // increased by stacks every tick, decrementing stacks when
+    // it reaches duration
+    private int elapsedTicks;
+
     public Condition(ConditionType conditionType, float stacks)
     {
         this.conditionType = conditionType;
         this.stacks = stacks;
-    }
-
-    public string GetName()
-    {
-        return conditionType.ToString();
     }
 
     public int GetStacks()
@@ -29,41 +31,60 @@ public class Condition
 
     public int GetSkillModifier(string skillName)
     {
-        throw new NotImplementedException();
+        List<string> skillNames = conditionType.GetSkillBonusNames();
+        List<int> skillBonusAmounts = conditionType.GetSkillBonusAmounts();
+        for (int i = 0; i < skillNames.Count; i++)
+        {
+            if (skillNames[i] == skillName)
+            {
+                return skillBonusAmounts[i];
+            }
+        }
+        return 0;
     }
 
     public float GetSpeedModifier()
     {
-        throw new NotImplementedException();
+        return conditionType.GetSpeedModifier() * stacks;
     }
 
     public int GetMoveSpeedModifier()
     {
-        throw new NotImplementedException();
+        return conditionType.GetMoveSpeedModifier();
     }
 
     public int GetAttributeModifier(AttributeScores score)
     {
-        throw new NotImplementedException();
+        List<AttributeScores> modifiedAttributeScores = conditionType.GetModifiedAttributeScores();
+        List<int> attributeModifiers = conditionType.GetAttributeModifierAmounts();
+        for (int i = 0; i < modifiedAttributeScores.Count; i++)
+        {
+            if (modifiedAttributeScores[i] == score)
+            {
+                return attributeModifiers[i];
+            }
+        }
+        return 0;
     }
 
     public int GetMaxHealthModifier()
     {
-        throw new NotImplementedException();
+        return conditionType.GetMaxHealthModifier();
     }
 
-    internal void Tick(Creature creature, Map map)
+    public void Tick(Creature creature, Map map)
     {
-        throw new NotImplementedException();
+        elapsedTicks += Mathf.FloorToInt(stacks);
+        int duration = conditionType.GetDuration();
+        int stacksToRemove = elapsedTicks / duration;
+        stacks -= stacksToRemove;
     }
 
-    internal int GetProtectionModifier()
+    /// <summary>
+    /// The protection this condition gives against other conditions.
+    /// </summary>
+    public int GetConditionProtection()
     {
-        throw new NotImplementedException();
-    }
-
-    internal int GetInflictorModifier()
-    {
-        throw new NotImplementedException();
+        return conditionType.GetConditionProtection();
     }
 }
