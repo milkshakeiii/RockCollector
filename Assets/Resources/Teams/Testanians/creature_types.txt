@@ -60,8 +60,8 @@ constitutionBonus:-2
 intelligenceBonus:4
 wisdomBonus:0
 charismaBonus:2
-abilities:Fireball,Weakness
-abilityLevels:1,1
+abilities:Fireball,Weakness,Magic Shield
+abilityLevels:1,1,1
 behavior:Warrior Behavior
 
 name:Skeleton

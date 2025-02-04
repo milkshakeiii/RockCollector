@@ -24,9 +24,9 @@ public class Condition
         return Mathf.FloorToInt(stacks);
     }
 
-    public void AddStacks(float stacks)
+    public void AddStacks(float stacks, float maxStacks)
     {
-        this.stacks += stacks;
+        this.stacks = Mathf.Min(this.stacks + stacks, maxStacks);
     }
 
     public int GetSkillModifier(string skillName)
@@ -78,6 +78,10 @@ public class Condition
         int duration = conditionType.GetDuration();
         int stacksToRemove = elapsedTicks / duration;
         stacks -= stacksToRemove;
+        if (stacksToRemove > 0)
+        {
+            Debug.Log("Condition " + conditionType.GetName() + " removed " + stacksToRemove + " stacks");
+        }
     }
 
     /// <summary>

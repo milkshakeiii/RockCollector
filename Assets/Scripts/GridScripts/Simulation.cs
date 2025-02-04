@@ -38,6 +38,14 @@ public class Simulation
                 NonweaponAttack(ability, actor, map);
             }
         }
+
+        if (ability.GetAllyTargets() > 0)
+        {
+            if (ability.GetConditionsInflicted().Count > 0)
+            {
+                AllyEffect(ability, actor, map);
+            }
+        }
     }
 
     private static void WeaponAttack(TypeAbility ability, Creature actor, Map map, List<string> weaponSkills)
@@ -142,6 +150,10 @@ public class Simulation
                         }
                     }
                 }
+                if (targetsStruck >= maxTargets)
+                {
+                    break;
+                }
             }
             if (targetsStruck >= maxTargets)
             {
@@ -173,15 +185,83 @@ public class Simulation
         }
     }
 
+    private static void AllyEffect(TypeAbility ability, Creature actor, Map map)
+    {
+        int range = ability.GetRange();
+        int radius = ability.GetEffectRadius();
+        int maxTargets = ability.GetAllyTargets();
+
+        RectInt actorRect = map.ExtentsOf(actor);
+        int xMin = actorRect.xMin - range;
+        int xMax = actorRect.xMax + range;
+        int yMin = actorRect.yMin - range;
+        int yMax = actorRect.yMax + range;
+
+        List<Vector2Int> possibleTargets = new();
+        for (int x = xMin; x <= xMax; x++)
+        {
+            for (int y = yMin; y <= yMax; y++)
+            {
+                Vector2Int position = new(x, y);
+                List<Placeable> placeables = map.PlaceablesAt(position);
+                foreach (Placeable placeable in placeables)
+                {
+                    if (placeable is Creature target && target.teamNumber == actor.teamNumber)
+                    {
+                        possibleTargets.Add(position);
+                    }
+                }
+            }
+        }
+
+        if (possibleTargets.Count == 0)
+        {
+            return;
+        }
+        int targetsStruck = 0;
+        // start at a random index to avoid always hitting the same target
+        int startindex = UnityEngine.Random.Range(0, possibleTargets.Count);
+        int i = startindex;
+        do
+        {
+            Vector2Int position = possibleTargets[i];
+            for (int x = position.x - radius; x <= position.x + radius; x++)
+            {
+                for (int y = position.y - radius; y <= position.y + radius; y++)
+                {
+                    Vector2Int blastSquare = new(x, y);
+                    List<Placeable> placeables = map.PlaceablesAt(blastSquare);
+                    foreach (Placeable placeable in placeables)
+                    {
+                        if (placeable is Creature target && target.teamNumber == actor.teamNumber)
+                        {
+                            InflictConditionsFromAbility(ability, actor, target, map);
+                        }
+                    }
+                }
+            }
+            targetsStruck++;
+            if (targetsStruck >= maxTargets)
+            {
+                break;
+            }
+            i = (i + 1) % possibleTargets.Count;
+        }
+        while (i != startindex);
+
+    }
+
     private static void InflictConditionsFromAbility(TypeAbility ability, Creature actor, Creature target, Map map)
     {
         List<ConditionType> conditions = ability.GetConditionsInflicted();
         List<int> baseStacks = ability.GetConditionsInflictedBaseStacks();
+        List<int> maxStacks = ability.GetConditionsInflictedMaxStacks();
         for (int i = 0; i < conditions.Count; i++)
         {
             ConditionType condition = conditions[i];
             int baseStack = baseStacks[i];
-            actor.InflictConditionOn(target, ability.GetSkill(), condition, baseStack, map);
+            int maxStack = maxStacks[i];
+            actor.InflictConditionOn(target, ability.GetSkill(), condition, baseStack, maxStack, map);
         }
     }
 

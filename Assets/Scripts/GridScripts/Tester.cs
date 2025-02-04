@@ -455,6 +455,12 @@ public class Tester : MonoBehaviour
         {
             Assert(testTarget.ListConditions().Count == 0, "Condition applied");
         }
+
+        int startingDodge = testInflictor.SkillModifier("dodge", map);
+        int peasantConditionsCount = testTarget.ListConditions().Count;
+        testInflictor.UseAbility(EntityManager.typeAbilities["Magic Shield"], map);
+        Assert(testInflictor.SkillModifier("dodge", map) == startingDodge + 2, "Condition skill bonus not applied");
+        Assert(testTarget.ListConditions().Count == peasantConditionsCount, "Condition applied to peasant");
     }
 
     void Assert(bool condition, string message)

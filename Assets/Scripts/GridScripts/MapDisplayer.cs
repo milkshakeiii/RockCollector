@@ -919,7 +919,7 @@ public class MapDisplayer : MonoBehaviour
     }
 }
 
-public abstract class Button
+public abstract class Button 
 {
     public string text;
     

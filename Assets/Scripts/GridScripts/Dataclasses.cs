@@ -455,7 +455,7 @@ public class TypeAbility : Entity
     }
     public int GetEnemyTargets()
     {
-        return EntityManager.GetIntAttribute(attributes, "enemyTargets", 1);
+        return EntityManager.GetIntAttribute(attributes, "enemyTargets", 0);
     }
     public List<string> GetWeaponSkills()
     {
@@ -488,6 +488,21 @@ public class TypeAbility : Entity
     public List<int> GetConditionsInflictedBaseStacks()
     {
         return EntityManager.GetIntListAttribute(attributes, "baseStacks", new List<int>());
+    }
+    public List<int> GetConditionsInflictedMaxStacks()
+    {
+        int conditionsCount = GetConditionsInflicted().Count;
+        List<int> defaultList = new();
+        for (int i = 0; i < conditionsCount; i++)
+        {
+            defaultList.Add(999);
+        }
+        return EntityManager.GetIntListAttribute(attributes, "maxStacks", defaultList);
+    }
+
+    public int GetAllyTargets()
+    {
+        return EntityManager.GetIntAttribute(attributes, "allyTargets", 0);
     }
 }
 

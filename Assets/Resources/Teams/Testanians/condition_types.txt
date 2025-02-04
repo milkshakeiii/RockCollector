@@ -3,3 +3,9 @@ modifiedAttributeScores:strength
 attributeModifierAmounts:-2
 protectionAttribute:strength
 duration:200
+
+name:Shielded
+skillBonusNames:defense,dodge,resistance
+skillBonusAmounts:2,2,2
+isHarmful:false
+duration:1000

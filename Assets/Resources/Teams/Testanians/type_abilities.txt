@@ -39,6 +39,16 @@ skill:necromancy
 conditionsInflicted:Weak
 baseStacks:2
 
+name:Magic Shield
+cooldown:10
+rechargeTicks:100
+allyTargets:1
+range:7
+skill:evocation
+conditionsInflicted:Shielded
+baseStacks:1
+maxStacks:1
+
 name:Plant Tree
 cooldown:80
 rechargeTicks:80

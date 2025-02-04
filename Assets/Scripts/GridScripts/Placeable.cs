@@ -1204,25 +1204,33 @@ public class Creature : Destructable
         return result;
     }
 
-    public void InflictConditionOn(Creature target, string skillName, ConditionType conditionType, int baseStacks, Map map)
+    public void InflictConditionOn(Creature target, string skillName, ConditionType conditionType, int baseStacks, int maxStacks, Map map)
     {
-        int difficulty = target.GetConditionProtectionClass(map, conditionType);
-        int toHit = SkillModifier(skillName, map);
-        int toHitResult = Roll20() + toHit;
-        if (toHitResult >= difficulty)
+        if (conditionType.GetIsHarmful())
         {
-            target.AddCondition(conditionType, baseStacks);
-            GainExperience(target.DifficultyEstimate(), skillName);
+            int difficulty = target.GetConditionProtectionClass(map, conditionType);
+            int toHit = SkillModifier(skillName, map);
+            int toHitResult = Roll20() + toHit;
+            if (toHitResult >= difficulty)
+            {
+                target.AddCondition(conditionType, baseStacks, maxStacks);
+                GainExperience(target.DifficultyEstimate(), skillName);
+            }
+        }
+        else
+        {
+            target.AddCondition(conditionType, baseStacks, maxStacks);
+            GainExperience(this.DifficultyEstimate()-1, skillName);
         }
     }
 
-    public void AddCondition(ConditionType conditionType, float stacks)
+    public void AddCondition(ConditionType conditionType, float stacks, float maxStacks)
     {
         foreach (Condition condition in conditions)
         {
             if (condition.conditionType == conditionType)
             {
-                condition.AddStacks(stacks);
+                condition.AddStacks(stacks, maxStacks);
                 return;
             }
         }
