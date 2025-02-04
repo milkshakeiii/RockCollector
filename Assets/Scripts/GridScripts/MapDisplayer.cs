@@ -460,13 +460,13 @@ public class MapDisplayer : MonoBehaviour
 
             // display the item name and (amount present/amount requested)
             displayGrid.DisplayText(itemType.GetName(),
-                (int)rootPosition.x + DisplayGrid.WIDTH / 16,
+                (int)rootPosition.x + DisplayGrid.WIDTH / 16 - 2,
                 height + 4,
                 Color.black,
                 true);
 
             displayGrid.DisplayText("(" + building.GetItemCount(itemType, map) + "/" + currentlyRequested + ")",
-                (int)rootPosition.x + DisplayGrid.WIDTH / 16,
+                (int)rootPosition.x + DisplayGrid.WIDTH / 16 - 2,
                 height + 1,
                 Color.black,
                 true);
@@ -792,6 +792,65 @@ public class MapDisplayer : MonoBehaviour
             0,
             6,
             true);
+
+        // display the power rating and required crafting skill
+        int equipmentLevel = itemType.GetEquipmentLevel();
+        if (equipmentLevel > 0)
+        {
+            height -= 4;
+            displayGrid.DisplayText(
+                "Power rating: " + equipmentLevel + " " + itemType.GetEquipmentCategory(),
+                (int)rootPosition.x + 1,
+                height,
+                Color.black,
+                true);
+        }
+
+        string craftingSkill = itemType.GetCraftingSkill();
+        if (craftingSkill != "none")
+        {
+            height -= 4;
+            displayGrid.DisplayText(
+                "Crafting skill: ",
+                (int)rootPosition.x + 1,
+                height,
+                Color.black,
+                true);
+            height -= 3;
+            displayGrid.DisplayText(
+                itemType.GetCraftingSkill() + " " + itemType.GetCraftingLevel().ToString("+0;-#"),
+                (int)rootPosition.x + 4,
+                height,
+                Color.black,
+                true);
+        }
+
+        List<ItemType> inputItemTypes = itemType.GetCraftingInputs();
+        if (inputItemTypes.Count > 0)
+        {
+            height -= 4;
+            displayGrid.DisplayText(
+                "Inputs: ",
+                (int)rootPosition.x + 1,
+                height,
+                Color.black,
+                true);
+
+            // display the input items
+            int itemButtonsPerRow = 4;
+            for (int i = 0; i < inputItemTypes.Count; i++)
+            {
+                if (i % itemButtonsPerRow == 0)
+                {
+                    height -= 7;
+                }
+                ItemType inputItemType = inputItemTypes[i];
+                Button itemIconButton = new ItemIconButton(inputItemType);
+                RectInt rectInt = new((int)rootPosition.x + 1 + 7 * (i % itemButtonsPerRow), height, 6, 6);
+                itemIconButton.Draw(displayGrid, rectInt, map);
+                buttonRectsToButtons[rectInt] = itemIconButton;
+            }
+        }
     }
 
     public void SetPlaceBuildingButton(BuildBuildingButton button)
