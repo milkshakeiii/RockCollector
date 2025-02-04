@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
-public class Placeable 
+public abstract class Placeable 
 {
     // sizeCategory is the width and height in cells if positive
     // if negative, the placeable takes up (1/sizeCategory) of a cell
@@ -17,6 +17,8 @@ public class Placeable
         this.sizeCategory = sizeCategory;
         this.claimed = claimed;
     }
+
+    public abstract string GetSpritePath();
 
     public int SquaresMinimumOne()
     {
@@ -268,6 +270,13 @@ public class Creature : Destructable
     public string GetName()
     {
         return name;
+    }
+
+    public override string GetSpritePath()
+    {
+        string folder = creatureType.GetTeamFolder();
+        string name = creatureType.GetSpriteName();
+        return System.IO.Path.Combine(folder, name);
     }
 
     public string GetActivityString()
@@ -1496,6 +1505,13 @@ public class Building : Destructable
         this.teamNumber = teamNumber;
     }
 
+    public override string GetSpritePath()
+    {
+        string folder = buildingType.GetTeamFolder();
+        string name = buildingType.GetSpriteName();
+        return System.IO.Path.Combine(folder, name);
+    }
+
     public override Placeable DeepCopy()
     {
         Building copy = new (buildingType, teamNumber);
@@ -1843,6 +1859,13 @@ public class Prop : Destructable
         this.propType = propType;
     }
 
+    public override string GetSpritePath()
+    {
+        string folder = propType.GetTeamFolder();
+        string name = propType.GetSpriteName();
+        return System.IO.Path.Combine(folder, name);
+    }
+
     public override Placeable DeepCopy()
     {
         Prop copy = new (propType);
@@ -1983,6 +2006,13 @@ public class Item : Placeable
     public Item(ItemType itemType) : base(itemType.GetSize())
     {
         this.itemType = itemType;
+    }
+
+    public override string GetSpritePath()
+    {
+        string folder = itemType.GetTeamFolder();
+        string name = itemType.GetSpriteName();
+        return System.IO.Path.Combine(folder, name);
     }
 
     public override Placeable DeepCopy()

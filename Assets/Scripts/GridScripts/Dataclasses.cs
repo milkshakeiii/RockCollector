@@ -82,39 +82,39 @@ public static class EntityManager
         return score;
     }
 
-    public static Entity CreateEntity(string identifier, Dictionary<string, string> attributes)
+    public static Entity CreateEntity(string identifier, string teamName, Dictionary<string, string> attributes)
     {
         if (identifier == "feats")
         {
-            return new Feat (attributes);
+            return new Feat (attributes, teamName);
         }
         else if (identifier == "type_abilities")
         {
-            return new TypeAbility (attributes);
+            return new TypeAbility (attributes, teamName);
         }
         else if (identifier == "condition_types")
         {
-            return new ConditionType (attributes);
+            return new ConditionType (attributes, teamName);
         }
         else if (identifier == "prop_types")
         {
-            return new PropType (attributes);
+            return new PropType (attributes, teamName);
         }
         else if (identifier == "item_types")
         {
-            return new ItemType (attributes);
+            return new ItemType (attributes, teamName);
         }
         else if (identifier == "creature_types")
         {
-            return new CreatureType (attributes);
+            return new CreatureType (attributes, teamName);
         }
         else if (identifier == "building_types")
         {
-            return new BuildingType (attributes);
+            return new BuildingType (attributes, teamName);
         }
         else if (identifier == "creature_behaviors")
         {
-            return new CreatureBehaviorType (attributes);
+            return new CreatureBehaviorType (attributes, teamName);
         }
         else
         {
@@ -339,7 +339,7 @@ public static class EntityManager
         {
             if (line.Length==0 || line.Length==1)
             {
-                StoreEntity(identifier, EntityManager.CreateEntity(identifier, currentItem));
+                StoreEntity(identifier, EntityManager.CreateEntity(identifier, teamName, currentItem));
                 currentItem = new();
             }
             else
@@ -369,16 +369,23 @@ public static class EntityManager
 public class Entity 
 {
     public readonly ReadOnlyDictionary<string, string> attributes;
+    public string teamName;
 
-    public Entity(Dictionary<string, string> attributes)
+    public string GetTeamFolder()
+    {
+        return "Teams/" + teamName + "/";
+    }
+
+    public Entity(Dictionary<string, string> attributes, string teamName)
     {
         this.attributes = new(attributes);
+        this.teamName = teamName;
     }
 }
 
 public class Feat : Entity
 {
-    public Feat(Dictionary<string, string> attributes) : base(attributes) {}
+    public Feat(Dictionary<string, string> attributes, string teamName) : base(attributes, teamName) {}
 
     public string GetName()
     {
@@ -396,7 +403,7 @@ public class Feat : Entity
 
 public class TypeAbility : Entity
 {
-    public TypeAbility(Dictionary<string, string> attributes) : base(attributes) {}
+    public TypeAbility(Dictionary<string, string> attributes, string teamName) : base(attributes, teamName) {}
 
     public string GetName()
     {
@@ -486,7 +493,7 @@ public class TypeAbility : Entity
 
 public class ConditionType : Entity
 {
-    public ConditionType(Dictionary<string, string> attributes) : base(attributes) {}
+    public ConditionType(Dictionary<string, string> attributes, string teamName) : base(attributes, teamName) {}
 
     public string GetName()
     {
@@ -561,11 +568,15 @@ public class ConditionType : Entity
 
 public class CreatureType : Entity
 {
-    public CreatureType(Dictionary<string, string> attributes) : base(attributes) {}
+    public CreatureType(Dictionary<string, string> attributes, string teamName) : base(attributes, teamName) {}
 
     public string GetName()
     {
         return EntityManager.GetStringAttribute(attributes, "name");
+    }
+    public string GetSpriteName()
+    {
+        return EntityManager.GetStringAttribute(attributes, "spriteName", "nosprite");
     }
     public int GetStartingHealth()
     {
@@ -635,7 +646,7 @@ public class CreatureType : Entity
 
 public class PropType : Entity
 {
-    public PropType(Dictionary<string, string> attributes) : base(attributes) {}
+    public PropType(Dictionary<string, string> attributes, string teamName) : base(attributes, teamName) {}
 
     public string GetName()
     {
@@ -697,11 +708,15 @@ public class PropType : Entity
     {
         return EntityManager.GetBoolAttribute(attributes, "requiresImplement", true);
     }
+    public string GetSpriteName()
+    {
+        return EntityManager.GetStringAttribute(attributes, "spriteName", "nosprite");
+    }
 }
 
 public class ItemType : Entity
 {
-    public ItemType(Dictionary<string, string> attributes) : base(attributes) {}
+    public ItemType(Dictionary<string, string> attributes, string teamName) : base(attributes, teamName) {}
 
     public string GetName()
     {
@@ -775,11 +790,15 @@ public class ItemType : Entity
     {
         return EntityManager.GetIntAttribute(attributes, "conditionInfliction", 0);
     }
+    public string GetSpriteName()
+    {
+        return EntityManager.GetStringAttribute(attributes, "spriteName", "nosprite");
+    }
 }
 
 public class BuildingType : Entity
 {
-    public BuildingType(Dictionary<string, string> attributes) : base(attributes) {}
+    public BuildingType(Dictionary<string, string> attributes, string teamName) : base(attributes, teamName) {}
 
     public string GetName()
     {
@@ -873,11 +892,15 @@ public class BuildingType : Entity
     {
         return EntityManager.GetIntListAttribute(attributes, "supportedBonusPropRespawnTicks", new List<int>());
     }
+    public string GetSpriteName()
+    {
+        return EntityManager.GetStringAttribute(attributes, "spriteName", "nosprite");
+    }
 }
 
 public class CreatureBehaviorType : Entity
 {
-    public CreatureBehaviorType(Dictionary<string, string> attributes) : base(attributes) { }
+    public CreatureBehaviorType(Dictionary<string, string> attributes, string teamName) : base(attributes, teamName) { }
 
     public string GetName()
     {

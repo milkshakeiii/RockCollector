@@ -27,13 +27,15 @@ public class Tester : MonoBehaviour
     void AddAndRemovePlaceablesOfVariousSizes()
     {
         Map map = new();
-        
+
         // add placeables of various sizes
-        Placeable referencedPlaceable = new Placeable(1);
-        map.Add(new Placeable(-5), new Vector2Int(0, 0));
-        map.Add(new Placeable(0), new Vector2Int(5, 5));
+        PropType propType = EntityManager.propTypes["Tree"];
+        Prop referencedPlaceable = new (propType);
+        map.Add(new Prop(propType), new Vector2Int(0, 0));
+        map.Add(new Prop(propType), new Vector2Int(5, 5));
         map.Add(referencedPlaceable, new Vector2Int(10, 10));
-        map.Add(new Placeable(2), new Vector2Int(15, 15));
+        Building shed = new(EntityManager.buildingTypes["Shed"], 1);
+        map.Add(shed, new Vector2Int(15, 15));
 
         // check that the placeables were added correctly
         Assert(map.PlaceablesAt(new Vector2Int(10, 10)).Contains(referencedPlaceable), "Referenced placeable not found at position");
@@ -59,7 +61,7 @@ public class Tester : MonoBehaviour
         // moving a creature doesn't remove the held placeables or outfit
         Creature testCreature = new("George", 0, EntityManager.creatureTypes["Peasant"], Map.NULL_POSITION);
         map.Add(testCreature, new Vector2Int(5, 5));
-        Item item = new Item(EntityManager.itemTypes["Axe"]);
+        Item item = new (EntityManager.itemTypes["Axe"]);
         map.AddHeld(testCreature, item);
         testCreature.AddToOutfit(item, map);
         map.MovePlaceable(testCreature, new Vector2Int(10, 10));
@@ -72,12 +74,15 @@ public class Tester : MonoBehaviour
     void DistancesBetweenPlaceablesOfVariousSizes()
     {
         Map map = new();
-        Placeable placeable1 = new (1);
-        Placeable placeable2 = new (0);
-        Placeable placeable3 = new (2);
-        Placeable placeable4 = new (-2);
-        Placeable placeable5 = new (3);
-        Placeable placeable6 = new (1);
+        PropType propType = EntityManager.propTypes["Tree"];
+        Prop placeable1 = new (propType);
+        Prop placeable2 = new (propType);
+        BuildingType shedType = EntityManager.buildingTypes["Shed"];
+        Building placeable3 = new (shedType, 1);
+        Prop placeable4 = new (propType);
+        BuildingType graveyardType = EntityManager.buildingTypes["Graveyard"];
+        Building placeable5 = new (graveyardType, 1);
+        Prop placeable6 = new (propType);
         map.Add(placeable1, new Vector2Int(10, 10));
         map.Add(placeable2, new Vector2Int(5, 5));
         map.Add(placeable3, new Vector2Int(10, 10));

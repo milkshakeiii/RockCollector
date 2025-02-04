@@ -282,7 +282,7 @@ public class MapDisplayer : MonoBehaviour
         foreach (Placeable placeable in map.UnheldPlaceables())
         {
             Vector2Int position = map.PositionOf(placeable);
-            displayGrid.DisplaySprite("Art/UI/button",
+            displayGrid.DisplaySprite(placeable.GetSpritePath(),
                 position.x * cellsPerSquare,
                 position.y * cellsPerSquare,
                 cellsPerSquare * placeable.SquaresMinimumOne(),

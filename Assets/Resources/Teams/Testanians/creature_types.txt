@@ -1,4 +1,5 @@
 name:Peasant
+spriteName:peasant
 startingHealth:4
 healthPerLevel:3
 strengthBonus:0
