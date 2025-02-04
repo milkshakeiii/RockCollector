@@ -21,6 +21,7 @@ craftingLevel:0
 size:-6
 
 name:Log
+spriteName:log
 size:1
 
 name:Flint

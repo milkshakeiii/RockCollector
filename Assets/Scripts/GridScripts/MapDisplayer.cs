@@ -98,6 +98,9 @@ public class MapDisplayer : MonoBehaviour
         Prop bush2 = new(EntityManager.propTypes["Bush"]);
         map.Add(bush2, new Vector2Int(-22, 0));
 
+        Item log = new(EntityManager.itemTypes["Log"]);
+        map.Add(log, new Vector2Int(1, 3));
+
         DisplayMap(map);
     }
     
