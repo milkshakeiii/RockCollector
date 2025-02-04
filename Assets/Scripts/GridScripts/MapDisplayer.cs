@@ -5,6 +5,7 @@ using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine.UIElements;
 using UnityEngine.Playables;
+using System;
 
 public class MapDisplayer : MonoBehaviour
 {
@@ -25,6 +26,7 @@ public class MapDisplayer : MonoBehaviour
     {
         public Vector2Int position;
         public Placeable placeable;
+        public Entity entity; // takes priority over placeable to be displayed in the info panel
         public int placeableIndex;
     }
 
@@ -138,7 +140,7 @@ public class MapDisplayer : MonoBehaviour
             {
                 Debug.Log("Button clicked " + buttonRectsToButtons[rectInt].text);
                 Button callback = buttonRectsToButtons[rectInt];
-                callback.OnClick(this);
+                callback.OnClick(this, mouseButton);
                 return;
             }
         }
@@ -198,6 +200,7 @@ public class MapDisplayer : MonoBehaviour
         if (placeables.Count == 0)
         {
             selection.placeable = null;
+            selection.entity = null;
         }
         else if (gamePosition == selection.position)
         {
@@ -205,6 +208,7 @@ public class MapDisplayer : MonoBehaviour
             selection.placeableIndex++;
             selection.placeableIndex %= placeables.Count;
             selection.placeable = placeables[selection.placeableIndex];
+            selection.entity = null;
         }
         else
         {
@@ -212,6 +216,7 @@ public class MapDisplayer : MonoBehaviour
             selection.position = gamePosition;
             selection.placeableIndex = 0;
             selection.placeable = placeables[0];
+            selection.entity = null;
         }
 
         if (mouseButton == 0)
@@ -320,8 +325,8 @@ public class MapDisplayer : MonoBehaviour
             }
         }
 
-        DisplayInfoPanel(leftMouseSelection.placeable, new Vector2(-DisplayGrid.WIDTH/2, -DisplayGrid.HEIGHT/2f));
-        DisplayInfoPanel(rightMouseSelection.placeable, new Vector2(3*DisplayGrid.WIDTH/8,-DisplayGrid.HEIGHT/2f));
+        DisplayInfoPanel(leftMouseSelection.placeable, leftMouseSelection.entity, new Vector2(-DisplayGrid.WIDTH/2, -DisplayGrid.HEIGHT/2f));
+        DisplayInfoPanel(rightMouseSelection.placeable, rightMouseSelection.entity, new Vector2(3*DisplayGrid.WIDTH/8,-DisplayGrid.HEIGHT/2f));
 
         DisplayBuildingShadow();
     }
@@ -373,9 +378,9 @@ public class MapDisplayer : MonoBehaviour
        
     }
 
-    void DisplayInfoPanel(Placeable placeable, Vector2 root)
+    void DisplayInfoPanel(Placeable placeable, Entity entity, Vector2 root)
     {
-        if (placeable == null)
+        if (placeable == null && entity == null)
         {
             return;
         }
@@ -387,17 +392,25 @@ public class MapDisplayer : MonoBehaviour
             0,
             5,
             true);
-        if (placeable is Building building)
+        if (entity is ItemType itemType)
+        {
+            DrawItemTypeInfoPanel(itemType, root, map, displayGrid);
+        }
+        else if (placeable is Building building)
         {
             DrawBuildingInfoPanel(building, root, map, displayGrid);
         }
-        if (placeable is Creature creature)
+        else if (placeable is Creature creature)
         {
             DrawCreatureInfoPanel(creature, root, map, displayGrid);
         }
-        if (placeable is Prop prop)
+        else if (placeable is Prop prop)
         {
             DrawPropInfoPanel(prop, root, map, displayGrid);
+        }
+        else if (placeable is Item item)
+        {
+            DrawItemTypeInfoPanel(item.itemType, root, map, displayGrid);
         }
     }
 
@@ -435,22 +448,34 @@ public class MapDisplayer : MonoBehaviour
             // display the + button to increase the requested amount
             height -= 7;
             Button increaseRequestButton = new ChangeItemRequestsButton("+", itemType.GetName(), currentlyRequested + 1, map.PositionOf(building));
-            RectInt rectInt = new((int)rootPosition.x + 1, height, 6, 6);
+            RectInt rectInt = new((int)rootPosition.x + 1, height, 3, 6);
             increaseRequestButton.Draw(displayGrid, rectInt, map);
             buttonRectsToButtons[rectInt] = increaseRequestButton;
 
             // display the - button to decrease the requested amount
             Button decreaseRequestButton = new ChangeItemRequestsButton("-", itemType.GetName(), currentlyRequested - 1, map.PositionOf(building));
-            rectInt = new((int)rootPosition.x + DisplayGrid.WIDTH / 8 - 7, height, 6, 6);
+            rectInt = new((int)rootPosition.x + DisplayGrid.WIDTH / 8 - 4, height, 3, 6);
             decreaseRequestButton.Draw(displayGrid, rectInt, map);
             buttonRectsToButtons[rectInt] = decreaseRequestButton;
 
             // display the item name and (amount present/amount requested)
-            displayGrid.DisplayText(itemType.GetName() + " (" + building.GetItemCount(itemType, map) + "/" + currentlyRequested + ")",
-                (int)rootPosition.x + 8,
-                height,
+            displayGrid.DisplayText(itemType.GetName(),
+                (int)rootPosition.x + DisplayGrid.WIDTH / 16,
+                height + 4,
                 Color.black,
                 true);
+
+            displayGrid.DisplayText("(" + building.GetItemCount(itemType, map) + "/" + currentlyRequested + ")",
+                (int)rootPosition.x + DisplayGrid.WIDTH / 16,
+                height + 1,
+                Color.black,
+                true);
+
+            // display the item icon button
+            Button itemIconButton = new ItemIconButton(itemType);
+            rectInt = new((int)rootPosition.x + 5, height, 6, 6);
+            itemIconButton.Draw(displayGrid, rectInt, map);
+            buttonRectsToButtons[rectInt] = itemIconButton;
         }
 
         // display a divider line
@@ -745,6 +770,30 @@ public class MapDisplayer : MonoBehaviour
         }
     }
 
+    private void DrawItemTypeInfoPanel(ItemType itemType, Vector2 rootPosition, Map map, DisplayGrid displayGrid)
+    {
+        // display the item name
+        int height = (int)rootPosition.y + DisplayGrid.HEIGHT - 4;
+        displayGrid.DisplayText(
+            itemType.GetName(),
+            (int)rootPosition.x + 1,
+            height,
+            Color.black,
+            true);
+
+        // display the item portrait
+        height -= 3 + 24;
+        displayGrid.DisplaySprite(
+            itemType.GetSpritePath(),
+            (int)rootPosition.x + 3,
+            height,
+            24,
+            24,
+            0,
+            6,
+            true);
+    }
+
     public void SetPlaceBuildingButton(BuildBuildingButton button)
     {
         activePlaceBuildingButton = button;
@@ -797,6 +846,18 @@ public class MapDisplayer : MonoBehaviour
             (map.PositionOf(targetBuilding).y + targetBuilding.buildingType.GetSize() / 2f) * cellsPerSquare - 2,
             4, 4, 1f);
     }
+
+    public void DisplayEntity(int buttonNumber, Entity entity)
+    {
+        if (buttonNumber == 0)
+        {
+            leftMouseSelection.entity = entity;
+        }
+        else if (buttonNumber == 1)
+        {
+            rightMouseSelection.entity = entity;
+        }
+    }
 }
 
 public abstract class Button
@@ -821,7 +882,7 @@ public abstract class Button
         displayGrid.DisplayText(text, rectInt.x+1, rectInt.y+ rectInt.height / 2, Color.black, true);
     }
 
-    public abstract void OnClick(MapDisplayer mapDisplayer);
+    public abstract void OnClick(MapDisplayer mapDisplayer, int buttonNumber);
 }
 
 public class SpawnCreatureButton : Button
@@ -877,8 +938,13 @@ public class SpawnCreatureButton : Button
         displayGrid.DisplayText(text, rectInt.x + 1, rectInt.y + rectInt.height / 2, Color.black, true);
     }
 
-    public override void OnClick(MapDisplayer mapDisplayer)
+    public override void OnClick(MapDisplayer mapDisplayer, int buttonNumber)
     {
+        if (buttonNumber != 0)
+        {
+            return;
+        }
+
         mapDisplayer.AddInputCommand(new SpawnCreature(creatureTypeName, buildingPosition));
     }
 }
@@ -896,8 +962,13 @@ public class ChangeItemRequestsButton : Button
         this.buildingPosition = buildingPosition;
     }
 
-    public override void OnClick(MapDisplayer mapDisplayer)
+    public override void OnClick(MapDisplayer mapDisplayer, int buttonNumber)
     {
+        if (buttonNumber != 0)
+        {
+            return;
+        }
+
         mapDisplayer.AddInputCommand(new ChangeRequestedItemAmount(itemName, amount, buildingPosition));
     }
 }
@@ -956,8 +1027,13 @@ public class BuildBuildingButton : Button
         return null;
     }
 
-    public override void OnClick(MapDisplayer mapDisplayer)
+    public override void OnClick(MapDisplayer mapDisplayer, int buttonNumber)
     {
+        if (buttonNumber != 0)
+        {
+            return;
+        }
+
         Map map = mapDisplayer.GetMap();
         Building sourceBuilding = GetSourceBuilding(map);
         if (sourceBuilding == null)
@@ -979,5 +1055,33 @@ public class BuildBuildingButton : Button
             return true;
         }
         return false;
+    }
+}
+
+public class ItemIconButton : Button
+{
+    private ItemType itemType;
+
+    public ItemIconButton(ItemType itemType) : base(itemType.GetName())
+    {
+        this.itemType = itemType;
+    }
+
+    public override void Draw(DisplayGrid displayGrid, RectInt rectInt, Map map, bool placingBuilding = false)
+    {
+        displayGrid.DisplaySprite(
+            itemType.GetSpritePath(),
+            rectInt.x,
+            rectInt.y,
+            rectInt.width,
+            rectInt.height,
+            0,
+            overlapLayer: 6,
+            true);
+    }
+
+    public override void OnClick(MapDisplayer mapDisplayer, int buttonNumber) 
+    {
+        mapDisplayer.DisplayEntity(buttonNumber, itemType);
     }
 }

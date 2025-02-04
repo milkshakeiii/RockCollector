@@ -2010,9 +2010,7 @@ public class Item : Placeable
 
     public override string GetSpritePath()
     {
-        string folder = itemType.GetTeamFolder();
-        string name = itemType.GetSpriteName();
-        return System.IO.Path.Combine(folder, name);
+        return itemType.GetSpritePath();
     }
 
     public override Placeable DeepCopy()
