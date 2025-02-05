@@ -564,6 +564,10 @@ public class Creature : Destructable
         {
             multiplier += 1;
         }
+        if (roll + modifier >= difficulty + 20)
+        {
+            multiplier += 1;
+        }
         if (roll == 20)
         {
             multiplier += 1;
@@ -1241,6 +1245,41 @@ public class Creature : Destructable
     {
         return new (conditions);
     }
+
+    public void AttackBuilding(TypeAbility ability, Building building, Map map)
+    {
+        DieRoll damage = null;
+
+        int multiplier = RollForMultiplier(building.buildingType.GetDemolitionDifficulty(), "demolition", map);
+        if (ability.GetWeaponSkills().Count > 0)
+        {
+            if (ability.GetRange() == 1)
+            {
+                multiplier += 2;
+            }
+            foreach (string weaponSkill in ability.GetWeaponSkills())
+            {
+                (DieRoll thisDamage, int range) = WeaponBaseDamangeAndRange(weaponSkill, map);
+                if (damage == null || thisDamage.ExpectedValue() > damage.ExpectedValue())
+                {
+                    damage = thisDamage;
+                }
+            }
+        }
+        else
+        {
+            damage = ability.GetDamage();
+            multiplier += 1;
+        }
+
+        if (damage == null)
+        {
+            return;
+        }
+
+        building.TakeDamage(damage.Roll() * multiplier);
+        GainExperience(building.buildingType.GetDemolitionDifficulty(), "demolition");
+    }
 }
 
 public class CreatureView : DestructableView
@@ -1809,6 +1848,11 @@ public class Building : Destructable
             }
         }
         return true;
+    }
+
+    public int DifficultyEstimate()
+    {
+        return buildingType.GetDifficultyEstimate();
     }
 }
 

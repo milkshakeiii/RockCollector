@@ -13,3 +13,4 @@ evocation:charisma
 necromancy:intelligence
 forestry:wisdom
 gathering:intelligence
+demolition:strength

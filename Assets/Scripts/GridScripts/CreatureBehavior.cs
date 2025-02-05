@@ -84,6 +84,7 @@ public abstract class BehaviorPriority
             "Flee" => new FleePriority(),
             "Fight" => new FightPriority(),
             "Plant Props" => new PlantPriority(),
+            "Raid" => new RaidPriority(),
             _ => throw new Exception("Unknown behavior priority: " + name),
         };
     }
@@ -423,6 +424,31 @@ public class HuntPriority : BehaviorPriority
     public override string GetIngVerb()
     {
         return "Hunting";
+    }
+}
+
+public class RaidPriority : BehaviorPriority
+{
+    public override Activity ChosenActivityOrNull(Map map, Creature actor, CreatureBehaviorType behaviorType)
+    {
+        Building homeBuilding = actor.GetHomeBuilding(map);
+        foreach (Placeable placeable in map.UnheldPlaceables())
+        {
+            if (placeable is Building building && building.teamNumber != actor.teamNumber
+                && map.DistanceBetween(homeBuilding, building) <= behaviorType.GetRaidRange()
+                && map.DistanceBetween(actor, building) <= behaviorType.GetRaidLookDistance()
+                && building.DifficultyEstimate() - actor.DifficultyEstimate() <= behaviorType.GetRaidMaximumLevelDifference()
+                && building.DifficultyEstimate() - actor.DifficultyEstimate() >= behaviorType.GetRaidMinimumLevelDifference())
+            {
+                return new RaidActivity(building);
+            }
+        }
+        return null;
+    }
+
+    public override string GetIngVerb()
+    {
+        return "Raiding";
     }
 }
 

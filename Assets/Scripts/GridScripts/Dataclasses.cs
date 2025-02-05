@@ -917,6 +917,14 @@ public class BuildingType : Entity
     {
         return EntityManager.GetStringAttribute(attributes, "spriteName", "nosprite");
     }
+    public int GetDifficultyEstimate()
+    {
+        return EntityManager.GetIntAttribute(attributes, "difficultyEstimate", 10);
+    }
+    public int GetDemolitionDifficulty()
+    {
+        return EntityManager.GetIntAttribute(attributes, "demolitionDifficulty", 10);
+    }
 }
 
 public class CreatureBehaviorType : Entity
@@ -1002,6 +1010,25 @@ public class CreatureBehaviorType : Entity
     public int GetPlantRange()
     {
         return EntityManager.GetIntAttribute(attributes, "plantRange");
+    }
+    public int GetRaidLookDistance()
+    {
+        return EntityManager.GetIntAttribute(attributes, "raidLookDistance");
+    }
+
+    public int GetRaidMaximumLevelDifference()
+    {
+        return EntityManager.GetIntAttribute(attributes, "raidMaximumLevelDifference");
+    }
+
+    public int GetRaidMinimumLevelDifference()
+    {
+        return EntityManager.GetIntAttribute(attributes, "raidMinimumLevelDifference");
+    }
+
+    public int GetRaidRange()
+    {
+        return EntityManager.GetIntAttribute(attributes, "raidRange");
     }
 }
 

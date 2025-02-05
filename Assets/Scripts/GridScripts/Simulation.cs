@@ -102,7 +102,7 @@ public class Simulation
                         InflictConditionsFromAbility(ability, actor, target, map);
                         InflictConditionsFromWeapon(chosenWeaponSkill, actor, target, map);
                         targetsStruck++;
-                        if (targetsStruck >= ability.GetEnemyTargets())
+                        if (targetsStruck >= maxTargets)
                         {
                             break;
                         }
@@ -112,6 +112,26 @@ public class Simulation
             if (targetsStruck >= ability.GetEnemyTargets())
             {
                 break;
+            }
+        }
+
+        // if we still haven't struck the maximum number of targets, try attacking buildings
+        if (targetsStruck < maxTargets)
+        {
+            foreach (Placeable placeable in map.UnheldPlaceables())
+            {
+                if (placeable is Building building && building.teamNumber != actor.teamNumber)
+                {
+                    if (map.DistanceBetween(actor, building) <= range)
+                    {
+                        actor.AttackBuilding(ability, building, map);
+                        targetsStruck++;
+                        if (targetsStruck >= maxTargets)
+                        {
+                            break;
+                        }
+                    }
+                }
             }
         }
     }
@@ -178,6 +198,26 @@ public class Simulation
                                 actor.NonweaponStrike(target, damage, skill, map);
                             }
                             InflictConditionsFromAbility(ability, actor, target, map);
+                        }
+                    }
+                }
+            }
+        }
+
+        // if we still haven't struck the maximum number of targets, try attacking buildings
+        if (targetsStruck < maxTargets)
+        {
+            foreach (Placeable placeable in map.UnheldPlaceables())
+            {
+                if (placeable is Building building && building.teamNumber != actor.teamNumber)
+                {
+                    if (map.DistanceBetween(actor, building) <= range)
+                    {
+                        actor.AttackBuilding(ability, building, map);
+                        targetsStruck++;
+                        if (targetsStruck >= maxTargets)
+                        {
+                            break;
                         }
                     }
                 }

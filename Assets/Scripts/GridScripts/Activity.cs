@@ -210,6 +210,68 @@ public class HuntActivity : Activity
     }
 }
 
+public class RaidActivity : Activity
+{
+    public RaidActivity(Building targetBuilding) : base(0,
+               new(), null, new(), new(), targetBuilding, Activity.NULL_POSITION)
+    {
+
+    }
+
+    public override string TargetDescriptiveString()
+    {
+        return SourceBuilding().buildingType.GetName();
+    }
+
+    public Building SourceBuilding()
+    {
+        return (Building)sourcePlaceable;
+    }
+
+    public override bool TryClaimPlaceables(Creature performer, Map map)
+    {
+        // do nothing
+        return true;
+    }
+
+    public override void UnclaimPlaceables(Creature performer, Map map)
+    {
+        // do nothing
+    }
+
+    public override int ProximityRequirement(Creature forCreature, Map map)
+    {
+        int myMaxRangeUp = -1;
+        int myMaxRangeEver = 1;
+        foreach (TypeAbility ability in forCreature.ListAbilities())
+        {
+            if (ability.GetEnemyTargets() > 0 && forCreature.AbilityIsUp(ability, map))
+            {
+                myMaxRangeUp = Math.Max(myMaxRangeUp, ability.GetRange());
+            }
+            if (ability.GetEnemyTargets() > 0)
+            {
+                myMaxRangeEver = Math.Max(myMaxRangeEver, ability.GetRange());
+            }
+        }
+        if (myMaxRangeUp == -1)
+        {
+            return myMaxRangeEver;
+        }
+        return myMaxRangeUp;
+    }
+
+    public override bool IsCompletedOrImpossible(Map map, Creature performer)
+    {
+        return SourceBuilding().IsDestroyed();
+    }
+
+    public override void Perform(Creature performer, Map map)
+    {
+        performer.UseAnyAbility(map);
+    }
+}
+
 public class CraftActivity : Activity
 {
     bool crafted = false;

@@ -22,7 +22,7 @@ huntMaximumLevelDifference:999
 wanderRange:5
 
 name:Warrior Behavior
-priorities:Flee,Equip,Fight,Hunt,Deliver Requested Items,Rest,Wander
+priorities:Flee,Equip,Fight,Hunt,Raid,Deliver Requested Items,Rest,Wander
 equipCategories:swords,shields
 fleeDangerThreshold:2
 equipRange:999
@@ -31,6 +31,10 @@ huntRange:100
 huntLookDistance:100
 huntMinimumLevelDifference:-999
 huntMaximumLevelDifference:999
+raidRange:100
+raidLookDistance:10
+raidMinimumLevelDifference:-999
+raidMaximumLevelDifference:999
 dropOffRange:0
 pickUpRange:999
 restRange:0

@@ -36,6 +36,8 @@ size:4
 maxHealth:100
 
 name:Graveyard
+difficultyEstimate:11
+demolitionDifficulty:11
 supportedCreatureTypes:Skeleton
 supportedCreatureCounts:5
 supportedCreatureSpawnTimes:600
