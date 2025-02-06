@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/test.unity
     guid: e4fc5302c922fdd41a0d074c828600f4
   - enabled: 0
-    path: Assets/Scenes/scenario_builder.unity
+    path: Assets/Scenes/scenario.unity
     guid: 0cc41dabcee6d514caf9847e5e85ab21
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0

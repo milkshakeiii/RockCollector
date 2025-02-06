@@ -7,7 +7,7 @@ maxHealth:100
 requestableItemTypes:Axe,Log,Flint,Hammer,Stone,Berry
 requestableItemCounts:5,5,5,5,5,5
 craftedItemTypes:Axe,Real Axe
-buildableBuildingTypes:Shed
+buildableBuildingTypes:Shed,Guild,Barracks
 restHealAmount:3
 restHealCooldown:20
 plantingZoneXMin:-10
@@ -29,6 +29,8 @@ supportedBonusPropYs:2,2
 supportedBonusPropRespawnTicks:400,400
 
 name:Guild
+constructionItemTypes:Log
+constructionItemAmounts:2
 supportedCreatureTypes:Woodcrafter
 supportedCreatureCounts:2
 supportedCreatureSpawnTimes:500
@@ -47,6 +49,8 @@ restHealAmount:3
 restHealCooldown:20
 
 name:Barracks
+constructionItemTypes:Log
+constructionItemAmounts:2
 supportedCreatureTypes:Warrior,Wizard
 supportedCreatureCounts:5,5
 supportedCreatureSpawnTimes:500,600

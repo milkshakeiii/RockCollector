@@ -1,0 +1,3 @@
+baseTile:grass1
+patchTile:grass2
+mapRadius:50
