@@ -19,12 +19,9 @@ public class Simulation
     public static event ConditionApplied OnConditionApplied;
     public delegate void ConditionApplied(Creature actor, Creature target, ConditionType condition, Map map);
 
-    public static void AdvanceTick(Gamestate gamestate)
+    public static void AdvanceTick(Gamestate gamestate, List<MapCommand> inputCommands)
     {
-        gamestate.maps.ForEach(map =>
-        {
-            map.AdvanceTick(new());
-        });
+        gamestate.map.AdvanceTick(inputCommands);
     }
 
     public static void AbilityEffect(TypeAbility ability, Creature actor, Map map)
@@ -325,7 +322,14 @@ public class Simulation
 
 public class Gamestate 
 {
-    public List<Map> maps = new();
+    public Gamestate(Map map, Scenario scenario)
+    {
+        this.map = map;
+        this.scenario = scenario;
+    }
+
+    public Map map;
+    public Scenario scenario;
 }
 
 public class Map 

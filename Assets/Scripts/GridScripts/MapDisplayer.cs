@@ -19,7 +19,7 @@ public class MapDisplayer : MonoBehaviour
     public float secondsPerTurn = 0.1f;
     public float lastTurnTime = 0;
 
-    private Map map = null;
+    private Gamestate gamestate = null;
     private List<MapCommand> inputCommands = new();
     private BuildBuildingButton activePlaceBuildingButton = null;
     private Placeable mouseDownPlaceable = null;
@@ -93,12 +93,12 @@ public class MapDisplayer : MonoBehaviour
     
     public Map GetMap()
     {
-        return map;
+        return gamestate.map;
     }
 
-    public void SetMap(Map map)
+    public void SetGamestate(Gamestate gamestate)
     {
-        this.map = map;
+        this.gamestate = gamestate;
     }
 
     private Vector2Int GetMouseWorldPosition()
@@ -162,12 +162,12 @@ public class MapDisplayer : MonoBehaviour
         if (mouseButton == 0 && previousMouseDownPlaceable != null)
         {
             // if the mouse is over a building and we were dragging from a building, make a transport route
-            Placeable mouseUpBuilding = map.PlaceablesAt(gamePosition).Find(placeable => placeable is Building);
+            Placeable mouseUpBuilding = GetMap().PlaceablesAt(gamePosition).Find(placeable => placeable is Building);
             if (mouseUpBuilding != null && previousMouseDownPlaceable is Building mouseDownBuilding && mouseDownBuilding != mouseUpBuilding)
             {
                 Building sourceBuilding = (Building)previousMouseDownPlaceable;
                 Building targetBuilding = (Building)mouseUpBuilding;
-                inputCommands.Add(new MakeTransportRoute(map.PositionOf(sourceBuilding), map.PositionOf(targetBuilding)));
+                inputCommands.Add(new MakeTransportRoute(GetMap().PositionOf(sourceBuilding), GetMap().PositionOf(targetBuilding)));
                 // visual feedback for the route
                 RouteFeedback(sourceBuilding, targetBuilding);
                 return;
@@ -185,7 +185,7 @@ public class MapDisplayer : MonoBehaviour
             selection = rightMouseSelection;
         }
 
-        List<Placeable> placeables = map.PlaceablesAt(gamePosition);
+        List<Placeable> placeables = GetMap().PlaceablesAt(gamePosition);
         // if there is no placeable at the position, clear the selection
         if (placeables.Count == 0)
         {
@@ -246,7 +246,7 @@ public class MapDisplayer : MonoBehaviour
 
         // otherwise, set the mouseDownPlaceable to the clicked placeable if there is one
         Vector2Int gamePosition = WorldPositionToGamePosition(worldPosition);
-        List<Placeable> placeables = map.PlaceablesAt(gamePosition);
+        List<Placeable> placeables = GetMap().PlaceablesAt(gamePosition);
         if (placeables.Count > 0)
         {
             mouseDownPlaceable = placeables[0];
@@ -256,16 +256,16 @@ public class MapDisplayer : MonoBehaviour
     // Update is called once per framex
     void Update()
     {
-        if (map == null)
+        if (gamestate == null)
         {
             return;
         }
         if (Time.time - lastTurnTime > secondsPerTurn)
         {
             lastTurnTime = Time.time;
-            map.AdvanceTick(inputCommands);
+            Simulation.AdvanceTick(gamestate, inputCommands);
             inputCommands.Clear();
-            DisplayMap(map);
+            DisplayMap(GetMap());
         }
     }
 
@@ -384,23 +384,23 @@ public class MapDisplayer : MonoBehaviour
             true);
         if (entity is ItemType itemType)
         {
-            DrawItemTypeInfoPanel(itemType, root, map, displayGrid);
+            DrawItemTypeInfoPanel(itemType, root, GetMap(), displayGrid);
         }
         else if (placeable is Building building)
         {
-            DrawBuildingInfoPanel(building, root, map, displayGrid);
+            DrawBuildingInfoPanel(building, root, GetMap(), displayGrid);
         }
         else if (placeable is Creature creature)
         {
-            DrawCreatureInfoPanel(creature, root, map, displayGrid);
+            DrawCreatureInfoPanel(creature, root, GetMap(), displayGrid);
         }
         else if (placeable is Prop prop)
         {
-            DrawPropInfoPanel(prop, root, map, displayGrid);
+            DrawPropInfoPanel(prop, root, GetMap(), displayGrid);
         }
         else if (placeable is Item item)
         {
-            DrawItemTypeInfoPanel(item.itemType, root, map, displayGrid);
+            DrawItemTypeInfoPanel(item.itemType, root, GetMap(), displayGrid);
         }
     }
 
@@ -869,15 +869,15 @@ public class MapDisplayer : MonoBehaviour
     private void AllRoutesFeedback(Building building)
     {
         // visual feedback for all routes to and from the building
-        foreach (Placeable placeable in map.UnheldPlaceables())
+        foreach (Placeable placeable in GetMap().UnheldPlaceables())
         {
             if (placeable is Building otherBuilding)
             {
-                if (map.TransportRouteExists(building, otherBuilding))
+                if (GetMap().TransportRouteExists(building, otherBuilding))
                 {
                     RouteFeedback(building, otherBuilding);
                 }
-                if (map.TransportRouteExists(otherBuilding, building))
+                if (GetMap().TransportRouteExists(otherBuilding, building))
                 {
                     RouteFeedback(otherBuilding, building);
                 }
@@ -889,10 +889,10 @@ public class MapDisplayer : MonoBehaviour
     {
         displayGrid.AnimateTo(
             "Art/UI/selected_button",
-            (map.PositionOf(sourceBuilding).x + sourceBuilding.buildingType.GetSize() / 2f) * cellsPerSquare - 2,
-            (map.PositionOf(sourceBuilding).y + sourceBuilding.buildingType.GetSize() / 2f) * cellsPerSquare - 2,
-            (map.PositionOf(targetBuilding).x + targetBuilding.buildingType.GetSize() / 2f) * cellsPerSquare - 2,
-            (map.PositionOf(targetBuilding).y + targetBuilding.buildingType.GetSize() / 2f) * cellsPerSquare - 2,
+            (GetMap().PositionOf(sourceBuilding).x + sourceBuilding.buildingType.GetSize() / 2f) * cellsPerSquare - 2,
+            (GetMap().PositionOf(sourceBuilding).y + sourceBuilding.buildingType.GetSize() / 2f) * cellsPerSquare - 2,
+            (GetMap().PositionOf(targetBuilding).x + targetBuilding.buildingType.GetSize() / 2f) * cellsPerSquare - 2,
+            (GetMap().PositionOf(targetBuilding).y + targetBuilding.buildingType.GetSize() / 2f) * cellsPerSquare - 2,
             4, 4, 1f);
     }
 

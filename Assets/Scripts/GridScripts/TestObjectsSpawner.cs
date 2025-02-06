@@ -69,6 +69,7 @@ public class TestObjectsSpawner : MonoBehaviour
         Item log = new(EntityManager.itemTypes["Log"]);
         map.Add(log, new Vector2Int(1, 3));
 
-        mapDisplayer.SetMap(map);
+        Gamestate gamestate = new(map, null);
+        mapDisplayer.SetGamestate(gamestate);
     }
 }
