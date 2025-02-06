@@ -285,4 +285,43 @@ public class DisplayGrid : MonoBehaviour
         // destroy the GameObject
         Destroy(newSquare);
     }
+
+    public void Fade(string spriteName, float fromX, float fromY, int width, int height, float duration)
+    {
+        StartCoroutine(FadeCoroutine(spriteName, fromX, fromY, width, height, duration));
+    }
+
+    public IEnumerator FadeCoroutine(string spriteName, float fromX, float fromY, int width, int height, float duration)
+    {
+        // create a new GameObject
+        GameObject newSquare = NewGameObject(spriteName);
+        newSquare.transform.SetParent(transform);
+        newSquare.transform.localPosition = new Vector3(fromX, fromY, 0);
+
+        // set the scale
+        Sprite sprite = newSquare.GetComponent<SpriteRenderer>().sprite;
+        uint spritePixelWidth = (uint)sprite.rect.width;
+        uint spritePixelHeight = (uint)sprite.rect.height;
+        uint spriteFullWidth = spritePixelWidth / 8;
+        uint spriteFullHeight = spritePixelHeight / 8;
+        float scaleX = (float)width / spriteFullWidth;
+        float scaleY = (float)height / spriteFullHeight;
+        newSquare.transform.localScale = new Vector3(scaleX, scaleY, 1);
+
+        // set the sorting layer
+        newSquare.GetComponent<SpriteRenderer>().sortingOrder = 10;
+
+        // animate
+        float time = 0;
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+            float t = time / duration;
+            newSquare.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1 - t);
+            yield return null;
+        }
+
+        // destroy the GameObject
+        Destroy(newSquare);
+    }
 }

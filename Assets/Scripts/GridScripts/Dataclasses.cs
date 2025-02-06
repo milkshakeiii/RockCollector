@@ -499,10 +499,19 @@ public class TypeAbility : Entity
         }
         return EntityManager.GetIntListAttribute(attributes, "maxStacks", defaultList);
     }
-
     public int GetAllyTargets()
     {
         return EntityManager.GetIntAttribute(attributes, "allyTargets", 0);
+    }
+    public string GetEffectSpriteName()
+    {
+        return EntityManager.GetStringAttribute(attributes, "effectSpritePath", "nosprite");
+    }
+    public string GetEffectSpritePath()
+    {
+        string folder = GetTeamFolder();
+        string name = GetEffectSpriteName();
+        return System.IO.Path.Combine(folder, name);
     }
 }
 

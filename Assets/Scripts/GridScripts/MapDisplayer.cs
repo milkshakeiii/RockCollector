@@ -42,7 +42,7 @@ public class MapDisplayer : MonoBehaviour
         DisplayGrid.MouseDown += OnMouseDownEvent;
 
         Simulation.OnWeaponStrike += OnWeaponStrikeEvent;
-        // Simulation.OnNonweaponStrike += OnNonweaponStrikeEvent;
+        Simulation.OnNonweaponStrike += OnNonweaponStrikeEvent;
         // Simulation.OnConditionApplied += OnConditionAppliedEvent;
     }
 
@@ -60,6 +60,18 @@ public class MapDisplayer : MonoBehaviour
             target.y * cellsPerSquare,
             cellsPerSquare,
             cellsPerSquare,
+            0.5f);
+    }
+
+    private void OnNonweaponStrikeEvent(Creature actor, Vector2Int target, TypeAbility ability, Map map)
+    {
+        int radius = ability.GetEffectRadius();
+        displayGrid.Fade(
+            ability.GetEffectSpritePath(),
+            (target.x - radius) * cellsPerSquare,
+            (target.y - radius) * cellsPerSquare,
+            (radius*2 + 1) * cellsPerSquare,
+            (radius*2 + 1) * cellsPerSquare,
             0.5f);
     }
     

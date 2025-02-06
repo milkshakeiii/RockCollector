@@ -14,7 +14,7 @@ public class Simulation
     public delegate void WeaponStrike(Creature actor, Vector2Int target, Item weapon, Map map);
 
     public static event NonweaponStrike OnNonweaponStrike;
-    public delegate void NonweaponStrike(Creature actor, Vector2Int target, Map map);
+    public delegate void NonweaponStrike(Creature actor, Vector2Int target, TypeAbility ability, Map map);
 
     public static event ConditionApplied OnConditionApplied;
     public delegate void ConditionApplied(Creature actor, Creature target, ConditionType condition, Map map);
@@ -212,7 +212,7 @@ public class Simulation
                     }
                 }
             }
-            OnNonweaponStrike?.Invoke(actor, position, map);
+            OnNonweaponStrike?.Invoke(actor, position, ability, map);
         }
 
         // if we still haven't struck the maximum number of targets, try attacking buildings
