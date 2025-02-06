@@ -1280,6 +1280,24 @@ public class Creature : Destructable
         building.TakeDamage(damage.Roll() * multiplier);
         GainExperience(building.buildingType.GetDemolitionDifficulty(), "demolition");
     }
+
+    public Item GetWeapon(string weaponSkill, Map map)
+    {
+        Item weapon = null;
+        foreach (Placeable placeable in map.HeldPlaceablesOf(this))
+        {
+            if (placeable is Item item && item.itemType.GetWeaponSkill() == weaponSkill)
+            {
+                weapon = item;
+                break;
+            }
+        }
+        if (weapon == null)
+        {
+            throw new System.Exception("No weapon held with skill " + weaponSkill);
+        }
+        return weapon;
+    }
 }
 
 public class CreatureView : DestructableView

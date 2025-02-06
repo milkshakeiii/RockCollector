@@ -1,4 +1,5 @@
 name:Axe
+spriteName:axe
 weaponDamage:1d8
 weaponRange:1
 weaponSkill:axes
@@ -11,6 +12,7 @@ craftingTime:10
 size:-6
 
 name:Hammer
+spriteName:hammer
 weaponDamage:1d6
 weaponRange:1
 weaponSkill:hammers
@@ -46,6 +48,7 @@ name:Stone
 size:-2
 
 name:Wooden Sword
+spriteName:wooden_sword
 equipmentCategory:swords
 equipmentLevel:1
 weaponDamage:1d6
@@ -58,6 +61,7 @@ craftingTime:10
 size:-3
 
 name:Wooden Shield
+spriteName:wooden_shield
 equipmentCategory:shields
 equipmentLevel:1
 craftingInputs:Log,Log

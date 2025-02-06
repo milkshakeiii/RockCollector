@@ -40,6 +40,27 @@ public class MapDisplayer : MonoBehaviour
     {
         DisplayGrid.MouseUp += OnMouseUpEvent;
         DisplayGrid.MouseDown += OnMouseDownEvent;
+
+        Simulation.OnWeaponStrike += OnWeaponStrikeEvent;
+        // Simulation.OnNonweaponStrike += OnNonweaponStrikeEvent;
+        // Simulation.OnConditionApplied += OnConditionAppliedEvent;
+    }
+
+    private void OnWeaponStrikeEvent(Creature actor, Vector2Int target, Item weapon, Map map)
+    {
+        if (weapon == null)
+        {
+            return;
+        }
+        displayGrid.AnimateTo(
+            weapon.itemType.GetSpritePath(),
+            map.PositionOf(actor).x * cellsPerSquare,
+            map.PositionOf(actor).y * cellsPerSquare,
+            target.x * cellsPerSquare,
+            target.y * cellsPerSquare,
+            cellsPerSquare,
+            cellsPerSquare,
+            0.5f);
     }
     
     public Map GetMap()

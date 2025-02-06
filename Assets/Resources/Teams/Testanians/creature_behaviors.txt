@@ -23,8 +23,8 @@ wanderRange:5
 
 name:Warrior Behavior
 priorities:Flee,Equip,Fight,Hunt,Raid,Deliver Requested Items,Rest,Wander
-equipCategories:swords,shields
 fleeDangerThreshold:2
+equipCategories:swords,shields
 equipRange:999
 fightDangerThreshold:1
 huntRange:100

@@ -10,6 +10,15 @@ using UnityEngine;
 
 public class Simulation 
 {
+    public static event WeaponStrike OnWeaponStrike;
+    public delegate void WeaponStrike(Creature actor, Vector2Int target, Item weapon, Map map);
+
+    public static event NonweaponStrike OnNonweaponStrike;
+    public delegate void NonweaponStrike(Creature actor, Vector2Int target, Map map);
+
+    public static event ConditionApplied OnConditionApplied;
+    public delegate void ConditionApplied(Creature actor, Creature target, ConditionType condition, Map map);
+
     public static void AdvanceTick(Gamestate gamestate)
     {
         gamestate.maps.ForEach(map =>
@@ -99,6 +108,7 @@ public class Simulation
                         {
                             actor.RangedStrike(target, damage, chosenWeaponSkill, map);
                         }
+                        OnWeaponStrike?.Invoke(actor, position, actor.GetWeapon(chosenWeaponSkill, map), map);
                         InflictConditionsFromAbility(ability, actor, target, map);
                         InflictConditionsFromWeapon(chosenWeaponSkill, actor, target, map);
                         targetsStruck++;
@@ -202,6 +212,7 @@ public class Simulation
                     }
                 }
             }
+            OnNonweaponStrike?.Invoke(actor, position, map);
         }
 
         // if we still haven't struck the maximum number of targets, try attacking buildings
@@ -302,6 +313,7 @@ public class Simulation
             int baseStack = baseStacks[i];
             int maxStack = maxStacks[i];
             actor.InflictConditionOn(target, ability.GetSkill(), condition, baseStack, maxStack, map);
+            OnConditionApplied?.Invoke(actor, target, condition, map);
         }
     }
 

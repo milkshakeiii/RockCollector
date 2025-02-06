@@ -1032,7 +1032,7 @@ public class CreatureBehaviorType : Entity
     }
 }
 
-public class DieRoll
+public class DieRoll 
 {
     public int sides;
     public int rolls;
