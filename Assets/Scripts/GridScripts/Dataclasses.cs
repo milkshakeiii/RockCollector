@@ -588,6 +588,18 @@ public class ConditionType : Entity
     {
         return EntityManager.GetIntAttribute(attributes, "duration", 0);
     }
+
+    public string GetSpriteName()
+    {
+        return EntityManager.GetStringAttribute(attributes, "spriteName", "nosprite");
+    }
+
+    public string GetSpritePath()
+    {
+        string folder = GetTeamFolder();
+        string name = GetSpriteName();
+        return System.IO.Path.Combine(folder, name);
+    }
 }
 
 public class CreatureType : Entity

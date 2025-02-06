@@ -270,7 +270,7 @@ public class DisplayGrid : MonoBehaviour
         newSquare.transform.localScale = new Vector3(scaleX, scaleY, 1);
 
         // set the sorting layer
-        newSquare.GetComponent<SpriteRenderer>().sortingOrder = 10;
+        newSquare.GetComponent<SpriteRenderer>().sortingOrder = 4;
 
         // animate
         float time = 0;
@@ -297,6 +297,7 @@ public class DisplayGrid : MonoBehaviour
         GameObject newSquare = NewGameObject(spriteName);
         newSquare.transform.SetParent(transform);
         newSquare.transform.localPosition = new Vector3(fromX, fromY, 0);
+        newSquare.GetComponent<SpriteRenderer>().sortingOrder = 4;
 
         // set the scale
         Sprite sprite = newSquare.GetComponent<SpriteRenderer>().sprite;

@@ -1,10 +1,12 @@
 name:Weak
+spriteName:weak
 modifiedAttributeScores:strength
 attributeModifierAmounts:-2
 protectionAttribute:strength
 duration:200
 
 name:Shielded
+spriteName:magic_shield
 skillBonusNames:defense,dodge,resistance
 skillBonusAmounts:2,2,2
 isHarmful:false

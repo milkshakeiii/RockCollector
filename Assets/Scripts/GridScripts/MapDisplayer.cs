@@ -6,6 +6,8 @@ using Unity.VisualScripting;
 using UnityEngine.UIElements;
 using UnityEngine.Playables;
 using System;
+using static UnityEngine.GraphicsBuffer;
+using UnityEditor.Playables;
 
 public class MapDisplayer : MonoBehaviour
 {
@@ -43,7 +45,7 @@ public class MapDisplayer : MonoBehaviour
 
         Simulation.OnWeaponStrike += OnWeaponStrikeEvent;
         Simulation.OnNonweaponStrike += OnNonweaponStrikeEvent;
-        // Simulation.OnConditionApplied += OnConditionAppliedEvent;
+        Simulation.OnConditionApplied += OnConditionAppliedEvent;
     }
 
     private void OnWeaponStrikeEvent(Creature actor, Vector2Int target, Item weapon, Map map)
@@ -72,6 +74,20 @@ public class MapDisplayer : MonoBehaviour
             (target.y - radius) * cellsPerSquare,
             (radius*2 + 1) * cellsPerSquare,
             (radius*2 + 1) * cellsPerSquare,
+            0.5f);
+    }
+
+    private void OnConditionAppliedEvent(Creature actor, Creature target, ConditionType condition, Map map)
+    {
+        Debug.Log("Condition applied: " + condition.GetSpritePath());
+        Vector2Int targetPosition = map.PositionOf(target);
+        int size = target.SquaresMinimumOne();
+        displayGrid.Fade(
+            condition.GetSpritePath(),
+            (targetPosition.x) * cellsPerSquare,
+            (targetPosition.y) * cellsPerSquare,
+            size * cellsPerSquare,
+            size * cellsPerSquare,
             0.5f);
     }
     
