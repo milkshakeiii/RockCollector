@@ -3,10 +3,12 @@ using UnityEngine;
 public class Scenario
 {
     public ScenarioInfo scenarioInfo;
+    private string playerTeamName;
 
-    public Scenario(ScenarioInfo scenarioInfo)
+    public Scenario(ScenarioInfo scenarioInfo, string playerTeamName)
     {
         this.scenarioInfo = scenarioInfo;
+        this.playerTeamName = playerTeamName;
     }
 
     public string GetTile1SpritePath()
@@ -24,10 +26,10 @@ public class Scenario
         return new Gamestate(new(), this);
     }
 
-    public static Scenario ReadScenario(string scenarioName)
+    public static Scenario ReadScenario(string scenarioName, string newPlayerTeamNAme)
     {
         EntityManager.ReadScenario(scenarioName);
         ScenarioInfo scenarioInfo = EntityManager.scenarioInfos[scenarioName];
-        return new Scenario(scenarioInfo);
+        return new Scenario(scenarioInfo, newPlayerTeamNAme);
     }
 }

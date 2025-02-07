@@ -340,6 +340,19 @@ public static class EntityManager
         return new List<string>(lines);
     }
 
+    public static List<string> ListTeams()
+    {
+        // read a file called "team_names" in the "Teams" directory
+        TextAsset textAsset = Resources.Load<TextAsset>("Teams/team_names");
+        if (textAsset == null)
+        {
+            throw new System.Exception("No team names file found");
+        }
+        string[] lines = textAsset.text.Split('\n');
+        Debug.Log("Teams: " + string.Join(", ", lines));
+        return new List<string>(lines);
+    }
+
     public static void ReadTeam(string teamName)
     {
         ReadTeamEntity("feats", teamName);

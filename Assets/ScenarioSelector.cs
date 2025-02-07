@@ -10,7 +10,8 @@ public class ScenarioSelector : MonoBehaviour
     public float spacing = 150f;
     public int buttonsPerRow = 4;
 
-    private Scenario scenario;
+    private string scenarioName;
+    private List<GameObject> buttons = new List<GameObject>();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -19,21 +20,43 @@ public class ScenarioSelector : MonoBehaviour
         List<string> scenarioNames = EntityManager.ListScenarios();
         for (int i = 0; i < scenarioNames.Count; i++)
         {
+            string thisScenarioName = scenarioNames[i];
             GameObject button = Instantiate(buttonPrefab, transform);
-            button.GetComponentInChildren<TMP_Text>().text = scenarioNames[i];
+            button.GetComponentInChildren<TMP_Text>().text = thisScenarioName;
             button.GetComponent<RectTransform>().anchoredPosition += new Vector2((i % buttonsPerRow) * spacing, -Mathf.Floor(i / buttonsPerRow) * spacing);
-            // button.GetComponent<Button>().onClick.AddListener(() => EntityManager.LoadScenario(scenarioNames[i]));
+            button.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => SelectScenario(thisScenarioName));
         }
     }
 
-    public void LoadScenario(string scenarioName)
+    public void SelectScenario(string newScenarioName)
     {
-        scenario = Scenario.ReadScenario(scenarioName);
+        scenarioName = newScenarioName;
+        foreach (GameObject button in buttons)
+        {
+            Destroy(button);
+        }
+        buttons.Clear();
+        titleText.text = "Select your team";
+        SpawnTeamButtons();
+    }
+
+    private void SpawnTeamButtons()
+    {
+        List<string> teamNames = EntityManager.ListTeams();
+        for (int i = 0; i < teamNames.Count; i++)
+        {
+            string thisTeamName = teamNames[i];
+            GameObject button = Instantiate(buttonPrefab, transform);
+            button.GetComponentInChildren<TMP_Text>().text = thisTeamName;
+            button.GetComponent<RectTransform>().anchoredPosition += new Vector2((i % buttonsPerRow) * spacing, -Mathf.Floor(i / buttonsPerRow) * spacing);
+            button.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => StartGame(thisTeamName));
+        }
     }
 
     public void StartGame(string playerTeam)
     {
-        scenario.ReadStartingTeam(playerTeam);
+        Debug.Log("Starting game with scenario " + scenarioName + " and team " + playerTeam);
+        Scenario scenario = Scenario.ReadScenario(scenarioName, playerTeam);
         FindAnyObjectByType<MapDisplayer>().SetGamestate(scenario.StartingGamestate());
     }
 
