@@ -4,13 +4,15 @@ using System.Collections.Generic;
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine.UIElements;
-using UnityEngine.Playables;
 using System;
 using static UnityEngine.GraphicsBuffer;
-using UnityEditor.Playables;
 
 public class MapDisplayer : MonoBehaviour
 {
+    public TMPro.TMP_Text fpsText;
+    // array of 15 floats to average for fps calculation
+    private float[] fpsBuffer = new float[15];
+
     public DisplayGrid displayGrid;
     public int cellsPerSquare;
     public uint widthInSquares;
@@ -267,20 +269,32 @@ public class MapDisplayer : MonoBehaviour
         }
     }
 
-    // Update is called once per framex
+    // Update is called once per frame
     void Update()
     {
+        // calculate fps
+        float fps = 1.0f / Time.deltaTime;
+        int fpsBufferIndex = (int)Time.frameCount % fpsBuffer.Length;
+        fpsBuffer[fpsBufferIndex] = fps;
+        float sum = 0;
+        foreach (float f in fpsBuffer)
+        {
+            sum += f;
+        }
+        fpsText.text = "FPS: " + (int)(sum / fpsBuffer.Length);
+
+        // advance the gamestate
         if (gamestate == null)
         {
             return;
         }
-        if (Time.time - lastTurnTime > secondsPerTurn)
-        {
+        //if (Time.time - lastTurnTime > secondsPerTurn)
+        //{
             lastTurnTime = Time.time;
             Simulation.AdvanceTick(gamestate, inputCommands);
             inputCommands.Clear();
             DisplayMap(GetMap());
-        }
+        //}
     }
 
     public void AddInputCommand(MapCommand command)
@@ -441,7 +455,7 @@ public class MapDisplayer : MonoBehaviour
             0,
             6,
             true);
-
+        
         // requestable items
         List<ItemType> requestableItemTypes = building.GetRequestableItemTypes();
         for (int i = 0; i < requestableItemTypes.Count; i++)
@@ -481,7 +495,7 @@ public class MapDisplayer : MonoBehaviour
             itemIconButton.Draw(displayGrid, rectInt, map);
             buttonRectsToButtons[rectInt] = itemIconButton;
         }
-
+        
         // display a divider line
         height -= 4;
         displayGrid.DisplaySprite(

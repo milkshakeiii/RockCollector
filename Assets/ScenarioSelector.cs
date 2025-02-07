@@ -25,7 +25,11 @@ public class ScenarioSelector : MonoBehaviour
             button.GetComponentInChildren<TMP_Text>().text = thisScenarioName;
             button.GetComponent<RectTransform>().anchoredPosition += new Vector2((i % buttonsPerRow) * spacing, -Mathf.Floor(i / buttonsPerRow) * spacing);
             button.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => SelectScenario(thisScenarioName));
+            buttons.Add(button);
         }
+
+        Simulation.OnGameLose += (gamestate) => titleText.text = "Game over";
+        Simulation.OnGameWin += (gamestate) => titleText.text = "You win!";
     }
 
     public void SelectScenario(string newScenarioName)
@@ -50,11 +54,21 @@ public class ScenarioSelector : MonoBehaviour
             button.GetComponentInChildren<TMP_Text>().text = thisTeamName;
             button.GetComponent<RectTransform>().anchoredPosition += new Vector2((i % buttonsPerRow) * spacing, -Mathf.Floor(i / buttonsPerRow) * spacing);
             button.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => StartGame(thisTeamName));
+            buttons.Add(button);
         }
     }
 
     public void StartGame(string playerTeam)
     {
+        // clear buttons
+        foreach (GameObject button in buttons)
+        {
+            Destroy(button);
+        }
+        buttons.Clear();
+        titleText.text = "";
+
+        // start game
         Debug.Log("Starting game with scenario " + scenarioName + " and team " + playerTeam);
         Scenario scenario = Scenario.ReadScenario(scenarioName, playerTeam);
         FindAnyObjectByType<MapDisplayer>().SetGamestate(scenario.StartingGamestate());

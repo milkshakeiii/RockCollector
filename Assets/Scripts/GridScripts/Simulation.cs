@@ -19,9 +19,23 @@ public class Simulation
     public static event ConditionApplied OnConditionApplied;
     public delegate void ConditionApplied(Creature actor, Creature target, ConditionType condition, Map map);
 
+    public static event GameWin OnGameWin;
+    public delegate void GameWin(Gamestate gamestate);
+
+    public static event GameLose OnGameLose;
+    public delegate void GameLose(Gamestate gamestate);
+
     public static void AdvanceTick(Gamestate gamestate, List<MapCommand> inputCommands)
     {
         gamestate.map.AdvanceTick(inputCommands);
+        if (gamestate.scenario.CheckWinCondition(gamestate.map))
+        {
+            OnGameWin?.Invoke(gamestate);
+        }
+        else if (gamestate.scenario.CheckLoseCondition(gamestate.map))
+        {
+            OnGameLose?.Invoke(gamestate);
+        }
     }
 
     public static void AbilityEffect(TypeAbility ability, Creature actor, Map map)

@@ -502,6 +502,18 @@ public class ScenarioInfo : Entity
     {
         return EntityManager.GetIntAttribute(attributes, "team1StartY");
     }
+    public List<string> GetPropNames()
+    {
+        return EntityManager.GetStringListAttribute(attributes, "propNames", new List<string>());
+    }
+    public List<int> GetPropXs()
+    {
+        return EntityManager.GetIntListAttribute(attributes, "propXs", new List<int>());
+    }
+    public List<int> GetPropYs()
+    {
+        return EntityManager.GetIntListAttribute(attributes, "propYs", new List<int>());
+    }
 }
 
 public class Feat : Entity
@@ -1078,6 +1090,10 @@ public class BuildingType : Entity
     public bool GetIsStartingBuilding()
     {
         return EntityManager.GetBoolAttribute(attributes, "isStartingBuilding", false);
+    }
+    public bool GetDestroyToWin()
+    {
+        return EntityManager.GetBoolAttribute(attributes, "destroyToWin", false);
     }
 }
 

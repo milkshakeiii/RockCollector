@@ -5,8 +5,8 @@ supportedCreatureCounts:5,5
 supportedCreatureSpawnTimes:500,500
 size:6
 maxHealth:100
-requestableItemTypes:Axe,Log,Flint,Hammer,Stone,Berry
-requestableItemCounts:5,5,5,5,5,5
+requestableItemTypes:Axe,Log,Flint,Hammer,Stone,Berry,Haxe
+requestableItemCounts:5,5,5,5,5,5,1
 craftedItemTypes:Axe,Real Axe
 buildableBuildingTypes:Shed,Guild,Barracks
 restHealAmount:3

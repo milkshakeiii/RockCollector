@@ -46,10 +46,22 @@ public class Scenario
         {
             if (buildingType.GetIsStartingBuilding() && buildingType.GetTeamOrScenarioName() == playerTeamName)
             {
-                Building newBuilding = new (buildingType, 0);
+                Building newBuilding = new (buildingType, 1);
                 map.Add(newBuilding, new Vector2Int(team1StartX, team1StartY));
                 break;
             }
+        }
+
+        // starting props
+        List<string> propNames = scenarioInfo.GetPropNames();
+        List<int> propXs = scenarioInfo.GetPropXs();
+        List<int> propYs = scenarioInfo.GetPropYs();
+        for (int i = 0; i < propNames.Count; i++)
+        {
+            Vector2Int propPosition = new(propXs[i], propYs[i]);
+            PropType propType = EntityManager.propTypes[propNames[i]];
+            Prop newProp = new (propType);
+            map.Add(newProp, propPosition);
         }
 
         return new Gamestate(map, this);
@@ -60,5 +72,33 @@ public class Scenario
         EntityManager.ReadScenario(scenarioName);
         ScenarioInfo scenarioInfo = EntityManager.scenarioInfos[scenarioName];
         return new Scenario(scenarioInfo, newPlayerTeamName);
+    }
+
+    public bool CheckWinCondition(Map map)
+    {
+        bool allVictoryBuildingsDestroyed = true;
+        foreach (Placeable placeable in map.UnheldPlaceables())
+        {
+            if (placeable is Building building && building.teamNumber <= 0 && building.buildingType.GetDestroyToWin())
+            {
+                allVictoryBuildingsDestroyed = false;
+                break;
+            }
+        }
+        return allVictoryBuildingsDestroyed;
+    }
+
+    public bool CheckLoseCondition(Map map)
+    {
+        bool allPlayerBuildingsDestroyed = true;
+        foreach (Placeable placeable in map.UnheldPlaceables())
+        {
+            if (placeable is Building building && building.teamNumber == 0)
+            {
+                allPlayerBuildingsDestroyed = false;
+                break;
+            }
+        }
+        return allPlayerBuildingsDestroyed;
     }
 }

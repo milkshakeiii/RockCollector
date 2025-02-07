@@ -22,6 +22,18 @@ craftingSkill:woodcrafting
 craftingLevel:0
 size:-6
 
+name:Haxe
+spriteName:hammer
+weaponDamage:1d6
+weaponRange:1
+weaponSkill:hammers
+repairAmount:2
+harvestingSkill:chopping
+harvestingAmount:1
+craftingSkill:woodcrafting
+craftingLevel:-1
+size:-6
+
 name:Log
 spriteName:log
 size:1
