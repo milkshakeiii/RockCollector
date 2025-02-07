@@ -4,15 +4,30 @@ public class Scenario
 {
     public ScenarioInfo scenarioInfo;
 
+    public Scenario(ScenarioInfo scenarioInfo)
+    {
+        this.scenarioInfo = scenarioInfo;
+    }
+
+    public string GetTile1SpritePath()
+    {
+        return scenarioInfo.GetTile1SpritePath();
+    }
+
+    public string GetFile2Path()
+    {
+        return scenarioInfo.GetTile2SpritePath();
+    }
+
+    public Gamestate StartingGamestate()
+    {
+        return new Gamestate(new(), this);
+    }
+
     public static Scenario ReadScenario(string scenarioName)
     {
-        TextAsset scenarioFile = Resources.Load<TextAsset>("Scenarios/" + scenarioName);
-        string[] lines = scenarioFile.text.Split('\n');
-        foreach (string line in lines)
-        {
-
-        }
-
-        return new Scenario();
+        EntityManager.ReadScenario(scenarioName);
+        ScenarioInfo scenarioInfo = EntityManager.scenarioInfos[scenarioName];
+        return new Scenario(scenarioInfo);
     }
 }

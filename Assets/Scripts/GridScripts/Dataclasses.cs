@@ -3,6 +3,7 @@ using Steamworks;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
@@ -326,6 +327,19 @@ public static class EntityManager
         return defaultValue;
     }
 
+    public static List<string> ListScenarios()
+    {
+        // read a file called "scenario_names" in the "Scenarios" directory
+        TextAsset textAsset = Resources.Load<TextAsset>("Scenarios/scenario_names");
+        if (textAsset == null)
+        {
+            throw new System.Exception("No scenario names file found");
+        }
+        string[] lines = textAsset.text.Split('\n');
+        Debug.Log("Scenarios: " + string.Join(", ", lines));
+        return new List<string>(lines);
+    }
+
     public static void ReadTeam(string teamName)
     {
         ReadTeamEntity("feats", teamName);
@@ -430,6 +444,30 @@ public class Entity
 public class ScenarioInfo : Entity
 {
     public ScenarioInfo(Dictionary<string, string> attributes, string scenarioName, string directory) : base(attributes, scenarioName, directory) { }
+
+    public string GetTile1SpriteName()
+    {
+        return EntityManager.GetStringAttribute(attributes, "tile1");
+    }
+
+    public string GetTile1SpritePath()
+    {
+        string folder = GetParentDirectory();
+        string name = GetTile1SpriteName();
+        return System.IO.Path.Combine(teamOrScenarioName, folder, name);
+    }
+
+    public string GetTile2SpriteName()
+    {
+        return EntityManager.GetStringAttribute(attributes, "tile2");
+    }
+
+    public string GetTile2SpritePath()
+    {
+        string folder = GetParentDirectory();
+        string name = GetTile2SpriteName();
+        return System.IO.Path.Combine(teamOrScenarioName, folder, name);
+    }
 }
 
 public class Feat : Entity

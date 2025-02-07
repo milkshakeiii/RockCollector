@@ -93,6 +93,10 @@ public class MapDisplayer : MonoBehaviour
     
     public Map GetMap()
     {
+        if (gamestate == null)
+        {
+            return null;
+        }
         return gamestate.map;
     }
 
@@ -118,6 +122,11 @@ public class MapDisplayer : MonoBehaviour
 
     void OnMouseUpEvent(Vector3 worldPosition, Vector2Int screenPosition, int mouseButton)
     {
+        if (GetMap() == null)
+        {
+            return;
+        }
+
         // always clear the mouseDownPlaceable
         Placeable previousMouseDownPlaceable = mouseDownPlaceable;
         mouseDownPlaceable = null;
@@ -226,6 +235,11 @@ public class MapDisplayer : MonoBehaviour
 
     void OnMouseDownEvent(Vector3 worldPosition, Vector2Int screenPosition, int mouseButton)
     {
+        if (GetMap() == null)
+        {
+            return;
+        }
+
         // if the leftMouseSelection is not null and this click is in the left 1/8 of the screen, do nothing
         if (leftMouseSelection.placeable != null && screenPosition.x < -DisplayGrid.WIDTH / 8)
         {
