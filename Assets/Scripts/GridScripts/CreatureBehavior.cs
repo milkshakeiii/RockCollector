@@ -153,7 +153,9 @@ public class RepairDamagedBuildingsPriority : BehaviorPriority
         int nearestDistance = int.MaxValue;
         foreach (Placeable placeable in map.UnheldPlaceables())
         {
-            if (placeable is Building building && building.teamNumber == actor.teamNumber)
+            if (placeable is Building building &&
+                building.teamNumber == actor.teamNumber &&
+                !building.IsClaimed())
             {
                 if (building.GetDamageTaken() > 0)
                 {
@@ -304,7 +306,10 @@ public class CraftItemsPriority : BehaviorPriority
         }
         foreach (Placeable placeable in map.UnheldPlaceables())
         {
-            if (placeable is Building craftBuilding && craftBuilding.teamNumber == actor.teamNumber && map.DistanceBetween(homeBuilding, craftBuilding) <= behaviorType.GetCraftRange())
+            if (placeable is Building craftBuilding &&
+                craftBuilding.teamNumber == actor.teamNumber &&
+                map.DistanceBetween(homeBuilding, craftBuilding) <= behaviorType.GetCraftRange() &&
+                !craftBuilding.IsClaimed())
             {
                 foreach (ItemType itemType in craftBuilding.GetRequestableItemTypes())
                 {
