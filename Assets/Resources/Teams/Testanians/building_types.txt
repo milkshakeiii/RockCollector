@@ -1,4 +1,5 @@
 name:Farm
+isStartingBuilding:true
 supportedCreatureTypes:Peasant,Forester
 supportedCreatureCounts:5,5
 supportedCreatureSpawnTimes:500,500

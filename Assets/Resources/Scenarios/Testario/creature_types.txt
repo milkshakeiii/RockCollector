@@ -11,3 +11,19 @@ abilities:Basic Attack
 abilityLevels:1
 startingEquipment:Axe
 behavior:Skeleton Behavior
+
+name:Ghoul
+startingHealth:40
+healthPerLevel:3
+skillBonusNames:defense,resistance,dodge,axes
+skillBonusAmounts:10,10,10,10
+strengthBonus:8
+dexterityBonus:8
+constitutionBonus:8
+intelligenceBonus:0
+wisdomBonus:0
+charismaBonus:0
+abilities:Basic Attack
+abilityLevels:1
+startingEquipment:Axe
+behavior:Skeleton Behavior

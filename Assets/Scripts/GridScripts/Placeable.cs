@@ -422,6 +422,17 @@ public class Creature : Destructable
         }
         int modifier = skillIncreases.ContainsKey(skillName) ? (int)skillIncreases[skillName] : 0;
         
+        // starting bonuses from creature type
+        List<string> skillBonuses = creatureType.GetSkillBonusNames();
+        List<int> skillBonusAmounts = creatureType.GetSkillBonusAmounts();
+        for (int i = 0; i < skillBonuses.Count; i++)
+        {
+            if (skillBonuses[i].Equals(skillName))
+            {
+                modifier += skillBonusAmounts[i];
+            }
+        }
+
         // check for bonuses from feats
         foreach (Feat feat in feats)
         {

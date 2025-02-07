@@ -2,3 +2,11 @@ name:Testario
 tile1:grass1
 tile2:grass2
 mapRadius:50
+team1StartX:-10
+team1StartY:-10
+lairNames:Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Crypt
+lairXs:0,0,0,10,10,10,20,20,20,30
+lairYs:0,10,20,0,10,20,0,10,20,30
+propNames:Tree,Tree
+propXs:-5,-5
+porpYs:-5,-6

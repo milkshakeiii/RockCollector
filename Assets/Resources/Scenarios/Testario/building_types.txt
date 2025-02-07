@@ -8,3 +8,15 @@ size:3
 maxHealth:100
 restHealAmount:3
 restHealCooldown:20
+
+name:Crypt
+destroyToWin:true
+difficultyEstimate:20
+demolitionDifficulty:20
+supportedCreatureTypes:Ghoul
+supportedCreatureCounts:5
+supportedCreatureSpawnTimes:600
+size:4
+maxHealth:100
+restHealAmount:3
+restHealCooldown:20

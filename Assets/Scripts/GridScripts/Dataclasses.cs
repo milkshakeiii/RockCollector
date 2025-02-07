@@ -441,6 +441,10 @@ public class Entity
     public string teamOrScenarioName;
     public string parentDirectory;
 
+    public string GetTeamOrScenarioName()
+    {
+        return teamOrScenarioName;
+    }
     public string GetParentDirectory()
     {
         return System.IO.Path.Combine(parentDirectory, teamOrScenarioName);
@@ -462,24 +466,41 @@ public class ScenarioInfo : Entity
     {
         return EntityManager.GetStringAttribute(attributes, "tile1");
     }
-
     public string GetTile1SpritePath()
     {
         string folder = GetParentDirectory();
         string name = GetTile1SpriteName();
         return System.IO.Path.Combine(teamOrScenarioName, folder, name);
     }
-
     public string GetTile2SpriteName()
     {
         return EntityManager.GetStringAttribute(attributes, "tile2");
     }
-
     public string GetTile2SpritePath()
     {
         string folder = GetParentDirectory();
         string name = GetTile2SpriteName();
         return System.IO.Path.Combine(teamOrScenarioName, folder, name);
+    }
+    public List<string> GetLairNames()
+    {
+        return EntityManager.GetStringListAttribute(attributes, "lairNames", new List<string>());
+    }
+    public List<int> GetLairXs()
+    {
+        return EntityManager.GetIntListAttribute(attributes, "lairXs", new List<int>());
+    }
+    public List<int> GetLairYs()
+    {
+        return EntityManager.GetIntListAttribute(attributes, "lairYs", new List<int>());
+    }
+    public int GetTeam1StartX()
+    {
+        return EntityManager.GetIntAttribute(attributes, "team1StartX");
+    }
+    public int GetTeam1StartY()
+    {
+        return EntityManager.GetIntAttribute(attributes, "team1StartY");
     }
 }
 
@@ -778,6 +799,14 @@ public class CreatureType : Entity
     {
         return EntityManager.GetItemListAttribute(attributes, "startingEquipment", new List<ItemType>());
     }
+    public List<string> GetSkillBonusNames()
+    {
+        return EntityManager.GetStringListAttribute(attributes, "skillBonusNames", new List<string>());
+    }
+    public List<int> GetSkillBonusAmounts()
+    {
+        return EntityManager.GetIntListAttribute(attributes, "skillBonusAmounts", new List<int>());
+    }
 }
 
 public class PropType : Entity
@@ -1045,6 +1074,10 @@ public class BuildingType : Entity
     public int GetDemolitionDifficulty()
     {
         return EntityManager.GetIntAttribute(attributes, "demolitionDifficulty", 10);
+    }
+    public bool GetIsStartingBuilding()
+    {
+        return EntityManager.GetBoolAttribute(attributes, "isStartingBuilding", false);
     }
 }
 
