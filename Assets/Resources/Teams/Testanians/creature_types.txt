@@ -63,17 +63,3 @@ charismaBonus:2
 abilities:Fireball,Weakness,Magic Shield
 abilityLevels:1,1,1
 behavior:Warrior Behavior
-
-name:Skeleton
-startingHealth:4
-healthPerLevel:3
-strengthBonus:0
-dexterityBonus:0
-constitutionBonus:0
-intelligenceBonus:0
-wisdomBonus:0
-charismaBonus:0
-abilities:Basic Attack
-abilityLevels:1
-startingEquipment:Axe
-behavior:Skeleton Behavior

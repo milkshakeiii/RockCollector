@@ -274,7 +274,7 @@ public class Creature : Destructable
 
     public override string GetSpritePath()
     {
-        string folder = creatureType.GetTeamFolder();
+        string folder = creatureType.GetParentDirectory();
         string name = creatureType.GetSpriteName();
         return System.IO.Path.Combine(folder, name);
     }
@@ -1572,7 +1572,7 @@ public class Building : Destructable
 
     public override string GetSpritePath()
     {
-        string folder = buildingType.GetTeamFolder();
+        string folder = buildingType.GetParentDirectory();
         string name = buildingType.GetSpriteName();
         return System.IO.Path.Combine(folder, name);
     }
@@ -1931,7 +1931,7 @@ public class Prop : Destructable
 
     public override string GetSpritePath()
     {
-        string folder = propType.GetTeamFolder();
+        string folder = propType.GetParentDirectory();
         string name = propType.GetSpriteName();
         return System.IO.Path.Combine(folder, name);
     }

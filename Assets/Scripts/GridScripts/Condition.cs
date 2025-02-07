@@ -78,10 +78,6 @@ public class Condition
         int duration = conditionType.GetDuration();
         int stacksToRemove = elapsedTicks / duration;
         stacks -= stacksToRemove;
-        if (stacksToRemove > 0)
-        {
-            Debug.Log("Condition " + conditionType.GetName() + " removed " + stacksToRemove + " stacks");
-        }
     }
 
     /// <summary>

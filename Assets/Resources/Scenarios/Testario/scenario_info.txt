@@ -1,3 +1,4 @@
-baseTile:grass1
-patchTile:grass2
+name:Testario
+tile1:grass1
+tile2:grass2
 mapRadius:50

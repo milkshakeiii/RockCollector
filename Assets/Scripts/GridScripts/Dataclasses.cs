@@ -17,6 +17,7 @@ public static class EntityManager
     public static Dictionary<string, ItemType> itemTypes = new();
     public static Dictionary<string, BuildingType> buildingTypes = new();
     public static Dictionary<string, CreatureBehaviorType> creatureBehaviors = new();
+    public static Dictionary<string, ScenarioInfo> scenarioInfos = new();
 
     public static Dictionary<string, string> skillsToAttributeScores = new();
 
@@ -54,6 +55,10 @@ public static class EntityManager
         {
             creatureBehaviors[entity.attributes["name"]] = (CreatureBehaviorType)entity;
         }
+        else if (identifier == "scenario_info")
+        {
+            scenarioInfos[entity.attributes["name"]] = (ScenarioInfo)entity;
+        }
         else
         {
             throw new System.Exception("Unrecognized entity identifier");
@@ -82,39 +87,43 @@ public static class EntityManager
         return score;
     }
 
-    public static Entity CreateEntity(string identifier, string teamName, Dictionary<string, string> attributes)
+    public static Entity CreateEntity(string identifier, string teamName, string directory, Dictionary<string, string> attributes)
     {
         if (identifier == "feats")
         {
-            return new Feat (attributes, teamName);
+            return new Feat (attributes, teamName, directory);
         }
         else if (identifier == "type_abilities")
         {
-            return new TypeAbility (attributes, teamName);
+            return new TypeAbility (attributes, teamName, directory);
         }
         else if (identifier == "condition_types")
         {
-            return new ConditionType (attributes, teamName);
+            return new ConditionType (attributes, teamName, directory);
         }
         else if (identifier == "prop_types")
         {
-            return new PropType (attributes, teamName);
+            return new PropType (attributes, teamName, directory);
         }
         else if (identifier == "item_types")
         {
-            return new ItemType (attributes, teamName);
+            return new ItemType (attributes, teamName, directory);
         }
         else if (identifier == "creature_types")
         {
-            return new CreatureType (attributes, teamName);
+            return new CreatureType (attributes, teamName, directory);
         }
         else if (identifier == "building_types")
         {
-            return new BuildingType (attributes, teamName);
+            return new BuildingType (attributes, teamName, directory);
         }
         else if (identifier == "creature_behaviors")
         {
-            return new CreatureBehaviorType (attributes, teamName);
+            return new CreatureBehaviorType (attributes, teamName, directory);
+        }
+        else if (identifier == "scenario_info")
+        {
+            return new ScenarioInfo (attributes, teamName, directory);
         }
         else
         {
@@ -319,40 +328,73 @@ public static class EntityManager
 
     public static void ReadTeam(string teamName)
     {
-        ReadEntity("feats", teamName);
-        ReadEntity("type_abilities", teamName);
-        ReadEntity("condition_types", teamName);
-        ReadEntity("creature_types", teamName);
-        ReadEntity("prop_types", teamName);
-        ReadEntity("item_types", teamName);
-        ReadEntity("building_types", teamName);
-        ReadEntity("creature_behaviors", teamName);
-        ReadMap("skills", teamName);
+        ReadTeamEntity("feats", teamName);
+        ReadTeamEntity("type_abilities", teamName);
+        ReadTeamEntity("condition_types", teamName);
+        ReadTeamEntity("creature_types", teamName);
+        ReadTeamEntity("prop_types", teamName);
+        ReadTeamEntity("item_types", teamName);
+        ReadTeamEntity("building_types", teamName);
+        ReadTeamEntity("creature_behaviors", teamName);
+        ReadDictionary("skills", teamName);
     }
 
-    private static void ReadEntity(string identifier, string teamName)
+    public static void ReadScenario(string scenarioName)
     {
-        TextAsset textAsset = Resources.Load<TextAsset>("Teams/" + teamName + "/" + identifier);
+        ReadScenarioEntity("scenario_info", scenarioName);
+        ReadScenarioEntity("feats", scenarioName);
+        ReadScenarioEntity("type_abilities", scenarioName);
+        ReadScenarioEntity("condition_types", scenarioName);
+        ReadScenarioEntity("creature_types", scenarioName);
+        ReadScenarioEntity("prop_types", scenarioName);
+        ReadScenarioEntity("item_types", scenarioName);
+        ReadScenarioEntity("building_types", scenarioName);
+        ReadScenarioEntity("creature_behaviors", scenarioName);
+        ReadDictionary("skills", scenarioName);
+    }
+
+    private static void ReadTeamEntity(string fileName, string teamName)
+    {
+        ReadEntity(fileName, teamName, "Teams");
+    }
+
+    private static void ReadScenarioEntity(string fileName, string scenarioName)
+    {
+        ReadEntity(fileName, scenarioName, "Scenarios");
+    }
+
+    private static void ReadEntity(string fileName, string teamOrScenarioName, string directory)
+    {
+        string path = System.IO.Path.Combine(directory, teamOrScenarioName, fileName);
+        TextAsset textAsset = Resources.Load<TextAsset>(path);
+        if (textAsset == null)
+        {
+            return;
+        }
         string[] lines = textAsset.text.Split('\n');
-        Dictionary<string, string> currentItem = new();
+        Dictionary<string, string> currentAttributes = new();
         foreach (string line in lines)
         {
             if (line.Length==0 || line.Length==1)
             {
-                StoreEntity(identifier, EntityManager.CreateEntity(identifier, teamName, currentItem));
-                currentItem = new();
+                StoreEntity(fileName, EntityManager.CreateEntity(fileName, teamOrScenarioName, directory, currentAttributes));
+                currentAttributes = new();
             }
             else
             {
                 string[] parts = line.Split(':');
-                currentItem[parts[0]] = parts[1][..^1];
+                currentAttributes[parts[0]] = parts[1][..^1];
             }
         }
     }
 
-    private static void ReadMap(string identifier, string teamName)
+    private static void ReadDictionary(string identifier, string teamName)
     {
         TextAsset textAsset = Resources.Load<TextAsset>("Teams/" + teamName + "/" + identifier);
+        if (textAsset == null)
+        {
+            return;
+        }
         string[] lines = textAsset.text.Split('\n');
         foreach (string line in lines)
         {
@@ -369,23 +411,30 @@ public static class EntityManager
 public class Entity 
 {
     public readonly ReadOnlyDictionary<string, string> attributes;
-    public string teamName;
+    public string teamOrScenarioName;
+    public string parentDirectory;
 
-    public string GetTeamFolder()
+    public string GetParentDirectory()
     {
-        return "Teams/" + teamName + "/";
+        return System.IO.Path.Combine(parentDirectory, teamOrScenarioName);
     }
 
-    public Entity(Dictionary<string, string> attributes, string teamName)
+    public Entity(Dictionary<string, string> attributes, string teamName, string parentDirectory)
     {
         this.attributes = new(attributes);
-        this.teamName = teamName;
+        this.teamOrScenarioName = teamName;
+        this.parentDirectory = parentDirectory;
     }
+}
+
+public class ScenarioInfo : Entity
+{
+    public ScenarioInfo(Dictionary<string, string> attributes, string scenarioName, string directory) : base(attributes, scenarioName, directory) { }
 }
 
 public class Feat : Entity
 {
-    public Feat(Dictionary<string, string> attributes, string teamName) : base(attributes, teamName) {}
+    public Feat(Dictionary<string, string> attributes, string teamName, string directory) : base(attributes, teamName, directory) {}
 
     public string GetName()
     {
@@ -403,7 +452,7 @@ public class Feat : Entity
 
 public class TypeAbility : Entity
 {
-    public TypeAbility(Dictionary<string, string> attributes, string teamName) : base(attributes, teamName) {}
+    public TypeAbility(Dictionary<string, string> attributes, string teamName, string directory) : base(attributes, teamName, directory) {}
 
     public string GetName()
     {
@@ -509,7 +558,7 @@ public class TypeAbility : Entity
     }
     public string GetEffectSpritePath()
     {
-        string folder = GetTeamFolder();
+        string folder = GetParentDirectory();
         string name = GetEffectSpriteName();
         return System.IO.Path.Combine(folder, name);
     }
@@ -517,7 +566,7 @@ public class TypeAbility : Entity
 
 public class ConditionType : Entity
 {
-    public ConditionType(Dictionary<string, string> attributes, string teamName) : base(attributes, teamName) {}
+    public ConditionType(Dictionary<string, string> attributes, string teamName, string directory) : base(attributes, teamName, directory) {}
 
     public string GetName()
     {
@@ -596,7 +645,7 @@ public class ConditionType : Entity
 
     public string GetSpritePath()
     {
-        string folder = GetTeamFolder();
+        string folder = GetParentDirectory();
         string name = GetSpriteName();
         return System.IO.Path.Combine(folder, name);
     }
@@ -604,7 +653,7 @@ public class ConditionType : Entity
 
 public class CreatureType : Entity
 {
-    public CreatureType(Dictionary<string, string> attributes, string teamName) : base(attributes, teamName) {}
+    public CreatureType(Dictionary<string, string> attributes, string teamName, string directory) : base(attributes, teamName, directory) {}
 
     public string GetName()
     {
@@ -682,7 +731,7 @@ public class CreatureType : Entity
 
 public class PropType : Entity
 {
-    public PropType(Dictionary<string, string> attributes, string teamName) : base(attributes, teamName) {}
+    public PropType(Dictionary<string, string> attributes, string teamName, string directory) : base(attributes, teamName, directory) {}
 
     public string GetName()
     {
@@ -752,7 +801,7 @@ public class PropType : Entity
 
 public class ItemType : Entity
 {
-    public ItemType(Dictionary<string, string> attributes, string teamName) : base(attributes, teamName) {}
+    public ItemType(Dictionary<string, string> attributes, string teamName, string directory) : base(attributes, teamName, directory) {}
 
     public string GetName()
     {
@@ -832,7 +881,7 @@ public class ItemType : Entity
     }
     public string GetSpritePath()
     {
-        string folder = GetTeamFolder();
+        string folder = GetParentDirectory();
         string name = GetSpriteName();
         return System.IO.Path.Combine(folder, name);
     }
@@ -840,7 +889,7 @@ public class ItemType : Entity
 
 public class BuildingType : Entity
 {
-    public BuildingType(Dictionary<string, string> attributes, string teamName) : base(attributes, teamName) {}
+    public BuildingType(Dictionary<string, string> attributes, string teamName, string directory) : base(attributes, teamName, directory) {}
 
     public string GetName()
     {
@@ -950,7 +999,7 @@ public class BuildingType : Entity
 
 public class CreatureBehaviorType : Entity
 {
-    public CreatureBehaviorType(Dictionary<string, string> attributes, string teamName) : base(attributes, teamName) { }
+    public CreatureBehaviorType(Dictionary<string, string> attributes, string teamName, string directory) : base(attributes, teamName, directory) { }
 
     public string GetName()
     {
