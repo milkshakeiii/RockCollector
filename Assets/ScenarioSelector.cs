@@ -10,6 +10,8 @@ public class ScenarioSelector : MonoBehaviour
     public float spacing = 150f;
     public int buttonsPerRow = 4;
 
+    private Scenario scenario;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -22,6 +24,17 @@ public class ScenarioSelector : MonoBehaviour
             button.GetComponent<RectTransform>().anchoredPosition += new Vector2((i % buttonsPerRow) * spacing, -Mathf.Floor(i / buttonsPerRow) * spacing);
             // button.GetComponent<Button>().onClick.AddListener(() => EntityManager.LoadScenario(scenarioNames[i]));
         }
+    }
+
+    public void LoadScenario(string scenarioName)
+    {
+        scenario = Scenario.ReadScenario(scenarioName);
+    }
+
+    public void StartGame(string playerTeam)
+    {
+        scenario.ReadStartingTeam(playerTeam);
+        FindAnyObjectByType<MapDisplayer>().SetGamestate(scenario.StartingGamestate());
     }
 
     // Update is called once per frame
