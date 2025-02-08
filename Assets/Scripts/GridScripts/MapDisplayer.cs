@@ -307,6 +307,10 @@ public class MapDisplayer : MonoBehaviour
         displayGrid.Clear();
         foreach (Placeable placeable in map.UnheldPlaceables())
         {
+            // if (placeable is Creature creature && creature.teamNumber != 1)
+            // {
+            //     continue;
+            // }
             Vector2Int position = map.PositionOf(placeable);
             displayGrid.DisplaySprite(placeable.GetSpritePath(),
                 position.x * cellsPerSquare,
@@ -315,7 +319,7 @@ public class MapDisplayer : MonoBehaviour
                 cellsPerSquare * placeable.SquaresMinimumOne(),
                 0);
             DisplayBars(placeable, position);
-            DisplayLabels(placeable, position);
+            // DisplayLabels(placeable, position);
         }
 
         buttonRectsToButtons.Clear();

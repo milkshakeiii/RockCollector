@@ -996,20 +996,22 @@ public class Creature : Destructable
         {
             newActivityComputation.Abort();
         }
-        (Map mapCopy, Dictionary<Placeable, Placeable> backDictionary, Creature newMe) = map.DeepCopy(this);
-        newActivityComputation = new Thread(() =>
-        {
-            Thread.CurrentThread.IsBackground = true; 
-            Thread.CurrentThread.Priority = System.Threading.ThreadPriority.Lowest;
-            (Activity bestActivity, string newIngVerb) = behavior.NextActivity(mapCopy, newMe);
-            if (bestActivity != null)
-            {
-                bestActivity.MarkForBackConversion(backDictionary);
-                this.stagedActivity = bestActivity;
-                this.stagedIngVerb = newIngVerb;
-            }
-        });
-        newActivityComputation.Start();
+        //(Map mapCopy, Dictionary<Placeable, Placeable> backDictionary, Creature newMe) = map.DeepCopy(this);
+        //newActivityComputation = new Thread(() =>
+        //{
+        //    Thread.CurrentThread.IsBackground = true; 
+        //    Thread.CurrentThread.Priority = System.Threading.ThreadPriority.Lowest;
+        //    (Activity bestActivity, string newIngVerb) = behavior.NextActivity(mapCopy, newMe);
+        //    if (bestActivity != null)
+        //    {
+        //        bestActivity.MarkForBackConversion(backDictionary);
+        //        this.stagedActivity = bestActivity;
+        //        this.stagedIngVerb = newIngVerb;
+        this.stagedActivity = new WanderActivity(GetHomeBuilding(map), 5);
+        this.stagedIngVerb = "Wandering";
+        //    }
+        //});
+        //newActivityComputation.Start();
     }
 
     /// <summary>
