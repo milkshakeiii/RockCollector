@@ -719,6 +719,10 @@ public class WanderActivity : Activity
     public WanderActivity(Building homeBuilding, int range) : base(0,
         new(), null, new(), new(), homeBuilding, Activity.NULL_POSITION)
     {
+        if (homeBuilding == null)
+        {
+            throw new Exception("Home building must not be null");
+        }
         this.range = range;
     }
 

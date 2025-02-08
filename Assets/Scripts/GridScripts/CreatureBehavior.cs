@@ -416,7 +416,12 @@ public class WanderPriority : BehaviorPriority
 {
     public override Activity ChosenActivityOrNull(Map map, Creature actor, CreatureBehaviorType behaviorType)
     {
-        return new WanderActivity(actor.GetHomeBuilding(map), behaviorType.GetWanderRadius());
+        Building homeBuilding = actor.GetHomeBuilding(map);
+        if (homeBuilding == null)
+        {
+            return null;
+        }
+        return new WanderActivity(homeBuilding, behaviorType.GetWanderRadius());
     }
 
     public override string GetIngVerb()
