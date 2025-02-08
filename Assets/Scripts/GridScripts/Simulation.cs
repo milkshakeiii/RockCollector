@@ -662,7 +662,7 @@ public class Map
         }
         if (!placeableToCells.ContainsKey(placeable))
         {
-            throw new System.Exception("Placeable does not exist in map");
+            throw new System.Exception("Placeable does not exist in map: " + placeable.ToString());
         }
         return placeableToCells[placeable][0];
     }

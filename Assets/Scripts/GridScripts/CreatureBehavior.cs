@@ -430,6 +430,10 @@ public class HuntPriority : BehaviorPriority
     public override Activity ChosenActivityOrNull(Map map, Creature actor, CreatureBehaviorType behaviorType)
     {
         Building homeBuilding = actor.GetHomeBuilding(map);
+        if (homeBuilding == null)
+        {
+            return null;
+        }
         foreach (Placeable placeable in map.UnheldPlaceables())
         {
             if (placeable is Creature creature && creature.teamNumber != actor.teamNumber

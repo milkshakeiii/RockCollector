@@ -245,6 +245,11 @@ public class Creature : Destructable
         LevelUp();
     }
 
+    public override string ToString()
+    {
+        return name + " the " + creatureType.GetName();
+    }
+
     public override Placeable DeepCopy()
     {
         Creature copy = new(name, teamNumber, creatureType, homePosition);
@@ -1002,6 +1007,10 @@ public class Creature : Destructable
 
     private void DoActivityComputation(Map map)
     {
+        if (!map.PlaceableExists(this))
+        {
+            return;
+        }
         (Map mapCopy, Dictionary<Placeable, Placeable> backDictionary, Creature newMe) = map.DeepCopy(this);
         {
             (Activity bestActivity, string newIngVerb) = behavior.NextActivity(mapCopy, newMe);
@@ -1583,6 +1592,11 @@ public class Building : Destructable
         this.teamNumber = teamNumber;
     }
 
+    public override string ToString()
+    {
+        return buildingType.GetName();
+    }
+
     public override string GetSpritePath()
     {
         string folder = buildingType.GetParentDirectory();
@@ -1942,6 +1956,11 @@ public class Prop : Destructable
         this.propType = propType;
     }
 
+    public override string ToString()
+    {
+        return propType.GetName();
+    }
+
     public override string GetSpritePath()
     {
         string folder = propType.GetParentDirectory();
@@ -2089,6 +2108,11 @@ public class Item : Placeable
     public Item(ItemType itemType) : base(itemType.GetSize())
     {
         this.itemType = itemType;
+    }
+
+    public override string ToString()
+    {
+        return itemType.GetName();
     }
 
     public override string GetSpritePath()

@@ -62,6 +62,10 @@ public abstract class Activity
 
     public virtual int DistanceTo(Creature creature, Map map)
     {
+        if (sourcePlaceable != null && !map.PlaceableExists(sourcePlaceable))
+        {
+            throw new Exception("Source placeable does not exist in " + this);
+        }
         if (sourcePlaceable != null)
         {
             return map.DistanceBetween(creature, sourcePlaceable);
@@ -70,7 +74,7 @@ public abstract class Activity
         {
             return map.DistanceTo(position, creature);
         }
-        throw new Exception("Unable to determine location of activity");
+        throw new Exception("Unable to determine location of activity " + this);
     }
 
     public void MarkForBackConversion(Dictionary<Placeable, Placeable> newBackDictionary)
@@ -718,6 +722,11 @@ public class WanderActivity : Activity
         this.range = range;
     }
 
+    private Building HomeBuilding()
+    {
+        return (Building)sourcePlaceable;
+    }
+
     public override string TargetDescriptiveString()
     {
         return "";
@@ -741,7 +750,7 @@ public class WanderActivity : Activity
 
     public override bool IsCompletedOrImpossible(Map map, Creature performer)
     {
-        return firstPerformedTick != -1 && map.CurrentTick() - firstPerformedTick >= 150;
+        return HomeBuilding().IsDestroyed() || firstPerformedTick != -1 && map.CurrentTick() - firstPerformedTick >= 150;
     }
 
     public override void Perform(Creature performer, Map map)
