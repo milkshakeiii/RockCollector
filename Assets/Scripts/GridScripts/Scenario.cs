@@ -90,15 +90,15 @@ public class Scenario
 
     public bool CheckLoseCondition(Map map)
     {
-        bool allPlayerBuildingsDestroyed = true;
+        bool startingBuildingsDestroyed = true;
         foreach (Placeable placeable in map.UnheldPlaceables())
         {
-            if (placeable is Building building && building.teamNumber == 0)
+            if (placeable is Building building && building.teamNumber == 1 && building.buildingType.GetIsStartingBuilding())
             {
-                allPlayerBuildingsDestroyed = false;
+                startingBuildingsDestroyed = false;
                 break;
             }
         }
-        return allPlayerBuildingsDestroyed;
+        return startingBuildingsDestroyed;
     }
 }
