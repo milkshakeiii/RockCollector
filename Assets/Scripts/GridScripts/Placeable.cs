@@ -214,7 +214,7 @@ public class Creature : Destructable
     private CreatureBehavior behavior;
     private Activity currentActivity;
     private Activity stagedActivity;
-    private Thread newActivityComputation;
+    private ThinkingTicket newActivityComputation;
 
     private float cooldownTicksRemaining = 0;
     private int lastInterruptTick = 0;
@@ -894,9 +894,9 @@ public class Creature : Destructable
             TryPromoteStagedActivity(map);
         }
         // if not, we might need to launch a new activity computation
-        else if (currentActivity == null && (newActivityComputation == null || !newActivityComputation.IsAlive)) 
+        else if (currentActivity == null && (newActivityComputation == null || !newActivityComputation.IsAlive()))
         {
-            LaunchNewActivityComputation(map);
+            QueueNewActivityComputation();
         }
         // otherwise, continue with the current activity
     }
@@ -990,28 +990,28 @@ public class Creature : Destructable
         }
     }
 
-    private void LaunchNewActivityComputation(Map map)
+    private void QueueNewActivityComputation()
     {
-        if (newActivityComputation != null && newActivityComputation.IsAlive)
+        if (newActivityComputation != null && newActivityComputation.IsAlive())
         {
             newActivityComputation.Abort();
         }
+        newActivityComputation = new ThinkingTicket(new Action<Map>(DoActivityComputation));
+        ThinkingQueue.EnqueueAction(newActivityComputation);
+    }
+
+    private void DoActivityComputation(Map map)
+    {
         (Map mapCopy, Dictionary<Placeable, Placeable> backDictionary, Creature newMe) = map.DeepCopy(this);
-        //newActivityComputation = new Thread(() =>
-        //{
-            //Thread.CurrentThread.IsBackground = true;
-            //Thread.CurrentThread.Priority = System.Threading.ThreadPriority.Lowest;
+        {
             (Activity bestActivity, string newIngVerb) = behavior.NextActivity(mapCopy, newMe);
             if (bestActivity != null)
             {
                 bestActivity.MarkForBackConversion(backDictionary);
                 this.stagedActivity = bestActivity;
                 this.stagedIngVerb = newIngVerb;
-        //this.stagedActivity = new WanderActivity(GetHomeBuilding(map), 5);
-        //this.stagedIngVerb = "Wandering";
             }
-        //});
-        //newActivityComputation.Start();
+        }
     }
 
     /// <summary>

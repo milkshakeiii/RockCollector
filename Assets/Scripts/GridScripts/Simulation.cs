@@ -27,7 +27,10 @@ public class Simulation
 
     public static void AdvanceTick(Gamestate gamestate, List<MapCommand> inputCommands)
     {
+        // first advance the map, including update methods for all placeables
         gamestate.map.AdvanceTick(inputCommands);
+
+        // then check for win/lose conditions
         if (gamestate.scenario.CheckWinCondition(gamestate.map))
         {
             OnGameWin?.Invoke(gamestate);
@@ -36,6 +39,9 @@ public class Simulation
         {
             OnGameLose?.Invoke(gamestate);
         }
+
+        // perform computations from the thinking queue
+        ThinkingQueue.PerformActions(1, gamestate.map);
     }
 
     public static void AbilityEffect(TypeAbility ability, Creature actor, Map map)
