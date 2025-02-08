@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 
 public class CreatureBehavior
@@ -45,20 +44,39 @@ public class CreatureBehavior
 
     private int GetDangerRating(MapView map, CreatureSelf self)
     {
-        int dangerRating = 0;
-        foreach (PlaceableView placeable in map.UnheldPlaceables())
+        int lookRange = creatureBehaviorType.GetDangerLookDistance();
+        if (lookRange == 0)
         {
+            return 0;
+        }
 
-            if (placeable is CreatureView creature2
-                && map.DistanceBetween(self.View(), creature2) <= creatureBehaviorType.GetDangerLookDistance())
+        int dangerRating = 0;
+
+        // look within look distance of the actor
+        RectInt actorRect = map.ExtentsOf(self.View());
+        int xMin = actorRect.xMin - lookRange;
+        int xMax = actorRect.xMax + lookRange;
+        int yMin = actorRect.yMin - lookRange;
+        int yMax = actorRect.yMax + lookRange;
+        for (int x = xMin; x <= xMax; x++)
+        {
+            for (int y = yMin; y <= yMax; y++)
             {
-                if (creature2.GetTeamNumber() != self.GetTeamNumber())
+                Vector2Int position = new(x, y);
+                List<PlaceableView> placeables = map.PlaceablesAt(position);
+                foreach (PlaceableView placeable in placeables)
                 {
-                    dangerRating += creature2.EncounterLevel();
-                }
-                else
-                {
-                    dangerRating -= creature2.EncounterLevel();
+                    if (placeable is CreatureView creature2)
+                    {
+                        if (creature2.GetTeamNumber() != self.GetTeamNumber())
+                        {
+                            dangerRating += creature2.EncounterLevel();
+                        }
+                        else // ally
+                        {
+                            dangerRating -= creature2.EncounterLevel();
+                        }
+                    }
                 }
             }
         }
@@ -368,7 +386,7 @@ public class RestPriority : BehaviorPriority
         {
             return null;
         }
-        if (actor.GetDamageTaken() > 0 || map.DistanceBetween(actor, homeBuilding) > behaviorType.GetWanderRange())
+        if (actor.GetDamageTaken() > 0 || map.DistanceBetween(actor, homeBuilding) > behaviorType.GetWanderRadius())
         {
             return new RestActivity(homeBuilding);
         }
@@ -398,7 +416,7 @@ public class WanderPriority : BehaviorPriority
 {
     public override Activity ChosenActivityOrNull(Map map, Creature actor, CreatureBehaviorType behaviorType)
     {
-        return new WanderActivity(actor.GetHomeBuilding(map), behaviorType.GetWanderRange());
+        return new WanderActivity(actor.GetHomeBuilding(map), behaviorType.GetWanderRadius());
     }
 
     public override string GetIngVerb()

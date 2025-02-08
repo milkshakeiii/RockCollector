@@ -281,7 +281,7 @@ public class MapDisplayer : MonoBehaviour
         {
             sum += f;
         }
-        fpsText.text = "FPS: " + (int)(sum / fpsBuffer.Length);
+        fpsText.text = "FPS: " + ((int)(sum / fpsBuffer.Length) + 1);
 
         // advance the gamestate
         if (gamestate == null)
@@ -307,10 +307,6 @@ public class MapDisplayer : MonoBehaviour
         displayGrid.Clear();
         foreach (Placeable placeable in map.UnheldPlaceables())
         {
-            // if (placeable is Creature creature && creature.teamNumber != 1)
-            // {
-            //     continue;
-            // }
             Vector2Int position = map.PositionOf(placeable);
             displayGrid.DisplaySprite(placeable.GetSpritePath(),
                 position.x * cellsPerSquare,

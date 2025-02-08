@@ -13,14 +13,6 @@ plantRange:999
 harvestRange:999
 restRange:0
 
-name:Skeleton Behavior
-priorities:Hunt,Wander
-huntRange:10
-huntLookDistance:5
-huntMinimumLevelDifference:-999
-huntMaximumLevelDifference:999
-wanderRange:5
-
 name:Warrior Behavior
 priorities:Flee,Equip,Fight,Raid,Hunt,Deliver Requested Items,Rest,Wander
 fleeDangerThreshold:2
@@ -38,7 +30,7 @@ raidMaximumLevelDifference:999
 dropOffRange:0
 pickUpRange:999
 restRange:0
-wanderRange:5
+wanderRadius:5
 dangerLookDistance:10
 interruptDangerThreshold:1
 

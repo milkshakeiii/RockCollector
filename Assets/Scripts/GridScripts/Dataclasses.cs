@@ -1133,9 +1133,9 @@ public class CreatureBehaviorType : Entity
     {
         return EntityManager.GetIntAttribute(attributes, "restRange");
     }
-    public int GetWanderRange()
+    public int GetWanderRadius()
     {
-        return EntityManager.GetIntAttribute(attributes, "wanderRange", 1);
+        return EntityManager.GetIntAttribute(attributes, "wanderRadius", 1);
     }
     public int GetHuntRange()
     {

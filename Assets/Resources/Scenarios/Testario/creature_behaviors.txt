@@ -1,0 +1,7 @@
+name:Skeleton Behavior
+priorities:Hunt,Wander
+huntRange:10
+huntLookDistance:5
+huntMinimumLevelDifference:-999
+huntMaximumLevelDifference:999
+wanderRadius:5
