@@ -158,6 +158,13 @@ public class MapDisplayer : MonoBehaviour
             return;
         }
 
+        // if we are placing a building, check for cancel
+        if (activePlaceBuildingButton != null && mouseButton == 1)
+        {
+            activePlaceBuildingButton = null;
+            return;
+        }
+
         // otherwise check for building placement
         Vector2Int gamePosition = WorldPositionToGamePosition(worldPosition);
         if (activePlaceBuildingButton != null)
