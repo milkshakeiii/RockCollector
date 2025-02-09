@@ -869,6 +869,12 @@ public class Creature : Destructable
         return behavior;
     }
 
+    public void ReplaceBehavior(CreatureBehavior newBehavior, Map map)
+    {
+        behavior = newBehavior;
+        AbandonCurrentActivity(map);
+    }
+
     public override void ObserveAndFeel(Map map)
     {
         if (experience >= ExperienceForNextLevel())
@@ -1282,7 +1288,7 @@ public class Creature : Destructable
             foreach (string weaponSkill in ability.GetWeaponSkills())
             {
                 (DieRoll thisDamage, int range) = WeaponBaseDamangeAndRange(weaponSkill, map);
-                if (damage == null || thisDamage.ExpectedValue() > damage.ExpectedValue())
+                if (damage == null || (thisDamage != null && thisDamage.ExpectedValue() > damage.ExpectedValue()))
                 {
                     damage = thisDamage;
                 }
@@ -1780,7 +1786,9 @@ public class Building : Destructable
             // Add starting equipment
             foreach (ItemType itemType in spawningCreature.GetCreatureType().GetStartingEquipment())
             {
-                map.AddHeld(spawningCreature, new Item(itemType));
+                Item item = new Item(itemType);
+                map.AddHeld(spawningCreature, item);
+                spawningCreature.AddToOutfit(item, map);
             }
 
             spawningCreature = null;
@@ -1800,6 +1808,29 @@ public class Building : Destructable
             foreach (Creature deadCreature in deadCreatures)
             {
                 creatures.Remove(deadCreature);
+            }
+        }
+
+        // Check for waves
+        List<int> wavesTimes = buildingType.GetWaveTimes();
+        for (int i = 0; i < wavesTimes.Count; i++)
+        {
+            if (map.CurrentTick() == wavesTimes[i])
+            {
+                int waveSize = buildingType.GetWaveSizes()[i];
+                List<Creature> creaturesInOrder = new();
+                foreach (CreatureType type in GetCreatureTypesAvailable())
+                {
+                    creaturesInOrder.AddRange(creaturesByType[type.GetName()]);
+                }
+                for (int j = 0; j < waveSize; j++)
+                {
+                    if (j < creaturesInOrder.Count)
+                    {
+                        Creature attacker = creaturesInOrder[j];
+                        attacker.ReplaceBehavior(CreatureBehavior.FromName(buildingType.GetWaveBehavior()), map);
+                    }
+                }
             }
         }
     }

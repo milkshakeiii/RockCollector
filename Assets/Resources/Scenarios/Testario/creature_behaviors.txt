@@ -5,3 +5,15 @@ huntLookDistance:5
 huntMinimumLevelDifference:-999
 huntMaximumLevelDifference:999
 wanderRadius:5
+
+name:Wave Behavior
+priorities:Hunt,Raid,Wander
+huntRange:999
+huntLookDistance:6
+huntMinimumLevelDifference:-999
+huntMaximumLevelDifference:999
+raidRange:999
+raidLookDistance:999
+raidMinimumLevelDifference:-999
+raidMaximumLevelDifference:999
+wanderRadius:999

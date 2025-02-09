@@ -1095,6 +1095,18 @@ public class BuildingType : Entity
     {
         return EntityManager.GetBoolAttribute(attributes, "destroyToWin", false);
     }
+    public List<int> GetWaveTimes()
+    {
+        return EntityManager.GetIntListAttribute(attributes, "waveTimes", new List<int>());
+    }
+    public List<int> GetWaveSizes()
+    {
+        return EntityManager.GetIntListAttribute(attributes, "waveSizes", new List<int>());
+    }
+    public string GetWaveBehavior()
+    {
+        return EntityManager.GetStringAttribute(attributes, "waveBehavior", "none");
+    }
 }
 
 public class CreatureBehaviorType : Entity
@@ -1207,7 +1219,7 @@ public class DieRoll
     public int sides;
     public int rolls;
 
-    public DieRoll(int sides, int rolls)
+    public DieRoll(int rolls, int sides)
     {
         this.sides = sides;
         this.rolls = rolls;

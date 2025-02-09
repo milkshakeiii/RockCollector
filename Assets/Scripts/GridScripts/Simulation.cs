@@ -859,6 +859,10 @@ public class Map
 
     public void AddToOutfit(Creature creature, Item item)
     {
+        if (!HolderOf(item).Equals(creature))
+        {
+            throw new System.Exception("Cannot add item to outfit that is not held by creature.");
+        }
         if (!creatureOutfits.ContainsKey(creature))
         {
             creatureOutfits[creature] = new();

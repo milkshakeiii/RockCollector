@@ -282,6 +282,10 @@ public class MapDisplayer : MonoBehaviour
             sum += f;
         }
         fpsText.text = "FPS: " + ((int)(sum / fpsBuffer.Length) + 1);
+        if (gamestate != null)
+        {
+            fpsText.text += " kTick: " + gamestate.map.CurrentTick() / 1000;
+        }
 
         // advance the gamestate
         if (gamestate == null)
