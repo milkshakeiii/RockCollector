@@ -1043,6 +1043,7 @@ public class Creature : Destructable
         return Mathf.Max(1, 10 + moveSpeedModifier);
     }
 
+    private static Vector2Int[] clockwise = new Vector2Int[] { new (1, 0), new (1, -1), new (0, -1), new (-1, -1), new (-1, 0), new (-1, 1), new (0, 1), new (1, 1) };
     public void MoveInDirection(Vector2Int direction, Map map)
     {
         cooldownTicksRemaining = MoveSpeed();
@@ -1051,65 +1052,33 @@ public class Creature : Destructable
         {
             return;
         }
-        Stack<Vector2Int> alternativeDirections;
-        if (step.x == 0 && step.y == 1)
+        Vector2Int currentPosition = map.PositionOf(this);
+        int stepIndex = Array.IndexOf(clockwise, step);
+        for (int i = stepIndex; i < stepIndex + clockwise.Length; i++)
         {
-            alternativeDirections = new Stack<Vector2Int>(new Vector2Int[] { new(1, 0), new(-1, 0), new (-1, 1), new (1, 1), });
+            Vector2Int nextStep = clockwise[i % clockwise.Length];
+            Vector2Int nextPosition = currentPosition + nextStep;
+            if (CanPathTo(nextPosition, map))
+            {
+                map.MovePlaceable(this, nextPosition);
+                return;
+            }
         }
-        else if (step.x == 0 && step.y == -1)
-        {
-            alternativeDirections = new Stack<Vector2Int>(new Vector2Int[] { new(1, 0), new(-1, 0), new (-1, -1), new (1, -1), });
-        }
-        else if (step.x == 1 && step.y == 0)
-        {
-            alternativeDirections = new Stack<Vector2Int>(new Vector2Int[] { new(0, -1), new(0, 1), new (1, -1), new (1, 1), });
-        }
-        else if (step.x == -1 && step.y == 0)
-        {
-            alternativeDirections = new Stack<Vector2Int>(new Vector2Int[] { new(0, -1), new(0, 1), new (-1, -1), new (-1, 1), });
-        }
-        else if (step.x == 1 && step.y == 1)
-        {
-            alternativeDirections = new Stack<Vector2Int>(new Vector2Int[] { new(1, -1), new(-1, 1), new(1, 0), new(0, 1), });
-        }
-        else if (step.x == -1 && step.y == 1)
-        {
-            alternativeDirections = new Stack<Vector2Int>(new Vector2Int[] { new(-1, -1), new(1, 1), new(-1, 0), new(0, 1) });
-        }
-        else if (step.x == 1 && step.y == -1)
-        {
-            alternativeDirections = new Stack<Vector2Int>(new Vector2Int[] { new(-1, -1), new (0, -1), new(1, 1), new(1, 0), });
-        }
-        else if (step.x == -1 && step.y == -1)
-        {
-            alternativeDirections = new Stack<Vector2Int>(new Vector2Int[] { new(1, -1), new (0, -1), new(-1, 1), new(-1, 0), });
-        }
-        else
-        {
-            throw new System.Exception("Invalid direction");
-        }
-        alternativeDirections.Push(step);
-        MoveInDirectionWithAlternatives(map.PositionOf(this), map, alternativeDirections);
     }
 
-    public void MoveInDirectionWithAlternatives(Vector2Int originalPosition, Map map, Stack<Vector2Int> alternativeDirections)
+    private bool CanPathTo(Vector2Int position, Map map)
     {
-        Vector2Int direction = alternativeDirections.Pop();
-        List<Placeable> currentOccupants = map.PlaceablesAt(originalPosition + direction);
+        List<Placeable> currentOccupants = map.PlaceablesAt(position);
         foreach (Placeable occupant in currentOccupants)
         {
             if ((occupant is Building building && !building.buildingType.GetIsPathable()) ||
                 (occupant is Prop prop && !prop.propType.GetIsPathable()) ||
                 (occupant is Creature))
             {
-                if (alternativeDirections.Count > 0)
-                {
-                    MoveInDirectionWithAlternatives(originalPosition, map, alternativeDirections);
-                    return;
-                }
+                return false;
             }
         }
-        map.MovePlaceable(this, originalPosition + direction);
+        return true;
     }
 
     public void MoveTowards(Vector2Int target, Map map)
