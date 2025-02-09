@@ -833,6 +833,10 @@ public class PropType : Entity
     {
         return EntityManager.GetStringAttribute(attributes, "name");
     }
+    public bool GetIsPathable()
+    {
+        return EntityManager.GetBoolAttribute(attributes, "isPathable", false);
+    }
     public int GetMaxHealth()
     {
         return EntityManager.GetIntAttribute(attributes, "maxHealth", 100);
@@ -991,6 +995,10 @@ public class BuildingType : Entity
     {
         return EntityManager.GetStringAttribute(attributes, "name");
     }
+    public bool GetIsPathable()
+    {
+        return EntityManager.GetBoolAttribute(attributes, "isPathable", false);
+    }
     public int GetMaxHealth()
     {
         return EntityManager.GetIntAttribute(attributes, "maxHealth");
@@ -1082,6 +1090,12 @@ public class BuildingType : Entity
     public string GetSpriteName()
     {
         return EntityManager.GetStringAttribute(attributes, "spriteName", "nosprite");
+    }
+    public string GetSpritePath()
+    {
+        string folder = GetParentDirectory();
+        string name = GetSpriteName();
+        return System.IO.Path.Combine(folder, name);
     }
     public int GetDifficultyEstimate()
     {

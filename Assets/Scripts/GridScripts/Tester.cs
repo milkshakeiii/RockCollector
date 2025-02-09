@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
 public class Tester : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class Tester : MonoBehaviour
     {
         LoadEntities();
         AddAndRemovePlaceablesOfVariousSizes();
+        MoveDirections();
         DistancesBetweenPlaceablesOfVariousSizes();
         HoldAndDropItems();
         CraftThings();
@@ -69,6 +71,20 @@ public class Tester : MonoBehaviour
         Assert(map.PositionOf(item) == new Vector2Int(10, 10), "Item not moved correctly");
         Assert(map.HolderOf(item) == testCreature, "Item not in held placeables");
         Assert(testCreature.OutfitContains(item, map), "Item not in outfit");
+    }
+
+    void MoveDirections()
+    {
+        Map map = new();
+        Creature testCreature = new("George", 0, EntityManager.creatureTypes["Peasant"], Map.NULL_POSITION);
+        map.Add(testCreature, new Vector2Int(5, 5));
+
+        PropType propType = EntityManager.propTypes["Tree"];
+        Prop placeable1 = new (propType);
+        map.Add(placeable1, new Vector2Int(5, 6));
+
+        testCreature.MoveInDirection(Vector2Int.up, map);
+        Assert(map.PositionOf(testCreature) == new Vector2Int(6, 6), "Move up");
     }
 
     void DistancesBetweenPlaceablesOfVariousSizes()

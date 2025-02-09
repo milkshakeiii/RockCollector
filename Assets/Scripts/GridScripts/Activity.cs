@@ -340,7 +340,7 @@ public class CraftActivity : Activity
 
     public override int ProximityRequirement(Creature forCreature, Map map)
     {
-        return 0;
+        return 1;
     }
 
     public override bool IsCompletedOrImpossible(Map map, Creature performer)

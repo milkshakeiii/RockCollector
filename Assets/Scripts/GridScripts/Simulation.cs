@@ -839,15 +839,16 @@ public class Map
 
     public bool IsBuildable(Vector2Int buildingPosition, int size)
     {
-        for (int x = 0; x < size; x++)
+        for (int x = -1; x < size + 1; x++)
         {
-            for (int y = 0; y < size; y++)
+            for (int y = -1; y < size + 1; y++)
             {
                 Vector2Int position = new(buildingPosition.x + x, buildingPosition.y + y);
                 List<Placeable> placeablesAtPosition = PlaceablesAt(position);
                 foreach (Placeable placeable in placeablesAtPosition)
                 {
-                    if (placeable is Building || placeable is Prop)
+                    if (placeable is Building || placeable is Prop ||
+                        (x != -1 && x != size && y != -1 && y != size && (placeable is Item || placeable is Creature)))
                     {
                         return false;
                     }

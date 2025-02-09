@@ -903,11 +903,19 @@ public class MapDisplayer : MonoBehaviour
         }
         Vector2Int mousePosition = GetMouseWorldPosition();
         BuildingType buildingType = activePlaceBuildingButton.GetBuildingType();
-        displayGrid.DisplaySprite("Art/UI/button",
+        displayGrid.DisplaySprite(buildingType.GetSpritePath(),
             mousePosition.x * cellsPerSquare,
             mousePosition.y * cellsPerSquare,
             cellsPerSquare * buildingType.GetSize(),
             cellsPerSquare * buildingType.GetSize(),
+            0,
+            1,
+            false);
+        displayGrid.DisplaySprite("Art/UI/button",
+            (mousePosition.x - 1) * cellsPerSquare,
+            (mousePosition.y - 1) * cellsPerSquare,
+            cellsPerSquare * (buildingType.GetSize() + 2),
+            cellsPerSquare * (buildingType.GetSize() + 2),
             0,
             0,
             false);
