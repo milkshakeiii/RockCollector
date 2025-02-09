@@ -105,6 +105,14 @@ public class MapDisplayer : MonoBehaviour
     public void SetGamestate(Gamestate gamestate)
     {
         this.gamestate = gamestate;
+        DrawScenarioBackground(gamestate.scenario);
+    }
+
+    private void DrawScenarioBackground(Scenario scenario)
+    {
+        string spritePath  = scenario.GetTile1SpritePath();
+        int radius = scenario.scenarioInfo.GetMapRadius();
+        displayGrid.SpawnBackgroundSprite(spritePath, -radius*cellsPerSquare, -radius*cellsPerSquare, 2*radius*cellsPerSquare, 2*radius*cellsPerSquare, 0);
     }
 
     private Vector2Int GetMouseWorldPosition()

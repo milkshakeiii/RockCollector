@@ -1,7 +1,7 @@
 name:Testario
 tile1:grass1
 tile2:grass2
-mapRadius:50
+mapRadius:150
 team1StartX:-10
 team1StartY:-20
 lairNames:Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Crypt,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Crypt,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Crypt,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Crypt,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Crypt,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Crypt,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Crypt,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Crypt,Small Graveyard

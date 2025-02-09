@@ -25,6 +25,8 @@ public class DisplayGrid : MonoBehaviour
     private List<GameObject> worldLetters = new();
     private List<GameObject> cameraLetters = new();
 
+    private List<GameObject> backgroundSprites = new();
+
     void OnEnable()
     {
 
@@ -65,20 +67,40 @@ public class DisplayGrid : MonoBehaviour
     /// <summary>
     /// Display a sprite on the grid
     /// </summary>
-    /// <param name="spriteName"> Sprite name from resources</param>
+    /// <param name="spriteResourcePath"> Sprite name from resources</param>
     /// <param name="x"> X position in cells (8 px per cell)</param>
     /// <param name="y"> Y position in cells (8 px per cell)</param>
     /// <param name="width"> Width in cells (8 px per cell)</param>
     /// <param name="height"> Height in cells (8 px per cell)</param>
     /// <param name="rotation"> Rotation in 90 degree increments</param>
-    public void DisplaySprite(string spriteName, float x, float y, int width, int height, int rotation, int overlapLayer = 0, bool parentToCamera = false)
+    public void DisplaySprite(string spriteResourcePath, float x, float y, int width, int height, int rotation, int overlapLayer = 0, bool parentToCamera = false)
     {
         // create a new GameObject
-        GameObject newSquare = GetCachedSprite(spriteName);
+        GameObject newSquare = GetCachedSprite(spriteResourcePath);
+        ConfigureSprite(newSquare, x, y, width, height, rotation, overlapLayer, parentToCamera);
+    }
+
+    public void SpawnBackgroundSprite(string spriteResourcePath, float x, float y, int width, int height, int rotation)
+    {
+        GameObject newSquare = NewGameObject(spriteResourcePath);
+        backgroundSprites.Add(newSquare);
+        ConfigureSprite(newSquare, x, y, width, height, rotation, -10, false);
+    }
+
+    public void ClearBackgroundSprites()
+    {
+        foreach (GameObject square in backgroundSprites)
+        {
+            square.SetActive(false);
+        }
+    }
+
+    private void ConfigureSprite(GameObject newSquare, float x, float y, int width, int height, int rotation, int overlapLayer, bool parentToCamera)
+    {
         if (parentToCamera)
         {
             newSquare.transform.SetParent(gridCamera.transform);
-            newSquare.transform.localPosition = new Vector3(x, y, DisplayGrid.HEIGHT/2f);
+            newSquare.transform.localPosition = new Vector3(x, y, DisplayGrid.HEIGHT / 2f);
         }
         else
         {
@@ -109,7 +131,7 @@ public class DisplayGrid : MonoBehaviour
         // pixel width and height must be divisible by 8
         if (spritePixelWidth % 8 != 0 || spritePixelHeight % 8 != 0)
         {
-            Debug.LogError("Sprite width and height must be divisible by 8: " + spriteName);
+            Debug.LogError("Sprite width and height must be divisible by 8: " + GetComponent<SpriteRenderer>().sprite.name);
             return;
         }
 
@@ -216,13 +238,13 @@ public class DisplayGrid : MonoBehaviour
         return newSquare;
     }
 
-    private GameObject NewGameObject(string spriteName)
+    private GameObject NewGameObject(string spriteResourcePath)
     {
         GameObject newSquare = Instantiate(baseSquarePrefab, transform);
-        Sprite firstSprite = Resources.Load<Sprite>(spriteName);
+        Sprite firstSprite = Resources.Load<Sprite>(spriteResourcePath);
         if (firstSprite == null)
         {
-            Debug.LogError("Sprite not found: " + spriteName);
+            Debug.LogError("Sprite not found: " + spriteResourcePath);
             return null;
         }
         newSquare.GetComponent<SpriteRenderer>().sprite = firstSprite;

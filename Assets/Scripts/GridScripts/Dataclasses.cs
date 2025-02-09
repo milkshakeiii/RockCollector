@@ -470,7 +470,7 @@ public class ScenarioInfo : Entity
     {
         string folder = GetParentDirectory();
         string name = GetTile1SpriteName();
-        return System.IO.Path.Combine(teamOrScenarioName, folder, name);
+        return System.IO.Path.Combine(folder, name);
     }
     public string GetTile2SpriteName()
     {
@@ -480,7 +480,7 @@ public class ScenarioInfo : Entity
     {
         string folder = GetParentDirectory();
         string name = GetTile2SpriteName();
-        return System.IO.Path.Combine(teamOrScenarioName, folder, name);
+        return System.IO.Path.Combine(folder, name);
     }
     public List<string> GetLairNames()
     {
@@ -513,6 +513,10 @@ public class ScenarioInfo : Entity
     public List<int> GetPropYs()
     {
         return EntityManager.GetIntListAttribute(attributes, "propYs", new List<int>());
+    }
+    public int GetMapRadius()
+    {
+        return EntityManager.GetIntAttribute(attributes, "mapRadius");
     }
 }
 

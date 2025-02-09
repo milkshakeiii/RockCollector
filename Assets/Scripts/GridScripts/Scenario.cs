@@ -18,7 +18,7 @@ public class Scenario
         return scenarioInfo.GetTile1SpritePath();
     }
 
-    public string GetFile2Path()
+    public string GetTile2SpritePath()
     {
         return scenarioInfo.GetTile2SpritePath();
     }
