@@ -8,8 +8,22 @@ size:3
 maxHealth:100
 restHealAmount:3
 restHealCooldown:20
-waveTimes:2000,20000,40000
+waveTimes:30000,40000,50000
 waveSizes:1,2,4
+waveBehavior:Wave Behavior
+
+name:Small Graveyard
+difficultyEstimate:10
+demolitionDifficulty:10
+supportedCreatureTypes:Skeleton
+supportedCreatureCounts:1
+supportedCreatureSpawnTimes:600
+size:3
+maxHealth:100
+restHealAmount:3
+restHealCooldown:20
+waveTimes:12000
+waveSizes:1
 waveBehavior:Wave Behavior
 
 name:Crypt

@@ -1197,20 +1197,25 @@ public class CreatureBehaviorType : Entity
     {
         return EntityManager.GetIntAttribute(attributes, "raidLookDistance");
     }
-
     public int GetRaidMaximumLevelDifference()
     {
         return EntityManager.GetIntAttribute(attributes, "raidMaximumLevelDifference");
     }
-
     public int GetRaidMinimumLevelDifference()
     {
         return EntityManager.GetIntAttribute(attributes, "raidMinimumLevelDifference");
     }
-
     public int GetRaidRange()
     {
         return EntityManager.GetIntAttribute(attributes, "raidRange");
+    }
+    public int GetDefendRange()
+    {
+        return EntityManager.GetIntAttribute(attributes, "defendRange");
+    }
+    public int GetDefendMinimumDangerSum()
+    {
+        return EntityManager.GetIntAttribute(attributes, "defendMinimumDangerSum");
     }
 }
 

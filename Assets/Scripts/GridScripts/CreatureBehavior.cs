@@ -103,6 +103,7 @@ public abstract class BehaviorPriority
             "Fight" => new FightPriority(),
             "Plant Props" => new PlantPriority(),
             "Raid" => new RaidPriority(),
+            "Defend" => new DefendPriority(),
             _ => throw new Exception("Unknown behavior priority: " + name),
         };
     }
@@ -655,5 +656,43 @@ public class PlantPriority : BehaviorPriority
     public override string GetIngVerb()
     {
         return "Planting";
+    }
+}
+
+public class DefendPriority : BehaviorPriority
+{
+    public override Activity ChosenActivityOrNull(Map map, Creature actor, CreatureBehaviorType behaviorType)
+    {
+        Building homeBuilding = actor.GetHomeBuilding(map);
+        if (homeBuilding == null)
+        {
+            return null;
+        }
+        foreach (Placeable placeable in map.UnheldPlaceables())
+        {
+            int invaderDangerRating = 0;
+            int scariestInvaderRating = 0;
+            Creature scariestInvader = null;
+            if (placeable is Creature creature && creature.teamNumber != actor.teamNumber
+                && map.DistanceBetween(homeBuilding, creature) <= behaviorType.GetDefendRange())
+            {
+                invaderDangerRating += creature.DifficultyEstimate();
+                if (creature.DifficultyEstimate() > scariestInvaderRating)
+                {
+                    scariestInvaderRating = creature.DifficultyEstimate();
+                    scariestInvader = creature;
+                }
+            }
+            if (invaderDangerRating >= behaviorType.GetDefendMinimumDangerSum())
+            {
+                return new HuntActivity(scariestInvader);
+            }
+        }
+        return null;
+    }
+
+    public override string GetIngVerb()
+    {
+        return "Repelling";
     }
 }
