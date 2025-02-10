@@ -130,6 +130,11 @@ public class MapDisplayer : MonoBehaviour
         return new Vector2Int(x, y);
     }
 
+    public Vector2Int GamePositionToWorldPosition(Vector2Int gamePosition)
+    {
+        return new Vector2Int(gamePosition.x * cellsPerSquare, gamePosition.y * cellsPerSquare);
+    }
+
     void OnMouseUpEvent(Vector3 worldPosition, Vector2Int screenPosition, int mouseButton)
     {
         if (GetMap() == null)
@@ -149,7 +154,7 @@ public class MapDisplayer : MonoBehaviour
             {
                 Debug.Log("Button clicked " + buttonRectsToButtons[rectInt].text);
                 Button callback = buttonRectsToButtons[rectInt];
-                callback.OnClick(this, mouseButton);
+                callback.OnMouseUp(this, mouseButton);
                 return;
             }
         }
@@ -255,6 +260,18 @@ public class MapDisplayer : MonoBehaviour
         if (GetMap() == null)
         {
             return;
+        }
+
+        // check if this is a button press
+        foreach (RectInt rectInt in buttonRectsToButtons.Keys)
+        {
+            if (rectInt.Contains(screenPosition))
+            {
+                Debug.Log("Button clicked " + buttonRectsToButtons[rectInt].text);
+                Button callback = buttonRectsToButtons[rectInt];
+                callback.OnMouseDown(this, mouseButton);
+                return;
+            }
         }
 
         // if the leftMouseSelection is not null and this click is in the left 1/8 of the screen, do nothing
@@ -433,6 +450,14 @@ public class MapDisplayer : MonoBehaviour
         {
             DrawItemTypeInfoPanel(itemType, root, GetMap(), displayGrid);
         }
+        else if (entity is BuildingType buildingType)
+        {
+            DrawBuildingTypeInfoPanel(buildingType, root, GetMap(), displayGrid);
+        }
+        else if (entity is CreatureType creatureType)
+        {
+            DrawCreatureTypeInfoPanel(creatureType, root, GetMap(), displayGrid);
+        }
         else if (placeable is Building building)
         {
             DrawBuildingInfoPanel(building, root, GetMap(), displayGrid);
@@ -465,15 +490,10 @@ public class MapDisplayer : MonoBehaviour
 
         // display the building portrait
         height -= 3 + 24;
-        displayGrid.DisplaySprite(
-            "Art/UI/plain_white",
-            (int)rootPosition.x + 3,
-            height,
-            24,
-            24,
-            0,
-            6,
-            true);
+        ClickToFollowPortaitButton clickToFollowPortaitButton = new (building.buildingType.GetName(), building);
+        RectInt portraitRect = new((int)rootPosition.x + 3, height, 24, 24);
+        clickToFollowPortaitButton.Draw(displayGrid, portraitRect, map);
+        buttonRectsToButtons[portraitRect] = clickToFollowPortaitButton;
         
         // requestable items
         List<ItemType> requestableItemTypes = building.GetRequestableItemTypes();
@@ -534,9 +554,15 @@ public class MapDisplayer : MonoBehaviour
             BuildingType buildingType = buildableBuildingTypes[i];
             Button buildBuildingButton = new BuildBuildingButton("Build " + buildingType.GetName(), building.teamNumber, buildingType.GetName(), map.PositionOf(building));
             height -= 7;
-            RectInt rectInt = new((int)rootPosition.x + 1, height, DisplayGrid.WIDTH / 8 - 2, 6);
+            RectInt rectInt = new((int)rootPosition.x + 1, height, DisplayGrid.WIDTH / 8 - 9, 6);
             buildBuildingButton.Draw(displayGrid, rectInt, map, activePlaceBuildingButton != null);
             buttonRectsToButtons[rectInt] = buildBuildingButton;
+
+            // display the building icon
+            BuildingIconButton buildingIconButton = new (buildingType);
+            rectInt = new((int)rootPosition.x + DisplayGrid.WIDTH / 8 - 7, height, 6, 6);
+            buildingIconButton.Draw(displayGrid, rectInt, map);
+            buttonRectsToButtons[rectInt] = buildingIconButton;
         }
 
         // display a divider line
@@ -558,9 +584,15 @@ public class MapDisplayer : MonoBehaviour
             CreatureType creatureType = creatureTypes[i];
             Button spawnCreatureButton = new SpawnCreatureButton("Spawn " + creatureType.GetName(), creatureType.GetName(), map.PositionOf(building));
             height -= 7;
-            RectInt rectInt = new((int)rootPosition.x + 1, height, DisplayGrid.WIDTH / 8 - 2, 6);
+            RectInt rectInt = new((int)rootPosition.x + 1, height, DisplayGrid.WIDTH / 8 - 9, 6);
             spawnCreatureButton.Draw(displayGrid, rectInt, map);
             buttonRectsToButtons[rectInt] = spawnCreatureButton;
+
+            // display the creature icon
+            CreatureIconButton creatureIconButton = new (creatureType);
+            rectInt = new((int)rootPosition.x + DisplayGrid.WIDTH / 8 - 7, height, 6, 6);
+            creatureIconButton.Draw(displayGrid, rectInt, map);
+            buttonRectsToButtons[rectInt] = creatureIconButton;
         }
     }
 
@@ -585,15 +617,10 @@ public class MapDisplayer : MonoBehaviour
 
         // display the creature's portrait
         height -= 2 + 24;
-        displayGrid.DisplaySprite(
-            "Art/UI/plain_white",
-            (int)rootPosition.x + 3,
-            height,
-            24,
-            24,
-            0,
-            6,
-            true);
+        ClickToFollowPortaitButton clickToFollowPortaitButton = new (creature.GetName(), creature);
+        RectInt rectInt = new((int)rootPosition.x + 3, height, 24, 24);
+        clickToFollowPortaitButton.Draw(displayGrid, rectInt, map);
+        buttonRectsToButtons[rectInt] = clickToFollowPortaitButton;
 
         // display the creature's activity string
         height -= 4;
@@ -863,6 +890,11 @@ public class MapDisplayer : MonoBehaviour
         }
 
         List<ItemType> inputItemTypes = itemType.GetCraftingInputs();
+        height = RenderItemTypeList(inputItemTypes, rootPosition, height, displayGrid, map);
+    }
+
+    private int RenderItemTypeList(List<ItemType> inputItemTypes, Vector2 rootPosition, int height, DisplayGrid displayGrid, Map map)
+    {
         if (inputItemTypes.Count > 0)
         {
             height -= 4;
@@ -888,6 +920,55 @@ public class MapDisplayer : MonoBehaviour
                 buttonRectsToButtons[rectInt] = itemIconButton;
             }
         }
+        return height;
+    }
+
+    private void DrawBuildingTypeInfoPanel(BuildingType buildingType, Vector2 rootPosition, Map map, DisplayGrid displayGrid)
+    {
+        // display the building name
+        int height = (int)rootPosition.y + DisplayGrid.HEIGHT - 4;
+        displayGrid.DisplayText(
+            buildingType.GetName(),
+            (int)rootPosition.x + 1,
+            height,
+            Color.black,
+            true);
+
+        // display the building portrait
+        height -= 3 + 24;
+        displayGrid.DisplaySprite(
+            buildingType.GetSpritePath(),
+            (int)rootPosition.x + 3,
+            height,
+            24,
+            24,
+            0,
+            6,
+            true);
+    }
+    
+    private void DrawCreatureTypeInfoPanel(CreatureType creatureType, Vector2 rootPosition, Map map, DisplayGrid displayGrid)
+    {
+        // display the creature name
+        int height = (int)rootPosition.y + DisplayGrid.HEIGHT - 4;
+        displayGrid.DisplayText(
+            creatureType.GetName(),
+            (int)rootPosition.x + 1,
+            height,
+            Color.black,
+            true);
+
+        // display the creature portrait
+        height -= 3 + 24;
+        displayGrid.DisplaySprite(
+            creatureType.GetSpritePath(),
+            (int)rootPosition.x + 3,
+            height,
+            24,
+            24,
+            0,
+            6,
+            true);
     }
 
     public void SetPlaceBuildingButton(BuildBuildingButton button)
@@ -986,7 +1067,11 @@ public abstract class Button
         displayGrid.DisplayText(text, rectInt.x+1, rectInt.y+ rectInt.height / 2, Color.black, true);
     }
 
-    public abstract void OnClick(MapDisplayer mapDisplayer, int buttonNumber);
+    public abstract void OnMouseUp(MapDisplayer mapDisplayer, int buttonNumber);
+    public virtual void OnMouseDown(MapDisplayer mapDisplayer, int buttonNumber)
+    {
+        // do nothing
+    }
 }
 
 public class SpawnCreatureButton : Button
@@ -1042,7 +1127,7 @@ public class SpawnCreatureButton : Button
         displayGrid.DisplayText(text, rectInt.x + 1, rectInt.y + rectInt.height / 2, Color.black, true);
     }
 
-    public override void OnClick(MapDisplayer mapDisplayer, int buttonNumber)
+    public override void OnMouseUp(MapDisplayer mapDisplayer, int buttonNumber)
     {
         if (buttonNumber != 0)
         {
@@ -1066,7 +1151,7 @@ public class ChangeItemRequestsButton : Button
         this.buildingPosition = buildingPosition;
     }
 
-    public override void OnClick(MapDisplayer mapDisplayer, int buttonNumber)
+    public override void OnMouseUp(MapDisplayer mapDisplayer, int buttonNumber)
     {
         if (buttonNumber != 0)
         {
@@ -1131,7 +1216,7 @@ public class BuildBuildingButton : Button
         return null;
     }
 
-    public override void OnClick(MapDisplayer mapDisplayer, int buttonNumber)
+    public override void OnMouseUp(MapDisplayer mapDisplayer, int buttonNumber)
     {
         if (buttonNumber != 0)
         {
@@ -1184,8 +1269,108 @@ public class ItemIconButton : Button
             true);
     }
 
-    public override void OnClick(MapDisplayer mapDisplayer, int buttonNumber) 
+    public override void OnMouseUp(MapDisplayer mapDisplayer, int buttonNumber) 
     {
         mapDisplayer.DisplayEntity(buttonNumber, itemType);
+    }
+}
+
+public class BuildingIconButton : Button
+{
+    private BuildingType buildingType;
+
+    public BuildingIconButton(BuildingType buildingType) : base(buildingType.GetName())
+    {
+        this.buildingType = buildingType;
+    }
+
+    public override void Draw(DisplayGrid displayGrid, RectInt rectInt, Map map, bool placingBuilding = false)
+    {
+        displayGrid.DisplaySprite(
+            buildingType.GetSpritePath(),
+            rectInt.x,
+            rectInt.y,
+            rectInt.width,
+            rectInt.height,
+            0,
+            overlapLayer: 6,
+            true);
+    }
+
+    public override void OnMouseUp(MapDisplayer mapDisplayer, int buttonNumber)
+    {
+        mapDisplayer.DisplayEntity(buttonNumber, buildingType);
+    }
+}
+
+public class CreatureIconButton : Button
+{
+    private CreatureType creatureType;
+
+    public CreatureIconButton(CreatureType creatureType) : base(creatureType.GetName())
+    {
+        this.creatureType = creatureType;
+    }
+
+    public override void Draw(DisplayGrid displayGrid, RectInt rectInt, Map map, bool placingBuilding = false)
+    {
+        displayGrid.DisplaySprite(
+            creatureType.GetSpritePath(),
+            rectInt.x,
+            rectInt.y,
+            rectInt.width,
+            rectInt.height,
+            0,
+            overlapLayer: 6,
+            true);
+    }
+
+    public override void OnMouseUp(MapDisplayer mapDisplayer, int buttonNumber)
+    {
+        mapDisplayer.DisplayEntity(buttonNumber, creatureType);
+    }
+}
+
+public class ClickToFollowPortaitButton : Button
+{
+    private Placeable followMe;
+
+    public ClickToFollowPortaitButton(string text, Placeable followMe) : base(text)
+    {
+        this.followMe = followMe;
+    }
+
+    public override void Draw(DisplayGrid displayGrid, RectInt rectInt, Map map, bool placingBuilding = false)
+    {
+        displayGrid.DisplaySprite(
+            followMe.GetSpritePath(),
+            rectInt.x,
+            rectInt.y,
+            rectInt.width,
+            rectInt.height,
+            0,
+            overlapLayer: 6,
+            true);
+    }
+
+    public override void OnMouseUp(MapDisplayer mapDisplayer, int buttonNumber)
+    {
+        // do nothing
+    }
+
+    public override void OnMouseDown(MapDisplayer mapDisplayer, int buttonNumber)
+    {
+        mapDisplayer.StartCoroutine(CameraFollowPlaceable(mapDisplayer, buttonNumber));
+    }
+
+    private IEnumerator CameraFollowPlaceable(MapDisplayer mapDisplayer, int buttonNumber)
+    {
+        while (UnityEngine.Input.GetMouseButton(buttonNumber))
+        {
+            Vector2Int position = mapDisplayer.GetMap().PositionOf(followMe);
+            Vector2 worldPosition = mapDisplayer.GamePositionToWorldPosition(position);
+            Camera.main.transform.position = new Vector3(worldPosition.x, worldPosition.y, Camera.main.transform.position.z);
+            yield return null;
+        }
     }
 }

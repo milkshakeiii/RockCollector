@@ -751,6 +751,12 @@ public class CreatureType : Entity
     {
         return EntityManager.GetStringAttribute(attributes, "spriteName", "nosprite");
     }
+    public string GetSpritePath()
+    {
+        string folder = GetParentDirectory();
+        string name = GetSpriteName();
+        return System.IO.Path.Combine(folder, name);
+    }
     public int GetStartingHealth()
     {
         return EntityManager.GetIntAttribute(attributes, "startingHealth");

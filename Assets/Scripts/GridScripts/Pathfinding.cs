@@ -6,7 +6,7 @@ public class Pathfinding
 {
     public static Vector2Int StepTowards(Vector2Int currentPosition, Vector2Int target, Map map)
     {
-        // Use A* to find the next step towards the target
+        // Use A* to find the next square to step towards the target
 
         // Initialize the frontier with the starting position
         Utils.PriorityQueue<Vector2Int, int> frontier = new();
