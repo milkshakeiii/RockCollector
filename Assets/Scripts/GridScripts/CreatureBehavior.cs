@@ -216,7 +216,7 @@ public class DeliverRequestedItemsPriority : BehaviorPriority
             {
                 foreach (Placeable unheldPlaceable in map.UnheldPlaceables())
                 {
-                    if (unheldPlaceable is Item item)
+                    if (unheldPlaceable is Item item && !item.IsClaimed())
                     {
                         if (requestorBuilding.GetMissingItemAmount(item.itemType, map) > 0)
                         {
@@ -229,14 +229,14 @@ public class DeliverRequestedItemsPriority : BehaviorPriority
                     // we may still want to pick up an item if it is in a building that
                     // has a transport route to the requesting building or if the item is held
                     // by the actor and not part of the actor's outfit
-                    if (heldPlaceable is Item item && map.HolderOf(item) is Building building)
+                    if (heldPlaceable is Item item && !item.IsClaimed() && map.HolderOf(item) is Building building)
                     {
                         if (building != requestorBuilding && map.TransportRouteExists(building, requestorBuilding) && requestorBuilding.GetMissingItemAmount(item.itemType, map) > 0)
                         {
                             return new DeliverActivity(item, map.PositionOf(requestorBuilding));
                         }
                     }
-                    if (heldPlaceable is Item item2 && map.HolderOf(item2) is Creature creature)
+                    if (heldPlaceable is Item item2 && !item2.IsClaimed() && map.HolderOf(item2) is Creature creature)
                     {
                         if (creature == actor && !actor.OutfitContains(item2, map) && requestorBuilding.GetMissingItemAmount(item2.itemType, map) > 0)
                         {
@@ -274,7 +274,7 @@ public class HarvestRequestedItemsPriority : BehaviorPriority
             // in the future, we should at least prioritize props that are closer to the home building
             foreach (Placeable placeable in map.UnheldPlaceables())
             {
-                if (placeable is Prop prop && prop.ChanceOfItemDrop(itemType) > 0)
+                if (placeable is Prop prop && !prop.IsClaimed() && prop.ChanceOfItemDrop(itemType) > 0)
                 {
                     string neededSkill = prop.propType.GetHarvestingSkill();
                     if (actor.BestHarvestingAbility(neededSkill) == null)
@@ -465,6 +465,10 @@ public class RaidPriority : BehaviorPriority
     public override Activity ChosenActivityOrNull(Map map, Creature actor, CreatureBehaviorType behaviorType)
     {
         Building homeBuilding = actor.GetHomeBuilding(map);
+        if (homeBuilding == null)
+        {
+            return null;
+        }
         foreach (Placeable placeable in map.UnheldPlaceables())
         {
             if (placeable is Building building && building.teamNumber != actor.teamNumber

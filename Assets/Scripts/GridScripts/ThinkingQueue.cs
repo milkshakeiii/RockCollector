@@ -5,10 +5,18 @@ using UnityEngine;
 public static class ThinkingQueue
 {
     private static Queue<ThinkingTicket> queuedActions = new ();
+    private static Queue<ThinkingTicket> prioritizedActions = new ();
 
-    public static void EnqueueAction(ThinkingTicket action)
+    public static void EnqueueAction(ThinkingTicket action, bool prioritize)
     {
-        queuedActions.Enqueue(action);
+        if (prioritize)
+        {
+            prioritizedActions.Enqueue(action);
+        }
+        else
+        {
+            queuedActions.Enqueue(action);
+        }
     }
 
     /// <summary>
@@ -19,9 +27,17 @@ public static class ThinkingQueue
     public static void PerformActions(int count, Map map)
     {
         int performed = 0;
-        while (performed < count && queuedActions.Count > 0)
+        while (performed < count && (queuedActions.Count > 0 || prioritizedActions.Count > 0))
         {
-            ThinkingTicket ticket = queuedActions.Dequeue();
+            ThinkingTicket ticket;
+            if (prioritizedActions.Count > 0)
+            {
+                ticket = prioritizedActions.Dequeue();
+            }
+            else
+            {
+                ticket = queuedActions.Dequeue();
+            }
             if (ticket.IsAlive())
             {
                 ticket.Invoke(map);
