@@ -1069,13 +1069,13 @@ public class Creature : Destructable
     private static readonly Vector2Int[] clockwise = new Vector2Int[] { new(1, 0), new(1, -1), new(0, -1), new(-1, -1), new(-1, 0), new(-1, 1), new(0, 1), new(1, 1) };
     private Vector2Int BlindMoveTowards(Vector2Int target, Map map)
     {
-        Vector2Int direction = target - map.PositionOf(this);
+        Vector2Int currentPosition = map.PositionOf(this);
+        Vector2Int direction = target - currentPosition;
         Vector2Int step = new(Math.Sign(direction.x), Math.Sign(direction.y));
         if (step == Vector2Int.zero)
         {
             return Vector2Int.zero;
         }
-        Vector2Int currentPosition = map.PositionOf(this);
         int stepIndex = Array.IndexOf(clockwise, step);
         for (int i = stepIndex; i < stepIndex + clockwise.Length; i++)
         {
@@ -1083,11 +1083,11 @@ public class Creature : Destructable
             Vector2Int nextPosition = currentPosition + nextStep;
             if (map.IsPathable(nextPosition))
             {
-                return nextStep;
+                return nextPosition;
             }
         }
         Debug.LogWarning("Blind move failed for " + this + " from " + currentPosition + " to " + target);
-        return Vector2Int.zero;
+        return currentPosition;
     }
 
     public Vector2Int DirectionToNextActivity(Map map)

@@ -22,6 +22,10 @@ public class Pathfinding
 
         for (int i = 0; i < 1000; i++)
         {
+            if (frontier.Count == 0)
+            {
+                break;
+            }
             // Get the current position
             Vector2Int current = frontier.Dequeue();
 
