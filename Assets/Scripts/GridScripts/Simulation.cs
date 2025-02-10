@@ -724,6 +724,21 @@ public class Map
         return Math.Max(xDistance, yDistance);
     }
 
+    public bool IsPathable(Vector2Int position)
+    {
+        List<Placeable> currentOccupants = PlaceablesAt(position);
+        foreach (Placeable occupant in currentOccupants)
+        {
+            if ((occupant is Building building && !building.buildingType.GetIsPathable()) ||
+                (occupant is Prop prop && !prop.propType.GetIsPathable()) ||
+                (occupant is Creature))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public Dictionary<Placeable, List<Vector2Int>>.KeyCollection UnheldPlaceables()
     {
         return placeableToCells.Keys;

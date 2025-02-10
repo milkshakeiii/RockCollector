@@ -770,6 +770,10 @@ public class WanderActivity : Activity
         }
         Vector2Int randomDirection = new(UnityEngine.Random.Range(-1, 2), UnityEngine.Random.Range(-1, 2));
         Vector2Int newPosition = map.PositionOf(performer) + randomDirection;
+        if (!map.IsPathable(newPosition))
+        {
+            return;
+        }
         // if this would not take us further out of range, move to the new position
         int newDistance = map.DistanceTo(newPosition, sourcePlaceable);
         int oldDistance = map.DistanceTo(map.PositionOf(performer), sourcePlaceable);

@@ -1046,46 +1046,25 @@ public class Creature : Destructable
     private static Vector2Int[] clockwise = new Vector2Int[] { new (1, 0), new (1, -1), new (0, -1), new (-1, -1), new (-1, 0), new (-1, 1), new (0, 1), new (1, 1) };
     public void MoveInDirection(Vector2Int direction, Map map)
     {
-        cooldownTicksRemaining = MoveSpeed();
-        Vector2Int step = new(Math.Sign(direction.x), Math.Sign(direction.y));
-        if (step == Vector2Int.zero)
-        {
-            return;
-        }
         Vector2Int currentPosition = map.PositionOf(this);
-        int stepIndex = Array.IndexOf(clockwise, step);
-        for (int i = stepIndex; i < stepIndex + clockwise.Length; i++)
-        {
-            Vector2Int nextStep = clockwise[i % clockwise.Length];
-            Vector2Int nextPosition = currentPosition + nextStep;
-            if (CanPathTo(nextPosition, map))
-            {
-                map.MovePlaceable(this, nextPosition);
-                return;
-            }
-        }
-    }
-
-    private bool CanPathTo(Vector2Int position, Map map)
-    {
-        List<Placeable> currentOccupants = map.PlaceablesAt(position);
-        foreach (Placeable occupant in currentOccupants)
-        {
-            if ((occupant is Building building && !building.buildingType.GetIsPathable()) ||
-                (occupant is Prop prop && !prop.propType.GetIsPathable()) ||
-                (occupant is Creature))
-            {
-                return false;
-            }
-        }
-        return true;
+        MoveTowards(currentPosition + direction, map);
     }
 
     public void MoveTowards(Vector2Int target, Map map)
     {
+        cooldownTicksRemaining = MoveSpeed();
         Vector2Int currentPosition = map.PositionOf(this);
-        Vector2Int direction = target - currentPosition;
-        MoveInDirection(direction, map);
+        if (currentPosition == target)
+        {
+            return;
+        }
+        Vector2Int step = Pathfinding.StepTowards(currentPosition, target, map);
+        if (step == Map.NULL_POSITION)
+        {
+            Debug.LogWarning("No path found from " + currentPosition + " to " + target);
+            return;
+        }
+        map.MovePlaceable(this, step);
     }
 
     public Vector2Int DirectionToNextActivity(Map map)

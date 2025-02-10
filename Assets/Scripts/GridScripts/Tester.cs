@@ -75,16 +75,38 @@ public class Tester : MonoBehaviour
 
     void MoveDirections()
     {
-        Map map = new();
-        Creature testCreature = new("George", 0, EntityManager.creatureTypes["Peasant"], Map.NULL_POSITION);
-        map.Add(testCreature, new Vector2Int(5, 5));
+        {
+            // test moving up around a tree
+            Map map = new();
+            Creature testCreature = new("George", 0, EntityManager.creatureTypes["Peasant"], Map.NULL_POSITION);
+            map.Add(testCreature, new Vector2Int(5, 5));
 
-        PropType propType = EntityManager.propTypes["Tree"];
-        Prop placeable1 = new (propType);
-        map.Add(placeable1, new Vector2Int(5, 6));
+            PropType propType = EntityManager.propTypes["Tree"];
+            Prop placeable1 = new(propType);
+            map.Add(placeable1, new Vector2Int(5, 6));
+            Vector2Int target = new Vector2Int(5, 7);
 
-        testCreature.MoveInDirection(Vector2Int.up, map);
-        Assert(map.PositionOf(testCreature) == new Vector2Int(6, 6), "Move up");
+            Assert(map.DistanceTo(target, testCreature) == 2, "starting distance");
+            testCreature.MoveTowards(target, map);
+            Assert(map.PositionOf(testCreature) != new Vector2Int(5, 6), "Overlapped tree");
+            Assert(map.DistanceTo(target, testCreature) == 1, "Move up");
+        }
+        {
+            // test moving right around a large building
+            Map map = new();
+            Creature testCreature = new("George", 0, EntityManager.creatureTypes["Peasant"], Map.NULL_POSITION);
+            map.Add(testCreature, new Vector2Int(5, 5));
+
+            BuildingType buildingType = EntityManager.buildingTypes["Farm"];
+            Building placeable1 = new(buildingType, 1);
+            map.Add(placeable1, new Vector2Int(6, 5));
+            Vector2Int target = new Vector2Int(12, 7);
+
+            Assert(map.DistanceTo(target, testCreature) == 7, "starting distance");
+            testCreature.MoveTowards(target, map);
+            Assert(map.PositionOf(testCreature) != new Vector2Int(6, 5), "Overlapped building");
+            Assert(map.DistanceTo(target, testCreature) == 6, "Move right");
+        }
     }
 
     void DistancesBetweenPlaceablesOfVariousSizes()
