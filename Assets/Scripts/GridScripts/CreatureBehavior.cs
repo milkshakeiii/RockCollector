@@ -274,7 +274,7 @@ public class HarvestRequestedItemsPriority : BehaviorPriority
             // in the future, we should at least prioritize props that are closer to the home building
             foreach (Placeable placeable in map.UnheldPlaceables())
             {
-                if (placeable is Prop prop && !prop.IsClaimed() && prop.ChanceOfItemDrop(itemType) > 0)
+                if (placeable is Prop prop && !prop.IsClaimed() && Prop.ChanceOfItemDrop(prop.propType, itemType) > 0)
                 {
                     string neededSkill = prop.propType.GetHarvestingSkill();
                     if (actor.BestHarvestingAbility(neededSkill) == null)

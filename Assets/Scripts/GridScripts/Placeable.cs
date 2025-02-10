@@ -2095,7 +2095,7 @@ public class Prop : Destructable
         }
     }
 
-    public float ChanceOfItemDrop(ItemType itemType)
+    public static float ChanceOfItemDrop(PropType propType, ItemType itemType)
     {
         List<ItemType> droppedItems = propType.GetProducedItems();
         List<int> probabilities = propType.GetProducedItemsProbabilities();
@@ -2104,10 +2104,10 @@ public class Prop : Destructable
         {
             return 0;
         }
-        return (float)probabilities[index] / (float)DroppedItemsProbabilitiesSum();
+        return (float)probabilities[index] / (float)DroppedItemsProbabilitiesSum(propType);
     }
 
-    private int DroppedItemsProbabilitiesSum()
+    private static int DroppedItemsProbabilitiesSum(PropType propType)
     {
         List<int> probabilities = propType.GetProducedItemsProbabilities();
         int sum = 0;
@@ -2150,11 +2150,6 @@ public class PropView : DestructableView
     public float HarvestedFraction()
     {
         return (placeable as Prop).HarvestedFraction();
-    }
-
-    public float ChanceOfItemDrop(ItemType itemType)
-    {
-        return (placeable as Prop).ChanceOfItemDrop(itemType);
     }
 
     public PropType GetPropType()

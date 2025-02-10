@@ -458,6 +458,10 @@ public class MapDisplayer : MonoBehaviour
         {
             DrawCreatureTypeInfoPanel(creatureType, root, GetMap(), displayGrid);
         }
+        else if (entity is PropType propType)
+        {
+            DrawPropTypeInfoPanel(propType, root, GetMap(), displayGrid);
+        }
         else if (placeable is Building building)
         {
             DrawBuildingInfoPanel(building, root, GetMap(), displayGrid);
@@ -468,7 +472,7 @@ public class MapDisplayer : MonoBehaviour
         }
         else if (placeable is Prop prop)
         {
-            DrawPropInfoPanel(prop, root, GetMap(), displayGrid);
+            DrawPropTypeInfoPanel(prop.propType, root, GetMap(), displayGrid);
         }
         else if (placeable is Item item)
         {
@@ -799,12 +803,12 @@ public class MapDisplayer : MonoBehaviour
         }
     }
 
-    private void DrawPropInfoPanel(Prop prop, Vector2 rootPosition, Map map, DisplayGrid displayGrid)
+    private void DrawPropTypeInfoPanel(PropType propType, Vector2 rootPosition, Map map, DisplayGrid displayGrid)
     {
         // display the prop name
         int height = (int)rootPosition.y + DisplayGrid.HEIGHT - 4;
         displayGrid.DisplayText(
-            prop.propType.GetName(),
+            propType.GetName(),
             (int)rootPosition.x + 1,
             height,
             Color.black,
@@ -823,14 +827,62 @@ public class MapDisplayer : MonoBehaviour
             true);
 
         // display item drop chances
-        foreach (ItemType itemType in prop.propType.GetProducedItems()) {
+        height -= 4;
+        displayGrid.DisplayText(
+            "Produces:",
+            (int)rootPosition.x + 1,
+            height,
+            Color.black,
+            true);
+        foreach (ItemType itemType in propType.GetProducedItems()) {
+            height -= 7;
+            ItemIconButton itemIconButton = new (itemType);
+            RectInt rectInt = new((int)rootPosition.x + 1, height, 6, 6);
+            itemIconButton.Draw(displayGrid, rectInt, map);
+            buttonRectsToButtons[rectInt] = itemIconButton;
+
+            displayGrid.DisplayText(
+                itemType.GetName() + " (" + ((int)(Prop.ChanceOfItemDrop(propType, itemType) * 100)) + "% chance)",
+                (int)rootPosition.x + 8,
+                height,
+                Color.black,
+                true);
+        }
+
+        // display the grows into prop
+        PropType growsIntoPropType = propType.GetGrowsInto();
+        if (growsIntoPropType != null)
+        {
             height -= 4;
             displayGrid.DisplayText(
-                itemType.GetName() + "(" + ((int)(prop.ChanceOfItemDrop(itemType) * 100)) + "%)",
+                "Grows into:",
                 (int)rootPosition.x + 1,
                 height,
                 Color.black,
                 true);
+            height -= 7;
+            PropIconButton propIconButton = new (growsIntoPropType);
+            RectInt rectInt = new((int)rootPosition.x + 1, height, 6, 6);
+            propIconButton.Draw(displayGrid, rectInt, map);
+            buttonRectsToButtons[rectInt] = propIconButton;
+        }
+
+        // display the replaced by prop
+        PropType replacedByPropType = propType.GetReplacedBy();
+        if (replacedByPropType != null)
+        {
+            height -= 4;
+            displayGrid.DisplayText(
+                "Replaced by:",
+                (int)rootPosition.x + 1,
+                height,
+                Color.black,
+                true);
+            height -= 7;
+            PropIconButton propIconButton = new (replacedByPropType);
+            RectInt rectInt = new((int)rootPosition.x + 1, height, 6, 6);
+            propIconButton.Draw(displayGrid, rectInt, map);
+            buttonRectsToButtons[rectInt] = propIconButton;
         }
     }
 
@@ -890,37 +942,7 @@ public class MapDisplayer : MonoBehaviour
         }
 
         List<ItemType> inputItemTypes = itemType.GetCraftingInputs();
-        height = RenderItemTypeList(inputItemTypes, rootPosition, height, displayGrid, map);
-    }
-
-    private int RenderItemTypeList(List<ItemType> inputItemTypes, Vector2 rootPosition, int height, DisplayGrid displayGrid, Map map)
-    {
-        if (inputItemTypes.Count > 0)
-        {
-            height -= 4;
-            displayGrid.DisplayText(
-                "Inputs: ",
-                (int)rootPosition.x + 1,
-                height,
-                Color.black,
-                true);
-
-            // display the input items
-            int itemButtonsPerRow = 4;
-            for (int i = 0; i < inputItemTypes.Count; i++)
-            {
-                if (i % itemButtonsPerRow == 0)
-                {
-                    height -= 7;
-                }
-                ItemType inputItemType = inputItemTypes[i];
-                Button itemIconButton = new ItemIconButton(inputItemType);
-                RectInt rectInt = new((int)rootPosition.x + 1 + 7 * (i % itemButtonsPerRow), height, 6, 6);
-                itemIconButton.Draw(displayGrid, rectInt, map);
-                buttonRectsToButtons[rectInt] = itemIconButton;
-            }
-        }
-        return height;
+        height = RenderItemTypeList("Inputs: ", inputItemTypes, rootPosition, height, displayGrid, map);
     }
 
     private void DrawBuildingTypeInfoPanel(BuildingType buildingType, Vector2 rootPosition, Map map, DisplayGrid displayGrid)
@@ -969,6 +991,96 @@ public class MapDisplayer : MonoBehaviour
             0,
             6,
             true);
+    }
+
+    private int RenderItemTypeList(string label, List<ItemType> inputItemTypes, Vector2 rootPosition, int height, DisplayGrid displayGrid, Map map)
+    {
+        if (inputItemTypes.Count > 0)
+        {
+            height -= 4;
+            displayGrid.DisplayText(
+                label,
+                (int)rootPosition.x + 1,
+                height,
+                Color.black,
+                true);
+
+            // display the input items
+            int itemButtonsPerRow = 4;
+            for (int i = 0; i < inputItemTypes.Count; i++)
+            {
+                if (i % itemButtonsPerRow == 0)
+                {
+                    height -= 7;
+                }
+                ItemType inputItemType = inputItemTypes[i];
+                Button itemIconButton = new ItemIconButton(inputItemType);
+                RectInt rectInt = new((int)rootPosition.x + 1 + 7 * (i % itemButtonsPerRow), height, 6, 6);
+                itemIconButton.Draw(displayGrid, rectInt, map);
+                buttonRectsToButtons[rectInt] = itemIconButton;
+            }
+        }
+        return height;
+    }
+
+    private int RenderCreatureTypeList(string label, List<CreatureType> creatureTypes, Vector2 rootPosition, int height, DisplayGrid displayGrid, Map map)
+    {
+        if (creatureTypes.Count > 0)
+        {
+            height -= 4;
+            displayGrid.DisplayText(
+                label,
+                (int)rootPosition.x + 1,
+                height,
+                Color.black,
+                true);
+
+            // display the creature types
+            int creatureButtonsPerRow = 4;
+            for (int i = 0; i < creatureTypes.Count; i++)
+            {
+                if (i % creatureButtonsPerRow == 0)
+                {
+                    height -= 7;
+                }
+                CreatureType creatureType = creatureTypes[i];
+                Button creatureIconButton = new CreatureIconButton(creatureType);
+                RectInt rectInt = new((int)rootPosition.x + 1 + 7 * (i % creatureButtonsPerRow), height, 6, 6);
+                creatureIconButton.Draw(displayGrid, rectInt, map);
+                buttonRectsToButtons[rectInt] = creatureIconButton;
+            }
+        }
+        return height;
+    }
+
+    private int RenderBuildingTypeList(string label, List<BuildingType> buildingTypes, Vector2 rootPosition, int height, DisplayGrid displayGrid, Map map)
+    {
+        if (buildingTypes.Count > 0)
+        {
+            height -= 4;
+            displayGrid.DisplayText(
+                label,
+                (int)rootPosition.x + 1,
+                height,
+                Color.black,
+                true);
+
+            // display the building types
+            int buildingButtonsPerRow = 4;
+            for (int i = 0; i < buildingTypes.Count; i++)
+            {
+                if (i % buildingButtonsPerRow == 0)
+                {
+                    height -= 7;
+                }
+                BuildingType buildingType = buildingTypes[i];
+                Button buildingIconButton = new BuildingIconButton(buildingType);
+                RectInt rectInt = new((int)rootPosition.x + 1 + 7 * (i % buildingButtonsPerRow), height, 6, 6);
+                buildingIconButton.Draw(displayGrid, rectInt, map);
+                buttonRectsToButtons[rectInt] = buildingIconButton;
+            }
+        }
+        return height;
     }
 
     public void SetPlaceBuildingButton(BuildBuildingButton button)
@@ -1328,6 +1440,34 @@ public class CreatureIconButton : Button
     public override void OnMouseUp(MapDisplayer mapDisplayer, int buttonNumber)
     {
         mapDisplayer.DisplayEntity(buttonNumber, creatureType);
+    }
+}
+
+public class PropIconButton : Button
+{
+    private PropType propType;
+
+    public PropIconButton(PropType propType) : base(propType.GetName())
+    {
+        this.propType = propType;
+    }
+
+    public override void Draw(DisplayGrid displayGrid, RectInt rectInt, Map map, bool placingBuilding = false)
+    {
+        displayGrid.DisplaySprite(
+            propType.GetSpritePath(),
+            rectInt.x,
+            rectInt.y,
+            rectInt.width,
+            rectInt.height,
+            0,
+            overlapLayer: 6,
+            true);
+    }
+
+    public override void OnMouseUp(MapDisplayer mapDisplayer, int buttonNumber)
+    {
+        mapDisplayer.DisplayEntity(buttonNumber, propType);
     }
 }
 
