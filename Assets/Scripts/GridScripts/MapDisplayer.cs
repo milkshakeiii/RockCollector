@@ -7,6 +7,7 @@ using UnityEngine.UIElements;
 using System;
 using static UnityEngine.GraphicsBuffer;
 using Utils;
+using System.Linq;
 
 public class MapDisplayer : MonoBehaviour
 {
@@ -466,6 +467,10 @@ public class MapDisplayer : MonoBehaviour
         else if (entity is TypeAbility typeAbility)
         {
             DrawTypeAbilityInfoPanel(typeAbility, root, GetMap(), displayGrid);
+        }
+        else if (entity is ConditionType conditionType)
+        {
+            DrawConditionTypeInfoPanel(conditionType, root, GetMap(), displayGrid);
         }
         else if (placeable is Building building)
         {
@@ -1150,6 +1155,209 @@ public class MapDisplayer : MonoBehaviour
             0,
             6,
             true);
+
+        // display the recovery time
+        height -= 4;
+        displayGrid.DisplayText(
+            "Recovery time: " + typeAbility.GetCooldown(),
+            (int)rootPosition.x + 1,
+            height,
+            Color.black,
+            true);
+
+        // display the recharge time
+        height -= 4;
+        displayGrid.DisplayText(
+            "Recharge time: " + typeAbility.GetRechargeTicks(),
+            (int)rootPosition.x + 1,
+            height,
+            Color.black,
+            true);
+
+        // display the harvesting skill, if any
+        string harvestingSkill = typeAbility.GetHarvestingSkill();
+        if (harvestingSkill != "none")
+        {
+            height -= 4;
+            displayGrid.DisplayText(
+                "Harvesting: " + harvestingSkill + " (" + ShortenedSkillString(EntityManager.skillsToAttributeScores[harvestingSkill]) + ")",
+                (int)rootPosition.x + 1,
+                height,
+                Color.black,
+                true);
+        }
+
+        // display the crafting skill, if any
+        string craftingSkill = typeAbility.GetCraftingSkill();
+        if (craftingSkill != "none")
+        {
+            height -= 4;
+            displayGrid.DisplayText(
+                "Crafting: " + craftingSkill + " (" + ShortenedSkillString(EntityManager.skillsToAttributeScores[craftingSkill]) + ")",
+                (int)rootPosition.x + 1,
+                height,
+                Color.black,
+                true);
+        }
+
+        // display the planting skill, if any
+        string plantingSkill = typeAbility.GetPlantingSkill();
+        if (plantingSkill != "none")
+        {
+            height -= 4;
+            displayGrid.DisplayText(
+                "Planting: " + plantingSkill + " (" + ShortenedSkillString(EntityManager.skillsToAttributeScores[plantingSkill]) + ")",
+                (int)rootPosition.x + 1,
+                height,
+                Color.black,
+                true);
+        }
+
+        // display the repair skills, if any
+        List<string> repairSkills = typeAbility.GetRepairImplementSkills();
+        if (repairSkills.Count > 0)
+        {
+            height -= 4;
+            displayGrid.DisplayText(
+                "Repair with: ",
+                (int)rootPosition.x + 1,
+                height,
+                Color.black,
+                true);
+            height -= 4;
+            string skills = string.Join(", ", repairSkills);
+            displayGrid.DisplayText(
+                skills,
+                (int)rootPosition.x + 3,
+                height,
+                Color.black,
+                true);
+        }
+
+        // display the weapon skills, if any
+        List<string> weaponSkills = typeAbility.GetWeaponSkills();
+        if (weaponSkills.Count > 0)
+        {
+            height -= 4;
+            displayGrid.DisplayText(
+                "Attack with weapons: ",
+                (int)rootPosition.x + 1,
+                height,
+                Color.black,
+                true);
+            height -= 4;
+            string skills = string.Join(", ", weaponSkills);
+            displayGrid.DisplayText(
+                skills,
+                (int)rootPosition.x + 3,
+                height,
+                Color.black,
+                true);
+        }
+
+        // display the damage, if any
+        DieRoll damage = typeAbility.GetDamage();
+        if (damage != null)
+        {
+            height -= 4;
+            displayGrid.DisplayText(
+                "Damage: " + damage.ToString(),
+                (int)rootPosition.x + 1,
+                height,
+                Color.black,
+                true);
+        }
+
+        // display the range if this is not a weapon attack or harvesting or crafting or planting ability
+        if (weaponSkills.Count == 0 && typeAbility.GetHarvestingSkill() == "none" && typeAbility.GetCraftingSkill() == "none" && typeAbility.GetPlantingSkill() == "none")
+        {
+            height -= 4;
+            displayGrid.DisplayText(
+                "Range: " + typeAbility.GetRange(),
+                (int)rootPosition.x + 1,
+                height,
+                Color.black,
+                true);
+        }
+
+        // display the radius, if not 0
+        if (typeAbility.GetEffectRadius() != 0)
+        {
+            height -= 4;
+            displayGrid.DisplayText(
+                "Radius: " + typeAbility.GetEffectRadius(),
+                (int)rootPosition.x + 1,
+                height,
+                Color.black,
+                true);
+        }
+
+        // display the nonweapon skill, if any
+        string nonWeaponSkill = typeAbility.GetSkill();
+        if (nonWeaponSkill != "none")
+        {
+            height -= 4;
+            displayGrid.DisplayText(
+                "Skill: " + nonWeaponSkill + " (" + ShortenedSkillString(EntityManager.skillsToAttributeScores[nonWeaponSkill]) + ")",
+                (int)rootPosition.x + 1,
+                height,
+                Color.black,
+                true);
+        }
+
+        // display the conditions applied, if any
+        List<ConditionType> conditionsApplied = typeAbility.GetConditionsInflicted();
+        List<int> conditionStacks = typeAbility.GetConditionsInflictedBaseStacks();
+        List<int> maxStacks = typeAbility.GetConditionsInflictedMaxStacks();
+        if (conditionsApplied.Count > 0)
+        {
+            height -= 4;
+            displayGrid.DisplayText(
+                "Inflicts conditions: ",
+                (int)rootPosition.x + 1,
+                height,
+                Color.black,
+                true);
+            for (int i = 0; i < conditionsApplied.Count; i++)
+            {
+                height -= 7;
+                ConditionIconButton conditionIconButton = new(conditionsApplied[i]);
+                RectInt rectInt = new((int)rootPosition.x + 1, height, 6, 6);
+                conditionIconButton.Draw(displayGrid, rectInt, map);
+                buttonRectsToButtons[rectInt] = conditionIconButton;
+
+                displayGrid.DisplayText(
+                    conditionsApplied[i].GetName() + " (" + conditionStacks[i] + "/" + maxStacks[i] + ")",
+                    (int)rootPosition.x + 10,
+                    height,
+                    Color.black,
+                    true);
+            }
+        }
+    }
+
+    private void DrawConditionTypeInfoPanel(ConditionType conditionType, Vector2 rootPosition, Map map, DisplayGrid displayGrid)
+    {
+        // display the condition name
+        int height = (int)rootPosition.y + DisplayGrid.HEIGHT - 4;
+        displayGrid.DisplayText(
+            conditionType.GetName(),
+            (int)rootPosition.x + 1,
+            height,
+            Color.black,
+            true);
+
+        // display the condition portrait
+        height -= 3 + 24;
+        displayGrid.DisplaySprite(
+            conditionType.GetSpritePath(),
+            (int)rootPosition.x + 3,
+            height,
+            24,
+            24,
+            0,
+            6,
+            true);
     }
 
     private int RenderItemTypeList(string label, List<ItemType> inputItemTypes, Vector2 rootPosition, int height, DisplayGrid displayGrid, Map map)
@@ -1343,6 +1551,20 @@ public class MapDisplayer : MonoBehaviour
         {
             rightMouseSelection.entity = entity;
         }
+    }
+
+    public static string ShortenedSkillString(string skill)
+    {
+        return skill switch
+        {
+            "strength" => "STR",
+            "dexterity" => "DEX",
+            "constitution" => "CON",
+            "intelligence" => "INT",
+            "wisdom" => "WIS",
+            "charisma" => "CHA",
+            _ => skill,
+        };
     }
 }
 
@@ -1685,6 +1907,34 @@ public class TypeAbilityIconButton : Button
     public override void OnMouseUp(MapDisplayer mapDisplayer, int buttonNumber)
     {
         mapDisplayer.DisplayEntity(buttonNumber, typeAbility);
+    }
+}
+
+public class ConditionIconButton : Button
+{
+    private ConditionType conditionType;
+
+    public ConditionIconButton(ConditionType conditionType) : base(conditionType.GetName())
+    {
+        this.conditionType = conditionType;
+    }
+
+    public override void Draw(DisplayGrid displayGrid, RectInt rectInt, Map map, bool placingBuilding = false)
+    {
+        displayGrid.DisplaySprite(
+            conditionType.GetSpritePath(),
+            rectInt.x,
+            rectInt.y,
+            rectInt.width,
+            rectInt.height,
+            0,
+            overlapLayer: 6,
+            true);
+    }
+
+    public override void OnMouseUp(MapDisplayer mapDisplayer, int buttonNumber)
+    {
+        mapDisplayer.DisplayEntity(buttonNumber, conditionType);
     }
 }
 
