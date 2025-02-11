@@ -1067,42 +1067,8 @@ public class MapDisplayer : MonoBehaviour
 
         // display the skill bonuses
         List<string> skillNames = creatureType.GetSkillBonusNames();
-        if (skillNames.Count != 0)
-        {
-            height -= 6;
-            displayGrid.DisplayText(
-                "Skills bonuses:",
-                (int)rootPosition.x + 1,
-                height,
-                Color.black,
-                true);
-            List<int> skillBonusAmounts = creatureType.GetSkillBonusAmounts();
-            List<string> skillBonusStrings = new();
-            for (int i = 0; i < skillNames.Count; i++)
-            {
-                string skillName = skillNames[i];
-                int skillBonusAmount = skillBonusAmounts[i];
-                string newPart = skillBonusAmount.ToString("+0;-#") + " " + skillName + ", ";
-                if (skillBonusStrings.Count == 0 || skillBonusStrings[^1].Length + newPart.Length > 30)
-                {
-                    skillBonusStrings.Add(newPart);
-                }
-                else
-                {
-                    skillBonusStrings[^1] += newPart;
-                }
-            }
-            for (int i = 0; i < skillBonusStrings.Count; i++)
-            {
-                height -= 4;
-                displayGrid.DisplayText(
-                    skillBonusStrings[i],
-                    (int)rootPosition.x + 1,
-                    height,
-                    Color.black,
-                    true);
-            }
-        }
+        List<int> skillBonusAmounts = creatureType.GetSkillBonusAmounts();
+        height = RenderSkillBonusList("Skill bonuses: ", skillNames, skillBonusAmounts, rootPosition, height, displayGrid);
 
         // display the abilities
         List<TypeAbility> abilityNames = creatureType.GetAbilities();
@@ -1358,6 +1324,112 @@ public class MapDisplayer : MonoBehaviour
             0,
             6,
             true);
+
+        if (conditionType.GetIsHarmful())
+        {
+            height -= 4;
+            string saveAttribute = conditionType.GetProtectionAttribute().ToString();
+            displayGrid.DisplayText(
+            "Save: " + saveAttribute.ToLower(),
+            (int)rootPosition.x + 1,
+            height,
+            Color.black,
+            true);
+        }
+
+        // display the duration
+        height -= 4;
+        int duration = conditionType.GetDuration();
+        displayGrid.DisplayText(
+            "Duration: " + duration + " ticks",
+            (int)rootPosition.x + 1,
+            height,
+            Color.black,
+            true);
+
+        // display the ability modifiers, if any
+        List<AttributeScores> abilityNames = conditionType.GetModifiedAttributeScores();
+        List<int> abilityModifiers = conditionType.GetAttributeModifierAmounts();
+        foreach (AttributeScores abilityName in abilityNames)
+        {
+            height -= 4;
+                displayGrid.DisplayText(
+                abilityModifiers[abilityNames.IndexOf(abilityName)].ToString("+0;-#") + " " + abilityName.ToString().ToLower(),
+                (int)rootPosition.x + 1,
+                height,
+                Color.black,
+                true);
+        }
+
+        // display the damage over time, if any
+        int damage = conditionType.GetDamage();
+        int ticksPetDamage = conditionType.GetTicksPerDamage();
+        if (damage > 0)
+        {
+            height -= 4;
+            displayGrid.DisplayText(
+                damage + " damage per " + ticksPetDamage + " ticks",
+                (int)rootPosition.x + 1,
+                height,
+                Color.black,
+                true);
+        }
+
+        // display the healing over time, if any
+        if (damage < 0)
+        {
+            height -= 4;
+            displayGrid.DisplayText(
+                -damage + " health per " + ticksPetDamage + " ticks",
+                (int)rootPosition.x + 1,
+                height,
+                Color.black,
+                true);
+        }
+
+        // display the skill modifiers, if any
+        List<string> skillNames = conditionType.GetSkillBonusNames();
+        List<int> skillModifiers = conditionType.GetSkillBonusAmounts();
+        height = RenderSkillBonusList("Skill modifiers: ", skillNames, skillModifiers, rootPosition, height, displayGrid);
+
+        // display the haste/slow modifier, if any
+        float speedModifier = conditionType.GetSpeedModifier();
+        if (speedModifier != 0)
+        {
+            height -= 4;
+            displayGrid.DisplayText(
+                "Speed modifier: " + speedModifier.ToString("+0.00;-#0.00"),
+                (int)rootPosition.x + 1,
+                height,
+                Color.black,
+                true);
+        }
+
+        // display the movement modifier, if any
+        int movementModifier = conditionType.GetMoveSpeedModifier();
+        if (movementModifier != 0)
+        {
+            height -= 4;
+            displayGrid.DisplayText(
+                "Movement modifier: " + movementModifier.ToString("+0;-#"),
+                (int)rootPosition.x + 1,
+                height,
+                Color.black,
+                true);
+        }
+
+        // display the condition protection, if any
+        int protection = conditionType.GetConditionProtection();
+        if (protection != 0)
+        {
+            height -= 4;
+                displayGrid.DisplayText(
+                "Protection: " + protection.ToString("+0;-#"),
+                (int)rootPosition.x + 1,
+                height,
+                Color.black,
+                true);
+        }
     }
 
     private int RenderItemTypeList(string label, List<ItemType> inputItemTypes, Vector2 rootPosition, int height, DisplayGrid displayGrid, Map map)
@@ -1475,6 +1547,47 @@ public class MapDisplayer : MonoBehaviour
                 RectInt rectInt = new((int)rootPosition.x + 1 + 7 * (i % abilityButtonsPerRow), height, 6, 6);
                 abilityIconButton.Draw(displayGrid, rectInt, map);
                 buttonRectsToButtons[rectInt] = abilityIconButton;
+            }
+        }
+        return height;
+    }
+
+    private int RenderSkillBonusList(string label, List<string> skillNames, List<int> skillBonusAmounts, Vector2 rootPosition, int height, DisplayGrid displayGrid)
+    {
+
+        if (skillNames.Count != 0)
+        {
+            height -= 4;
+            displayGrid.DisplayText(
+                label,
+                (int)rootPosition.x + 1,
+                height,
+                Color.black,
+                true);
+            List<string> skillBonusStrings = new();
+            for (int i = 0; i < skillNames.Count; i++)
+            {
+                string skillName = skillNames[i];
+                int skillBonusAmount = skillBonusAmounts[i];
+                string newPart = skillBonusAmount.ToString("+0;-#") + " " + skillName + ", ";
+                if (skillBonusStrings.Count == 0 || skillBonusStrings[^1].Length + newPart.Length > 30)
+                {
+                    skillBonusStrings.Add(newPart);
+                }
+                else
+                {
+                    skillBonusStrings[^1] += newPart;
+                }
+            }
+            for (int i = 0; i < skillBonusStrings.Count; i++)
+            {
+                height -= 4;
+                displayGrid.DisplayText(
+                    skillBonusStrings[i],
+                    (int)rootPosition.x + 1,
+                    height,
+                    Color.black,
+                    true);
             }
         }
         return height;

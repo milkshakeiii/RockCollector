@@ -670,10 +670,6 @@ public class ConditionType : Entity
     {
         return EntityManager.GetStringAttribute(attributes, "name");
     }
-    public int GetAttackPenalty()
-    {
-        return EntityManager.GetIntAttribute(attributes, "attackPenalty", 0);
-    }
     public int GetTicksPerDamage()
     {
         return EntityManager.GetIntAttribute(attributes, "ticksPerDamage", 0);
