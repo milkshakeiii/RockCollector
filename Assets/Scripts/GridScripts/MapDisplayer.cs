@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 using UnityEngine.UIElements;
 using System;
 using static UnityEngine.GraphicsBuffer;
+using Utils;
 
 public class MapDisplayer : MonoBehaviour
 {
@@ -462,6 +463,10 @@ public class MapDisplayer : MonoBehaviour
         {
             DrawPropTypeInfoPanel(propType, root, GetMap(), displayGrid);
         }
+        else if (entity is TypeAbility typeAbility)
+        {
+            DrawTypeAbilityInfoPanel(typeAbility, root, GetMap(), displayGrid);
+        }
         else if (placeable is Building building)
         {
             DrawBuildingInfoPanel(building, root, GetMap(), displayGrid);
@@ -485,7 +490,7 @@ public class MapDisplayer : MonoBehaviour
 
         // display the building name
         int height = (int)rootPosition.y + DisplayGrid.HEIGHT - 4;
-        BuildingTypeTitleButton buildingTypeTitleButton = new (building.buildingType);
+        TypeTitleButton buildingTypeTitleButton = new (building.buildingType.GetName(), building.buildingType);
         RectInt titleRect = new((int)rootPosition.x + 1, height, DisplayGrid.WIDTH / 8 - 2, 6);
         buildingTypeTitleButton.Draw(displayGrid, titleRect, map);
         buttonRectsToButtons[titleRect] = buildingTypeTitleButton;
@@ -610,12 +615,11 @@ public class MapDisplayer : MonoBehaviour
             true);
 
         height -= 3;
-        displayGrid.DisplayText(
-            "Level " + creature.GetLevel() + " " + creature.GetCreatureType().GetName(),
-            (int)rootPosition.x + 3,
-            height,
-            Color.black,
-            true);
+        string nameString = "  Level " + creature.GetLevel() + " " + creature.GetCreatureType().GetName();
+        TypeTitleButton creatureTypeTitleButton = new (nameString, creature.GetCreatureType());
+        RectInt titleRect = new((int)rootPosition.x + 1, height, DisplayGrid.WIDTH / 8 - 2, 6);
+        creatureTypeTitleButton.Draw(displayGrid, titleRect, map);
+        buttonRectsToButtons[titleRect] = creatureTypeTitleButton;
 
         // display the creature's portrait
         height -= 2 + 24;
@@ -741,13 +745,13 @@ public class MapDisplayer : MonoBehaviour
                 {
                     newPart = "<" + newPart + ">";
                 }
-                if (inventoryStrings.Count == 0 || inventoryStrings[inventoryStrings.Count - 1].Length + newPart.Length > 30)
+                if (inventoryStrings.Count == 0 || inventoryStrings[^1].Length + newPart.Length > 30)
                 {
                     inventoryStrings.Add(newPart);
                 }
                 else
                 {
-                    inventoryStrings[inventoryStrings.Count - 1] += newPart;
+                    inventoryStrings[^1] += newPart;
                 }
             }
         }
@@ -780,13 +784,13 @@ public class MapDisplayer : MonoBehaviour
         foreach (Condition condition in conditions)
         {
             string newPart = condition.conditionType.GetName() + " (" + condition.GetStacks() + "), ";
-            if (conditionStrings.Count == 0 || conditionStrings[conditionStrings.Count - 1].Length + newPart.Length > 30)
+            if (conditionStrings.Count == 0 || conditionStrings[^1].Length + newPart.Length > 30)
             {
                 conditionStrings.Add(newPart);
             }
             else
             {
-                conditionStrings[conditionStrings.Count - 1] += newPart;
+                conditionStrings[^1] += newPart;
             }
         }
         for (int i = 0; i < conditionStrings.Count; i++)
@@ -1005,6 +1009,147 @@ public class MapDisplayer : MonoBehaviour
             0,
             6,
             true);
+
+        // display the health information
+        height -= 4;
+        displayGrid.DisplayText(
+            "Heath: " + creatureType.GetStartingHealth() + " + " + creatureType.GetHealthPerLevel() + " per level",
+            (int)rootPosition.x + 1,
+            height,
+            Color.black,
+            true);
+
+        // display the attribute scores
+        height -= 4;
+        displayGrid.DisplayText(
+            creatureType.GetStrengthBonus().ToString("+0;-#") + " STR",
+            (int)rootPosition.x + 1,
+            height,
+            Color.black,
+            true);
+        displayGrid.DisplayText(
+            creatureType.GetIntelligenceBonus().ToString("+0;-#") + " INT",
+            (int)rootPosition.x + DisplayGrid.WIDTH / 16,
+            height,
+            Color.black,
+            true);
+        height -= 4;
+        displayGrid.DisplayText(
+            creatureType.GetDexterityBonus().ToString("+0;-#") + " DEX",
+            (int)rootPosition.x + 1,
+            height,
+            Color.black,
+            true);
+        displayGrid.DisplayText(
+            creatureType.GetWisdomBonus().ToString("+0;-#") + " WIS",
+            (int)rootPosition.x + DisplayGrid.WIDTH / 16,
+            height,
+            Color.black,
+            true);
+        height -= 4;
+        displayGrid.DisplayText(
+            creatureType.GetConstitutionBonus().ToString("+0;-#") + " CON",
+            (int)rootPosition.x + 1,
+            height,
+            Color.black,
+            true);
+        displayGrid.DisplayText(
+            creatureType.GetCharismaBonus().ToString("+0;-#") + " CHA",
+            (int)rootPosition.x + DisplayGrid.WIDTH / 16,
+            height,
+            Color.black,
+            true);
+
+        // display the skill bonuses
+        List<string> skillNames = creatureType.GetSkillBonusNames();
+        if (skillNames.Count != 0)
+        {
+            height -= 6;
+            displayGrid.DisplayText(
+                "Skills bonuses:",
+                (int)rootPosition.x + 1,
+                height,
+                Color.black,
+                true);
+            List<int> skillBonusAmounts = creatureType.GetSkillBonusAmounts();
+            List<string> skillBonusStrings = new();
+            for (int i = 0; i < skillNames.Count; i++)
+            {
+                string skillName = skillNames[i];
+                int skillBonusAmount = skillBonusAmounts[i];
+                string newPart = skillBonusAmount.ToString("+0;-#") + " " + skillName + ", ";
+                if (skillBonusStrings.Count == 0 || skillBonusStrings[^1].Length + newPart.Length > 30)
+                {
+                    skillBonusStrings.Add(newPart);
+                }
+                else
+                {
+                    skillBonusStrings[^1] += newPart;
+                }
+            }
+            for (int i = 0; i < skillBonusStrings.Count; i++)
+            {
+                height -= 4;
+                displayGrid.DisplayText(
+                    skillBonusStrings[i],
+                    (int)rootPosition.x + 1,
+                    height,
+                    Color.black,
+                    true);
+            }
+        }
+
+        // display the abilities
+        List<TypeAbility> abilityNames = creatureType.GetAbilities();
+        List<int> abilityLevels = creatureType.GetAbilityLevels();
+        int highestLevel = 0;
+        for (int i = 0; i < abilityLevels.Count; i++)
+        {
+            if (abilityLevels[i] > highestLevel)
+            {
+                highestLevel = abilityLevels[i];
+            }
+        }
+        for (int i = 0; i < highestLevel+1; i++)
+        {
+            if (abilityLevels.Contains(i))
+            {
+                string label = "Level " + i + " abilities:";
+                List<TypeAbility> thisLevelAbilities = new();
+                for (int j = 0; j < abilityNames.Count; j++)
+                {
+                    if (abilityLevels[j] == i)
+                    {
+                        thisLevelAbilities.Add(abilityNames[j]);
+                    }
+                }
+                height = RenderTypeAbilityList(label, thisLevelAbilities, rootPosition, height, displayGrid, map);
+            }
+        }
+    }
+
+    private void DrawTypeAbilityInfoPanel(TypeAbility typeAbility, Vector2 rootPosition, Map map, DisplayGrid displayGrid)
+    {
+        // display the ability name
+        int height = (int)rootPosition.y + DisplayGrid.HEIGHT - 4;
+        displayGrid.DisplayText(
+            typeAbility.GetName(),
+            (int)rootPosition.x + 1,
+            height,
+            Color.black,
+            true);
+
+        // display the ability portrait
+        height -= 3 + 24;
+        displayGrid.DisplaySprite(
+            typeAbility.GetSpritePath(),
+            (int)rootPosition.x + 3,
+            height,
+            24,
+            24,
+            0,
+            6,
+            true);
     }
 
     private int RenderItemTypeList(string label, List<ItemType> inputItemTypes, Vector2 rootPosition, int height, DisplayGrid displayGrid, Map map)
@@ -1092,6 +1237,36 @@ public class MapDisplayer : MonoBehaviour
                 RectInt rectInt = new((int)rootPosition.x + 1 + 7 * (i % buildingButtonsPerRow), height, 6, 6);
                 buildingIconButton.Draw(displayGrid, rectInt, map);
                 buttonRectsToButtons[rectInt] = buildingIconButton;
+            }
+        }
+        return height;
+    }
+
+    private int RenderTypeAbilityList(string label, List<TypeAbility> abilityNames, Vector2 rootPosition, int height, DisplayGrid displayGrid, Map map)
+    {
+        if (abilityNames.Count > 0)
+        {
+            height -= 4;
+            displayGrid.DisplayText(
+                label,
+                (int)rootPosition.x + 1,
+                height,
+                Color.black,
+                true);
+
+            // display the abilities
+            int abilityButtonsPerRow = 4;
+            for (int i = 0; i < abilityNames.Count; i++)
+            {
+                if (i % abilityButtonsPerRow == 0)
+                {
+                    height -= 7;
+                }
+                TypeAbility abilityName = abilityNames[i];
+                Button abilityIconButton = new TypeAbilityIconButton(abilityName);
+                RectInt rectInt = new((int)rootPosition.x + 1 + 7 * (i % abilityButtonsPerRow), height, 6, 6);
+                abilityIconButton.Draw(displayGrid, rectInt, map);
+                buttonRectsToButtons[rectInt] = abilityIconButton;
             }
         }
         return height;
@@ -1429,31 +1604,6 @@ public class BuildingIconButton : Button
     }
 }
 
-public class BuildingTypeTitleButton : Button
-{
-    private BuildingType buildingType;
-
-    public BuildingTypeTitleButton(BuildingType buildingType) : base(buildingType.GetName())
-    {
-        this.buildingType = buildingType;
-    }
-
-    public override void Draw(DisplayGrid displayGrid, RectInt rectInt, Map map, bool placingBuilding = false)
-    {
-        displayGrid.DisplayText(
-            buildingType.GetName(),
-            rectInt.x,
-            rectInt.y,
-            Color.black,
-            true);
-    }
-
-    public override void OnMouseUp(MapDisplayer mapDisplayer, int buttonNumber)
-    {
-        mapDisplayer.DisplayEntity(buttonNumber, buildingType);
-    }
-}
-
 public class CreatureIconButton : Button
 {
     private CreatureType creatureType;
@@ -1507,6 +1657,60 @@ public class PropIconButton : Button
     public override void OnMouseUp(MapDisplayer mapDisplayer, int buttonNumber)
     {
         mapDisplayer.DisplayEntity(buttonNumber, propType);
+    }
+}
+
+public class TypeAbilityIconButton : Button
+{
+    private TypeAbility typeAbility;
+
+    public TypeAbilityIconButton(TypeAbility typeAbility) : base(typeAbility.GetName())
+    {
+        this.typeAbility = typeAbility;
+    }
+
+    public override void Draw(DisplayGrid displayGrid, RectInt rectInt, Map map, bool placingBuilding = false)
+    {
+        displayGrid.DisplaySprite(
+            typeAbility.GetSpritePath(),
+            rectInt.x,
+            rectInt.y,
+            rectInt.width,
+            rectInt.height,
+            0,
+            overlapLayer: 6,
+            true);
+    }
+
+    public override void OnMouseUp(MapDisplayer mapDisplayer, int buttonNumber)
+    {
+        mapDisplayer.DisplayEntity(buttonNumber, typeAbility);
+    }
+}
+
+public class TypeTitleButton : Button
+{
+    private Entity entity;
+
+    public TypeTitleButton(string text, Entity entity) : base(text)
+    {
+        this.entity = entity;
+        this.text = text;
+    }
+
+    public override void Draw(DisplayGrid displayGrid, RectInt rectInt, Map map, bool placingBuilding = false)
+    {
+        displayGrid.DisplayText(
+            text,
+            rectInt.x,
+            rectInt.y,
+            Color.black,
+            true);
+    }
+
+    public override void OnMouseUp(MapDisplayer mapDisplayer, int buttonNumber)
+    {
+        mapDisplayer.DisplayEntity(buttonNumber, entity);
     }
 }
 

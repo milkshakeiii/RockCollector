@@ -61,5 +61,5 @@ intelligenceBonus:4
 wisdomBonus:0
 charismaBonus:2
 abilities:Fireball,Weakness,Magic Shield
-abilityLevels:1,1,1
+abilityLevels:1,3,5
 behavior:Warrior Behavior

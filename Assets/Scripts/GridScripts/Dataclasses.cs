@@ -650,6 +650,16 @@ public class TypeAbility : Entity
         string name = GetEffectSpriteName();
         return System.IO.Path.Combine(folder, name);
     }
+    public string GetSpriteName()
+    {
+        return EntityManager.GetStringAttribute(attributes, "spriteName", "nosprite");
+    }
+    public string GetSpritePath()
+    {
+        string folder = GetParentDirectory();
+        string name = GetSpriteName();
+        return System.IO.Path.Combine(folder, name);
+    }
 }
 
 public class ConditionType : Entity
