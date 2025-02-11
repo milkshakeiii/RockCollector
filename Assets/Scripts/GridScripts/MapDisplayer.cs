@@ -485,12 +485,10 @@ public class MapDisplayer : MonoBehaviour
 
         // display the building name
         int height = (int)rootPosition.y + DisplayGrid.HEIGHT - 4;
-        displayGrid.DisplayText(
-            building.buildingType.GetName(),
-            (int)rootPosition.x + 1,
-            height,
-            Color.black,
-            true);
+        BuildingTypeTitleButton buildingTypeTitleButton = new (building.buildingType);
+        RectInt titleRect = new((int)rootPosition.x + 1, height, DisplayGrid.WIDTH / 8 - 2, 6);
+        buildingTypeTitleButton.Draw(displayGrid, titleRect, map);
+        buttonRectsToButtons[titleRect] = buildingTypeTitleButton;
 
         // display the building portrait
         height -= 3 + 24;
@@ -967,6 +965,22 @@ public class MapDisplayer : MonoBehaviour
             0,
             6,
             true);
+
+        // display the build cost item list
+        List<ItemType> buildCostItemTypes = Building.ConstructionItemTypesWithDuplicity(buildingType);
+        height = RenderItemTypeList("Construction materials: ", buildCostItemTypes, rootPosition, height, displayGrid, map);
+
+        // display the requestable item list
+        List<ItemType> requestableItemTypes = buildingType.GetRequestableItemTypes();
+        height = RenderItemTypeList("Requestable items: ", requestableItemTypes, rootPosition, height, displayGrid, map);
+
+        // display the buildable building list
+        List<BuildingType> buildableBuildingTypes = buildingType.GetBuildableBuildingTypes();
+        height = RenderBuildingTypeList("Buildable buildings: ", buildableBuildingTypes, rootPosition, height, displayGrid, map);
+
+        // display the spawnable creature list
+        List<CreatureType> spawnableCreatureTypes = buildingType.GetSupportedCreatureTypes();
+        height = RenderCreatureTypeList("Spawnable creatures: ", spawnableCreatureTypes, rootPosition, height, displayGrid, map);
     }
     
     private void DrawCreatureTypeInfoPanel(CreatureType creatureType, Vector2 rootPosition, Map map, DisplayGrid displayGrid)
@@ -1406,6 +1420,31 @@ public class BuildingIconButton : Button
             rectInt.height,
             0,
             overlapLayer: 6,
+            true);
+    }
+
+    public override void OnMouseUp(MapDisplayer mapDisplayer, int buttonNumber)
+    {
+        mapDisplayer.DisplayEntity(buttonNumber, buildingType);
+    }
+}
+
+public class BuildingTypeTitleButton : Button
+{
+    private BuildingType buildingType;
+
+    public BuildingTypeTitleButton(BuildingType buildingType) : base(buildingType.GetName())
+    {
+        this.buildingType = buildingType;
+    }
+
+    public override void Draw(DisplayGrid displayGrid, RectInt rectInt, Map map, bool placingBuilding = false)
+    {
+        displayGrid.DisplayText(
+            buildingType.GetName(),
+            rectInt.x,
+            rectInt.y,
+            Color.black,
             true);
     }
 

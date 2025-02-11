@@ -1962,6 +1962,21 @@ public class Building : Destructable
     {
         return buildingType.GetDifficultyEstimate();
     }
+
+    public static List<ItemType> ConstructionItemTypesWithDuplicity(BuildingType buildingType)
+    {
+        List<ItemType> itemTypes = buildingType.GetConstructionItemTypes();
+        List<int> amounts = buildingType.GetConstructionItemAmounts();
+        List<ItemType> result = new();
+        for (int i = 0; i < itemTypes.Count; i++)
+        {
+            for (int j = 0; j < amounts[i]; j++)
+            {
+                result.Add(itemTypes[i]);
+            }
+        }
+        return result;
+    }
 }
 
 public class BuildingView : DestructableView
