@@ -1058,6 +1058,7 @@ public class Creature : Destructable
             }
         }
         Debug.LogWarning("Blind move failed for " + this + " from " + currentPosition + " to " + target);
+        AbandonCurrentActivity(map);
         return currentPosition;
     }
 

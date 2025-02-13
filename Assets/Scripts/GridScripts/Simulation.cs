@@ -41,7 +41,7 @@ public class Simulation
         }
 
         // perform computations from the thinking queue
-        ThinkingQueue.PerformActions(1, gamestate.map);
+        ThinkingQueue.PerformActions(2, gamestate.map);
     }
 
     public static void AbilityEffect(TypeAbility ability, Creature actor, Map map)

@@ -480,7 +480,7 @@ public class DeliverActivity : Activity
         {
             return true;
         }
-        return building.IsDestroyed() || building.GetMissingItemAmount(Item().itemType, map) <= 0 || delivered;
+        return building.IsDestroyed() || !map.PlaceableExists(Item()) || building.GetMissingItemAmount(Item().itemType, map) <= 0 || delivered;
     }
 
     public override void Perform(Creature performer, Map map)
@@ -731,6 +731,7 @@ public class WanderActivity : Activity
         return HomeBuilding().IsDestroyed() || firstPerformedTick != -1 && map.CurrentTick() - firstPerformedTick >= 150;
     }
 
+    private static readonly List<Vector2Int> clockwise = new () { new(0, 0), new(1, 0), new(1, -1), new(0, -1), new(-1, -1), new(-1, 0), new(-1, 1), new(0, 1), new(1, 1) };
     public override void Perform(Creature performer, Map map)
     {
         if (firstPerformedTick == -1)
@@ -738,22 +739,28 @@ public class WanderActivity : Activity
             firstPerformedTick = map.CurrentTick();
         }
         // 1% chance of moving to a new location
-        if (UnityEngine.Random.Range(0, 100) != 0)
+        if (map.CurrentTick() % 10 != 0 || UnityEngine.Random.Range(0,10) != 0)
         {
             return;
         }
         Vector2Int randomDirection = new(UnityEngine.Random.Range(-1, 2), UnityEngine.Random.Range(-1, 2));
-        Vector2Int newPosition = map.PositionOf(performer) + randomDirection;
-        if (!map.IsPathable(newPosition))
+        // if this would not take us further out of range, move to the new position, otherwise try the next direction
+        int clockwiseIndex = clockwise.IndexOf(randomDirection);
+        for (int i = clockwiseIndex; i < clockwise.Count + clockwiseIndex; i++)
         {
-            return;
-        }
-        // if this would not take us further out of range, move to the new position
-        int newDistance = map.DistanceTo(newPosition, sourcePlaceable);
-        int oldDistance = map.DistanceTo(map.PositionOf(performer), sourcePlaceable);
-        if (newDistance <= range || newDistance < oldDistance)
-        {
-            performer.MoveInDirection(randomDirection, map);
+            Vector2Int newDirection = clockwise[i % clockwise.Count];
+            Vector2Int newPosition = map.PositionOf(performer) + randomDirection;
+            if (!map.IsPathable(newPosition))
+            {
+                continue;
+            }
+            int newDistance = map.DistanceTo(newPosition, sourcePlaceable);
+            int oldDistance = map.DistanceTo(map.PositionOf(performer), sourcePlaceable);
+            if (newDistance <= range || newDistance < oldDistance)
+            {
+                performer.MoveInDirection(newDirection, map);
+                return;
+            }
         }
     }
 }
