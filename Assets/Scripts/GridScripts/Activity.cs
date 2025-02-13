@@ -19,8 +19,6 @@ public abstract class Activity
     protected Placeable sourcePlaceable;
     protected Vector2Int position;
 
-    private Dictionary<Placeable, Placeable> backDictionary = null;
-
     protected Activity(int encounterLevel,
                        List<ItemType> craftingInputItems,
                        ItemType craftingOutputItem,
@@ -75,30 +73,6 @@ public abstract class Activity
             return map.DistanceTo(position, creature);
         }
         throw new Exception("Unable to determine location of activity " + this);
-    }
-
-    public void MarkForBackConversion(Dictionary<Placeable, Placeable> newBackDictionary)
-    {
-        if (this.backDictionary != null)
-        {
-            throw new Exception("Already marked for back conversion");
-        }
-        this.backDictionary = newBackDictionary;
-    }
-
-    public bool SuccessfulBackConversion(Map map)
-    {
-        if (backDictionary == null)
-        {
-            return true;
-        }
-        if (sourcePlaceable == null)
-        {
-            return true;
-        }
-        Placeable originalPlaceable = backDictionary[sourcePlaceable];
-        sourcePlaceable = originalPlaceable;
-        return map.PlaceableExists(originalPlaceable);
     }
 
     public virtual bool TryClaimPlaceables(Creature performer, Map map)

@@ -59,11 +59,6 @@ public abstract class Placeable
     {
         return claimed;
     }
-
-    public virtual Placeable DeepCopy()
-    {
-        throw new System.NotImplementedException("Deep copy on placeable parent class not implemented");
-    }
 }
 
 public class PlaceableView 
@@ -248,28 +243,6 @@ public class Creature : Destructable
     public override string ToString()
     {
         return name + " the " + creatureType.GetName();
-    }
-
-    public override Placeable DeepCopy()
-    {
-        Creature copy = new(name, teamNumber, creatureType, homePosition);
-        copy.name = name;
-        copy.attributeScores = new Dictionary<AttributeScores, int>(attributeScores);
-        copy.claimed = claimed; // from parent
-        copy.damageTaken = damageTaken; // from parent
-        copy.level = level;
-        copy.feats = new List<Feat>(feats);
-        copy.abilities = new List<TypeAbility>(abilities);
-        copy.ticksLastUsed = new Dictionary<TypeAbility, int>(ticksLastUsed);
-        copy.behavior = null;
-        copy.currentActivity = null;
-        copy.stagedActivity = null;
-        copy.newActivityComputation = null;
-        copy.cooldownTicksRemaining = cooldownTicksRemaining;
-        copy.skillIncreases = new Dictionary<string, float>(skillIncreases);
-        copy.experience = experience;
-        copy.homePosition = homePosition;
-        return copy;
     }
 
     public string GetName()
@@ -982,7 +955,7 @@ public class Creature : Destructable
         // when we have a new activity, we need to mark the target placeables as claimed
         // new activities always are assigned here
         // Debug.Log("Activity promoted: " + currentActivity + " " + currentActivity.GetLocation(map));
-        if (currentActivity.SuccessfulBackConversion(map) && currentActivity.TryClaimPlaceables(this, map))
+        if (currentActivity.TryClaimPlaceables(this, map))
         {
             stagedActivity = null;
         }
@@ -1017,12 +990,10 @@ public class Creature : Destructable
         {
             return;
         }
-        (Map mapCopy, Dictionary<Placeable, Placeable> backDictionary, Creature newMe) = map.DeepCopy(this);
         {
-            (Activity bestActivity, string newIngVerb) = behavior.NextActivity(mapCopy, newMe);
+            (Activity bestActivity, string newIngVerb) = behavior.NextActivity(map, this);
             if (bestActivity != null)
             {
-                bestActivity.MarkForBackConversion(backDictionary);
                 this.stagedActivity = bestActivity;
                 this.stagedIngVerb = newIngVerb;
             }
@@ -1642,18 +1613,6 @@ public class Building : Destructable
         return System.IO.Path.Combine(folder, name);
     }
 
-    public override Placeable DeepCopy()
-    {
-        Building copy = new (buildingType, teamNumber);
-        copy.claimed = claimed; // from parent
-        copy.damageTaken = damageTaken; // from parent
-        copy.creaturesByType = null;
-        copy.requestedItemAmounts = new Dictionary<ItemType, int>(requestedItemAmounts);
-        copy.spawnTicksRemaining = spawnTicksRemaining;
-        copy.spawningCreature = null;
-        return copy;
-    }
-
     public override int GetMaxHealth()
     {
         return buildingType.GetMaxHealth();
@@ -2046,16 +2005,6 @@ public class Prop : Destructable
         return System.IO.Path.Combine(folder, name);
     }
 
-    public override Placeable DeepCopy()
-    {
-        Prop copy = new (propType);
-        copy.claimed = claimed; // from parent
-        copy.damageTaken = damageTaken; // from parent
-        copy.propType = propType;
-        copy.harvestedAmount = harvestedAmount;
-        return copy;
-    }
-
     public override int GetMaxHealth()
     {
         return propType.GetMaxHealth();
@@ -2191,15 +2140,6 @@ public class Item : Placeable
     public override string GetSpritePath()
     {
         return itemType.GetSpritePath();
-    }
-
-    public override Placeable DeepCopy()
-    {
-        Item copy = new(itemType);
-        copy.claimed = claimed; // from parent
-        copy.itemType = itemType;
-        copy.consumed = consumed;
-        return copy;
     }
 
     public void Consume()
