@@ -499,6 +499,8 @@ public class RaidPriority : BehaviorPriority
         {
             return null;
         }
+        Building nearestAppropriateBuilding = null;
+        int nearestDistance = int.MaxValue;
         foreach (Placeable placeable in map.UnheldPlaceables())
         {
             if (placeable is Building building && building.teamNumber != actor.teamNumber
@@ -507,8 +509,17 @@ public class RaidPriority : BehaviorPriority
                 && building.DifficultyEstimate() - actor.DifficultyEstimate() <= behaviorType.GetRaidMaximumLevelDifference()
                 && building.DifficultyEstimate() - actor.DifficultyEstimate() >= behaviorType.GetRaidMinimumLevelDifference())
             {
-                return new RaidActivity(building);
+                int distance = map.DistanceBetween(actor, building);
+                if (distance < nearestDistance)
+                {
+                    nearestAppropriateBuilding = building;
+                    nearestDistance = distance;
+                }
             }
+        }
+        if (nearestAppropriateBuilding != null)
+        {
+            return new RaidActivity(nearestAppropriateBuilding);
         }
         return null;
     }
