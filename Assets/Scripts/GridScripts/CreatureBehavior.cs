@@ -266,44 +266,63 @@ public class HarvestRequestedItemsPriority : BehaviorPriority
         }
         foreach (ItemType itemType in homeBuilding.GetRequestableItemTypes())
         {
-            if (homeBuilding.GetMissingItemAmount(itemType, map) <= 0)
+            Activity activity = HarvestItemTypeForBuilding(map, actor, homeBuilding, itemType, behaviorType);
+            if (activity != null)
             {
-                continue;
+                return activity;
             }
-            // for now, just harvest the first prop that has a chance of dropping the requested item
-            // in the future, we should at least prioritize props that are closer to the home building
-            foreach (Placeable placeable in map.UnheldPlaceables())
+        }
+        return null;
+    }
+
+    private Activity HarvestItemTypeForBuilding(Map map, Creature actor, Building building, ItemType itemType, CreatureBehaviorType behaviorType)
+    {
+        if (building.GetMissingItemAmount(itemType, map) <= 0)
+        {
+            return null;
+        }
+        Prop nearestAppropriateProp = null;
+        int nearestDistance = int.MaxValue;
+        foreach (Placeable placeable in map.UnheldPlaceables())
+        {
+            if (placeable is Prop prop && !prop.IsClaimed() && Prop.ChanceOfItemDrop(prop.propType, itemType) > 0)
             {
-                if (placeable is Prop prop && !prop.IsClaimed() && Prop.ChanceOfItemDrop(prop.propType, itemType) > 0)
+                string neededSkill = prop.propType.GetHarvestingSkill();
+                if (actor.BestHarvestingAbility(neededSkill) == null)
                 {
-                    string neededSkill = prop.propType.GetHarvestingSkill();
-                    if (actor.BestHarvestingAbility(neededSkill) == null)
+                    continue;
+                }
+                // make sure you are holding the correct tool
+                if (prop.propType.GetRequiresImplement() && actor.HarvestingCooldownAndAmount(prop, map).Item1 == 0)
+                {
+                    // we are not holding the correct tool
+                    // so find the correct tool
+                    foreach (Placeable placeable2 in map.AllPlaceables())
                     {
-                        continue;
-                    }
-                    // make sure you are holding the correct tool
-                    if (prop.propType.GetRequiresImplement() && actor.HarvestingCooldownAndAmount(prop, map).Item1 == 0)
-                    {
-                        // we are not holding the correct tool
-                        // so find the correct tool
-                        foreach (Placeable placeable2 in map.AllPlaceables())
+                        if (map.HolderOf(placeable2) is Creature)
                         {
-                            if (map.HolderOf(placeable2) is Creature)
-                            {
-                                continue;
-                            }
-                            if (placeable2 is Item item && item.itemType.GetHarvestingSkills().Contains(neededSkill))
-                            {
-                                return new PickUpActivity(item, true);
-                            }
+                            continue;
                         }
-                        // we were unable to find the correct tool
-                        continue;
+                        if (placeable2 is Item item && item.itemType.GetHarvestingSkills().Contains(neededSkill))
+                        {
+                            return new PickUpActivity(item, true);
+                        }
                     }
-                    // harvest the prop
-                    return new HarvestActivity(prop);
+                    // we were unable to find the correct tool
+                    continue;
+                }
+                // consider the prop
+                int distance = map.DistanceBetween(actor, prop);
+                if (distance < nearestDistance)
+                {
+                    nearestAppropriateProp = prop;
+                    nearestDistance = distance;
                 }
             }
+        }
+        if (nearestAppropriateProp != null)
+        {
+            return new HarvestActivity(nearestAppropriateProp);
         }
         return null;
     }
