@@ -459,6 +459,8 @@ public class HuntPriority : BehaviorPriority
         {
             return null;
         }
+        Creature nearestAppropriateCreature = null;
+        int nearestDistance = int.MaxValue;
         foreach (Placeable placeable in map.UnheldPlaceables())
         {
             if (placeable is Creature creature && creature.teamNumber != actor.teamNumber
@@ -467,8 +469,17 @@ public class HuntPriority : BehaviorPriority
                 && creature.DifficultyEstimate() - actor.DifficultyEstimate() <= behaviorType.GetHuntMaximumLevelDifference()
                 && creature.DifficultyEstimate() - actor.DifficultyEstimate() >= behaviorType.GetHuntMinimumLevelDifference())
             {
-                return new HuntActivity(creature);
+                int distance = map.DistanceBetween(actor, creature);
+                if (distance < nearestDistance)
+                {
+                    nearestAppropriateCreature = creature;
+                    nearestDistance = distance;
+                }
             }
+        }
+        if (nearestAppropriateCreature != null)
+        {
+            return new HuntActivity(nearestAppropriateCreature);
         }
         return null;
     }
