@@ -1,0 +1,4 @@
+name:Gathering
+cooldown:20
+harvestingAmount:1
+harvestingSkill:gathering

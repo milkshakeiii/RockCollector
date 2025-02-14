@@ -1,0 +1,28 @@
+name:Denhome
+isStartingBuilding:true
+supportedCreatureTypes:Tribling
+supportedCreatureCounts:8
+supportedCreatureSpawnTimes:500
+size:6
+maxHealth:1000
+demolitionDifficulty:12
+requestableItemTypes:Stick,Flint,Axe
+requestableItemCounts:5,5,5
+craftedItemTypes:Axe
+buildableBuildingTypes:Gatherer's Den,Builder's Den
+restHealAmount:1
+restHealCooldown:100
+supportedBonusProps:Sapling,Sapling
+supportedBonusPropXs:1,2,3,4
+supportedBonusPropYs:-1,-1,-1,-1
+supportedBonusPropRespawnTicks:600,600,600,600
+
+name:Gatherer's Den
+supportedCreatureTypes:Tribling
+supportedCreatureCounts:2
+supportedCreatureSpawnTimes:500
+size:2
+maxHealth:200
+demolitionDifficulty:12
+
+name:Builder's Den
