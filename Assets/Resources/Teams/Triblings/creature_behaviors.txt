@@ -1,6 +1,7 @@
 name:Tribling Behavior
 priorities:Equip,Defend,Repair Damaged Buildings,Deliver Requested Items,Harvest Requested Items,Rest,Idle
 equipCategories:simple
+equipRange:100
 defendRange:20
 defendMinimumDangerSum:0
 repairRange:100
@@ -11,14 +12,14 @@ restRange:0
 
 name:Grower Behavior
 priorities:Plant Props,Harvest Requested Items,Rest,Idle
-plantRange:999
-harvestRange:999
+plantRange:100
+harvestRange:100
 restRange:0
 
 name:Crafter Behavior
 priorities:Repair Damaged Buildings,Deliver Requested Items,Craft Items,Rest,Idle
 repairRange:0
 dropOffRange:0
-pickUpRange:999
-craftRange:999
+pickUpRange:100
+craftRange:100
 restRange:0

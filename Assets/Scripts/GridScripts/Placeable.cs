@@ -767,6 +767,15 @@ public class Creature : Destructable
                     }
                 }
             }
+            if (ability.GetRepairAmount() > 0)
+            {
+                int repairAmount = ability.GetRepairAmount();
+                if (bestCooldown == 0 || repairAmount / cooldown > bestAmount / bestCooldown)
+                {
+                    bestAmount = repairAmount;
+                    bestCooldown = cooldown;
+                }
+            }
         }
         return (bestCooldown, bestAmount);
     }
@@ -1149,7 +1158,7 @@ public class Creature : Destructable
     {
         foreach (TypeAbility ability in abilities)
         {
-            if (ability.GetRepairImplementSkills().Count > 0)
+            if (ability.GetRepairImplementSkills().Count > 0 || ability.GetRepairAmount() > 0)
             {
                 return true;
             }

@@ -69,7 +69,9 @@ public class Scenario
 
     public static Scenario ReadScenario(string scenarioName, string newPlayerTeamName)
     {
+        EntityManager.ReadTeam("Common");
         EntityManager.ReadScenario(scenarioName);
+        EntityManager.ReadTeam(newPlayerTeamName);
         ScenarioInfo scenarioInfo = EntityManager.scenarioInfos[scenarioName];
         return new Scenario(scenarioInfo, newPlayerTeamName);
     }

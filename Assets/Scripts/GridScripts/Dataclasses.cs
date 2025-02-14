@@ -349,6 +349,10 @@ public static class EntityManager
             throw new System.Exception("No team names file found");
         }
         string[] lines = textAsset.text.Split('\n');
+        for (int i = 0; i < lines.Length; i++)
+        {
+            lines[i] = lines[i].Trim();
+        }
         Debug.Log("Teams: " + string.Join(", ", lines));
         return new List<string>(lines);
     }
@@ -601,6 +605,10 @@ public class TypeAbility : Entity
     public List<string> GetRepairImplementSkills()
     {
         return EntityManager.GetStringListAttribute(attributes, "repairImplementSkills", new List<string>());
+    }
+    public int GetRepairAmount()
+    {
+        return EntityManager.GetIntAttribute(attributes, "repairAmount", 0);
     }
     public string GetCraftingSkill()
     {

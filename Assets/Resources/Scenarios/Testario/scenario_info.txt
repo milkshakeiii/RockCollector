@@ -3,10 +3,10 @@ tile1:grass1
 tile2:grass2
 mapRadius:150
 team1StartX:-10
-team1StartY:-20
+team1StartY:-40
 lairNames:Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Crypt,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Crypt,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Crypt,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Crypt,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Crypt,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Crypt,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Crypt,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Graveyard,Crypt,Small Graveyard
 lairXs:0,0,10,10,10,20,20,20,30,40,40,50,50,50,60,60,60,70,0,0,10,10,10,20,20,20,30,40,40,50,50,50,60,60,60,70,-10,-10,-20,-20,-20,-30,-30,-30,-40,-50,-50,-60,-60,-60,-70,-70,-70,-80,-10,-10,-20,-20,-20,-30,-30,-30,-40,-50,-50,-60,-60,-60,-70,-70,-70,-80,0
-lairYs:10,20,0,10,20,0,10,20,30,10,20,0,10,20,0,10,20,30,50,60,40,50,60,40,50,60,70,50,60,40,50,60,40,50,60,70,10,20,0,10,20,0,10,20,30,10,20,0,10,20,0,10,20,30,50,60,40,50,60,40,50,60,70,50,60,40,50,60,40,50,60,70,-50
+lairYs:10,20,0,10,20,0,10,20,30,10,20,0,10,20,0,10,20,30,50,60,40,50,60,40,50,60,70,50,60,40,50,60,40,50,60,70,10,20,0,10,20,0,10,20,30,10,20,0,10,20,0,10,20,30,50,60,40,50,60,40,50,60,70,50,60,40,50,60,40,50,60,70,-100
 propNames:Tree,Tree,Tree,Tree,Tree,Tree
 propXs:-5,-3,-1,1,3,4
 propYs:-13,-13,-13,-13,-13,-13

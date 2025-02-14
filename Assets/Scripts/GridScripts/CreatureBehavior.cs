@@ -739,7 +739,7 @@ public class DefendPriority : BehaviorPriority
         }
         foreach (Placeable placeable in map.UnheldPlaceables())
         {
-            int invaderDangerRating = 0;
+            int invaderDangerRating = -1;
             int scariestInvaderRating = 0;
             Creature scariestInvader = null;
             if (placeable is Creature creature && creature.teamNumber != actor.teamNumber

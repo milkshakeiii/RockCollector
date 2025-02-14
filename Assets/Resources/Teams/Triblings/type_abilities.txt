@@ -6,3 +6,21 @@ harvestingSkill:gathering
 name:Fungiculture
 cooldown:100
 harvestingSkill:fungiculture
+
+name:Primitive Weapon Attack
+cooldown:20
+rechargeTicks:20
+weaponSkills:clubs,slingshots
+enemyTargets:1
+
+name:Bite
+cooldown:15
+rechargeTicks:20
+enemyTargets:1
+damage:1d2
+range:1
+skill:biting
+
+name:Repair Den
+repairAmount:1
+cooldown:40

@@ -849,7 +849,7 @@ public class MapDisplayer : MonoBehaviour
             buttonRectsToButtons[rectInt] = itemIconButton;
 
             displayGrid.DisplayText(
-                itemType.GetName() + " (" + ((int)(Prop.ChanceOfItemDrop(propType, itemType) * 100)) + "% chance)",
+                itemType.GetName() + " (" + ((int)(Prop.ChanceOfItemDrop(propType, itemType) * 100)) + "%)",
                 (int)rootPosition.x + 8,
                 height,
                 Color.black,

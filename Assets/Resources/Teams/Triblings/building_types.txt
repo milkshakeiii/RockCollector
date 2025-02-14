@@ -9,7 +9,7 @@ demolitionDifficulty:12
 requestableItemTypes:Berry
 requestableItemCounts:5
 craftedItemTypes:Axe
-buildableBuildingTypes:Gatherer's Den,Builder's Den
+buildableBuildingTypes:Grower's Den,Crafter's Den
 restHealAmount:1
 restHealCooldown:100
 supportedBonusProps:Bush,Bush,Bush,Bush
@@ -52,4 +52,3 @@ supportedBonusProps:Fungus
 supportedBonusPropXs:1
 supportedBonusPropYs:-1
 supportedBonusPropRespawnTicks:600
-
