@@ -1,4 +1,8 @@
 name:Gathering
-cooldown:20
+cooldown:60
 harvestingAmount:1
 harvestingSkill:gathering
+
+name:Fungiculture
+cooldown:100
+harvestingSkill:fungiculture

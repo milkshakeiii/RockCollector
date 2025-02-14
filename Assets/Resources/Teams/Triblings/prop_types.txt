@@ -12,3 +12,19 @@ producedItems:Berry
 producedItemsProbabilities:1
 replacedBy:Bush
 size:1
+
+name:Fungus
+plantingLevel:0
+plantingDifficulty:10
+plantingSkill:growing
+size:1
+growthTicks:1000
+growsInto:Tree
+
+name:Wood Morel
+harvestingSkill:fungiculture
+harvestingRequired:10
+harvestingDifficulty:15
+producedItems:Fungiwood
+producedItemsProbabilities:1
+size:1

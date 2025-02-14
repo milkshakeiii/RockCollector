@@ -1,0 +1,5 @@
+defense:constitution
+dodge:dexterity
+resistance:wisdom
+repair:intelligence
+demolition:strength

@@ -1,28 +1,55 @@
 name:Denhome
+size:6
 isStartingBuilding:true
 supportedCreatureTypes:Tribling
 supportedCreatureCounts:8
 supportedCreatureSpawnTimes:500
-size:6
 maxHealth:1000
 demolitionDifficulty:12
-requestableItemTypes:Stick,Flint,Axe
-requestableItemCounts:5,5,5
+requestableItemTypes:Berry
+requestableItemCounts:5
 craftedItemTypes:Axe
 buildableBuildingTypes:Gatherer's Den,Builder's Den
 restHealAmount:1
 restHealCooldown:100
-supportedBonusProps:Sapling,Sapling
+supportedBonusProps:Bush,Bush,Bush,Bush
 supportedBonusPropXs:1,2,3,4
 supportedBonusPropYs:-1,-1,-1,-1
 supportedBonusPropRespawnTicks:600,600,600,600
 
-name:Gatherer's Den
-supportedCreatureTypes:Tribling
+name:Grower's Den
+size:2
+constructionItemTypes:Berry
+constructionItemAmounts:2
+supportedCreatureTypes:Grower
 supportedCreatureCounts:2
 supportedCreatureSpawnTimes:500
-size:2
 maxHealth:200
 demolitionDifficulty:12
+requestableItemTypes:Berry
+requestableItemCounts:5
+restHealAmount:1
+restHealCooldown:100
+supportedBonusProps:Fungus
+supportedBonusPropXs:1
+supportedBonusPropYs:-1
+supportedBonusPropRespawnTicks:600
 
-name:Builder's Den
+name:Crafter's Den
+size:2
+constructionItemTypes:Berry
+constructionItemAmounts:2
+supportedCreatureTypes:Crafter
+supportedCreatureCounts:2
+supportedCreatureSpawnTimes:500
+maxHealth:200
+demolitionDifficulty:12
+requestableItemTypes:Fungiwood
+requestableItemCounts:5
+restHealAmount:1
+restHealCooldown:100
+supportedBonusProps:Fungus
+supportedBonusPropXs:1
+supportedBonusPropYs:-1
+supportedBonusPropRespawnTicks:600
+

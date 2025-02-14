@@ -1,6 +1,5 @@
 name:Tribling
-spriteName:tribling
-startingHealth:4
+startingHealth:3
 healthPerLevel:3
 strengthBonus:-4
 dexterityBonus:0
@@ -11,3 +10,29 @@ charismaBonus:0
 abilities:Repair Building,Gathering,Simple Attack
 abilityLevels:1,1,5
 behavior:Tribling Behavior
+
+name:Grower
+startingHealth:5
+healthPerLevel:3
+strengthBonus:-4
+dexterityBonus:0
+constitutionBonus:2
+intelligenceBonus:0
+wisdomBonus:2
+charismaBonus:0
+abilities:Repair Building,Fungiculture
+abilityLevels:1,1
+behavior:Grower Behavior
+
+name:Crafter
+startingHealth:5
+healthPerLevel:3
+strengthBonus:-4
+dexterityBonus:2
+constitutionBonus:2
+intelligenceBonus:0
+wisdomBonus:0
+charismaBonus:0
+abilities:,Gathering
+abilityLevels:1,1
+behavior:Crafter Behavior

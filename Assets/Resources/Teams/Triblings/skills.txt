@@ -1,6 +1,2 @@
-defense:constitution
-dodge:dexterity
-resistance:wisdom
-repair:intelligence
-demolition:strength
-gathering:intelligence
+gathering:dexterity
+fungiculture:wisdom
