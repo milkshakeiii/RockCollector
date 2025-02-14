@@ -1,7 +1,7 @@
 name:Peasant Behavior
 priorities:Repair Damaged Buildings,Deliver Requested Items,Harvest Requested Items,Craft Items,Rest,Idle
-repairRange:0
-dropOffRange:0
+repairRange:999
+dropOffRange:999
 pickUpRange:999
 harvestRange:999
 craftRange:0

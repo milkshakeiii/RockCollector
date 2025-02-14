@@ -150,6 +150,11 @@ public class RepairDamagedBuildingsPriority : BehaviorPriority
         {
             return null;
         }
+        Building homeBuilding = actor.GetHomeBuilding(map);
+        if (homeBuilding == null)
+        {
+            return null;
+        }
 
         // make sure you are holding a repair implement
         if (actor.RepairCooldownAndAmount(map).Item1 == 0)
@@ -174,7 +179,8 @@ public class RepairDamagedBuildingsPriority : BehaviorPriority
         {
             if (placeable is Building building &&
                 building.teamNumber == actor.teamNumber &&
-                !building.IsClaimed())
+                !building.IsClaimed() &&
+                map.DistanceBetween(homeBuilding, building) <= behaviorType.GetRepairRange())
             {
                 if (building.GetDamageTaken() > 0)
                 {
@@ -212,7 +218,7 @@ public class DeliverRequestedItemsPriority : BehaviorPriority
         }
         foreach (Placeable placeable in map.UnheldPlaceables())
         {
-            if (placeable is Building requestorBuilding && map.DistanceBetween(placeable, homeBuilding) <= behaviorType.GetPickUpRange())
+            if (placeable is Building requestorBuilding && map.DistanceBetween(placeable, homeBuilding) <= behaviorType.GetDropOffRange())
             {
                 foreach (Placeable unheldPlaceable in map.UnheldPlaceables())
                 {
@@ -229,7 +235,7 @@ public class DeliverRequestedItemsPriority : BehaviorPriority
                     // we may still want to pick up an item if it is in a building that
                     // has a transport route to the requesting building or if the item is held
                     // by the actor and not part of the actor's outfit
-                    if (heldPlaceable is Item item && !item.IsClaimed() && map.HolderOf(item) is Building building)
+                    if (heldPlaceable is Item item && !item.IsClaimed() && map.HolderOf(item) is Building building && map.DistanceBetween(building, homeBuilding) <= behaviorType.GetPickUpRange())
                     {
                         if (building != requestorBuilding && map.TransportRouteExists(building, requestorBuilding) && requestorBuilding.GetMissingItemAmount(item.itemType, map) > 0)
                         {
@@ -285,7 +291,7 @@ public class HarvestRequestedItemsPriority : BehaviorPriority
         int nearestDistance = int.MaxValue;
         foreach (Placeable placeable in map.UnheldPlaceables())
         {
-            if (placeable is Prop prop && !prop.IsClaimed() && Prop.ChanceOfItemDrop(prop.propType, itemType) > 0)
+            if (placeable is Prop prop && !prop.IsClaimed() && Prop.ChanceOfItemDrop(prop.propType, itemType) > 0 && map.DistanceBetween(building, prop) <= behaviorType.GetHarvestRange())
             {
                 string neededSkill = prop.propType.GetHarvestingSkill();
                 if (actor.BestHarvestingAbility(neededSkill) == null)
@@ -408,7 +414,25 @@ public class RestPriority : BehaviorPriority
         }
         if (actor.GetDamageTaken() > 0 || map.DistanceBetween(actor, homeBuilding) > behaviorType.GetWanderRadius())
         {
-            return new RestActivity(homeBuilding);
+            Building nearestAppropriateBuilding = null;
+            int nearestDistance = int.MaxValue;
+            foreach (Placeable placeable in map.UnheldPlaceables())
+            {
+                if (placeable is Building building && building.teamNumber == actor.teamNumber
+                                       && map.DistanceBetween(homeBuilding, building) <= behaviorType.GetRestRange())
+                {
+                    int distance = map.DistanceBetween(actor, building);
+                    if (distance < nearestDistance)
+                    {
+                        nearestAppropriateBuilding = building;
+                        nearestDistance = distance;
+                    }
+                }
+            }
+            if (nearestAppropriateBuilding != null)
+            {
+                return new RestActivity(nearestAppropriateBuilding);
+            }
         }
         return null;
     }

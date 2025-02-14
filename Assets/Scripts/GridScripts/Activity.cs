@@ -397,7 +397,7 @@ public class PickUpActivity : Activity
 
     public override bool IsCompletedOrImpossible(Map map, Creature performer)
     {
-        return Item().IsConsumed() || (map.HolderOf(Item()) is Creature);
+        return !map.PlaceableExists(Item()) || Item().IsConsumed() || (map.HolderOf(Item()) is Creature);
     }
 
     public override void Perform(Creature performer, Map map)
