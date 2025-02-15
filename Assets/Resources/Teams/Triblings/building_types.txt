@@ -39,10 +39,11 @@ name:Experiment Shack
 size:1
 constructionItemTypes:Fungiwood,Cap Ingot
 constructionItemAmounts:1,1
-supportedBonusProps:Hybrid Fungus
-supportedBonusPropXs:1
-supportedBonusPropYs:0
-supportedBonusPropRespawnTicks:1000
+plantingZoneXMin:1
+plantingZoneYMin:0
+plantingZoneXMax:1
+plantingZoneYMax:0
+plantablePropTypes:Hybrid Fungus
 
 name:Crafter's Den
 size:2
@@ -74,7 +75,6 @@ maxHealth:200
 demolitionDifficulty:12
 requestableItemTypes:Berry
 requestableItemCounts:4
-craftedItemTypes:Wooden Shovel
 restHealAmount:1
 restHealCooldown:100
 

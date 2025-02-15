@@ -1,0 +1,5 @@
+name:Bolstered
+modifiedAttributeScores:strength,constitution,charisma
+attributeModifierAmounts:4,4,2
+isHarmful:false
+duration:2000

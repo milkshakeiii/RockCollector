@@ -31,12 +31,40 @@ spawnCostItemTypes:Berry
 spawnCostItemAmounts:1
 startingHealth:5
 healthPerLevel:3
-strengthBonus:-4
+strengthBonus:-2
 dexterityBonus:2
-constitutionBonus:2
+constitutionBonus:0
 intelligenceBonus:0
 wisdomBonus:0
 charismaBonus:0
 abilities:Woodcrafting
 abilityLevels:1
 behavior:Crafter Behavior
+
+name:Smith
+spawnCostItemTypes:Berry
+spawnCostItemAmounts:1
+startingHealth:5
+healthPerLevel:3
+strengthBonus:0
+dexterityBonus:2
+constitutionBonus:0
+intelligenceBonus:2
+wisdomBonus:0
+charismaBonus:0
+abilities:Ironcrafting
+abilityLevels:1
+behavior:Crafter Behavior
+
+name:Mayor
+startingHealth:6
+healthPerLevel:6
+strengthBonus:0
+dexterityBonus:0
+constitutionBonus:2
+intelligenceBonus:0
+wisdomBonus:0
+charismaBonus:2
+abilities:Primitive Weapon Attack,Dig Den,Bolster
+abilityLevels:1,1,5
+behavior:Mayor Behavior

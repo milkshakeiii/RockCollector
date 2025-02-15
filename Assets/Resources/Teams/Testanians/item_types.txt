@@ -71,6 +71,9 @@ craftingSkill:woodcrafting
 craftingLevel:1
 craftingTime:10
 size:-3
+conditionsInflicted:Shielded
+baseStacks:1
+maxStacks:1
 
 name:Wooden Shield
 spriteName:wooden_shield

@@ -1,0 +1,8 @@
+name:Sun Orb
+size:-4
+
+name:Clargent Orb
+size:-4
+
+name:Meteor Orb
+size:-4

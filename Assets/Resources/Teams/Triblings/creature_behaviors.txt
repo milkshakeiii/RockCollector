@@ -1,23 +1,41 @@
 name:Tribling Behavior
-priorities:Equip,Defend,Repair Damaged Buildings,Deliver Requested Items,Harvest Requested Items,Rest,Idle
+priorities:Equip,Defend,Flee,Repair Damaged Buildings,Deliver Requested Items,Harvest Requested Items,Rest,Idle
 equipCategories:simple
 equipRange:100
 defendRange:20
 defendMinimumDangerSum:0
+fleeDangerThreshold:2
 repairRange:100
 dropOffRange:100
 pickUpRange:100
 harvestRange:100
 restRange:0
+dangerLookDistance:10
+interruptDangerThreshold:1
+
+name:Mayor Behavior
+priorities:Equip,Defend,Flee,Fight,Repair Damaged Buildings,Rest,Wander
+equipCategories:simple
+equipRange:100
+defendRange:40
+defendMinimumDangerSum:5
+fleeDangerThreshold:2
+fightDangerThreshold:1
+restRange:40
+wanderRadius:40
+dangerLookDistance:10
+interruptDangerThreshold:1
 
 name:Grower Behavior
-priorities:Plant Props,Harvest Requested Items,Rest,Idle
+priorities:Flee,Plant Props,Harvest Requested Items,Rest,Idle
+fleeDangerThreshold:2
 plantRange:100
 harvestRange:100
 restRange:0
 
 name:Crafter Behavior
-priorities:Repair Damaged Buildings,Deliver Requested Items,Craft Items,Rest,Idle
+priorities:Flee,Repair Damaged Buildings,Deliver Requested Items,Craft Items,Rest,Idle
+fleeDangerThreshold:2
 repairRange:100
 dropOffRange:0
 pickUpRange:100

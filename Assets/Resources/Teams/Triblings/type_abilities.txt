@@ -10,7 +10,7 @@ harvestingSkill:fungiculture
 name:Primitive Weapon Attack
 cooldown:20
 rechargeTicks:20
-weaponSkills:clubs,slingshots
+weaponSkills:shovels,spears,slingshots
 enemyTargets:1
 
 name:Bite
@@ -28,3 +28,23 @@ cooldown:40
 name:Dig Den
 cooldown:10
 repairImplementSkills:shovels
+
+name:Woodcrafting
+craftingSkill:woodcrafting
+craftingSkillBonus:0
+
+name:Ironcrafting
+craftingSkill:ironcrafting
+craftingSkillBonus:0
+
+name:Bolster
+cooldown:0
+rechargeTicks:100
+allyTargets:1
+range:7
+skill:motivation
+conditionsInflicted:Bolstered
+baseStacks:1
+maxStacks:1
+
+

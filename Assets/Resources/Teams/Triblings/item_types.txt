@@ -2,9 +2,17 @@ name:Berry
 size:-15
 
 name:Fungiwood
-side:1
+size:1
 
-name:Shovel
+name:Cap Ingot
+size:1
+
+name:Spotted Cap
+size:1
+
+name:Wooden Shovel
+equipmentCategory:simple
+equipmentLevel:1
 weaponDamage:2d2
 weaponRange:1
 weaponSkill:shovels
@@ -12,4 +20,16 @@ repairAmount:2
 craftingInputs:Log
 craftingSkill:woodcrafting
 craftingLevel:0
+size:-2
+
+name:Iron Shovel
+equipmentCategory:simple
+equipmentLevel:2
+weaponDamage:3d4
+weaponRange:1
+weaponSkill:shovels
+repairAmount:3
+craftingInputs:Cap Ingot
+craftingSkill:ironcrafting
+craftingLevel:8
 size:-2
