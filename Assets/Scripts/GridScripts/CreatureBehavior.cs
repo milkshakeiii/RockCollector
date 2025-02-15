@@ -272,13 +272,46 @@ public class HarvestRequestedItemsPriority : BehaviorPriority
         {
             return null;
         }
-        foreach (ItemType itemType in homeBuilding.GetRequestableItemTypes())
+
+        Dictionary<ItemType, Building> requestorBuildings = new();
+        foreach (Placeable buildingPlaceable in map.UnheldPlaceables())
         {
-            Activity activity = HarvestItemTypeForBuilding(map, actor, homeBuilding, itemType, behaviorType);
-            if (activity != null)
+            if (buildingPlaceable is Building requestorBuilding && map.DistanceBetween(buildingPlaceable, homeBuilding) <= behaviorType.GetHarvestRange())
             {
-                return activity;
+                foreach (ItemType itemType in requestorBuilding.GetRequestableItemTypes())
+                {
+                    if (requestorBuilding.GetMissingItemAmount(itemType, map) > 0)
+                    {
+                        requestorBuildings[itemType] = requestorBuilding;
+                    }
+                }
             }
+        }
+
+        ItemType nearestAvailableRequestedItemType = null;
+        int nearestDistance = int.MaxValue;
+        foreach (Placeable placeable in map.UnheldPlaceables())
+        {
+            if (placeable is Prop prop && !prop.IsClaimed() && map.DistanceBetween(homeBuilding, prop) <= behaviorType.GetHarvestRange())
+            {
+                foreach (ItemType itemType in prop.propType.GetProducedItems())
+                {
+                    if (requestorBuildings.ContainsKey(itemType))
+                    {
+                        int distance = map.DistanceBetween(homeBuilding, prop);
+                        if (distance < nearestDistance)
+                        {
+                            nearestAvailableRequestedItemType = itemType;
+                            nearestDistance = distance;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (nearestAvailableRequestedItemType != null)
+        {
+            return HarvestItemTypeForBuilding(map, actor, requestorBuildings[nearestAvailableRequestedItemType], nearestAvailableRequestedItemType, behaviorType);
         }
         return null;
     }
