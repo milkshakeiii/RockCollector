@@ -233,11 +233,13 @@ public class DeliverRequestedItemsPriority : BehaviorPriority
                 foreach (Placeable heldPlaceable in map.HeldPlaceables())
                 {
                     // we may still want to pick up an item if it is in a building that
-                    // has a transport route to the requesting building or if the item is held
-                    // by the actor and not part of the actor's outfit
-                    if (heldPlaceable is Item item && !item.IsClaimed() && map.HolderOf(item) is Building building && map.DistanceBetween(building, homeBuilding) <= behaviorType.GetPickUpRange())
+                    // has a transport route to the requesting building
+                    // or if the source building is over its requested amount
+                    // or if the item is held by the actor and not part of the actor's outfit
+                    if (heldPlaceable is Item item && !item.IsClaimed() && map.HolderOf(item) is Building sourceBuilding && map.DistanceBetween(sourceBuilding, homeBuilding) <= behaviorType.GetPickUpRange())
                     {
-                        if (building != requestorBuilding && map.TransportRouteExists(building, requestorBuilding) && requestorBuilding.GetMissingItemAmount(item.itemType, map) > 0)
+                        if (sourceBuilding != requestorBuilding && requestorBuilding.GetMissingItemAmount(item.itemType, map) > 0 &&
+                            (map.TransportRouteExists(sourceBuilding, requestorBuilding) || sourceBuilding.GetMissingItemAmount(item.itemType, map) < 0))
                         {
                             return new DeliverActivity(item, map.PositionOf(requestorBuilding));
                         }

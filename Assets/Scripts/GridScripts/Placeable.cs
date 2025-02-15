@@ -1711,18 +1711,14 @@ public class Building : Destructable
     }
 
     /// <summary>
-    /// Returns the amount of items needed to fulfill the request, or 0 if the item type is not requested.
+    /// Returns the amount of items needed to fulfill the request, or negative if there are already more items than requested.
     /// </summary>
     /// <param name="itemType"></param>
     /// <param name="map"></param>
     /// <returns></returns>
     public int GetMissingItemAmount(ItemType itemType, Map map)
     {
-        if (!GetRequestableItemTypes().Contains(itemType))
-        {
-            return 0;
-        }
-        return Mathf.Max(0, GetRequestedItemAmount(itemType) - GetItemCount(itemType, map));
+        return GetRequestedItemAmount(itemType) - GetItemCount(itemType, map);
     }
 
     public List<int> GetRequestableItemAmounts()
