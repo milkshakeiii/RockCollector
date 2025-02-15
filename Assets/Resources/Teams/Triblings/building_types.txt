@@ -25,8 +25,8 @@ supportedCreatureCounts:2
 supportedCreatureSpawnTimes:500
 maxHealth:200
 demolitionDifficulty:12
-requestableItemTypes:Berry
-requestableItemCounts:5
+requestableItemTypes:Berry,Fungiwood,Cap Ingot
+requestableItemCounts:5,1,1
 restHealAmount:1
 restHealCooldown:100
 buildableBuildingTypes:Fungiwood Cave,Experiment Shack
@@ -37,8 +37,8 @@ supportedBonusPropRespawnTicks:600
 
 name:Experiment Shack
 size:1
-constructionItemTypes:Fungiwood
-constructionItemAmounts:2
+constructionItemTypes:Fungiwood,Cap Ingot
+constructionItemAmounts:1,1
 supportedBonusProps:Hybrid Fungus
 supportedBonusPropXs:1
 supportedBonusPropYs:0
@@ -58,7 +58,7 @@ requestableItemCounts:4,4,4
 craftedItemTypes:Wooden Shovel
 restHealAmount:1
 restHealCooldown:100
-supportedBonusProps:Fungus
+supportedBonusProps:Red Fungus
 supportedBonusPropXs:1
 supportedBonusPropYs:-1
 supportedBonusPropRespawnTicks:600
@@ -91,8 +91,6 @@ buildableBuildingTypes:Ironcap Cave,Armory,Smith's Den
 restHealAmount:2
 restHealCooldown:100
 
-name:Smith's Den
-
 name:Ironcap Cave
 size:2
 plantingZoneXMin:2
@@ -119,20 +117,62 @@ size:4
 maxHealth:400
 requestableItemTypes:Cap Ingot,Iron Spear,Slingshot
 requestableItemCounts:5,5,5
-buildableBuildingTypes:Cauldron
+buildableBuildingTypes:Cauldron,Foundry
 craftedItemTypes:Iron Spear,Slingshot
 restHealAmount:1
 restHealCooldown:100
 
+name:Foundry
+size:4
+constructionItemTypes:Cap Ingot
+constructionItemAmounts:5
+requestableItemTypes:Cap Ingot,Chanfron,Peytral,Croupiere
+requestableItemCounts:10,5,5,5
+craftedItemTypes:Chanfron,Peytral,Croupiere
+
 name:Cauldron
 constructionItemTypes:Cap Ingot
 constructionItemAmounts:5
-requestableItemTypes:Spotted Cap,Venomwood Spear
-craftedItemTypes:Venomwood Spear
+requestableItemTypes:Spotted Cap,Venomwood Shovel,Venomwood Spear
+requestableItemCounts:5,5,5
+craftedItemTypes:Venomwood Shovel,Venomwood Spear
 
 name:House of Wisdom
 size:5
 supportedCreatureTypes:Wiseling
 supportedCreatureCounts:4
 requestableItemTypes:Sun Orb,Clargent Orb,Meteor Orb,Berry,Fungiwood
+requestableItemCounts:5,5,5,50,50
 buildableBuildingTypes:Tribling House,Nursery,Alchemist's Den
+
+name:Tribling House
+size:3
+constructionItemTypes:Berry,Fungiwood
+constructionItemAmounts:2,2
+requestableItemTypes:Berry
+requestableItemCounts:5
+supportedCreatureTypes:Tribling
+supportedCreatureCounts:4
+supportedCreatureSpawnTimes:500
+supportedBonusProps:Bush,Bush
+supportedBonusPropXs:1,2
+supportedBonusPropYs:-1,-1
+supportedBonusPropRespawnTicks:600,600
+
+name:Nursery
+size:5
+constructionItemTypes:Clargent Orb,Fungiwood,Berry
+constructionItemAmounts:1,10,50
+requestableItemTypes:Clargent Orb,Berry
+requestableItemCounts:5,50
+buildableBuildingTypes:Dragon's Den
+supportedCreatureTypes:Clargeling,Strongling
+supportedCreatureCounts:4,4
+
+name:Dragon's Den
+
+name:Alchemist's Den
+size:3
+requestableItemTypes:Spotted Cap,Cap Ingot,Meteor Orb
+requestableItemCounts:5,5,5
+craftedItemTypes:Venomiron Spear,Venomiron Chanfron,
