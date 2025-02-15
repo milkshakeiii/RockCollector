@@ -1913,10 +1913,22 @@ public class Building : Destructable
         }
     }
 
+    public bool SpawnCreatureInputMaterialsPresent(CreatureType creatureType, Map map)
+    {
+        List<ItemType> requiredItems = creatureType.GetSpawnCostItemTypes();
+        List<int> requiredCounts = creatureType.GetSpawnCostItemAmounts();
+        return InputMaterialsPresent(requiredItems, requiredCounts, map);
+    }
+
     public bool BuildBuildingInputMaterialsPresent(BuildingType buildingType, Map map)
     {
         List<ItemType> requiredItems = buildingType.GetConstructionItemTypes();
         List<int> requiredCounts = buildingType.GetConstructionItemAmounts();
+        return InputMaterialsPresent(requiredItems, requiredCounts, map);
+    }
+
+    private bool InputMaterialsPresent(List<ItemType> requiredItems, List<int> requiredCounts, Map map)
+    {
         for (int i = 0; i < requiredItems.Count; i++)
         {
             if (GetItemCount(requiredItems[i], map) < requiredCounts[i])

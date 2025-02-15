@@ -8,6 +8,7 @@ using System;
 using static UnityEngine.GraphicsBuffer;
 using Utils;
 using System.Linq;
+using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 public class MapDisplayer : MonoBehaviour
 {
@@ -1752,7 +1753,12 @@ public class SpawnCreatureButton : Button
                 overlapLayer: 7,
                 true);
         }
-        displayGrid.DisplaySprite("Art/UI/plain_white",
+        string spriteName = "Art/UI/plain_white";
+        if (!building.SpawnCreatureInputMaterialsPresent(EntityManager.creatureTypes[creatureTypeName], map))
+        {
+            spriteName = "Art/UI/selected_button";
+        }
+        displayGrid.DisplaySprite(spriteName,
             rectInt.x,
             rectInt.y,
             rectInt.width,

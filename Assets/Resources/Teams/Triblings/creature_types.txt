@@ -12,6 +12,8 @@ abilityLevels:1,1,1,5
 behavior:Tribling Behavior
 
 name:Grower
+spawnCostItemTypes:Berry
+spawnCostItemAmounts:1
 startingHealth:5
 healthPerLevel:3
 strengthBonus:-4
@@ -20,11 +22,13 @@ constitutionBonus:2
 intelligenceBonus:0
 wisdomBonus:2
 charismaBonus:0
-abilities:Repair Building,Fungiculture
+abilities:Repair Den,Fungiculture
 abilityLevels:1,1
 behavior:Grower Behavior
 
 name:Crafter
+spawnCostItemTypes:Berry
+spawnCostItemAmounts:1
 startingHealth:5
 healthPerLevel:3
 strengthBonus:-4

@@ -771,6 +771,14 @@ public class CreatureType : Entity
         string name = GetSpriteName();
         return System.IO.Path.Combine(folder, name);
     }
+    public List<ItemType> GetSpawnCostItemTypes()
+    {
+        return EntityManager.GetItemListAttribute(attributes, "spawnCostItemTypes", new List<ItemType>());
+    }
+    public List<int> GetSpawnCostItemAmounts()
+    {
+        return EntityManager.GetIntListAttribute(attributes, "spawnCostItemAmounts", new List<int>());
+    }
     public int GetStartingHealth()
     {
         return EntityManager.GetIntAttribute(attributes, "startingHealth");

@@ -22,14 +22,20 @@ public class SpawnCreature : MapCommand
     public override bool CheckStillValid(Map map)
     {
         List<Placeable> placeablesAtPosition = map.PlaceablesAt(buildingPosition);
+        Building building = null;
         foreach (Placeable placeable in placeablesAtPosition)
         {
             if (placeable is Building)
             {
-                return true;
+                building = (Building)placeable;
+                break;
             }
         }
-        return false;
+        if (building == null)
+        {
+            return false;
+        }
+        return building.SpawnCreatureInputMaterialsPresent(EntityManager.creatureTypes[creatureTypeName], map);
     }
 
     public override void Execute(Map map)
@@ -45,6 +51,15 @@ public class SpawnCreature : MapCommand
             }
         }
         CreatureType creatureType = EntityManager.creatureTypes[creatureTypeName];
+
+        // Remove input materials
+        List<ItemType> inputTypes = creatureType.GetSpawnCostItemTypes();
+        List<int> inputAmounts = creatureType.GetSpawnCostItemAmounts();
+        for (int i = 0; i < inputTypes.Count; i++)
+        {
+            spawningBuilding.SpendStoredItems(inputTypes[i], inputAmounts[i], map);
+        }
+
         spawningBuilding.StartSpawnCreature(creatureType, map);
     }
 }
