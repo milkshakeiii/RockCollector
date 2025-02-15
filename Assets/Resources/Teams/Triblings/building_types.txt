@@ -91,6 +91,8 @@ buildableBuildingTypes:Ironcap Cave,Armory,Smith's Den
 restHealAmount:2
 restHealCooldown:100
 
+name:Smith's Den
+
 name:Ironcap Cave
 size:2
 plantingZoneXMin:2
