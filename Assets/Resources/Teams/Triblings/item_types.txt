@@ -3,3 +3,13 @@ size:-15
 
 name:Fungiwood
 side:1
+
+name:Shovel
+weaponDamage:2d2
+weaponRange:1
+weaponSkill:shovels
+repairAmount:2
+craftingInputs:Log
+craftingSkill:woodcrafting
+craftingLevel:0
+size:-2

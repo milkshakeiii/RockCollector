@@ -13,7 +13,7 @@ producedItemsProbabilities:1
 replacedBy:Bush
 size:1
 
-name:Fungus
+name:Red Fungus
 plantingLevel:0
 plantingDifficulty:10
 plantingSkill:growing
@@ -26,5 +26,21 @@ harvestingSkill:fungiculture
 harvestingRequired:10
 harvestingDifficulty:15
 producedItems:Fungiwood
+producedItemsProbabilities:1
+size:1
+
+name:White Fungus
+plantingLevel:5
+plantingDifficulty:15
+plantingSkill:growing
+size:1
+growthTicks:1000
+growsInto:Ironcap
+
+name:Ironcap
+harvestingSkill:fungiculture
+harvestingRequired:15
+harvestingDifficulty:20
+producedItems:Cap Ingot
 producedItemsProbabilities:1
 size:1

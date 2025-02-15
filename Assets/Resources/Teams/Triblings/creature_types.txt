@@ -7,8 +7,8 @@ constitutionBonus:2
 intelligenceBonus:0
 wisdomBonus:0
 charismaBonus:0
-abilities:Repair Den,Gathering,Bite,Primitive Weapon Attack
-abilityLevels:1,1,1,5
+abilities:Repair Den,Gathering,Bite,Primitive Weapon Attack,Dig Den
+abilityLevels:1,1,1,5,5
 behavior:Tribling Behavior
 
 name:Grower
@@ -22,8 +22,8 @@ constitutionBonus:2
 intelligenceBonus:0
 wisdomBonus:2
 charismaBonus:0
-abilities:Repair Den,Fungiculture
-abilityLevels:1,1
+abilities:Fungiculture
+abilityLevels:1
 behavior:Grower Behavior
 
 name:Crafter

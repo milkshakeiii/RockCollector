@@ -18,7 +18,7 @@ restRange:0
 
 name:Crafter Behavior
 priorities:Repair Damaged Buildings,Deliver Requested Items,Craft Items,Rest,Idle
-repairRange:0
+repairRange:100
 dropOffRange:0
 pickUpRange:100
 craftRange:100

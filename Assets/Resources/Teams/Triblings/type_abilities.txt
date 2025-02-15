@@ -24,3 +24,7 @@ skill:biting
 name:Repair Den
 repairAmount:1
 cooldown:40
+
+name:Dig Den
+cooldown:10
+repairImplementSkills:shovels

@@ -6,10 +6,9 @@ supportedCreatureCounts:8
 supportedCreatureSpawnTimes:500
 maxHealth:1000
 demolitionDifficulty:12
-requestableItemTypes:Berry
-requestableItemCounts:5
-craftedItemTypes:Axe
-buildableBuildingTypes:Grower's Den,Crafter's Den
+requestableItemTypes:Berry,Fungiwood,Sun Fruit
+requestableItemCounts:10,10
+buildableBuildingTypes:Grower's Den,Crafter's Den,Meeting Den,House of Wisdom
 restHealAmount:1
 restHealCooldown:100
 supportedBonusProps:Bush,Bush,Bush,Bush
@@ -19,8 +18,8 @@ supportedBonusPropRespawnTicks:600,600,600,600
 
 name:Grower's Den
 size:2
-constructionItemTypes:Berry
-constructionItemAmounts:2
+constructionItemTypes:Berry,Fungiwood
+constructionItemAmounts:4,4
 supportedCreatureTypes:Grower
 supportedCreatureCounts:2
 supportedCreatureSpawnTimes:500
@@ -30,6 +29,7 @@ requestableItemTypes:Berry
 requestableItemCounts:5
 restHealAmount:1
 restHealCooldown:100
+buildableBuildingTypes:Fungiwood Cave
 supportedBonusProps:Fungus
 supportedBonusPropXs:1
 supportedBonusPropYs:-1
@@ -44,11 +44,47 @@ supportedCreatureCounts:2
 supportedCreatureSpawnTimes:500
 maxHealth:200
 demolitionDifficulty:12
-requestableItemTypes:Fungiwood
-requestableItemCounts:5
+requestableItemTypes:Berry,Fungiwood,Wooden Shovel
+requestableItemCounts:4,4,4
+craftedItemTypes:Wooden Shovel
 restHealAmount:1
 restHealCooldown:100
 supportedBonusProps:Fungus
 supportedBonusPropXs:1
 supportedBonusPropYs:-1
 supportedBonusPropRespawnTicks:600
+
+name:Meeting Den
+size:5
+supportedCreatureTypes:Mayor
+supportedCreatureCounts:1
+supportedCreatureSpawnTimes:1500
+maxHealth:1000
+demolitionDifficulty:12
+requestableItemTypes:Berry,Fungiwood,Ironcap,Wooden Shovel,Iron Shovel
+requestableItemCounts:5,5,5,5,5
+buildableBuildingTypes:Ironcap Cave,Armory
+restHealAmount:2
+restHealCooldown:100
+
+name:Ironcap Cave
+size:2
+plantingZoneXMin:2
+plantingZoneYMin:0
+plantingZoneXMax:2
+plantingZoneYMax:1
+plantablePropTypes:White Fungus
+
+name:Fungiwood Cave
+size:2
+plantingZoneXMin:2
+plantingZoneYMin:0
+plantingZoneXMax:2
+plantingZoneYMax:1
+plantablePropTypes:Red Fungus
+
+name:Armory
+
+
+name:House of Wisdom
+
