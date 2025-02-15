@@ -6,7 +6,7 @@ supportedCreatureCounts:8
 supportedCreatureSpawnTimes:500
 maxHealth:1000
 demolitionDifficulty:12
-requestableItemTypes:Berry,Fungiwood,Sun Fruit
+requestableItemTypes:Berry,Fungiwood,Sun Orb
 requestableItemCounts:10,10
 buildableBuildingTypes:Grower's Den,Crafter's Den,Meeting Den,House of Wisdom
 restHealAmount:1
@@ -29,11 +29,20 @@ requestableItemTypes:Berry
 requestableItemCounts:5
 restHealAmount:1
 restHealCooldown:100
-buildableBuildingTypes:Fungiwood Cave
-supportedBonusProps:Fungus
+buildableBuildingTypes:Fungiwood Cave,Experiment Shack
+supportedBonusProps:Red Fungus
 supportedBonusPropXs:1
 supportedBonusPropYs:-1
 supportedBonusPropRespawnTicks:600
+
+name:Experiment Shack
+size:1
+constructionItemTypes:Fungiwood
+constructionItemAmounts:2
+supportedBonusProps:Hybrid Fungus
+supportedBonusPropXs:1
+supportedBonusPropYs:0
+supportedBonusPropRespawnTicks:1000
 
 name:Crafter's Den
 size:2
@@ -54,6 +63,21 @@ supportedBonusPropXs:1
 supportedBonusPropYs:-1
 supportedBonusPropRespawnTicks:600
 
+name:Smith's Den
+size:2
+constructionItemTypes:Berry
+constructionItemAmounts:2
+supportedCreatureTypes:Smith
+supportedCreatureCounts:2
+supportedCreatureSpawnTimes:500
+maxHealth:200
+demolitionDifficulty:12
+requestableItemTypes:Berry
+requestableItemCounts:4
+craftedItemTypes:Wooden Shovel
+restHealAmount:1
+restHealCooldown:100
+
 name:Meeting Den
 size:5
 supportedCreatureTypes:Mayor
@@ -63,7 +87,7 @@ maxHealth:1000
 demolitionDifficulty:12
 requestableItemTypes:Berry,Fungiwood,Ironcap,Wooden Shovel,Iron Shovel
 requestableItemCounts:5,5,5,5,5
-buildableBuildingTypes:Ironcap Cave,Armory
+buildableBuildingTypes:Ironcap Cave,Armory,Smith's Den
 restHealAmount:2
 restHealCooldown:100
 
@@ -84,7 +108,29 @@ plantingZoneYMax:1
 plantablePropTypes:Red Fungus
 
 name:Armory
+constructionItemTypes:Fungiwood
+constructionItemAmounts:5
+supportedCreatureTypes:Fighter
+supportedCreatureCounts:5
+supportedCreatureSpawnTimes:700
+size:4
+maxHealth:400
+requestableItemTypes:Cap Ingot,Iron Spear,Slingshot
+requestableItemCounts:5,5,5
+buildableBuildingTypes:Cauldron
+craftedItemTypes:Iron Spear,Slingshot
+restHealAmount:1
+restHealCooldown:100
 
+name:Cauldron
+constructionItemTypes:Cap Ingot
+constructionItemAmounts:5
+requestableItemTypes:Spotted Cap,Venomwood Spear
+craftedItemTypes:Venomwood Spear
 
 name:House of Wisdom
-
+size:5
+supportedCreatureTypes:Wiseling
+supportedCreatureCounts:4
+requestableItemTypes:Sun Orb,Clargent Orb,Meteor Orb,Berry,Fungiwood
+buildableBuildingTypes:Tribling House,Nursery,Alchemist's Den
