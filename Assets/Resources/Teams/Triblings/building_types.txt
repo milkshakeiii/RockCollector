@@ -170,9 +170,16 @@ supportedCreatureTypes:Clargeling,Strongling
 supportedCreatureCounts:4,4
 
 name:Dragon's Den
+size:4
+constructionItemTypes:Clargent Orb,Berry
+constructionItemAmounts:1,40
+requestableItemTypes:Sun Orb,Clargent Orb,Meteor Orb
+requestableItemCounts:5,5,5
+supportedCreatureTypes:Dragon
+supportedCreatureCounts:1
 
 name:Alchemist's Den
 size:3
-requestableItemTypes:Spotted Cap,Cap Ingot,Meteor Orb
+requestableItemTypes:Spotted Cap,Cap Ingot,Meteor Orb,Venomiron Spear,Venomiron Chanfron,Venomiron 
 requestableItemCounts:5,5,5
-craftedItemTypes:Venomiron Spear,Venomiron Chanfron,
+craftedItemTypes:Venomiron Spear,Venomiron Chanfron,Venomiron Catapult
