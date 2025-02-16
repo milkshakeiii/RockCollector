@@ -8,9 +8,15 @@ cooldown:100
 harvestingSkill:fungiculture
 
 name:Primitive Weapon Attack
+cooldown:30
+rechargeTicks:30
+weaponSkills:shovels
+enemyTargets:1
+
+name:Simple Weapon Attack
 cooldown:20
-rechargeTicks:20
-weaponSkills:shovels,spears,slingshots
+rechargeTicks:30
+weaponSkills:spears,slingshots
 enemyTargets:1
 
 name:Bite
@@ -46,5 +52,3 @@ skill:motivation
 conditionsInflicted:Bolstered
 baseStacks:1
 maxStacks:1
-
-

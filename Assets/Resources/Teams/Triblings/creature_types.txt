@@ -41,6 +41,19 @@ abilities:Woodcrafting
 abilityLevels:1
 behavior:Crafter Behavior
 
+name:Fighter
+startingHealth:8
+healthPerLevel:4
+strengthBonus:2
+dexterityBonus:0
+constitutionBonus:2
+intelligenceBonus:-2
+wisdomBonus:-2
+charismaBonus:0
+abilities:Basic Attack
+abilityLevels:1
+behavior:Fighter Behavior
+
 name:Smith
 spawnCostItemTypes:Berry
 spawnCostItemAmounts:1

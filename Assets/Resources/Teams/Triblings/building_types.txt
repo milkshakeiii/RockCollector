@@ -7,7 +7,7 @@ supportedCreatureSpawnTimes:500
 maxHealth:1000
 demolitionDifficulty:12
 requestableItemTypes:Berry,Fungiwood,Sun Orb
-requestableItemCounts:10,10
+requestableItemCounts:10,10,2
 buildableBuildingTypes:Grower's Den,Crafter's Den,Meeting Den,House of Wisdom
 restHealAmount:1
 restHealCooldown:100
@@ -80,18 +80,22 @@ restHealCooldown:100
 
 name:Meeting Den
 size:5
+constructionItemTypes:Berry,Fungiwood
+constructionItemAmounts:10,10
 supportedCreatureTypes:Mayor
 supportedCreatureCounts:1
 supportedCreatureSpawnTimes:1500
 maxHealth:1000
 demolitionDifficulty:12
-requestableItemTypes:Berry,Fungiwood,Ironcap,Wooden Shovel,Iron Shovel
+requestableItemTypes:Berry,Fungiwood,Cap Ingot,Wooden Shovel,Iron Shovel
 requestableItemCounts:5,5,5,5,5
 buildableBuildingTypes:Ironcap Cave,Armory,Smith's Den
 restHealAmount:2
 restHealCooldown:100
 
 name:Ironcap Cave
+constructionItemTypes:Berry,Fungiwood
+constructionItemAmounts:4,4
 size:2
 plantingZoneXMin:2
 plantingZoneYMin:0
@@ -100,6 +104,8 @@ plantingZoneYMax:1
 plantablePropTypes:White Fungus
 
 name:Fungiwood Cave
+constructionItemTypes:Berry,Fungiwood
+constructionItemAmounts:4,4
 size:2
 plantingZoneXMin:2
 plantingZoneYMin:0

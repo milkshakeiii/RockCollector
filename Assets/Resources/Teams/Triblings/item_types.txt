@@ -11,7 +11,9 @@ name:Spotted Cap
 size:1
 
 name:Wooden Shovel
-equipmentCategory:simple
+craftingInputs:Fungiwood
+craftingSkill:woodcrafting
+equipmentCategory:primitive
 equipmentLevel:1
 weaponDamage:2d2
 weaponRange:1
@@ -23,13 +25,97 @@ craftingLevel:0
 size:-2
 
 name:Iron Shovel
-equipmentCategory:simple
+craftingInputs:Fungiwood,Cap Ingot
+craftingSkill:ironcrafting
+equipmentCategory:primitive
 equipmentLevel:2
 weaponDamage:3d4
 weaponRange:1
 weaponSkill:shovels
 repairAmount:3
+craftingLevel:6
+size:-2
+
+name:Venomwood Shovel
+craftingInputs:Fungiwood,Spotted Cap
+craftingSkill:woodcrafting
+equipmentCategory:primitive
+equipmentLevel:3
+weaponDamage:3d4
+weaponRange:1
+weaponSkill:shovels
+repairAmount:4
+craftingLevel:8
+size:-2
+conditionsInflicted:Poisoned
+baseStacks:1
+maxStacks:8
+
+name:Iron Spear
+craftingInputs:Fungiwood,Cap Ingot
+craftingSkill:ironcrafting
+equipmentCategory:simple
+equipmentLevel:2
+weaponDamage:3d6
+weaponRange:1
+weaponSkill:spears
+craftingLevel:10
+size:-2
+
+name:Venomwood Spear
+craftingInputs:Fungiwood,Spotted Cap
+craftingSkill:woodcrafting
+equipmentCategory:simple
+equipmentLevel:3
+weaponDamage:3d6
+weaponRange:1
+weaponSkill:spears
+craftingLevel:12
+size:-2
+conditionsInflicted:Poisoned
+baseStacks:1
+maxStacks:8
+
+name:Slingshot
+craftingInputs:Fungiwood,Cap Ingot
+craftingSkill:woodcrafting
+equipmentCategory:simple
+equipmentLevel:1
+weaponDamage:1d6
+weaponRange:4
+weaponSkill:slingshots
+craftingLevel:0
+size:-4
+
+name:Chanfron
+equipmentCategory:chanfrons
+equipmentLevel:1
 craftingInputs:Cap Ingot
 craftingSkill:ironcrafting
-craftingLevel:8
+craftingLevel:10
+craftingTime:1000
+skillBonusNames:defense,dodge
+skillBonusAmounts:4,4
+size:-2
+
+name:Peytral
+equipmentCategory:peytrals
+equipmentLevel:1
+craftingInputs:Cap Ingot,Cap Ingot
+craftingSkill:ironcrafting
+craftingLevel:10
+craftingTime:1000
+skillBonusNames:defense,dodge
+skillBonusAmounts:4,4
+size:-2
+
+name:Croupiere
+equipmentCategory:croupieres
+equipmentLevel:1
+craftingInputs:Cap Ingot,Cap Ingot
+craftingSkill:ironcrafting
+craftingLevel:10
+craftingTime:1000
+skillBonusNames:defense,dodge
+skillBonusAmounts:4,4
 size:-2

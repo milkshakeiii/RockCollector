@@ -3,3 +3,8 @@ modifiedAttributeScores:strength,constitution,charisma
 attributeModifierAmounts:4,4,2
 isHarmful:false
 duration:2000
+
+name:Poisoned
+modifiedAttributeScores:constitution
+attributeModifierAmounts:-1
+duration:400
