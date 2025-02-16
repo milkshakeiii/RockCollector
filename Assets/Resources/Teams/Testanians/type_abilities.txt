@@ -16,8 +16,8 @@ cooldown:10
 repairImplementSkills:hammers,saws
 
 name:Basic Attack
-cooldown:10
-rechargeTicks:20
+cooldown:200
+rechargeTicks:200
 weaponSkills:axes,swords
 enemyTargets:1
 

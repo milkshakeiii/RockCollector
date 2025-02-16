@@ -135,6 +135,10 @@ public class Simulation
                         }
                     }
                 }
+                if (targetsStruck >= maxTargets)
+                {
+                    break;
+                }
             }
             if (targetsStruck >= ability.GetEnemyTargets())
             {
@@ -336,7 +340,18 @@ public class Simulation
 
     private static void InflictConditionsFromWeapon(string weaponSkill, Creature actor, Creature target, Map map)
     {
-        // TODO
+        Item weapon = actor.WeaponForSkill(weaponSkill, map);
+        List<ConditionType> conditions = weapon.itemType.GetConditionsInflicted();
+        List<int> baseStacks = weapon.itemType.GetConditionsInflictedBaseStacks();
+        List<int> maxStacks = weapon.itemType.GetConditionsInflictedMaxStacks();
+        for (int i = 0; i < conditions.Count; i++)
+        {
+            ConditionType condition = conditions[i];
+            int baseStack = baseStacks[i];
+            int maxStack = maxStacks[i];
+            actor.InflictConditionOn(target, weaponSkill, condition, baseStack, maxStack, map);
+            OnConditionApplied?.Invoke(actor, target, condition, map);
+        }
     }
 }
 

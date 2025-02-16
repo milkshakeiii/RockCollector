@@ -1019,6 +1019,24 @@ public class ItemType : Entity
         string name = GetSpriteName();
         return System.IO.Path.Combine(folder, name);
     }
+    public List<ConditionType> GetConditionsInflicted()
+    {
+        return EntityManager.GetConditionListAttribute(attributes, "conditionsInflicted", new List<ConditionType>());
+    }
+    public List<int> GetConditionsInflictedBaseStacks()
+    {
+        return EntityManager.GetIntListAttribute(attributes, "baseStacks", new List<int>());
+    }
+    public List<int> GetConditionsInflictedMaxStacks()
+    {
+        int conditionsCount = GetConditionsInflicted().Count;
+        List<int> defaultList = new();
+        for (int i = 0; i < conditionsCount; i++)
+        {
+            defaultList.Add(999);
+        }
+        return EntityManager.GetIntListAttribute(attributes, "maxStacks", defaultList);
+    }
 }
 
 public class BuildingType : Entity
@@ -1295,6 +1313,6 @@ public class DieRoll
     public int Roll()
     {
         System.Random random = new();
-        return random.Next(sides, rolls * sides + 1);
+        return random.Next(rolls, rolls * sides + 1);
     }
 }

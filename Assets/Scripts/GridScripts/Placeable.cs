@@ -631,6 +631,7 @@ public class Creature : Destructable
         if (!target.Defend(toHitResult, map))
         {
             int damageAmount = damage.Roll();
+            Debug.Log(name + " strikes " + target.GetName() + " for " + damageAmount + " damage");
             target.TakeDamage(damageAmount);
             GainExperience(target.DifficultyEstimate(), weaponSkill);
         }
@@ -811,6 +812,31 @@ public class Creature : Destructable
         }
 
         return (damage, range);
+    }
+
+    public Item WeaponForSkill(string weaponSkill, Map map)
+    {
+        Item weapon = null;
+        DieRoll bestDamage = null;
+
+        List<Placeable> heldItems = map.HeldPlaceablesOf(this);
+
+        foreach (Placeable placeable in heldItems)
+        {
+            if (placeable is Item item)
+            {
+                if (item.itemType.GetWeaponSkill() == weaponSkill)
+                {
+                    DieRoll thisDamage = item.itemType.GetWeaponDamage();
+                    if (bestDamage == null || thisDamage.ExpectedValue() > bestDamage.ExpectedValue())
+                    {
+                        bestDamage = thisDamage;
+                        weapon = item;
+                    }
+                }
+            }
+        }
+        return weapon;
     }
 
     public List<string> GetPreferredWeaponSkills()
