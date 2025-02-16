@@ -8,3 +8,14 @@ name:Poisoned
 modifiedAttributeScores:constitution
 attributeModifierAmounts:-1
 duration:400
+
+name:Blinded
+skillBonusNames:defense,dodge
+skillBonusAmounts:-1,-1
+duration:300
+
+name:Regenerating
+ticksPerDamage:50
+damage:-1
+isHarmful:false
+duration:500

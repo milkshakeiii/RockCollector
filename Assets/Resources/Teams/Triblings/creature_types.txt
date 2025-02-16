@@ -81,3 +81,31 @@ charismaBonus:2
 abilities:Primitive Weapon Attack,Dig Den,Bolster
 abilityLevels:1,1,5
 behavior:Mayor Behavior
+
+name:Wiseling
+spawnCostItemTypes:Sun Orb
+spawnCostItemAmounts:1
+startingHealth:4
+healthPerLevel:2
+strengthBonus:-2
+dexterityBonus:-2
+constitutionBonus:-2
+intelligenceBonus:2
+wisdomBonus:2
+charismaBonus:2
+abilities:Energy Beam,Blinding Blast,Regeneration
+abilityLevels:1,3,5
+behavior:Wiseling Behavior
+
+name:Clargeling
+startingHealth:20
+healthPerLevel:10
+strengthBonus:6
+dexterityBonus:0
+constitutionBonus:8
+intelligenceBonus:0
+wisdomBonus:0
+charismaBonus:0
+abilities:Basic Attack
+abilityLevels:1
+behavior:Fighter Behavior

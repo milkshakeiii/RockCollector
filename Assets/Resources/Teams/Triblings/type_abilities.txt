@@ -52,3 +52,34 @@ skill:motivation
 conditionsInflicted:Bolstered
 baseStacks:1
 maxStacks:1
+
+name:Energy Beam
+cooldown:40
+rechargeTicks:100
+enemyTargets:1
+damage:1d12
+range:7
+skill:energy
+
+name:Blinding Blast
+cooldown:40
+rechargeTicks:100
+enemyTargets:1
+damage:1d6
+range:7
+effectRadius:3
+skill:energy
+conditionsInflicted:Blinded
+baseStacks:2
+maxStacks:10
+
+name:Regeneration
+cooldown:10
+rechargeTicks:100
+allyTargets:1
+range:7
+baseStacks:1
+maxStacks:10
+skill:healing
+conditionsInflicted:Regenerating
+

@@ -1,3 +1,5 @@
 gathering:dexterity
 fungiculture:wisdom
 biting:strength
+energy:intelligence
+healing:wisdom

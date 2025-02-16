@@ -145,6 +145,8 @@ craftedItemTypes:Venomwood Shovel,Venomwood Spear
 
 name:House of Wisdom
 size:5
+constructionItemTypes:Sun Orb
+constructionItemAmounts:1
 supportedCreatureTypes:Wiseling
 supportedCreatureCounts:4
 requestableItemTypes:Sun Orb,Clargent Orb,Meteor Orb,Berry,Fungiwood
