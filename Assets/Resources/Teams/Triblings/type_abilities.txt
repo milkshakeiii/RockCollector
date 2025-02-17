@@ -19,6 +19,12 @@ rechargeTicks:30
 weaponSkills:spears,slingshots
 enemyTargets:1
 
+name:Double Smash
+cooldown:25
+rechargeTicks:25
+weaponSkills:shovels
+enemyTargets:2
+
 name:Bite
 cooldown:15
 rechargeTicks:20
@@ -33,6 +39,10 @@ cooldown:40
 
 name:Dig Den
 cooldown:10
+repairImplementSkills:shovels
+
+name:Heavy Repair
+cooldown:3
 repairImplementSkills:shovels
 
 name:Woodcrafting

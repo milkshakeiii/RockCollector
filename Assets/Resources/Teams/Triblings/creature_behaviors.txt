@@ -65,6 +65,53 @@ wanderRadius:5
 dangerLookDistance:10
 interruptDangerThreshold:1
 
+name:Clargeling Behavior
+priorities:Equip,Defend,Flee,Fight,Raid,Hunt,Deliver Requested Items,Rest,Wander
+equipCategories:shovels,shovels,chanfrons,peytrals,croupieres
+equipRange:999
+defendRange:10
+defendMinimumDangerSum:10
+fleeDangerThreshold:2
+fightDangerThreshold:1
+huntRange:100
+huntLookDistance:100
+huntMinimumLevelDifference:-999
+huntMaximumLevelDifference:999
+raidRange:100
+raidLookDistance:3
+raidMinimumLevelDifference:-999
+raidMaximumLevelDifference:999
+dropOffRange:0
+pickUpRange:999
+restRange:0
+wanderRadius:5
+dangerLookDistance:10
+interruptDangerThreshold:1
+
+name:Strongling Behavior
+priorities:Equip,Defend,Flee,Fight,Repair Damaged Buildings,Raid,Hunt,Deliver Requested Items,Rest,Wander
+equipCategories:shovels
+equipRange:999
+defendRange:10
+defendMinimumDangerSum:10
+fleeDangerThreshold:2
+fightDangerThreshold:1
+repairRange:100
+huntRange:100
+huntLookDistance:100
+huntMinimumLevelDifference:-999
+huntMaximumLevelDifference:999
+raidRange:100
+raidLookDistance:50
+raidMinimumLevelDifference:-999
+raidMaximumLevelDifference:999
+dropOffRange:0
+pickUpRange:999
+restRange:0
+wanderRadius:5
+dangerLookDistance:10
+interruptDangerThreshold:1
+
 name:Wiseling Behavior
 priorities:Equip,Defend,Flee,Fight,Raid,Hunt,Deliver Requested Items,Rest,Wander
 equipCategories:baubles

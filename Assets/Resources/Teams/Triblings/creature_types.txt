@@ -98,6 +98,7 @@ abilityLevels:1,3,5
 behavior:Wiseling Behavior
 
 name:Clargeling
+size:2
 startingHealth:20
 healthPerLevel:10
 strengthBonus:6
@@ -106,6 +107,19 @@ constitutionBonus:8
 intelligenceBonus:0
 wisdomBonus:0
 charismaBonus:0
-abilities:Basic Attack
+abilities:Double Smash
 abilityLevels:1
-behavior:Fighter Behavior
+behavior:Clargeling Behavior
+
+name:Strongling
+startingHealth:20
+healthPerLevel:10
+strengthBonus:4
+dexterityBonus:0
+constitutionBonus:4
+intelligenceBonus:2
+wisdomBonus:2
+charismaBonus:2
+abilities:Smash,Heavy Repair
+abilityLevels:1
+behavior:Strongling Behavior
