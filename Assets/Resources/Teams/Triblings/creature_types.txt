@@ -50,7 +50,7 @@ constitutionBonus:2
 intelligenceBonus:-2
 wisdomBonus:-2
 charismaBonus:0
-abilities:Basic Attack
+abilities:Simple Weapon Attack
 abilityLevels:1
 behavior:Fighter Behavior
 
@@ -123,3 +123,18 @@ charismaBonus:2
 abilities:Smash,Heavy Repair
 abilityLevels:1
 behavior:Strongling Behavior
+
+name:Dragon
+spawnCostItemTypes:Sun Orb,Clargent Orb,Meteor Orb
+spawnCostItemAmounts:1
+startingHealth:20
+healthPerLevel:10
+strengthBonus:6
+dexterityBonus:6
+constitutionBonus:6
+intelligenceBonus:6
+wisdomBonus:6
+charismaBonus:6
+abilities:Bite,Simple Weapon Attack,Blinding Blast,Alter
+abilityLevels:1,1,1,1
+behavior:Wiseling Behavior

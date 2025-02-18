@@ -19,3 +19,10 @@ ticksPerDamage:50
 damage:-1
 isHarmful:false
 duration:500
+
+name:Altered
+modifiedAttributeScores:strength,dexterity,constitution,intelligence
+attributeModifierAmounts:4,4,4,4
+isHarmful:false
+speedModifier:-0.1
+moveSpeedModifier:-2

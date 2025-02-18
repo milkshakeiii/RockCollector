@@ -188,6 +188,6 @@ supportedCreatureCounts:1
 
 name:Alchemist's Den
 size:3
-requestableItemTypes:Spotted Cap,Cap Ingot,Meteor Orb,Venomiron Spear,Venomiron Chanfron,Venomiron 
+requestableItemTypes:Spotted Cap,Cap Ingot,Meteor Orb,Venomiron Spear,Venomiron Chanfron,Venomiron Catapult
 requestableItemCounts:5,5,5
 craftedItemTypes:Venomiron Spear,Venomiron Chanfron,Venomiron Catapult

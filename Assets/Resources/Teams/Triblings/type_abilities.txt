@@ -93,3 +93,12 @@ maxStacks:10
 skill:healing
 conditionsInflicted:Regenerating
 
+name:Alter
+cooldown:10
+rechargeTicks:100
+allyTargets:2
+range:7
+baseStacks:1
+maxStacks:2
+skill:alteration
+conditionsInflicted:Regenerating
