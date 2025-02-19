@@ -11,6 +11,9 @@ abilities:Basic Attack
 abilityLevels:1
 startingEquipment:Axe
 behavior:Skeleton Behavior
+droppedItems:Sun Orb,Clargent Orb,Meteor Orb
+droppedItemsProbabilities:1,1,1
+dropNothingProbability:3
 
 name:Ghoul
 startingHealth:40

@@ -1257,6 +1257,31 @@ public class Creature : Destructable
         return base.IsDestroyed();
     }
 
+    public override void OnDestroyed(Map map)
+    {
+        List<ItemType> droppedItems = creatureType.GetDroppedItems();
+        List<int> droppedItemsProbabilities = creatureType.GetDroppedItemsProbabilities();
+        List<ItemType> droppedItemsMultipliedByProbabilities = new();
+        for (int i = 0; i < droppedItems.Count; i++)
+        {
+            for (int j = 0; j < droppedItemsProbabilities[i]; j++)
+            {
+                droppedItemsMultipliedByProbabilities.Add(droppedItems[i]);
+            }
+        }
+        if (droppedItemsMultipliedByProbabilities.Count > 0)
+        {
+            int randomIndex = UnityEngine.Random.Range(0, droppedItemsMultipliedByProbabilities.Count + creatureType.GetDropNothingProbability());
+            if (randomIndex >= droppedItemsMultipliedByProbabilities.Count)
+            {
+                return;
+            }
+            ItemType itemType = droppedItemsMultipliedByProbabilities[randomIndex];
+            Item item = new (itemType);
+            map.Add(item, map.PositionOf(this));
+        }
+    }
+
     public int GetConditionProtectionClass(Map map, ConditionType conditionType)
     {
         int result = 10 + GetLevel();

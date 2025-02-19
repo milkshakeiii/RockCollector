@@ -835,6 +835,10 @@ public class CreatureType : Entity
     {
         return EntityManager.GetIntListAttribute(attributes, "droppedItemsProbabilities", new List<int>());
     }
+    public int GetDropNothingProbability()
+    {
+        return EntityManager.GetIntAttribute(attributes, "dropNothingProbability", 0);
+    }
     public string GetBehavior()
     {
         return EntityManager.GetStringAttribute(attributes, "behavior");
