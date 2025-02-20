@@ -119,3 +119,43 @@ craftingTime:1000
 skillBonusNames:defense,dodge
 skillBonusAmounts:4,4
 size:-2
+
+name:Venomiron Spear
+craftingInputs:Fungiwood,Cap Ingot
+craftingSkill:ironcrafting
+equipmentCategory:simple
+equipmentLevel:4
+weaponDamage:4d6
+weaponRange:1
+weaponSkill:spears
+craftingLevel:15
+size:-2
+conditionsInflicted:Poisoned
+baseStacks:2
+maxStacks:10
+
+name:Venomiron Chanfron
+equipmentCategory:chanfrons
+equipmentLevel:2
+craftingInputs:Cap Ingot
+craftingSkill:ironcrafting
+craftingLevel:10
+craftingTime:1000
+skillBonusNames:defense,dodge,resistance
+skillBonusAmounts:4,4,4
+size:-2
+
+name:Venomiron Catapult
+craftingInputs:Fungiwood,Cap Ingot
+craftingSkill:woodcrafting
+equipmentCategory:simple
+equipmentLevel:2
+weaponDamage:2d6
+weaponRange:4
+weaponSkill:slingshots
+craftingLevel:0
+size:-4
+conditionsInflicted:Poisoned
+baseStacks:2
+maxStacks:10
+
